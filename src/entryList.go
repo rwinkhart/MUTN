@@ -43,7 +43,7 @@ func printFileEntry(entry string, lastSlash int, charCounter int, colorAlternato
 
 // EntryListGen generates and displays full entry list
 func EntryListGen() {
-	fmt.Print("\nfor a list of usable commands, run \"mutn help\"\n\n\033[38;5;0;48;5;15mlibmutton entries:\033[0m")
+	fmt.Print("\n\u001B[38;5;0;48;5;15mlibmutton entries:\u001B[0m")
 
 	// walk entry directory
 	_ = filepath.WalkDir(EntryRoot,
@@ -83,68 +83,71 @@ func EntryListGen() {
 
 	}
 
-	// DirListMain iteration
-	nextStartIndex := 0           // set to track where to resume when iterating through fileListMain
-	var containsSubdirectory bool // set to track whether the current directory contains a subdirectory - if it does, empty directory warnings will not be printed
-	for i, directory := range dirListMain {
+	dirListMainLength := len(dirListMain) // save length for multiple references below
+	if dirListMainLength > 1 {            // DirListMain iteration - only run if non-root-level directories are present
+		nextStartIndex := 0           // set to track where to resume when iterating through fileListMain
+		var containsSubdirectory bool // set to track whether the current directory contains a subdirectory - if it does, empty directory warnings will not be printed
+		for i, directory := range dirListMain {
 
-		// reset formatting variables for new directory
-		charCounter = 0
-		colorAlternator = 1
+			// reset formatting variables for new directory
+			charCounter = 0
+			colorAlternator = 1
 
-		// check if next directory is within the current one
-		if len(dirListMain) > i+1 {
-			nextDir := dirListMain[i+1]
-			if directory == nextDir[:strings.LastIndex(nextDir, PathSeparator)] {
-				containsSubdirectory = true
+			// check if next directory is within the current one
+			if dirListMainLength > i+1 {
+				nextDir := dirListMain[i+1]
+				if directory == nextDir[:strings.LastIndex(nextDir, PathSeparator)] {
+					containsSubdirectory = true
+				} else {
+					containsSubdirectory = false
+				}
 			} else {
 				containsSubdirectory = false
 			}
-		} else {
-			containsSubdirectory = false
-		}
 
-		// fileListMain iteration
-		ran = false // set to track whether the loop has been run yet
-		for _, file := range fileListMain[nextStartIndex:] {
+			// fileListMain iteration
+			ran = false // set to track whether the loop has been run yet
+			for _, file := range fileListMain[nextStartIndex:] {
 
-			// get index of last occurrence of pathSeparator in trimmed entry path (used to split entry's containing directory and entry's name)
-			lastSlash := strings.LastIndex(file, PathSeparator) + 1
+				// get index of last occurrence of pathSeparator in trimmed entry path (used to split entry's containing directory and entry's name)
+				lastSlash := strings.LastIndex(file, PathSeparator) + 1
 
-			// print the current file if it belongs in the current directory - otherwise, break the loop and move on to the next directory
-			if file[:lastSlash-1] == directory {
+				// print the current file if it belongs in the current directory - otherwise, break the loop and move on to the next directory
+				if file[:lastSlash-1] == directory {
 
-				// print directory header if this is the first run of the loop
-				// must be done within loop in order to allow not printing the header if its directory contains no entries
-				if !ran {
-					ran = true
-					// for consistency, format directories with UNIX-style path separators on all platforms
-					if !Windows {
-						fmt.Printf("\n\n\033[38;5;7;48;5;8m%s/\033[0m\n", directory)
-					} else {
-						fmt.Printf("\n\n\033[38;5;7;48;5;8m%s/\033[0m\n", strings.ReplaceAll(directory, PathSeparator, "/"))
+					// print directory header if this is the first run of the loop
+					// must be done within loop in order to allow not printing the header if its directory contains no entries
+					if !ran {
+						ran = true
+						// for consistency, format directories with UNIX-style path separators on all platforms
+						if !Windows {
+							fmt.Printf("\n\n\033[38;5;7;48;5;8m%s/\033[0m\n", directory)
+						} else {
+							fmt.Printf("\n\n\033[38;5;7;48;5;8m%s/\033[0m\n", strings.ReplaceAll(directory, PathSeparator, "/"))
+						}
 					}
+
+					nextStartIndex++ // increment to prevent having to iterate through ALL of fileListMain each time
+					charCounter, colorAlternator = printFileEntry(file, lastSlash, charCounter, colorAlternator)
+
+				} else {
+					break
 				}
+			}
 
-				nextStartIndex++ // increment to prevent having to iterate through ALL of fileListMain each time
-				charCounter, colorAlternator = printFileEntry(file, lastSlash, charCounter, colorAlternator)
-
-			} else {
-				break
+			// display empty directory warning if the last printed directory contained no entries or subdirectories
+			if !ran && !containsSubdirectory {
+				// for consistency, format directories with UNIX-style path separators on all platforms
+				if !Windows {
+					fmt.Printf("\n\n\033[38;5;7;48;5;8m%s/\033[0m\n", directory)
+				} else {
+					fmt.Printf("\n\n\033[38;5;7;48;5;8m%s/\033[0m\n", strings.ReplaceAll(directory, PathSeparator, "/"))
+				}
+				fmt.Print("\033[38;5;9m-Empty Directory-\033[0m")
 			}
 		}
-
-		// display empty directory warning if the last printed directory contained no entries or subdirectories
-		if !ran && !containsSubdirectory {
-			// for consistency, format directories with UNIX-style path separators on all platforms
-			if !Windows {
-				fmt.Printf("\n\n\033[38;5;7;48;5;8m%s/\033[0m\n", directory)
-			} else {
-				fmt.Printf("\n\n\033[38;5;7;48;5;8m%s/\033[0m\n", strings.ReplaceAll(directory, PathSeparator, "/"))
-			}
-			fmt.Print("\033[38;5;9m-empty directory-\033[0m")
-		}
-
+	} else if !ran {
+		fmt.Print("\n\nNothing's here! For help creating your first entry, run \"mutn help\".")
 	}
 
 	// print trailing new lines for proper spacing after entry list is complete
