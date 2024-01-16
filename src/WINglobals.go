@@ -2,7 +2,7 @@
 
 package main
 
-// exported variables
+// EntryRoot path to libmutton entry directory
 var EntryRoot = home + "\\AppData\\Local\\libmutton\\entries"
 
 // exported constants
