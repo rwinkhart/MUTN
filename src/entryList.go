@@ -43,7 +43,7 @@ func printFileEntry(entry string, lastSlash int, charCounter int, colorAlternato
 
 // EntryListGen generates and displays full entry list
 func EntryListGen() {
-	fmt.Print("\n\u001B[38;5;0;48;5;15mlibmutton entries:\u001B[0m")
+	fmt.Print("\n\033[38;5;0;48;5;15mlibmutton entries:\033[0m")
 
 	// walk entry directory
 	_ = filepath.WalkDir(EntryRoot,

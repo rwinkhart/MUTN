@@ -45,7 +45,7 @@ edit:
 }
 
 func Version() {
-	fmt.Print("\n\033[1mMUTN | Copyright (c) 2024 Randall Winkhart\033[0m" + `
+	fmt.Print("\n\033[1m                    MIT License\033[0m" + `
 
 Permission is hereby granted, free of charge, to any
 person obtaining a copy of this software and associated
