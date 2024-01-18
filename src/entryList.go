@@ -99,7 +99,6 @@ func EntryListGen() {
 
 	dirListMainLength := len(dirListMain) // save length for multiple references below
 	if dirListMainLength > 1 {            // DirListMain iteration - only run if non-root-level directories are present
-		nextStartIndex := 0           // set to track where to resume when iterating through fileListMain
 		var containsSubdirectory bool // set to track whether the current directory contains a subdirectory - if it does, empty directory warnings will not be printed
 		for i, directory := range dirListMain {
 
@@ -121,7 +120,7 @@ func EntryListGen() {
 
 			// fileListMain iteration
 			ran = false // set to track whether the loop has been run yet
-			for _, file := range fileListMain[nextStartIndex:] {
+			for _, file := range fileListMain {
 
 				// get index of last occurrence of pathSeparator in trimmed entry path (used to split entry's containing directory and entry's name)
 				lastSlash := strings.LastIndex(file, PathSeparator) + 1
@@ -141,11 +140,7 @@ func EntryListGen() {
 						}
 					}
 
-					nextStartIndex++ // increment to prevent having to iterate through ALL of fileListMain each time
 					charCounter, colorAlternator = printFileEntry(file, lastSlash, charCounter, colorAlternator)
-
-				} else {
-					break
 				}
 			}
 
