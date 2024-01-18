@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/fs"
+	"os"
 	"path/filepath"
 	"strings"
 )
@@ -48,6 +49,19 @@ func EntryListGen() {
 	// walk entry directory
 	_ = filepath.WalkDir(EntryRoot,
 		func(fullPath string, entry fs.DirEntry, err error) error {
+
+			// check for errors encountered while walking directory
+			if err != nil {
+				// create EntryRoot if the error is the result of it not existing on the system
+				if err.Error() == "lstat "+EntryRoot+": no such file or directory" {
+					_ = os.Mkdir(EntryRoot, 0700)
+				} else {
+					// otherwise, print the source of the error
+					fmt.Print("\n\n\033[38;5;9mAn unexpected error occurred while generating the entry list: " + err.Error() + "\033[0m")
+				}
+				// quit walking EntryRoot and return nil to allow the program to continue
+				return nil
+			}
 
 			// trim root path from each path before storing
 			trimmedPath := fullPath[RootLength:]
