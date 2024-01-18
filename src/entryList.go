@@ -157,7 +157,7 @@ func EntryListGen() {
 				} else {
 					fmt.Printf("\n\n\033[38;5;7;48;5;8m%s/\033[0m\n", strings.ReplaceAll(directory, PathSeparator, "/"))
 				}
-				fmt.Print("\033[38;5;9m-Empty Directory-\033[0m")
+				fmt.Print("\033[38;5;11m-empty directory-\033[0m")
 			}
 		}
 	} else if !ran {
