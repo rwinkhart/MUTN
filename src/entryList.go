@@ -77,14 +77,11 @@ func EntryListGen() {
 			return nil
 		})
 
-	// fileListRoot iteration
-	charCounter := 0             // set to track whether to line-wrap based on character count in line
-	var colorAlternator int8 = 1 // set to allow alternating colors for each printed entry name
-	ran := false                 // set to track whether the loop has been run yet
-
 	// dirList iteration
 	dirListLength := len(dirList) // save length for multiple references below
-	var containsSubdirectory bool // track whether the current directory contains a subdirectory
+	charCounter := 0              // track whether to line-wrap based on character count in line
+	var colorAlternator int8 = 1  // track alternating colors for each printed entry name
+	var containsSubdirectory bool // indicates whether the current directory contains a subdirectory
 	var indent int                // visual indentation multiplier
 	for i, directory := range dirList {
 
@@ -94,9 +91,6 @@ func EntryListGen() {
 
 		// determine directory's indentation multiplier based on PathSeparator occurrences - only run if last directory contained a subdirectory (indicating that the current directory is a subdirectory)
 		indent = strings.Count(directory, PathSeparator) - 1 // subtract 1 to account for trailing PathSeparator
-		if indent < 0 {
-			indent = 0
-		}
 
 		// check if next directory is within the current one
 		if dirListLength > i+1 {
@@ -111,7 +105,7 @@ func EntryListGen() {
 		}
 
 		// fileList iteration
-		ran = false // set to track whether the loop has been run yet
+		containsFiles := false // indicates whether the current directory contains files (entries)
 		for _, file := range fileList {
 
 			// get index of last occurrence of pathSeparator in trimmed entry path (used to split entry's containing directory and entry's name)
@@ -121,11 +115,9 @@ func EntryListGen() {
 			if file[:lastSlash-1] == directory {
 
 				// print directory header if this is the first run of the loop
-				// must be done within loop in order to allow not printing the header if its directory contains no entries
-				if !ran {
-					ran = true
-					// for consistency, format directories with UNIX-style path separators on all platforms
-					if !Windows {
+				if !containsFiles {
+					containsFiles = true
+					if !Windows { // for consistency, format directories with UNIX-style path separators on all platforms
 						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/\033[0m\n", directory)
 					} else {
 						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/\033[0m\n", strings.ReplaceAll(directory, PathSeparator, "/"))
@@ -139,7 +131,7 @@ func EntryListGen() {
 			}
 		}
 
-		if !ran { // if the current directory contains no files...
+		if !containsFiles { // if the current directory contains no files...
 			if !containsSubdirectory { // nor does it contain any subdirectories...
 				if dirListLength > 1 { // and directories besides the root-level exist... display directory header and empty directory warning
 					if !Windows { // for consistency, format directories with UNIX-style path separators on all platforms
@@ -157,5 +149,4 @@ func EntryListGen() {
 
 	// print trailing new lines for proper spacing after entry list is complete
 	fmt.Print("\n\n")
-
 }
