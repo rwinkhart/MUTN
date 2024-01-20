@@ -5,14 +5,38 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 )
 
 var (
-	fileListRoot []string
-	fileListMain []string
-	dirListMain  []string
+	fileListRoot   []string
+	fileListMain   []string
+	dirListMain    []string
+	sameParentList []string
 )
+
+// sorts a slice of strings (representing paths) by hierarchy
+func sortByHierarchy(paths []string) []string {
+	// custom sorting function
+	sort.Slice(paths, func(i, j int) bool {
+		// split paths into directory components
+		dirs1 := strings.Split(paths[i], PathSeparator)
+		dirs2 := strings.Split(paths[j], PathSeparator)
+
+		// compare each directory component
+		for k := 0; k < len(dirs1) && k < len(dirs2); k++ {
+			if dirs1[k] != dirs2[k] {
+				return dirs1[k] < dirs2[k]
+			}
+		}
+
+		// if one path is a prefix of the other, the shorter path comes first
+		return len(dirs1) < len(dirs2)
+	})
+
+	return paths
+}
 
 // processing for printing file entries (determines color, line wrapping, and prints)
 func printFileEntry(entry string, lastSlash int, charCounter int, colorAlternator int8) (int, int8) {
@@ -47,6 +71,8 @@ func EntryListGen() {
 	fmt.Print("\n\033[38;5;0;48;5;15mlibmutton entries:\033[0m")
 
 	// walk entry directory
+	var current string
+	var last string
 	_ = filepath.WalkDir(EntryRoot,
 		func(fullPath string, entry fs.DirEntry, err error) error {
 
@@ -72,12 +98,34 @@ func EntryListGen() {
 				fileListRoot = append(fileListRoot, trimmedPath)
 			} else if !entry.IsDir() {
 				fileListMain = append(fileListMain, trimmedPath)
-			} else {
-				dirListMain = append(dirListMain, trimmedPath)
+			} else if trimmedPath != "" { // TODO use sortByHierarchy
+
+				// if sameParentList is empty, set to the current trimmedPath
+				if len(sameParentList) == 0 {
+
+					sameParentList = []string{trimmedPath}
+				} else { // if sameParentList is not empty, check the parent subdirectory and compare it to the last one checked
+
+					current = trimmedPath[:strings.Index(trimmedPath[1:], PathSeparator)+1]
+					if current == last { // if the current and last parent subdirectory match, append the current trimmedPath to sameParentList
+
+						sameParentList = append(sameParentList, trimmedPath)
+					} else { // if the current and last parent subdirectory do not match, append sameParentList to dirListMain and restart sameParentList with the current trimmedPath
+
+						dirListMain = append(dirListMain, sortByHierarchy(sameParentList)...)
+						sameParentList = []string{trimmedPath}
+					}
+
+					last = current // save the current parent directory for comparison in the next iteration
+				}
 			}
 
 			return nil
 		})
+
+	if len(sameParentList) > 0 { // if there are leftover items in sameParentList, append them to dirListMain
+		dirListMain = append(dirListMain, sortByHierarchy(sameParentList)...)
+	}
 
 	// fileListRoot iteration
 	charCounter := 0             // set to track whether to line-wrap based on character count in line
@@ -98,13 +146,17 @@ func EntryListGen() {
 	}
 
 	dirListMainLength := len(dirListMain) // save length for multiple references below
-	if dirListMainLength > 1 {            // DirListMain iteration - only run if non-root-level directories are present
-		var containsSubdirectory bool // set to track whether the current directory contains a subdirectory - if it does, empty directory warnings will not be printed
+	if dirListMainLength > 0 {            // DirListMain iteration - only run if non-root-level directories are present TODO is this still necessary?
+		var containsSubdirectory bool // track whether the current directory contains a subdirectory
+		var indent int                // visual indentation multiplier
 		for i, directory := range dirListMain {
 
 			// reset formatting variables for new directory
 			charCounter = 0
 			colorAlternator = 1
+
+			// determine directory's indentation multiplier based on PathSeparator occurrences - only run if last directory contained a subdirectory (indicating that the current directory is a subdirectory)
+			indent = strings.Count(directory, PathSeparator) - 1 // subtract 1 to account for trailing PathSeparator
 
 			// check if next directory is within the current one
 			if dirListMainLength > i+1 {
@@ -134,25 +186,28 @@ func EntryListGen() {
 						ran = true
 						// for consistency, format directories with UNIX-style path separators on all platforms
 						if !Windows {
-							fmt.Printf("\n\n\033[38;5;7;48;5;8m%s/\033[0m\n", directory)
+							fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/\033[0m\n", directory)
 						} else {
-							fmt.Printf("\n\n\033[38;5;7;48;5;8m%s/\033[0m\n", strings.ReplaceAll(directory, PathSeparator, "/"))
+							fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/\033[0m\n", strings.ReplaceAll(directory, PathSeparator, "/"))
 						}
 					}
 
+					if indent > 0 { // indent entry list to the same degree as the directory header
+						fmt.Print(strings.Repeat(" ", indent*2))
+					}
 					charCounter, colorAlternator = printFileEntry(file, lastSlash, charCounter, colorAlternator)
 				}
 			}
 
-			// display empty directory warning if the last printed directory contained no entries or subdirectories
-			if !ran && !containsSubdirectory {
-				// for consistency, format directories with UNIX-style path separators on all platforms
-				if !Windows {
-					fmt.Printf("\n\n\033[38;5;7;48;5;8m%s/\033[0m\n", directory)
-				} else {
-					fmt.Printf("\n\n\033[38;5;7;48;5;8m%s/\033[0m\n", strings.ReplaceAll(directory, PathSeparator, "/"))
+			if !ran { // if the current directory contains no files...
+				if !containsSubdirectory { // display directory header and empty directory warning if it also contains no subdirectories
+					if !Windows { // for consistency, format directories with UNIX-style path separators on all platforms
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/\033[0m\n", directory)
+					} else {
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/\033[0m\n", strings.ReplaceAll(directory, PathSeparator, "/"))
+					}
+					fmt.Print(strings.Repeat(" ", indent*2) + "\033[38;5;11m-empty directory-\033[0m")
 				}
-				fmt.Print("\033[38;5;11m-empty directory-\033[0m")
 			}
 		}
 	} else if !ran {
