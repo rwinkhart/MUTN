@@ -2,14 +2,20 @@ package main
 
 import "fmt"
 
+// global constants used only in this file
+const (
+	ansiGoFuchsia = "\033[38;2;206;48;98m"
+	ansiGoGopher  = "\033[38;2;1;173;216m"
+)
+
 func HelpMain() {
-	fmt.Print("\n\033[1mMUTN | Copyright (c) 2024 Randall Winkhart\033[0m\n" + `
+	fmt.Print(ansiBold + "\nMUTN | Copyright (c) 2024 Randall Winkhart\n" + ansiReset + `
 This software exists under the MIT license; you may redistribute it under certain conditions.
 This program comes with absolutely no warranty; type "mutn version" for details.
 
-` + "\033[1mUsage:\033[0m" + ` mutn [/<entry name> [argument] [option]] | [argument]
+` + ansiBold + "Usage:" + ansiReset + ` mutn [/<entry name> [argument] [option]] | [argument]
 
-` + "\033[1mArguments:\033[0m" + `
+` + ansiBold + "Arguments:" + ansiReset + `
  help/--help/-h          Bring up this menu
  version/-v              Display version and license information
  init                    Set up MUTN
@@ -21,7 +27,7 @@ This program comes with absolutely no warranty; type "mutn version" for details.
  shear                   Delete an existing entry
  sync                    Manually sync the entry directory
 
-` + "\033[1mOptions:\033[0m" + `
+` + ansiBold + "Options:" + ansiReset + `
  add:
   password/-p            Add a password entry
   note/-n                Add a note entry
@@ -40,12 +46,12 @@ edit:
  gen:
   update/-u              Generate a password for an existing entry
 
-` + "\033[1mTip 1:\033[0m" + ` You can quickly read an entry with "mutn /<entry name>"
+` + ansiBold + "Tip 1:" + ansiReset + ` You can quickly read an entry with "mutn /<entry name>"
 ` + "\033[1mTip 2:\033[0m" + ` Type "mutn" to view a list of saved entries` + "\n\n")
 }
 
 func Version() {
-	fmt.Print("\n\033[1m                    MIT License\033[0m" + `
+	fmt.Print(ansiBold + "\n                    MIT License" + ansiReset + `
 
 Permission is hereby granted, free of charge, to any
 person obtaining a copy of this software and associated
@@ -72,19 +78,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 OR OTHER DEALINGS IN THE SOFTWARE.` +
 		"\n\n---------------------------------------------------------" +
 		"\n\n             MUTN is a simple, self-hosted,\n  SSH-synchronized password manager based on libmutton\n\n" +
-		"         ..               \033[38;2;206;48;98m♥♥ ♥♥\033[0m               ..\n" +
-		"        /()\\''.''.       \033[38;2;206;48;98m♥♥♥♥♥♥♥\033[0m       .''.''/()\\   _)\n" +
-		"     _.   :       *       \033[38;2;206;48;98m♥♥♥♥♥\033[0m       *       :   <[◎]|_|=\n" +
-		" }-}-*]    `..'..'         \033[38;2;206;48;98m♥♥♥\033[0m         `..'..'      |\n" +
-		"    ◎-◎    //   \\\\          \033[38;2;206;48;98m♥\033[0m          //   \\\\     /|\\\n" +
-		"\033[38;2;1;173;216m<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" +
-		"\\\033[38;5;15;48;5;15m                                                       \033[0m\033[38;2;1;173;216m/\n" +
-		"\\\033[38;5;15;48;5;15m                  \033[0mMUTN Version 0.0.1\033[38;5;15;48;5;15m                   \033[0m\033[38;2;1;173;216m/\n" +
-		"\\\033[38;5;15;48;5;15m                 \033[0mThe Butchered Update\033[38;5;15;48;5;15m                  \033[0m\033[38;2;1;173;216m/\n" +
-		"\\\033[38;5;15;48;5;15m                                                       \033[0m\033[38;2;1;173;216m/\n" +
-		"\\\033[38;5;15;48;5;15m          \033[0mCopyright (c) 2024 Randall Winkhart\033[38;5;15;48;5;15m          \033[0m\033[38;2;1;173;216m/\n" +
-		"\\\033[38;5;15;48;5;15m                                                       \033[0m\033[38;2;1;173;216m/\n" +
-		"<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\033[0m\n" +
+		"         ..               " + ansiGoFuchsia + "♥♥ ♥♥" + ansiReset + "               ..\n" +
+		"        /()\\''.''.       " + ansiGoFuchsia + "♥♥♥♥♥♥♥" + ansiReset + "       .''.''/()\\   _)\n" +
+		"     _.   :       *       " + ansiGoFuchsia + "♥♥♥♥♥" + ansiReset + "       *       :   <[◎]|_|=\n" +
+		" }-}-*]    `..'..'         " + ansiGoFuchsia + "♥♥♥" + ansiReset + "         `..'..'      |\n" +
+		"    ◎-◎    //   \\\\          " + ansiGoFuchsia + "♥" + ansiReset + "          //   \\\\     /|\\\n" +
+		ansiGoGopher + "<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" +
+		"\\" + ansiBlackOnWhite + "                                                       " + ansiReset + ansiGoGopher + "/\n" +
+		"\\" + ansiBlackOnWhite + "                  MUTN Version 0.0.1                   " + ansiReset + ansiGoGopher + "/\n" +
+		"\\" + ansiBlackOnWhite + "                 The Butchered Update                  " + ansiReset + ansiGoGopher + "/\n" +
+		"\\" + ansiBlackOnWhite + "                                                       " + ansiReset + ansiGoGopher + "/\n" +
+		"\\" + ansiBlackOnWhite + "          Copyright (c) 2024 Randall Winkhart          " + ansiReset + ansiGoGopher + "/\n" +
+		"\\" + ansiBlackOnWhite + "                                                       " + ansiReset + ansiGoGopher + "/\n" +
+		"<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" + ansiReset +
 		"\nFor more information, see:\n" +
 		"https://github.com/rwinkhart/MUTN\n" +
 		"https://github.com/rwinkhart/libmutton\n\n")

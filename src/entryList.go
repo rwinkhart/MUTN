@@ -8,9 +8,15 @@ import (
 	"strings"
 )
 
+// global variables used only in this file
 var (
 	fileList []string
 	dirList  []string
+)
+
+// global constants used only in this file
+const (
+	ansiAlternateEntryColor = "\033[38;5;8m"
 )
 
 // processing for printing file entries (determines color, line wrapping, and prints)
@@ -20,7 +26,7 @@ func printFileEntry(entry string, lastSlash int, charCounter int, colorAlternato
 	if colorAlternator > 0 {
 		colorCode = ""
 	} else {
-		colorCode = "\033[38;5;8m"
+		colorCode = ansiAlternateEntryColor
 	}
 	colorAlternator = -colorAlternator
 
@@ -30,20 +36,20 @@ func printFileEntry(entry string, lastSlash int, charCounter int, colorAlternato
 
 	// determine whether to wrap to a new line (+1 is to account for trailing spaces)
 	charCounter += len(fileEntryName) + 1
-	if charCounter >= Width {
+	if charCounter >= width {
 		charCounter = len(fileEntryName) + 1
 		fmt.Println()
 	}
 
 	// print fileEntryName to screen
-	fmt.Printf("%s%s\033[0m ", colorCode, fileEntryName)
+	fmt.Printf("%s%s%s ", colorCode, fileEntryName, ansiReset)
 
 	return charCounter, colorAlternator
 }
 
-// EntryListGen generates and displays full entry list
+// EntryListGen generates and displays full libmutton entry list
 func EntryListGen() {
-	fmt.Print("\n\033[38;5;0;48;5;15mlibmutton entries:\033[0m")
+	fmt.Print("\n" + ansiBlackOnWhite + "libmutton entries:" + ansiReset)
 
 	// walk entry directory
 	_ = filepath.WalkDir(EntryRoot,
@@ -57,14 +63,14 @@ func EntryListGen() {
 					dirList = append(dirList, "")
 				} else {
 					// otherwise, print the source of the error
-					fmt.Print("\n\n\033[38;5;9mAn unexpected error occurred while generating the entry list: " + err.Error() + "\033[0m")
+					fmt.Print("\n\n\033[38;5;9mAn unexpected error occurred while generating the entry list: " + err.Error() + ansiReset)
 				}
 				// quit walking EntryRoot and return nil to allow the program to continue
 				return nil
 			}
 
 			// trim root path from each path before storing
-			trimmedPath := fullPath[RootLength:]
+			trimmedPath := fullPath[rootLength:]
 
 			// create three separate slices for root-level entries, all other entries, and all subdirectories
 			// root-level entries get their own slice so that they can be alphabetically sorted without the chance of directories being placed in from of them
@@ -118,9 +124,9 @@ func EntryListGen() {
 				if !containsFiles {
 					containsFiles = true
 					if !Windows { // for consistency, format directories with UNIX-style path separators on all platforms
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/\033[0m\n", directory)
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", directory)
 					} else {
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/\033[0m\n", strings.ReplaceAll(directory, PathSeparator, "/"))
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", strings.ReplaceAll(directory, PathSeparator, "/"))
 					}
 				}
 
@@ -135,11 +141,11 @@ func EntryListGen() {
 			if !containsSubdirectory { // nor does it contain any subdirectories...
 				if dirListLength > 1 { // and directories besides the root-level exist... display directory header and empty directory warning
 					if !Windows { // for consistency, format directories with UNIX-style path separators on all platforms
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/\033[0m\n", directory)
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", directory)
 					} else {
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/\033[0m\n", strings.ReplaceAll(directory, PathSeparator, "/"))
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", strings.ReplaceAll(directory, PathSeparator, "/"))
 					}
-					fmt.Print(strings.Repeat(" ", indent*2) + "\033[38;5;11m-empty directory-\033[0m")
+					fmt.Print(strings.Repeat(" ", indent*2) + "\033[38;5;11m-empty directory-" + ansiReset)
 				} else { // warn if the only thing that exists is the root-level directory
 					fmt.Print("\n\nNothing's here! For help creating your first entry, run \"mutn help\".")
 				}
