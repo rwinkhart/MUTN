@@ -5,38 +5,14 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 )
 
 var (
-	fileListRoot   []string
-	fileListMain   []string
-	dirListMain    []string
-	sameParentList []string
+	fileListRoot []string
+	fileListMain []string
+	dirListMain  []string
 )
-
-// sorts a slice of strings (representing paths) by hierarchy
-func sortByHierarchy(paths []string) []string {
-	// custom sorting function
-	sort.Slice(paths, func(i, j int) bool {
-		// split paths into directory components
-		dirs1 := strings.Split(paths[i], PathSeparator)
-		dirs2 := strings.Split(paths[j], PathSeparator)
-
-		// compare each directory component
-		for k := 0; k < len(dirs1) && k < len(dirs2); k++ {
-			if dirs1[k] != dirs2[k] {
-				return dirs1[k] < dirs2[k]
-			}
-		}
-
-		// if one path is a prefix of the other, the shorter path comes first
-		return len(dirs1) < len(dirs2)
-	})
-
-	return paths
-}
 
 // processing for printing file entries (determines color, line wrapping, and prints)
 func printFileEntry(entry string, lastSlash int, charCounter int, colorAlternator int8) (int, int8) {
@@ -71,8 +47,6 @@ func EntryListGen() {
 	fmt.Print("\n\033[38;5;0;48;5;15mlibmutton entries:\033[0m")
 
 	// walk entry directory
-	var current string
-	var last string
 	_ = filepath.WalkDir(EntryRoot,
 		func(fullPath string, entry fs.DirEntry, err error) error {
 
@@ -98,34 +72,12 @@ func EntryListGen() {
 				fileListRoot = append(fileListRoot, trimmedPath)
 			} else if !entry.IsDir() {
 				fileListMain = append(fileListMain, trimmedPath)
-			} else if trimmedPath != "" { // TODO use sortByHierarchy
-
-				// if sameParentList is empty, set to the current trimmedPath
-				if len(sameParentList) == 0 {
-
-					sameParentList = []string{trimmedPath}
-				} else { // if sameParentList is not empty, check the parent subdirectory and compare it to the last one checked
-
-					current = trimmedPath[:strings.Index(trimmedPath[1:], PathSeparator)+1]
-					if current == last { // if the current and last parent subdirectory match, append the current trimmedPath to sameParentList
-
-						sameParentList = append(sameParentList, trimmedPath)
-					} else { // if the current and last parent subdirectory do not match, append sameParentList to dirListMain and restart sameParentList with the current trimmedPath
-
-						dirListMain = append(dirListMain, sortByHierarchy(sameParentList)...)
-						sameParentList = []string{trimmedPath}
-					}
-
-					last = current // save the current parent directory for comparison in the next iteration
-				}
+			} else if trimmedPath != "" {
+				dirListMain = append(dirListMain, trimmedPath)
 			}
 
 			return nil
 		})
-
-	if len(sameParentList) > 0 { // if there are leftover items in sameParentList, append them to dirListMain
-		dirListMain = append(dirListMain, sortByHierarchy(sameParentList)...)
-	}
 
 	// fileListRoot iteration
 	charCounter := 0             // set to track whether to line-wrap based on character count in line
