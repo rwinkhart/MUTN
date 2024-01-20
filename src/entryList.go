@@ -58,7 +58,7 @@ func EntryListGen() {
 			// check for errors encountered while walking directory
 			if err != nil {
 				// create EntryRoot if the error is the result of it not existing on the system
-				if err.Error() == "lstat "+EntryRoot+": no such file or directory" {
+				if os.IsNotExist(err) {
 					_ = os.Mkdir(EntryRoot, 0700)
 					dirList = append(dirList, "")
 				} else {
