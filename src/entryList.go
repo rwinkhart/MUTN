@@ -20,7 +20,7 @@ const (
 )
 
 // processing for printing file entries (determines color, line wrapping, and prints)
-func printFileEntry(entry string, lastSlash int, charCounter int, colorAlternator int8) (int, int8) {
+func printFileEntry(entry string, lastSlash int, charCounter int, colorAlternator int8, indent int) (int, int8) {
 	// determine color to print fileEntryName (alternate each time function is run)
 	var colorCode string
 	if colorAlternator > 0 {
@@ -34,11 +34,15 @@ func printFileEntry(entry string, lastSlash int, charCounter int, colorAlternato
 	fileEntryName := entry[lastSlash:]
 	fileEntryName = fileEntryName[:len(fileEntryName)-4]
 
+	if charCounter == 0 { // indent first line of entries for each directory header
+		fmt.Print(strings.Repeat(" ", indent*2))
+	}
+
 	// determine whether to wrap to a new line (+1 is to account for trailing spaces)
 	charCounter += len(fileEntryName) + 1
 	if charCounter >= width {
 		charCounter = len(fileEntryName) + 1
-		fmt.Println()
+		fmt.Print("\n" + strings.Repeat(" ", indent*2)) // indent each line
 	}
 
 	// print fileEntryName to screen
@@ -97,6 +101,9 @@ func EntryListGen() {
 
 		// determine directory's indentation multiplier based on PathSeparator occurrences - only run if last directory contained a subdirectory (indicating that the current directory is a subdirectory)
 		indent = strings.Count(directory, PathSeparator) - 1 // subtract 1 to account for trailing PathSeparator
+		if indent < 0 {                                      // do not allow negative indentation multiplier
+			indent = 0
+		}
 
 		// check if next directory is within the current one
 		if dirListLength > i+1 {
@@ -130,10 +137,7 @@ func EntryListGen() {
 					}
 				}
 
-				if indent > 0 { // indent entry list to the same degree as the directory header
-					fmt.Print(strings.Repeat(" ", indent*2))
-				}
-				charCounter, colorAlternator = printFileEntry(file, lastSlash, charCounter, colorAlternator)
+				charCounter, colorAlternator = printFileEntry(file, lastSlash, charCounter, colorAlternator, indent)
 			}
 		}
 
