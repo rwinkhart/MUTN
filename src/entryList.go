@@ -59,7 +59,7 @@ func printFileEntry(entry string, lastSlash int, charCounter int, colorAlternato
 
 	// determine whether to wrap to a new line (+1 is to account for trailing spaces)
 	charCounter += len(fileEntryName) + 1
-	if charCounter >= width {
+	if charCounter+(indent*2) >= width {
 		charCounter = len(fileEntryName) + 1
 		fmt.Print("\n" + strings.Repeat(" ", indent*2)) // indent each line
 	}
