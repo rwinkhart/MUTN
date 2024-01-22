@@ -78,11 +78,11 @@ ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
            OR OTHER DEALINGS IN THE SOFTWARE.` +
 		"\n\n---------------------------------------------------------" +
 		"\n\n             MUTN is a simple, self-hosted,\n  SSH-synchronized password manager based on libmutton\n\n" +
-		"         ..               " + ansiGoFuchsia + "♥♥ ♥♥" + ansiReset + "               ..\n" +
-		"        /()\\''.''.       " + ansiGoFuchsia + "♥♥♥♥♥♥♥" + ansiReset + "       .''.''/()\\   _)\n" +
-		"     _.   :       *       " + ansiGoFuchsia + "♥♥♥♥♥" + ansiReset + "       *       :   <[◎]|_|=\n" +
-		" }-}-*]    `..'..'         " + ansiGoFuchsia + "♥♥♥" + ansiReset + "         `..'..'      |\n" +
-		"    ◎-◎    //   \\\\          " + ansiGoFuchsia + "♥" + ansiReset + "          //   \\\\     /|\\\n" +
+		"         ..                                     ..\n" +
+		"        /()\\''.''.    " + ansiGoFuchsia + "♥♥♥♥" + ansiReset + "               .''.''/()\\   _)\n" +
+		"     _.   :       *  " + ansiGoFuchsia + "♥♥♥♥♥♥   ♥♥♥♥♥♥♥♥" + ansiReset + "  *       :   <[◎]|_|=\n" +
+		" }-}-*]    `..'..'    " + ansiGoFuchsia + "♥♥♥♥♥♥♥♥♥♥♥♥♥" + ansiReset + "      `..'..'      |\n" +
+		"    ◎-◎    //   \\\\     " + ansiGoFuchsia + "♥♥♥♥♥♥♥♥♥" + ansiReset + "         //   \\\\     /|\\\n" +
 		ansiGoGopher + "<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + ansiReset + ansiGoGopher + "/\n" +
 		"\\" + ansiBlackOnWhite + "                  MUTN Version 0.0.1                   " + ansiReset + ansiGoGopher + "/\n" +
