@@ -53,29 +53,29 @@ edit:
 func Version() {
 	fmt.Print(ansiBold + "\n                    MIT License" + ansiReset + `
 
-Permission is hereby granted, free of charge, to any
+  Permission is hereby granted, free of charge, to any
 person obtaining a copy of this software and associated
-documentation files (the "Software"), to deal in the
-Software without restriction, including without
-limitation the rights to use, copy, modify, merge,
-publish, distribute, sublicense, and/or sell copies of
+  documentation files (the "Software"), to deal in the
+    Software without restriction, including without
+   limitation the rights to use, copy, modify, merge,
+ publish, distribute, sublicense, and/or sell copies of
 the Software, and to permit persons to whom the Software
-is furnished to do so, subject to the following
-conditions:
+    is furnished to do so, subject to the following
+                      conditions:
 
-The above copyright notice and this permission notice
+ The above copyright notice and this permission notice
 shall be included in all copies or substantial portions
-of the Software.
+                   of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
 ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
-SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
-ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
-OR OTHER DEALINGS IN THE SOFTWARE.` +
+  TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+  PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
+ SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
+ ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+           OR OTHER DEALINGS IN THE SOFTWARE.` +
 		"\n\n---------------------------------------------------------" +
 		"\n\n             MUTN is a simple, self-hosted,\n  SSH-synchronized password manager based on libmutton\n\n" +
 		"         ..               " + ansiGoFuchsia + "♥♥ ♥♥" + ansiReset + "               ..\n" +
@@ -91,7 +91,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.` +
 		"\\" + ansiBlackOnWhite + "          Copyright (c) 2024 Randall Winkhart          " + ansiReset + ansiGoGopher + "/\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + ansiReset + ansiGoGopher + "/\n" +
 		"<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" + ansiReset +
-		"\nFor more information, see:\n" +
-		"https://github.com/rwinkhart/MUTN\n" +
-		"https://github.com/rwinkhart/libmutton\n\n")
+		"\n               For more information, see:\n\n" +
+		"           https://github.com/rwinkhart/MUTN\n" +
+		"         https://github.com/rwinkhart/libmutton\n\n")
 }
