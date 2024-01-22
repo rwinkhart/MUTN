@@ -3,7 +3,7 @@
 package main
 
 // EntryRoot path to libmutton entry directory TODO to be moved to libmutton
-var EntryRoot = home + "/.local/share/fake"
+var EntryRoot = home + "/.local/share/libmutton"
 
 // exported constants TODO to be moved to libmutton
 const (
