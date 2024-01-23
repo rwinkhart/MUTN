@@ -53,9 +53,9 @@ func printFileEntry(entry string, lastSlash int, charCounter int, colorAlternato
 
 	// determine whether to wrap to a new line (+1 is to account for trailing spaces)
 	charCounter += len(fileEntryName) + 1
-	if charCounter+(indent*2) >= width {
+	if indentation := indent * 2; charCounter+(indentation) >= width {
 		charCounter = len(fileEntryName) + 1
-		fmt.Print("\n" + strings.Repeat(" ", indent*2)) // indent each line
+		fmt.Print("\n" + strings.Repeat(" ", indentation)) // indent each line
 	}
 
 	// print fileEntryName to screen
@@ -118,9 +118,10 @@ func EntryListGen() {
 		colorAlternator = 1
 
 		// default to assuming this directory will be skipped (unless it is the root)
-		skippedDirList[i] = true
 		if i == 0 {
 			skippedDirList[i] = false
+		} else {
+			skippedDirList[i] = true
 		}
 
 		// determine directory's indentation multiplier based on PathSeparator occurrences
@@ -128,8 +129,7 @@ func EntryListGen() {
 
 		// check if next directory is within the current one
 		if dirListLength > i+1 {
-			nextDir := dirList[i+1]
-			if directory == nextDir[:strings.LastIndex(nextDir, PathSeparator)] {
+			if nextDir := dirList[i+1]; directory == nextDir[:strings.LastIndex(nextDir, PathSeparator)] {
 				containsSubdirectory = true
 			} else {
 				containsSubdirectory = false
@@ -142,11 +142,8 @@ func EntryListGen() {
 		containsFiles := false // indicates whether the current directory contains files (entries)
 		for _, file := range fileList {
 
-			// get index of last occurrence of pathSeparator in trimmed entry path (used to split entry's containing directory and entry's name)
-			lastSlash := strings.LastIndex(file, PathSeparator) + 1
-
 			// print the current file if it belongs in the current directory - otherwise, break the loop and move on to the next directory
-			if file[:lastSlash-1] == directory {
+			if lastSlash := strings.LastIndex(file, PathSeparator) + 1; file[:lastSlash-1] == directory {
 
 				// print directory header if this is the first run of the loop
 				if !containsFiles {
