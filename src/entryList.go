@@ -27,6 +27,19 @@ func indentSubtractor(skippedDirList []bool, dirList []string, currentDirIndex i
 
 	if indent < 0 { // disallow negative indentation multipliers
 		indent = 0
+	} else if indent > 0 {
+		var sliceIndex int
+		var count int
+		for currentIndex := 0; currentIndex < len(dirList[currentDirIndex]); currentIndex++ {
+			if string(dirList[currentDirIndex][currentIndex]) == "/" {
+				count++
+				if count == indent+1 {
+					sliceIndex = currentIndex
+					break
+				}
+			}
+		}
+		dirList[currentDirIndex] = dirList[currentDirIndex][sliceIndex+1:]
 	}
 
 	return indent
@@ -151,9 +164,9 @@ func EntryListGen() {
 					skippedDirList[i] = false                                     // the directory header is being printed, indicate that it is not being skipped
 					indent = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
 					if !Windows {                                                 // for consistency, format directories with UNIX-style path separators on all platforms
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", directory)
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", dirList[i])
 					} else {
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", strings.ReplaceAll(directory, PathSeparator, "/"))
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", strings.ReplaceAll(dirList[i], PathSeparator, "/"))
 					}
 				}
 
@@ -167,9 +180,9 @@ func EntryListGen() {
 					skippedDirList[i] = false                                     // the directory header is being printed, indicate that it is not being skipped
 					indent = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
 					if !Windows {                                                 // for consistency, format directories with UNIX-style path separators on all platforms
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", directory)
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", dirList[i])
 					} else {
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", strings.ReplaceAll(directory, PathSeparator, "/"))
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", strings.ReplaceAll(dirList[i], PathSeparator, "/"))
 					}
 					fmt.Print(strings.Repeat(" ", indent*2) + "\033[38;5;11m-empty directory-" + ansiReset)
 				} else { // warn if the only thing that exists is the root-level directory
