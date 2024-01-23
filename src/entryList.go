@@ -13,7 +13,7 @@ const (
 	ansiAlternateEntryColor = "\033[38;5;8m"
 )
 
-// calculates and returns the final visual indentation multiplier (needed to adjust indentation for skipped parent directories)
+// calculates and returns the final visual indentation multiplier (needed to adjust indentation for skipped parent directories) - also subtracts "old" text from directory header
 func indentSubtractor(skippedDirList []bool, dirList []string, currentDirIndex int, indent int) int {
 	var subtractor int // tracks how much to subtract from expected indentation multiplier
 
@@ -27,19 +27,19 @@ func indentSubtractor(skippedDirList []bool, dirList []string, currentDirIndex i
 
 	if indent < 0 { // disallow negative indentation multipliers
 		indent = 0
-	} else if indent > 0 {
-		var sliceIndex int
-		var count int
-		for currentIndex := 0; currentIndex < len(dirList[currentDirIndex]); currentIndex++ {
-			if string(dirList[currentDirIndex][currentIndex]) == "/" {
+	} else if indent > 0 { // trim already printed text from directory header
+		var sliceIndex int                                                                    // track index of where new text begins
+		var count int                                                                         // track PathSeparator occurrences in current directory header
+		for currentIndex := 0; currentIndex < len(dirList[currentDirIndex]); currentIndex++ { // iterate over characters in the current directory header
+			if string(dirList[currentDirIndex][currentIndex]) == PathSeparator { // increment count if an occurrence of PathSeparator is found
 				count++
-				if count == indent+1 {
+				if count == indent+1 { // set sliceIndex and break once the correct number of PathSeparator occurrences are found
 					sliceIndex = currentIndex
 					break
 				}
 			}
 		}
-		dirList[currentDirIndex] = dirList[currentDirIndex][sliceIndex+1:]
+		dirList[currentDirIndex] = dirList[currentDirIndex][sliceIndex+1:] // update the directory header with the newly trimmed one for visual indentation
 	}
 
 	return indent
