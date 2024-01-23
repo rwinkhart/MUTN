@@ -20,11 +20,11 @@ const (
 )
 
 // calculates and returns the final visual indentation multiplier (needed to adjust indentation for skipped parent directories)
-func indentSubtractor(indent int, skippedDirList []bool, currentIndex int) int {
+func indentSubtractor(indent int, skippedDirList []bool, currentDirIndex int) int {
 	var subtractor int // tracks how much to subtract from expected indentation multiplier
 
-	for i, skipped := range skippedDirList { // checks each skipped directory to determine if it is a parent to the current directory
-		if skipped && strings.HasPrefix(dirList[currentIndex], dirList[i]+PathSeparator) {
+	for i := len(skippedDirList[:currentDirIndex]) - 1; i >= 0; i-- { // checks each skipped directory to determine if it is a parent to the current directory
+		if skippedDirList[i] && strings.HasPrefix(dirList[currentDirIndex], dirList[i]+PathSeparator) {
 			subtractor++ // if the skipped directory is a parent, increment the subtractor
 		}
 	}
