@@ -8,19 +8,13 @@ import (
 	"strings"
 )
 
-// global variables used only in this file
-var (
-	fileList []string
-	dirList  []string
-)
-
 // global constants used only in this file
 const (
 	ansiAlternateEntryColor = "\033[38;5;8m"
 )
 
 // calculates and returns the final visual indentation multiplier (needed to adjust indentation for skipped parent directories)
-func indentSubtractor(indent int, skippedDirList []bool, currentDirIndex int) int {
+func indentSubtractor(skippedDirList []bool, dirList []string, currentDirIndex int, indent int) int {
 	var subtractor int // tracks how much to subtract from expected indentation multiplier
 
 	for i := len(skippedDirList[:currentDirIndex]) - 1; i >= 0; i-- { // checks each skipped directory to determine if it is a parent to the current directory
@@ -73,6 +67,10 @@ func printFileEntry(entry string, lastSlash int, charCounter int, colorAlternato
 // EntryListGen generates and displays full libmutton entry list
 func EntryListGen() {
 	fmt.Print("\n" + ansiBlackOnWhite + "libmutton entries:" + ansiReset)
+
+	// define file/directory containing slices so that they may be accessed by the anonymous WalkDir function
+	var fileList []string
+	var dirList []string
 
 	// walk entry directory
 	_ = filepath.WalkDir(EntryRoot,
@@ -153,9 +151,9 @@ func EntryListGen() {
 				// print directory header if this is the first run of the loop
 				if !containsFiles {
 					containsFiles = true
-					skippedDirList[i] = false                            // the directory header is being printed, indicate that it is not being skipped
-					indent = indentSubtractor(indent, skippedDirList, i) // calculate the final indentation multiplier
-					if !Windows {                                        // for consistency, format directories with UNIX-style path separators on all platforms
+					skippedDirList[i] = false                                     // the directory header is being printed, indicate that it is not being skipped
+					indent = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
+					if !Windows {                                                 // for consistency, format directories with UNIX-style path separators on all platforms
 						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", directory)
 					} else {
 						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", strings.ReplaceAll(directory, PathSeparator, "/"))
@@ -169,9 +167,9 @@ func EntryListGen() {
 		if !containsFiles { // if the current directory contains no files...
 			if !containsSubdirectory { // nor does it contain any subdirectories...
 				if dirListLength > 1 { // and directories besides the root-level exist... display directory header and empty directory warning
-					skippedDirList[i] = false                            // the directory header is being printed, indicate that it is not being skipped
-					indent = indentSubtractor(indent, skippedDirList, i) // calculate the final indentation multiplier
-					if !Windows {                                        // for consistency, format directories with UNIX-style path separators on all platforms
+					skippedDirList[i] = false                                     // the directory header is being printed, indicate that it is not being skipped
+					indent = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
+					if !Windows {                                                 // for consistency, format directories with UNIX-style path separators on all platforms
 						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", directory)
 					} else {
 						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", strings.ReplaceAll(directory, PathSeparator, "/"))
