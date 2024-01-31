@@ -14,12 +14,18 @@ const (
 )
 
 // calculates and returns the final visual indentation multiplier (needed to adjust indentation for skipped parent directories) - also subtracts "old" text from directory header
-func indentSubtractor(skippedDirList []bool, dirList []string, currentDirIndex int, indent int) int {
-	var subtractor int // tracks how much to subtract from expected indentation multiplier
+func indentSubtractor(skippedDirList []bool, dirList []string, currentDirIndex int, indent int) (int, string) {
+	var subtractor int      // tracks how much to subtract from expected indentation multiplier
+	var lastPrefixIndex int // tracks the index (in both skippedDirList and dirList) of the last displayed parent directory
+	var trimmedDirectory = dirList[currentDirIndex]
 
-	for i := len(skippedDirList[:currentDirIndex]) - 1; i >= 0; i-- { // checks each skipped directory to determine if it is a parent to the current directory
-		if skippedDirList[i] && strings.HasPrefix(dirList[currentDirIndex], dirList[i]+PathSeparator) {
-			subtractor++ // if the skipped directory is a parent, increment the subtractor
+	for i, skipped := range skippedDirList[:currentDirIndex] { // checks each skipped directory to determine if it is a parent to the current directory
+		if strings.HasPrefix(trimmedDirectory, dirList[i]+PathSeparator) { // if the current directory is the child of this iteration's directory...
+			if skipped { // ...and this iteration's directory was skipped...
+				subtractor++ // increment the subtractor to indicate that the visual indentation should be reduced
+			} else {
+				lastPrefixIndex = i
+			}
 		}
 	}
 
@@ -27,22 +33,11 @@ func indentSubtractor(skippedDirList []bool, dirList []string, currentDirIndex i
 
 	if indent < 0 { // disallow negative indentation multipliers
 		indent = 0
-	} else if indent > 0 { // trim already printed text from directory header
-		var sliceIndex int                                                                    // track index of where new text begins
-		var count int                                                                         // track PathSeparator occurrences in current directory header
-		for currentIndex := 0; currentIndex < len(dirList[currentDirIndex]); currentIndex++ { // iterate over characters in the current directory header
-			if string(dirList[currentDirIndex][currentIndex]) == PathSeparator { // increment count if an occurrence of PathSeparator is found
-				count++
-				if count == indent+1 { // set sliceIndex and break once the correct number of PathSeparator occurrences are found
-					sliceIndex = currentIndex
-					break
-				}
-			}
-		}
-		dirList[currentDirIndex] = dirList[currentDirIndex][sliceIndex+1:] // update the directory header with the newly trimmed one for visual indentation
+	} else if indent > 0 { // trim the most recently displayed parent directory from the directory header to avoid displaying redundant information
+		trimmedDirectory = strings.Replace(trimmedDirectory, dirList[lastPrefixIndex], "", 1)
 	}
 
-	return indent
+	return indent, trimmedDirectory
 }
 
 // processing for printing file entries (determines color, line wrapping, and prints)
@@ -161,12 +156,12 @@ func EntryListGen() {
 				// print directory header if this is the first run of the loop
 				if !containsFiles {
 					containsFiles = true
-					skippedDirList[i] = false                                     // the directory header is being printed, indicate that it is not being skipped
-					indent = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
-					if !Windows {                                                 // for consistency, format directories with UNIX-style path separators on all platforms
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", dirList[i])
+					skippedDirList[i] = false                                                // the directory header is being printed, indicate that it is not being skipped
+					indent, directory = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
+					if !Windows {                                                            // for consistency, format directories with UNIX-style path separators on all platforms
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", directory)
 					} else {
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", strings.ReplaceAll(dirList[i], PathSeparator, "/"))
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", strings.ReplaceAll(directory, PathSeparator, "/"))
 					}
 				}
 
@@ -177,12 +172,12 @@ func EntryListGen() {
 		if !containsFiles { // if the current directory contains no files...
 			if !containsSubdirectory { // nor does it contain any subdirectories...
 				if dirListLength > 1 { // and directories besides the root-level exist... display directory header and empty directory warning
-					skippedDirList[i] = false                                     // the directory header is being printed, indicate that it is not being skipped
-					indent = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
-					if !Windows {                                                 // for consistency, format directories with UNIX-style path separators on all platforms
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", dirList[i])
+					skippedDirList[i] = false                                                // the directory header is being printed, indicate that it is not being skipped
+					indent, directory = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
+					if !Windows {                                                            // for consistency, format directories with UNIX-style path separators on all platforms
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", directory)
 					} else {
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", strings.ReplaceAll(dirList[i], PathSeparator, "/"))
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", strings.ReplaceAll(directory, PathSeparator, "/"))
 					}
 					fmt.Print(strings.Repeat(" ", indent*2) + "\033[38;5;11m-empty directory-" + ansiReset)
 				} else { // warn if the only thing that exists is the root-level directory
