@@ -119,6 +119,7 @@ func EntryListGen() {
 	var colorAlternator int8 = 1                     // track alternating colors for each printed entry name
 	var containsSubdirectory bool                    // indicates whether the current directory contains a subdirectory
 	var indent int                                   // visual indentation multiplier
+	var vanityDirectory string                       // directory header printed to end-user - visual only, not used in any processing
 	for i, directory := range dirList {
 
 		// reset formatting variables for new directory
@@ -156,12 +157,12 @@ func EntryListGen() {
 				// print directory header if this is the first run of the loop
 				if !containsFiles {
 					containsFiles = true
-					skippedDirList[i] = false                                                // the directory header is being printed, indicate that it is not being skipped
-					indent, directory = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
-					if !Windows {                                                            // for consistency, format directories with UNIX-style path separators on all platforms
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", directory)
+					skippedDirList[i] = false                                                      // the directory header is being printed, indicate that it is not being skipped
+					indent, vanityDirectory = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
+					if !Windows {                                                                  // for consistency, format directories with UNIX-style path separators on all platforms
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", vanityDirectory)
 					} else {
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", strings.ReplaceAll(directory, PathSeparator, "/"))
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", strings.ReplaceAll(vanityDirectory, PathSeparator, "/"))
 					}
 				}
 
@@ -172,12 +173,12 @@ func EntryListGen() {
 		if !containsFiles { // if the current directory contains no files...
 			if !containsSubdirectory { // nor does it contain any subdirectories...
 				if dirListLength > 1 { // and directories besides the root-level exist... display directory header and empty directory warning
-					skippedDirList[i] = false                                                // the directory header is being printed, indicate that it is not being skipped
-					indent, directory = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
-					if !Windows {                                                            // for consistency, format directories with UNIX-style path separators on all platforms
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", directory)
+					skippedDirList[i] = false                                                      // the directory header is being printed, indicate that it is not being skipped
+					indent, vanityDirectory = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
+					if !Windows {                                                                  // for consistency, format directories with UNIX-style path separators on all platforms
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", vanityDirectory)
 					} else {
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", strings.ReplaceAll(directory, PathSeparator, "/"))
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", strings.ReplaceAll(vanityDirectory, PathSeparator, "/"))
 					}
 					fmt.Print(strings.Repeat(" ", indent*2) + "\033[38;5;11m-empty directory-" + ansiReset)
 				} else { // warn if the only thing that exists is the root-level directory
