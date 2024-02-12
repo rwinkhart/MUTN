@@ -32,7 +32,7 @@ This program comes with absolutely no warranty; type "mutn version" for details.
   password/-p            Add a password entry
   note/-n                Add a note entry
   folder/-f              Add a new folder for entries
-edit:
+ edit:
   rename/relocate/-r     Rename or relocate an entry
   username/-u            Change the username of an entry
   password/-p            Change the password of an entry
@@ -47,7 +47,51 @@ edit:
   update/-u              Generate a password for an existing entry
 
 ` + ansiBold + "Tip 1:" + ansiReset + ` You can quickly read an entry with "mutn /<entry name>"
-` + "\033[1mTip 2:\033[0m" + ` Type "mutn" to view a list of saved entries` + "\n\n")
+` + ansiBold + "Tip 2:" + ansiReset + ` Type "mutn" (no arguments/options) to view a list of saved entries
+` + ansiBold + "Tip 3:" + ansiReset + " Provide \"add\", \"edit\", \"copy\", or \"gen\" as the only argument to receive more specific help\n\n")
+}
+
+func HelpAdd() {
+	fmt.Print(ansiBold + "\nUsage:" + ansiReset + ` mutn /<entry name> add <option>
+
+` + ansiBold + "Options:" + ansiReset + `
+ add:
+  password/-p            Add a password entry
+  note/-n                Add a note entry
+  folder/-f              Add a new folder for entries` + "\n\n")
+}
+
+func HelpEdit() {
+	fmt.Print(ansiBold + "\nUsage:" + ansiReset + ` mutn /<entry name> edit <option>
+
+` + ansiBold + "Options:" + ansiReset + `
+ edit:
+  rename/-r              Rename or relocate an entry
+  username/-u            Change the username of an entry
+  password/-p            Change the password of an entry
+  url/-l                 Change the url attached to an entry
+  note/-n                Change the note attached to an entry` + "\n\n")
+}
+
+func HelpCopy() {
+	fmt.Print(ansiBold + "\nUsage:" + ansiReset + ` mutn /<entry name> copy <option>
+
+` + ansiBold + "Options:" + ansiReset + `
+ copy:
+  username/-u            Copy the username in an entry to your clipboard
+  password/-p            Copy the password in an entry to your clipboard
+  url/-l                 Copy the url in an entry to your clipboard
+  note/-n                Copy the first note line in an entry to your clipboard` + "\n\n")
+}
+
+func HelpGen() {
+	fmt.Print(ansiBold + "\nUsage:" + ansiReset + ` mutn /<entry name> gen [option]
+
+` + ansiBold + "Options:" + ansiReset + `
+ gen:
+  update/-u              Generate a password for an existing entry
+
+` + ansiBold + "Tip:" + ansiReset + " If no options are provided, a new password entry is generated\n\n")
 }
 
 func Version() {

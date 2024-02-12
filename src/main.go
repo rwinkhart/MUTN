@@ -19,6 +19,14 @@ func main() {
 
 		case "help", "--help", "-h":
 			HelpMain()
+		case "add":
+			HelpAdd()
+		case "edit":
+			HelpEdit()
+		case "copy":
+			HelpCopy()
+		case "gen":
+			HelpGen()
 		case "version", "-v":
 			Version()
 		default:
