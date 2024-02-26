@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/rwinkhart/MUTN/src/cli"
 	"os"
 )
 
@@ -11,26 +12,26 @@ func main() {
 
 	if argsCount == 0 {
 
-		EntryListGen()
+		cli.EntryListGen()
 
 	} else if argsCount == 1 {
 
 		switch args[0] {
 
 		case "help", "--help", "-h":
-			HelpMain()
+			cli.HelpMain()
 		case "add":
-			HelpAdd()
+			cli.HelpAdd()
 		case "edit":
-			HelpEdit()
+			cli.HelpEdit()
 		case "copy":
-			HelpCopy()
+			cli.HelpCopy()
 		case "gen":
-			HelpGen()
+			cli.HelpGen()
 		case "version", "-v":
-			Version()
+			cli.Version()
 		default:
-			HelpMain()
+			cli.HelpMain()
 
 		}
 	}
