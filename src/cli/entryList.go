@@ -11,7 +11,9 @@ import (
 
 // global constants used only in this file
 const (
-	ansiAlternateEntryColor = "\033[38;5;8m"
+	ansiAlternateEntryColor   = "\033[38;5;8m"
+	ansiDirectoryHeader       = "\033[38;5;7;48;5;8m"
+	ansiEmptyDirectoryWarning = "\033[38;5;11m"
 )
 
 // calculates and returns the final visual indentation multiplier (needed to adjust indentation for skipped parent directories) - also subtracts "old" text from directory header
@@ -161,9 +163,9 @@ func EntryListGen() {
 					skippedDirList[i] = false                                                      // the directory header is being printed, indicate that it is not being skipped
 					indent, vanityDirectory = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
 					if !offline.Windows {                                                          // for consistency, format directories with UNIX-style path separators on all platforms
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+offline.AnsiReset+"\n", vanityDirectory)
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+offline.AnsiReset+"\n", vanityDirectory)
 					} else {
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+offline.AnsiReset+"\n", strings.ReplaceAll(vanityDirectory, offline.PathSeparator, "/"))
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+offline.AnsiReset+"\n", strings.ReplaceAll(vanityDirectory, offline.PathSeparator, "/"))
 					}
 				}
 
@@ -177,11 +179,11 @@ func EntryListGen() {
 					skippedDirList[i] = false                                                      // the directory header is being printed, indicate that it is not being skipped
 					indent, vanityDirectory = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
 					if !offline.Windows {                                                          // for consistency, format directories with UNIX-style path separators on all platforms
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+offline.AnsiReset+"\n", vanityDirectory)
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+offline.AnsiReset+"\n", vanityDirectory)
 					} else {
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+offline.AnsiReset+"\n", strings.ReplaceAll(vanityDirectory, offline.PathSeparator, "/"))
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+offline.AnsiReset+"\n", strings.ReplaceAll(vanityDirectory, offline.PathSeparator, "/"))
 					}
-					fmt.Print(strings.Repeat(" ", indent*2) + "\033[38;5;11m-empty directory-" + offline.AnsiReset)
+					fmt.Print(strings.Repeat(" ", indent*2) + ansiEmptyDirectoryWarning + "-empty directory-" + offline.AnsiReset)
 				} else { // warn if the only thing that exists is the root-level directory
 					fmt.Print("\n\nNothing's here! For help creating your first entry, run \"mutn help\".")
 				}

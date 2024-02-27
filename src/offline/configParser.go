@@ -11,7 +11,7 @@ var Config = make(map[string]interface{})
 func ReadConfig() {
 	cfg, err := ini.Load(home + "/.config/libmutton/libmutton.ini")
 	if err != nil {
-		fmt.Println(AnsiError + "\033[38;5;9mFailed to load libmutton.ini" + AnsiReset)
+		fmt.Println(AnsiError + "Failed to load libmutton.ini" + AnsiReset)
 		os.Exit(1)
 	}
 
@@ -22,7 +22,7 @@ func ReadConfig() {
 	// ONLINE (conditional)
 	onlineMode, err := cfg.Section("OFFLINE").Key("onlineMode").Bool()
 	if err != nil {
-		fmt.Println(AnsiError + "\033[38;5;9mFailed to enable online (synced) mode - [OFFLINE]/onlineMode in libmutton.ini must be a boolean value - continuing in offline mode" + AnsiReset)
+		fmt.Println(AnsiError + "Failed to enable online (synced) mode - [OFFLINE]/onlineMode in libmutton.ini must be a boolean value - continuing in offline mode" + AnsiReset)
 		onlineMode = false
 	}
 	if onlineMode {
@@ -38,7 +38,7 @@ func ReadConfig() {
 		Config["remoteIP"] = cfg.Section("ONLINE").Key("remoteIP").String()
 		Config["remotePort"], err = cfg.Section("ONLINE").Key("remotePort").Int()
 		if err != nil {
-			fmt.Println(AnsiError + "\033[38;5;9mFailed to enable online (synced) mode - [ONLINE]/remotePort in libmutton.ini must be an integer value- continuing in offline mode" + AnsiReset)
+			fmt.Println(AnsiError + "Failed to enable online (synced) mode - [ONLINE]/remotePort in libmutton.ini must be an integer value- continuing in offline mode" + AnsiReset)
 			// remotePort == 0 represents offline-only mode
 			Config["remotePort"] = 0
 		}
