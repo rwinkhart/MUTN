@@ -1,6 +1,9 @@
 package cli
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/rwinkhart/MUTN/src/offline"
+)
 
 // global constants used only in this file
 const (
@@ -9,13 +12,13 @@ const (
 )
 
 func HelpMain() {
-	fmt.Print(ansiBold + "\nMUTN | Copyright (c) 2024 Randall Winkhart\n" + ansiReset + `
+	fmt.Print(ansiBold + "\nMUTN | Copyright (c) 2024 Randall Winkhart\n" + offline.AnsiReset + `
 This software exists under the MIT license; you may redistribute it under certain conditions.
 This program comes with absolutely no warranty; type "mutn version" for details.
 
-` + ansiBold + "Usage:" + ansiReset + ` mutn [/<entry name> [argument] [option]] | [argument]
+` + ansiBold + "Usage:" + offline.AnsiReset + ` mutn [/<entry name> [argument] [option]] | [argument]
 
-` + ansiBold + "Arguments:" + ansiReset + `
+` + ansiBold + "Arguments:" + offline.AnsiReset + `
  help/--help/-h          Bring up this menu
  version/-v              Display version and license information
  init                    Set up MUTN
@@ -27,7 +30,7 @@ This program comes with absolutely no warranty; type "mutn version" for details.
  shear                   Delete an existing entry
  sync                    Manually sync the entry directory
 
-` + ansiBold + "Options:" + ansiReset + `
+` + ansiBold + "Options:" + offline.AnsiReset + `
  add:
   password/-p            Add a password entry
   note/-n                Add a note entry
@@ -46,15 +49,15 @@ This program comes with absolutely no warranty; type "mutn version" for details.
  gen:
   update/-u              Generate a password for an existing entry
 
-` + ansiBold + "Tip 1:" + ansiReset + ` You can quickly read an entry with "mutn /<entry name>"
-` + ansiBold + "Tip 2:" + ansiReset + ` Type "mutn" (no arguments/options) to view a list of saved entries
-` + ansiBold + "Tip 3:" + ansiReset + " Provide \"add\", \"edit\", \"copy\", or \"gen\" as the only argument to receive more specific help\n\n")
+` + ansiBold + "Tip 1:" + offline.AnsiReset + ` You can quickly read an entry with "mutn /<entry name>"
+` + ansiBold + "Tip 2:" + offline.AnsiReset + ` Type "mutn" (no arguments/options) to view a list of saved entries
+` + ansiBold + "Tip 3:" + offline.AnsiReset + " Provide \"add\", \"edit\", \"copy\", or \"gen\" as the only argument to receive more specific help\n\n")
 }
 
 func HelpAdd() {
-	fmt.Print(ansiBold + "\nUsage:" + ansiReset + ` mutn /<entry name> add <option>
+	fmt.Print(ansiBold + "\nUsage:" + offline.AnsiReset + ` mutn /<entry name> add <option>
 
-` + ansiBold + "Options:" + ansiReset + `
+` + ansiBold + "Options:" + offline.AnsiReset + `
  add:
   password/-p            Add a password entry
   note/-n                Add a note entry
@@ -62,9 +65,9 @@ func HelpAdd() {
 }
 
 func HelpEdit() {
-	fmt.Print(ansiBold + "\nUsage:" + ansiReset + ` mutn /<entry name> edit <option>
+	fmt.Print(ansiBold + "\nUsage:" + offline.AnsiReset + ` mutn /<entry name> edit <option>
 
-` + ansiBold + "Options:" + ansiReset + `
+` + ansiBold + "Options:" + offline.AnsiReset + `
  edit:
   rename/-r              Rename or relocate an entry
   username/-u            Change the username of an entry
@@ -74,9 +77,9 @@ func HelpEdit() {
 }
 
 func HelpCopy() {
-	fmt.Print(ansiBold + "\nUsage:" + ansiReset + ` mutn /<entry name> copy <option>
+	fmt.Print(ansiBold + "\nUsage:" + offline.AnsiReset + ` mutn /<entry name> copy <option>
 
-` + ansiBold + "Options:" + ansiReset + `
+` + ansiBold + "Options:" + offline.AnsiReset + `
  copy:
   username/-u            Copy the username in an entry to your clipboard
   password/-p            Copy the password in an entry to your clipboard
@@ -85,17 +88,17 @@ func HelpCopy() {
 }
 
 func HelpGen() {
-	fmt.Print(ansiBold + "\nUsage:" + ansiReset + ` mutn /<entry name> gen [option]
+	fmt.Print(ansiBold + "\nUsage:" + offline.AnsiReset + ` mutn /<entry name> gen [option]
 
-` + ansiBold + "Options:" + ansiReset + `
+` + ansiBold + "Options:" + offline.AnsiReset + `
  gen:
   update/-u              Generate a password for an existing entry
 
-` + ansiBold + "Tip:" + ansiReset + " If no options are provided, a new password entry is generated\n\n")
+` + ansiBold + "Tip:" + offline.AnsiReset + " If no options are provided, a new password entry is generated\n\n")
 }
 
 func Version() {
-	fmt.Print(ansiBold + "\n                    MIT License" + ansiReset + `
+	fmt.Print(ansiBold + "\n                    MIT License" + offline.AnsiReset + `
 
   Permission is hereby granted, free of charge, to any
 person obtaining a copy of this software and associated
@@ -123,18 +126,18 @@ ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
 		"\n\n---------------------------------------------------------" +
 		"\n\n             MUTN is a simple, self-hosted,\n  SSH-synchronized password manager based on libmutton\n\n" +
 		"         ..                                     ..\n" +
-		"        /()\\''.''.    " + ansiGoFuchsia + "♥♥♥♥" + ansiReset + "               .''.''/()\\   _)\n" +
-		"     _.   :       *  " + ansiGoFuchsia + "♥♥♥♥♥♥   ♥♥♥♥♥♥♥♥" + ansiReset + "  *       :   <[◎]|_|=\n" +
-		" }-}-*]    `..'..'    " + ansiGoFuchsia + "♥♥♥♥♥♥♥♥♥♥♥♥♥" + ansiReset + "      `..'..'      |\n" +
-		"    ◎-◎    //   \\\\     " + ansiGoFuchsia + "♥♥♥♥♥♥♥♥♥" + ansiReset + "         //   \\\\     /|\\\n" +
+		"        /()\\''.''.    " + ansiGoFuchsia + "♥♥♥♥" + offline.AnsiReset + "               .''.''/()\\   _)\n" +
+		"     _.   :       *  " + ansiGoFuchsia + "♥♥♥♥♥♥   ♥♥♥♥♥♥♥♥" + offline.AnsiReset + "  *       :   <[◎]|_|=\n" +
+		" }-}-*]    `..'..'    " + ansiGoFuchsia + "♥♥♥♥♥♥♥♥♥♥♥♥♥" + offline.AnsiReset + "      `..'..'      |\n" +
+		"    ◎-◎    //   \\\\     " + ansiGoFuchsia + "♥♥♥♥♥♥♥♥♥" + offline.AnsiReset + "         //   \\\\     /|\\\n" +
 		ansiGoGopher + "<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" +
-		"\\" + ansiBlackOnWhite + "                                                       " + ansiReset + ansiGoGopher + "/\n" +
-		"\\" + ansiBlackOnWhite + "                  MUTN Version 0.0.1                   " + ansiReset + ansiGoGopher + "/\n" +
-		"\\" + ansiBlackOnWhite + "                 The Butchered Update                  " + ansiReset + ansiGoGopher + "/\n" +
-		"\\" + ansiBlackOnWhite + "                                                       " + ansiReset + ansiGoGopher + "/\n" +
-		"\\" + ansiBlackOnWhite + "          Copyright (c) 2024 Randall Winkhart          " + ansiReset + ansiGoGopher + "/\n" +
-		"\\" + ansiBlackOnWhite + "                                                       " + ansiReset + ansiGoGopher + "/\n" +
-		"<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" + ansiReset +
+		"\\" + ansiBlackOnWhite + "                                                       " + offline.AnsiReset + ansiGoGopher + "/\n" +
+		"\\" + ansiBlackOnWhite + "                  MUTN Version 0.0.1                   " + offline.AnsiReset + ansiGoGopher + "/\n" +
+		"\\" + ansiBlackOnWhite + "                 The Butchered Update                  " + offline.AnsiReset + ansiGoGopher + "/\n" +
+		"\\" + ansiBlackOnWhite + "                                                       " + offline.AnsiReset + ansiGoGopher + "/\n" +
+		"\\" + ansiBlackOnWhite + "          Copyright (c) 2024 Randall Winkhart          " + offline.AnsiReset + ansiGoGopher + "/\n" +
+		"\\" + ansiBlackOnWhite + "                                                       " + offline.AnsiReset + ansiGoGopher + "/\n" +
+		"<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" + offline.AnsiReset +
 		"\n               For more information, see:\n\n" +
 		"           https://github.com/rwinkhart/MUTN\n" +
 		"         https://github.com/rwinkhart/libmutton\n\n")

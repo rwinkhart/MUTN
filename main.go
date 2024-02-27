@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/rwinkhart/MUTN/src/cli"
+	"github.com/rwinkhart/MUTN/src/offline"
 	"os"
 )
 
@@ -34,5 +35,8 @@ func main() {
 			cli.HelpMain()
 
 		}
+	} else if argsCount > 1 {
+		// load config (libmutton.ini)
+		offline.ReadConfig()
 	}
 }

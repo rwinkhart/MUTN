@@ -68,14 +68,14 @@ func printFileEntry(entry string, lastSlash int, charCounter int, colorAlternato
 	}
 
 	// print fileEntryName to screen
-	fmt.Printf("%s%s%s ", colorCode, fileEntryName, ansiReset)
+	fmt.Printf("%s%s%s ", colorCode, fileEntryName, offline.AnsiReset)
 
 	return charCounter, colorAlternator
 }
 
 // EntryListGen generates and displays full libmutton entry list
 func EntryListGen() {
-	fmt.Print("\n" + ansiBlackOnWhite + "libmutton entries:" + ansiReset)
+	fmt.Print("\n" + ansiBlackOnWhite + "libmutton entries:" + offline.AnsiReset)
 
 	// define file/directory containing slices so that they may be accessed by the anonymous WalkDir function
 	var fileList []string
@@ -93,7 +93,7 @@ func EntryListGen() {
 					dirList = append(dirList, "")
 				} else {
 					// otherwise, print the source of the error
-					fmt.Print("\n\n\033[38;5;9mAn unexpected error occurred while generating the entry list: " + err.Error() + ansiReset)
+					fmt.Print("\n\n" + offline.AnsiError + "An unexpected error occurred while generating the entry list: " + err.Error() + offline.AnsiReset)
 				}
 				// quit walking EntryRoot and return nil to allow the program to continue
 				return nil
@@ -161,9 +161,9 @@ func EntryListGen() {
 					skippedDirList[i] = false                                                      // the directory header is being printed, indicate that it is not being skipped
 					indent, vanityDirectory = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
 					if !offline.Windows {                                                          // for consistency, format directories with UNIX-style path separators on all platforms
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", vanityDirectory)
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+offline.AnsiReset+"\n", vanityDirectory)
 					} else {
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", strings.ReplaceAll(vanityDirectory, offline.PathSeparator, "/"))
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+offline.AnsiReset+"\n", strings.ReplaceAll(vanityDirectory, offline.PathSeparator, "/"))
 					}
 				}
 
@@ -177,11 +177,11 @@ func EntryListGen() {
 					skippedDirList[i] = false                                                      // the directory header is being printed, indicate that it is not being skipped
 					indent, vanityDirectory = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
 					if !offline.Windows {                                                          // for consistency, format directories with UNIX-style path separators on all platforms
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", vanityDirectory)
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+offline.AnsiReset+"\n", vanityDirectory)
 					} else {
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+ansiReset+"\n", strings.ReplaceAll(vanityDirectory, offline.PathSeparator, "/"))
+						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+"\033[38;5;7;48;5;8m%s/"+offline.AnsiReset+"\n", strings.ReplaceAll(vanityDirectory, offline.PathSeparator, "/"))
 					}
-					fmt.Print(strings.Repeat(" ", indent*2) + "\033[38;5;11m-empty directory-" + ansiReset)
+					fmt.Print(strings.Repeat(" ", indent*2) + "\033[38;5;11m-empty directory-" + offline.AnsiReset)
 				} else { // warn if the only thing that exists is the root-level directory
 					fmt.Print("\n\nNothing's here! For help creating your first entry, run \"mutn help\".")
 				}

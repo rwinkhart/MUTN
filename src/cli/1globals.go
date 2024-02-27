@@ -14,7 +14,6 @@ var (
 
 // global constants used across multiple files
 const (
-	ansiReset        = "\033[0m"
 	ansiBold         = "\033[1m"
 	ansiBlackOnWhite = "\033[38;5;0;48;5;15m"
 )
