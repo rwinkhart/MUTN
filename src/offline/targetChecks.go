@@ -11,7 +11,7 @@ func TargetIsFile(targetLocation string, errorOnFail bool) (bool, bool) {
 	targetInfo, err := os.Stat(targetLocation)
 	if err != nil {
 		if errorOnFail {
-			fmt.Println(AnsiError + "Failed to access " + targetLocation + " - ensure it exists and has the correct permissions" + AnsiReset)
+			fmt.Println(AnsiError + "Failed to access \"" + targetLocation + "\" - ensure it exists and has the correct permissions" + AnsiReset)
 			os.Exit(1)
 		} else {
 			return false, false

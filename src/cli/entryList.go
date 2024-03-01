@@ -95,7 +95,7 @@ func EntryListGen() {
 					dirList = append(dirList, "")
 				} else {
 					// otherwise, print the source of the error
-					fmt.Print("\n\n" + offline.AnsiError + "An unexpected error occurred while generating the entry list: " + err.Error() + offline.AnsiReset)
+					fmt.Println(offline.AnsiError + "An unexpected error occurred while generating the entry list: " + err.Error() + offline.AnsiReset)
 				}
 				// quit walking EntryRoot and return nil to allow the program to continue
 				return nil

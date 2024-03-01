@@ -22,10 +22,12 @@ func main() {
 		// initial entry reader shortcut
 		// TODO Do not use file extensions for entries! This will allow doing this check more efficiently than otherwise possible.
 		if strings.HasPrefix(args[0], "/") {
-			if isFile, _ := offline.TargetIsFile(offline.EntryRoot+args[0], true); isFile {
+			targetLocation := offline.EntryRoot + offline.PathSeparator + args[0][1:]
+			if isFile, _ := offline.TargetIsFile(targetLocation, true); isFile {
+				// TODO decrypt and display the entry
 				fmt.Println("It's a file!")
 			} else {
-				fmt.Println("It's a directory!")
+				fmt.Println(offline.AnsiError + "Failed to read \"" + targetLocation + "\" - it is a directory" + offline.AnsiReset)
 			}
 			os.Exit(0)
 		}
