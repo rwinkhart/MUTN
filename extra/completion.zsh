@@ -1,10 +1,10 @@
 #compdef mutn
 
 mutn_path="$HOME/.local/share/libmutton"
-full_paths=("$mutn_path"/**/*.gpg)
+full_paths=("$mutn_path"/**/*)
 trimmed_paths=()
 for scan_path in "${full_paths[@]}"; do
-    trimmed_paths+=("${${scan_path#$mutn_path}%????}")
+  trimmed_paths+=("${scan_path#$mutn_path}")
 done
 [[ -z $trimmed_paths ]] && trimmed_paths=(help)
 

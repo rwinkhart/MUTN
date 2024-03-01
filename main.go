@@ -20,7 +20,6 @@ func main() {
 	} else if argsCount == 1 {
 
 		// initial entry reader shortcut
-		// TODO Do not use file extensions for entries! This will allow doing this check more efficiently than otherwise possible.
 		if strings.HasPrefix(args[0], "/") {
 			targetLocation := offline.EntryRoot + offline.PathSeparator + args[0][1:]
 			if isFile, _ := offline.TargetIsFile(targetLocation, true); isFile {

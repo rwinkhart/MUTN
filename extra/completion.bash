@@ -4,10 +4,10 @@ _path_gen() {
     local mutn_path="$HOME/.local/share/libmutton"
     local glob_status=$(shopt -p globstar)
     [ -z "${glob_status##*u*}" ] && shopt -s globstar  # if recursive globbing is disabled, enable it
-    local full_paths=("$mutn_path"/**/*.gpg)
+    local full_paths=("$mutn_path"/**/*)
     $glob_status  # set recursive globbing to user default
     for scan_path in "${full_paths[@]}"; do
-      trimmed_paths+=("${scan_path:${#mutn_path}:-4}")
+      trimmed_paths+=("${scan_path#$mutn_path}")
     done
     if [ "${trimmed_paths[0]}" == '/**/*' ]; then trimmed_paths[0]=help; fi
 } &&

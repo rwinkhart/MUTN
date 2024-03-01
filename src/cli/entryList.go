@@ -54,9 +54,8 @@ func printFileEntry(entry string, lastSlash int, charCounter int, colorAlternato
 	}
 	colorAlternator = -colorAlternator
 
-	// trim the containing directory and file extension from the entry to determine fileEntryName
+	// trim the containing directory from the entry to determine fileEntryName
 	fileEntryName := entry[lastSlash:]
-	fileEntryName = fileEntryName[:len(fileEntryName)-4]
 
 	if charCounter == 0 { // indent first line of entries for each directory header
 		fmt.Print(strings.Repeat(" ", indent*2))
