@@ -23,8 +23,8 @@ func main() {
 		if strings.HasPrefix(args[0], "/") {
 			targetLocation := offline.EntryRoot + offline.PathSeparator + args[0][1:]
 			if isFile, _ := offline.TargetIsFile(targetLocation, true); isFile {
-				// TODO decrypt and display the entry
-				fmt.Println("It's a file!")
+				// TODO properly display entry contents (with headers)
+				offline.DecryptGPG(targetLocation)
 			} else {
 				fmt.Println(offline.AnsiError + "Failed to read \"" + targetLocation + "\" - it is a directory" + offline.AnsiReset)
 			}
