@@ -3,9 +3,11 @@ package cli
 import (
 	"fmt"
 	"github.com/rwinkhart/MUTN/src/offline"
+	"os"
 )
 
 // EntryReader prints the decrypted contents of a libmutton entry in a human-readable format
+// TODO implement password hiding
 func EntryReader(decryptedEntry []string) {
 	fmt.Println()
 
@@ -53,5 +55,14 @@ func EntryReader(decryptedEntry []string) {
 	// print trailing newline if extended notes were printed
 	if notesFlag {
 		fmt.Println()
+	}
+	os.Exit(0)
+}
+
+func EntryReaderShortcut(targetLocation string) {
+	if isFile, _ := offline.TargetIsFile(targetLocation, true); isFile {
+		EntryReader(offline.DecryptGPG(targetLocation))
+	} else {
+		fmt.Println(offline.AnsiError + "Failed to read \"" + targetLocation + "\" - it is a directory" + offline.AnsiReset)
 	}
 }
