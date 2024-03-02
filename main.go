@@ -48,24 +48,26 @@ func main() {
 			} else if argsCount == 3 {
 
 				// declare entry field to perform target operation on
-				var field rune
 
 				switch args[1] {
 				case "copy":
+					var field uint8
 					switch args[2] {
 					case "password", "-p":
-						field = 'p'
+						field = 0
 					case "username", "-u":
-						field = 'u'
+						field = 1
 					case "url", "-l":
-						field = 'l'
+						field = 2
 					case "note", "-n":
-						field = 'n'
+						field = 3
 					default:
 						cli.HelpCopy()
 					}
 					offline.CopyField(targetLocation, field)
 				case "edit":
+					var field rune
+					field = field // TODO temporary to avoid unused variable error
 					switch args[2] {
 					case "password", "-p":
 						field = 'p'
@@ -79,8 +81,10 @@ func main() {
 					default:
 						cli.HelpCopy()
 					}
-					offline.CopyField(targetLocation, field)
+					// TODO offline.EditEntry(targetLocation, field), exit after run
 				case "add":
+					var field rune
+					field = field // TODO temporary to avoid unused variable error
 					switch args[2] {
 					case "password", "-p":
 						field = 'p'
@@ -92,6 +96,8 @@ func main() {
 					}
 					// TODO offline.AddEntry(targetLocation, field), exit after run
 				case "gen":
+					var field rune
+					field = field // TODO temporary to avoid unused variable error
 					switch args[2] {
 					case "update", "-u": // TODO offline.GenUpdate(targetLocation), exit after run
 					default:

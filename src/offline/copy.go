@@ -2,14 +2,21 @@ package offline
 
 import (
 	"fmt"
+	"io"
 	"os"
+	"os/exec"
 )
 
-func CopyField(targetLocation string, field rune) {
+func CopyField(targetLocation string, field uint8) {
 	if isFile, _ := TargetIsFile(targetLocation, true); isFile {
-		//decryptedEntry := DecryptGPG(targetLocation)
-		// TODO implement clipboard support (maybe use third-party library?)
-		fmt.Println("In the future, this will copy " + string(field))
+		copySubject := DecryptGPG(targetLocation)[field]
+		cmd := exec.Command("wl-copy")
+		stdin, _ := cmd.StdinPipe()
+		go func() {
+			defer stdin.Close()
+			io.WriteString(stdin, copySubject)
+		}()
+		cmd.Run()
 	} else {
 		fmt.Println(AnsiError + "Failed to read \"" + targetLocation + "\" - it is a directory" + AnsiReset)
 	}
