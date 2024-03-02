@@ -6,9 +6,10 @@ import (
 	"os"
 )
 
+const ansiShownPassword = "\033[38;5;10m"
+
 // EntryReader prints the decrypted contents of a libmutton entry in a human-readable format
-// TODO implement password hiding
-func EntryReader(decryptedEntry []string) {
+func EntryReader(decryptedEntry []string, hidePassword bool) {
 	fmt.Println()
 
 	// track if extended notes have been printed (to avoid printing an extra newline)
@@ -30,7 +31,11 @@ func EntryReader(decryptedEntry []string) {
 		case 1:
 			// if the first field (password) is not empty, print it
 			if decryptedEntry[0] != "" {
-				fmt.Print(ansiDirectoryHeader + "Password:" + offline.AnsiReset + "\n" + decryptedEntry[0] + "\n\n")
+				if !hidePassword {
+					fmt.Print(ansiDirectoryHeader + "Password:" + offline.AnsiReset + "\n" + ansiShownPassword + decryptedEntry[0] + offline.AnsiReset + "\n\n")
+				} else {
+					fmt.Print(ansiDirectoryHeader + "Password:" + offline.AnsiReset + "\n" + ansiEmptyDirectoryWarning + "End command in \"show\" or \"-s\" to view" + offline.AnsiReset + "\n\n")
+				}
 			}
 		case 2:
 			// if the third field (url) is not empty, print it
@@ -59,9 +64,9 @@ func EntryReader(decryptedEntry []string) {
 	os.Exit(0)
 }
 
-func EntryReaderShortcut(targetLocation string) {
+func EntryReaderShortcut(targetLocation string, hidePassword bool) {
 	if isFile, _ := offline.TargetIsFile(targetLocation, true); isFile {
-		EntryReader(offline.DecryptGPG(targetLocation))
+		EntryReader(offline.DecryptGPG(targetLocation), hidePassword)
 	} else {
 		fmt.Println(offline.AnsiError + "Failed to read \"" + targetLocation + "\" - it is a directory" + offline.AnsiReset)
 	}

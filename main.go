@@ -26,12 +26,13 @@ func main() {
 
 			// entry reader shortcut (if no other arguments are supplied)
 			if argsCount == 1 {
-				cli.EntryReaderShortcut(targetLocation)
+				cli.EntryReaderShortcut(targetLocation, true)
 				// perform other operations on the entry (if other arguments are supplied)
 			} else if argsCount == 2 {
 
 				switch args[1] {
-
+				case "show", "-s":
+					cli.EntryReaderShortcut(targetLocation, false)
 				case "shear": // TODO offline.Shear(targetLocation), exit after run
 				case "gen": // TODO offline.Gen(targetLocation), exit after run
 				case "copy":
@@ -42,7 +43,6 @@ func main() {
 					cli.HelpAdd()
 				default:
 					cli.HelpMain()
-
 				}
 
 			} else if argsCount == 3 {
