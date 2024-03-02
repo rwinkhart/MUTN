@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 	"github.com/rwinkhart/MUTN/src/offline"
+	"os"
 )
 
 // global constants used only in this file
@@ -52,6 +53,7 @@ This program comes with absolutely no warranty; type "mutn version" for details.
 ` + ansiBold + "Tip 1:" + offline.AnsiReset + ` You can quickly read an entry with "mutn /<entry name>"
 ` + ansiBold + "Tip 2:" + offline.AnsiReset + ` Type "mutn" (no arguments/options) to view a list of saved entries
 ` + ansiBold + "Tip 3:" + offline.AnsiReset + " Provide \"add\", \"edit\", \"copy\", or \"gen\" as the only argument to receive more specific help\n\n")
+	os.Exit(0)
 }
 
 func HelpAdd() {
@@ -62,6 +64,7 @@ func HelpAdd() {
   password/-p            Add a password entry
   note/-n                Add a note entry
   folder/-f              Add a new folder for entries` + "\n\n")
+	os.Exit(0)
 }
 
 func HelpEdit() {
@@ -74,6 +77,7 @@ func HelpEdit() {
   password/-p            Change the password of an entry
   url/-l                 Change the url attached to an entry
   note/-n                Change the note attached to an entry` + "\n\n")
+	os.Exit(0)
 }
 
 func HelpCopy() {
@@ -85,6 +89,7 @@ func HelpCopy() {
   password/-p            Copy the password in an entry to your clipboard
   url/-l                 Copy the url in an entry to your clipboard
   note/-n                Copy the first note line in an entry to your clipboard` + "\n\n")
+	os.Exit(0)
 }
 
 func HelpGen() {
@@ -95,6 +100,7 @@ func HelpGen() {
   update/-u              Generate a password for an existing entry
 
 ` + ansiBold + "Tip:" + offline.AnsiReset + " If no options are provided, a new password entry is generated\n\n")
+	os.Exit(0)
 }
 
 func Version() {
@@ -141,4 +147,5 @@ ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
 		"\n               For more information, see:\n\n" +
 		"           https://github.com/rwinkhart/MUTN\n" +
 		"         https://github.com/rwinkhart/libmutton\n\n")
+	os.Exit(0)
 }

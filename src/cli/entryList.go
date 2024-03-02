@@ -192,4 +192,6 @@ func EntryListGen() {
 
 	// print trailing new lines for proper spacing after entry list is complete
 	fmt.Print("\n\n")
+
+	os.Exit(0)
 }
