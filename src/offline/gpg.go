@@ -13,7 +13,7 @@ import (
 // DecryptGPG decrypts a GPG-encrypted file and returns the contents as a slice of (trimmed) strings
 func DecryptGPG(targetLocation string) []string {
 	cmd := exec.Command("gpg", "--pinentry-mode", "loopback", "-q", "-d", targetLocation)
-	output, err := cmd.CombinedOutput()
+	output, err := cmd.Output()
 	if err != nil {
 		fmt.Println(AnsiError + "Failed to decrypt \"" + targetLocation + "\" - ensure it is a valid GPG-encrypted file and that you entered your passphrase correctly" + AnsiReset)
 		os.Exit(1)

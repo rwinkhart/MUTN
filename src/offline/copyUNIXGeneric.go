@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-// TODO Implement support for MacOS via pbcopy, Termux via termux-clipboard-set (in separate files)
+// TODO Implement support for Termux via termux-clipboard-set (in separate file)
 
 // CopyField copies a field from an entry to the clipboard
 func CopyField(targetLocation string, field int, executableName string) {
@@ -61,12 +61,12 @@ func CopyField(targetLocation string, field int, executableName string) {
 
 	} else {
 		fmt.Println(AnsiError + "Failed to read \"" + targetLocation + "\" - it is a directory" + AnsiReset)
+		os.Exit(1)
 	}
 	os.Exit(0)
 }
 
 // ClipClear is called in a separate process to clear the clipboard after 30 seconds
-// TODO Make clear time period configurable
 func ClipClear(oldContents string) {
 	time.Sleep(30 * time.Second)
 

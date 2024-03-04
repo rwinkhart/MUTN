@@ -1,4 +1,4 @@
-//go:build windows
+//go:build darwin
 
 package offline
 
@@ -9,6 +9,8 @@ import (
 	"strings"
 	"time"
 )
+
+// TODO MacOS support is entirely untested - I would appreciate feedback on this implementation
 
 // CopyField copies a field from an entry to the clipboard
 func CopyField(targetLocation string, field int, executableName string) {
@@ -30,7 +32,8 @@ func CopyField(targetLocation string, field int, executableName string) {
 			os.Exit(1)
 		}
 
-		cmd := exec.Command("powershell.exe", "-c", fmt.Sprintf("echo '%s' | Set-Clipboard", copySubject))
+		cmd := exec.Command("pbcopy")
+		writeToStdin(cmd, copySubject)
 		err := cmd.Run()
 		if err != nil {
 			fmt.Println(AnsiError + "Failed to copy to clipboard: " + err.Error() + AnsiReset)
@@ -56,11 +59,12 @@ func CopyField(targetLocation string, field int, executableName string) {
 func ClipClear(oldContents string) {
 	time.Sleep(30 * time.Second)
 
-	cmd := exec.Command("powershell.exe", "-c", "Get-Clipboard")
+	cmd := exec.Command("pbpaste")
 	newContents, _ := cmd.Output()
 
 	if oldContents == strings.TrimRight(string(newContents), "\r\n") {
-		cmd = exec.Command("powershell.exe", "-c", "Set-Clipboard")
+		cmd = exec.Command("pbcopy")
+		writeToStdin(cmd, "")
 		err := cmd.Run()
 		if err != nil {
 			fmt.Println(AnsiError + "Failed to clear clipboard: " + err.Error() + AnsiReset)
