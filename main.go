@@ -64,7 +64,7 @@ func main() {
 					default:
 						cli.HelpCopy()
 					}
-					offline.CopyField(targetLocation, field, args[0])
+					offline.CopyArgument(targetLocation, field, args[0])
 				case "edit":
 					var field rune
 					field = field // TODO temporary to avoid unused variable error

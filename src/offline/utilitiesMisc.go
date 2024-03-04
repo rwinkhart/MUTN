@@ -1,7 +1,6 @@
 package offline
 
 import (
-	"bufio"
 	"fmt"
 	"io"
 	"os"
@@ -9,8 +8,9 @@ import (
 )
 
 // TargetIsFile TargetStatusCheck checks if the targetLocation is a file, directory, or is inaccessible
+// failCondition: 0 = fail on inaccessible, 1 = fail on inaccessible/file, 2 = fail on inaccessible/directory
 // returns: isFile, isAccessible
-func TargetIsFile(targetLocation string, errorOnFail bool) (bool, bool) {
+func TargetIsFile(targetLocation string, errorOnFail bool, failCondition uint8) (bool, bool) {
 	targetInfo, err := os.Stat(targetLocation)
 	if err != nil {
 		if errorOnFail {
@@ -21,8 +21,16 @@ func TargetIsFile(targetLocation string, errorOnFail bool) (bool, bool) {
 		}
 	}
 	if targetInfo.IsDir() {
+		if errorOnFail && failCondition == 2 {
+			fmt.Println(AnsiError + "\"" + targetLocation + "\" is a directory" + AnsiReset)
+			os.Exit(1)
+		}
 		return false, true
 	} else {
+		if errorOnFail && failCondition == 1 {
+			fmt.Println(AnsiError + "\"" + targetLocation + "\" is a file" + AnsiReset)
+			os.Exit(1)
+		}
 		return true, true
 	}
 }
@@ -34,15 +42,4 @@ func writeToStdin(cmd *exec.Cmd, input string) {
 		defer stdin.Close()
 		io.WriteString(stdin, input)
 	}()
-}
-
-func ClipClearArgument() {
-	// read previous clipboard contents from stdin
-	clipScanner := bufio.NewScanner(os.Stdin)
-	if clipScanner.Scan() {
-		oldContents := clipScanner.Text()
-		ClipClear(oldContents)
-	} else {
-		os.Exit(0)
-	}
 }

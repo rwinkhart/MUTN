@@ -13,61 +13,39 @@ import (
 // TODO Implement support for Termux via termux-clipboard-set (in separate file)
 
 // CopyField copies a field from an entry to the clipboard
-func CopyField(targetLocation string, field int, executableName string) {
-	if isFile, _ := TargetIsFile(targetLocation, true); isFile {
-		decryptedEntry := DecryptGPG(targetLocation)
-		var copySubject string // will store data to be copied
-
-		// ensure field exists in entry
-		if len(decryptedEntry) > field {
-			copySubject = decryptedEntry[field]
-		} else {
-			fmt.Println(AnsiError + "Field does not exist in entry" + AnsiReset)
-			os.Exit(1)
-		}
-
-		// ensure field is not blank
-		if copySubject == "" {
-			fmt.Println(AnsiError + "Field is empty" + AnsiReset)
-			os.Exit(1)
-		}
-
-		var envSet bool // track whether environment variables are set
-		var cmd *exec.Cmd
-		// determine whether to use wl-copy (Wayland) or xclip (X11)
-		if _, envSet = os.LookupEnv("WAYLAND_DISPLAY"); envSet {
-			cmd = exec.Command("wl-copy")
-		} else if _, envSet = os.LookupEnv("DISPLAY"); envSet {
-			cmd = exec.Command("xclip", "-sel", "c")
-		} else {
-			fmt.Println(AnsiError + "Clipboard platform could not be determined - note that the clipboard does not function in a raw TTY" + AnsiReset)
-			os.Exit(1)
-		}
-
-		writeToStdin(cmd, copySubject)
-		err := cmd.Run()
-		if err != nil {
-			fmt.Println(AnsiError + "Failed to copy to clipboard: " + err.Error() + AnsiReset)
-			os.Exit(1)
-		}
-
-		cmd = exec.Command(executableName, "clipclear")
-		writeToStdin(cmd, copySubject)
-		err = cmd.Start()
-		if err != nil {
-			fmt.Println(AnsiError + "Failed to launch automated clipboard clearing process - does this libmutton implementation support the \"clipclear\" argument?" + AnsiReset)
-			os.Exit(1)
-		}
-
+func copyField(copySubject string, executableName string) {
+	var envSet bool // track whether environment variables are set
+	var cmd *exec.Cmd
+	// determine whether to use wl-copy (Wayland) or xclip (X11)
+	if _, envSet = os.LookupEnv("WAYLAND_DISPLAY"); envSet {
+		cmd = exec.Command("wl-copy")
+	} else if _, envSet = os.LookupEnv("DISPLAY"); envSet {
+		cmd = exec.Command("xclip", "-sel", "c")
 	} else {
-		fmt.Println(AnsiError + "Failed to read \"" + targetLocation + "\" - it is a directory" + AnsiReset)
+		fmt.Println(AnsiError + "Clipboard platform could not be determined - note that the clipboard does not function in a raw TTY" + AnsiReset)
 		os.Exit(1)
 	}
+
+	writeToStdin(cmd, copySubject)
+	err := cmd.Run()
+	if err != nil {
+		fmt.Println(AnsiError + "Failed to copy to clipboard: " + err.Error() + AnsiReset)
+		os.Exit(1)
+	}
+
+	cmd = exec.Command(executableName, "clipclear")
+	writeToStdin(cmd, copySubject)
+	err = cmd.Start()
+	if err != nil {
+		fmt.Println(AnsiError + "Failed to launch automated clipboard clearing process - does this libmutton implementation support the \"clipclear\" argument?" + AnsiReset)
+		os.Exit(1)
+	}
+
 	os.Exit(0)
 }
 
 // ClipClear is called in a separate process to clear the clipboard after 30 seconds
-func ClipClear(oldContents string) {
+func clipClear(oldContents string) {
 	time.Sleep(30 * time.Second)
 
 	var envSet bool   // track whether environment variables are set

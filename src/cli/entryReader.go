@@ -65,9 +65,7 @@ func EntryReader(decryptedEntry []string, hidePassword bool) {
 }
 
 func EntryReaderShortcut(targetLocation string, hidePassword bool) {
-	if isFile, _ := offline.TargetIsFile(targetLocation, true); isFile {
+	if isFile, _ := offline.TargetIsFile(targetLocation, true, 2); isFile {
 		EntryReader(offline.DecryptGPG(targetLocation), hidePassword)
-	} else {
-		fmt.Println(offline.AnsiError + "Failed to read \"" + targetLocation + "\" - it is a directory" + offline.AnsiReset)
 	}
 }
