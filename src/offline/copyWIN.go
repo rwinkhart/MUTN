@@ -21,9 +21,6 @@ func CopyField(targetLocation string, field uint8, executableName string) {
 		cmd := exec.Command("powershell.exe", "-c", fmt.Sprintf("echo '%s' | Set-Clipboard", copySubject))
 		cmd.Run()
 
-		// TODO Unpair from mutn, as this breaks library functionality
-		// TODO Maybe use this method for mutn and strongly encourage other implementations to support a clipclear argument
-		// TODO If an implementation opts out of doing this, this may error out
 		cmd = exec.Command(executableName, "clipclear")
 		writeToStdin(cmd, copySubject)
 		cmd.Start()
