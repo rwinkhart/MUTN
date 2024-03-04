@@ -10,13 +10,27 @@ import (
 	"time"
 )
 
-// TODO Avoid index out of range errors when copying fields that do not exist
 // TODO Implement support for MacOS via pbcopy, Termux via termux-clipboard-set (in separate files)
 
 // CopyField copies a field from an entry to the clipboard
-func CopyField(targetLocation string, field uint8, executableName string) {
+func CopyField(targetLocation string, field int, executableName string) {
 	if isFile, _ := TargetIsFile(targetLocation, true); isFile {
-		copySubject := DecryptGPG(targetLocation)[field]
+		decryptedEntry := DecryptGPG(targetLocation)
+		var copySubject string // will store data to be copied
+
+		// ensure field exists in entry
+		if len(decryptedEntry) > field {
+			copySubject = decryptedEntry[field]
+		} else {
+			fmt.Println(AnsiError + "Field does not exist in entry" + AnsiReset)
+			os.Exit(1)
+		}
+
+		// ensure field is not blank
+		if copySubject == "" {
+			fmt.Println(AnsiError + "Field is empty" + AnsiReset)
+			os.Exit(1)
+		}
 
 		var envSet bool // track whether environment variables are set
 		var cmd *exec.Cmd

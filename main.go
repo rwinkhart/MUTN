@@ -52,7 +52,7 @@ func main() {
 
 				switch args[2] {
 				case "copy":
-					var field uint8
+					var field int
 					switch args[3] {
 					case "password", "-p":
 						field = 0
