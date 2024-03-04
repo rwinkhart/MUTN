@@ -42,8 +42,8 @@ func ClipClear(oldContents string) {
 	cmd := exec.Command("powershell.exe", "-c", "Get-Clipboard")
 	newContents, _ := cmd.Output()
 
-	if oldContents == strings.TrimRight(string(newContents), "\n") {
-		cmd := exec.Command("powershell.exe", "-c", "Set-Clipboard")
+	if oldContents == strings.TrimRight(string(newContents), "\r\n") {
+		cmd = exec.Command("powershell.exe", "-c", "Set-Clipboard")
 		cmd.Run()
 	}
 	os.Exit(0)

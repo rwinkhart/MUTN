@@ -45,8 +45,8 @@ func ClipClear(oldContents string) {
 	cmd := exec.Command("wl-paste")
 	newContents, _ := cmd.Output()
 
-	if oldContents == strings.TrimRight(string(newContents), "\n") {
-		cmd := exec.Command("wl-copy", "-c")
+	if oldContents == strings.TrimRight(string(newContents), "\r\n") {
+		cmd = exec.Command("wl-copy", "-c")
 		cmd.Run()
 	}
 	os.Exit(0)
