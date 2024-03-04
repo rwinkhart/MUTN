@@ -2,7 +2,9 @@ package offline
 
 import (
 	"fmt"
+	"io"
 	"os"
+	"os/exec"
 )
 
 // TargetIsFile TargetStatusCheck checks if the targetLocation is a file, directory, or is inaccessible
@@ -22,4 +24,13 @@ func TargetIsFile(targetLocation string, errorOnFail bool) (bool, bool) {
 	} else {
 		return true, true
 	}
+}
+
+// writeToStdin writes a string to a command's stdin
+func writeToStdin(cmd *exec.Cmd, input string) {
+	stdin, _ := cmd.StdinPipe()
+	go func() {
+		defer stdin.Close()
+		io.WriteString(stdin, input)
+	}()
 }
