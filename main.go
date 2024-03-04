@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"github.com/rwinkhart/MUTN/src/cli"
 	"github.com/rwinkhart/MUTN/src/offline"
 	"os"
@@ -113,14 +112,7 @@ func main() {
 		} else {
 			switch args[1] {
 			case "clipclear":
-				// read previous clipboard contents from stdin
-				clipScanner := bufio.NewScanner(os.Stdin)
-				if clipScanner.Scan() {
-					oldContents := clipScanner.Text()
-					offline.ClipClear(oldContents)
-				} else {
-					os.Exit(0)
-				}
+				offline.ClipClearArgument()
 			case "sync": // TODO online.Sync(), exit after run
 			case "init": // TODO offline.Init(), exit after run
 			case "tweak": // TODO offline.Tweak(), exit after run

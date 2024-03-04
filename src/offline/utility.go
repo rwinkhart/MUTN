@@ -1,6 +1,7 @@
 package offline
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"os"
@@ -33,4 +34,15 @@ func writeToStdin(cmd *exec.Cmd, input string) {
 		defer stdin.Close()
 		io.WriteString(stdin, input)
 	}()
+}
+
+func ClipClearArgument() {
+	// read previous clipboard contents from stdin
+	clipScanner := bufio.NewScanner(os.Stdin)
+	if clipScanner.Scan() {
+		oldContents := clipScanner.Text()
+		ClipClear(oldContents)
+	} else {
+		os.Exit(0)
+	}
 }
