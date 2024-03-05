@@ -1,9 +1,12 @@
 package cli
 
 import (
+	"bufio"
 	"fmt"
+	"github.com/rwinkhart/MUTN/src/offline"
 	"golang.org/x/crypto/ssh/terminal"
 	"os"
+	"os/exec"
 )
 
 // input prompts the user for input and returns the input as a string
@@ -21,4 +24,35 @@ func inputHidden(prompt string) string {
 	password := string(byteInput)
 	fmt.Println()
 	return password
+}
+
+// newNote uses the user-specified text editor to create a new note and returns the note as a slice of strings
+func newNote() []string {
+	tempFile := offline.CreateTempFile()
+	defer os.Remove(tempFile.Name())
+	editor := offline.ReadConfig([]string{"textEditor"})[0]
+	cmd := exec.Command(editor, tempFile.Name())
+	cmd.Stdout = os.Stdout
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
+	err := cmd.Run()
+	if err != nil {
+		fmt.Println(offline.AnsiError + "Failed to write note with " + editor + offline.AnsiReset)
+		os.Exit(1)
+	}
+
+	file, err := os.Open(tempFile.Name())
+	if err != nil {
+		fmt.Println(offline.AnsiError + "Failed to open temporary file (\"" + tempFile.Name() + "\") " + err.Error() + offline.AnsiReset)
+		os.Exit(1)
+	}
+	defer file.Close()
+
+	var note []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		note = append(note, scanner.Text())
+	}
+
+	return offline.RemoveTrailingEmptyStrings(note)
 }

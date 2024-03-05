@@ -6,21 +6,28 @@ import (
 	"os"
 )
 
-// AddPasswordEntry prompts the user for all information relevant to a password entry and writes the entry to an encrypted file at targetLocation
-func AddPasswordEntry(targetLocation string, hidePassword bool) {
+// AddEntry creates a new entry at targetLocation by taking user input via CLI prompts
+func AddEntry(targetLocation string, hidePassword bool, isNote bool) {
 	_, isAccessible := offline.TargetIsFile(targetLocation, false, 0)
 	if isAccessible {
 		fmt.Println(offline.AnsiError + "Target location already exists" + offline.AnsiReset)
 		os.Exit(1)
 	}
 
-	username := input("Username: ")
-	password := inputHidden("Password: ")
-	url := input("URL: ")
-	// TODO implement notes editor
-	notes := ""
+	var unencryptedEntry []string
 
-	unencryptedEntry := []string{password, username, url, notes}
+	if !isNote {
+		username := input("Username: ")
+		password := inputHidden("Password: ")
+		url := input("URL: ")
+		// TODO prompt for optional note
+		unencryptedEntry = []string{password, username, url}
+	} else {
+		note := newNote()
+		unencryptedEntry = append([]string{"", "", ""}, note...)
+		fmt.Println()
+	}
+
 	offline.WriteEntry(targetLocation, unencryptedEntry)
 	fmt.Println(ansiBold + "\nEntry Preview:" + offline.AnsiReset)
 	EntryReader(unencryptedEntry, hidePassword)

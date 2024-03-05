@@ -6,52 +6,33 @@ import (
 	"os"
 )
 
-var Config = make(map[string]interface{})
-
-func ReadConfig() {
+// ReadConfig reads the libmutton.ini file and returns a map of the requested values
+// requires readMap: a map of section names to key names (indicates requested values)
+// returns configMap: a map of key names to values (sections are irrelevant)
+func ReadConfig(readKeys []string) []string {
 	cfg, err := ini.Load(home + "/.config/libmutton/libmutton.ini")
 	if err != nil {
 		fmt.Println(AnsiError + "Failed to load libmutton.ini" + AnsiReset)
 		os.Exit(1)
 	}
 
-	// OFFLINE
-	Config["gpgID"] = cfg.Section("OFFLINE").Key("gpgID").String()
-	Config["textEditor"] = cfg.Section("OFFLINE").Key("textEditor").String()
+	var config []string
 
-	// ONLINE (conditional)
-	onlineMode, err := cfg.Section("OFFLINE").Key("onlineMode").Bool()
-	if err != nil {
-		fmt.Println(AnsiError + "Failed to enable online (synced) mode - [OFFLINE]/onlineMode in libmutton.ini must be a boolean value - continuing in offline mode" + AnsiReset)
-		onlineMode = false
-	}
-	if onlineMode {
-		Config["sshError"], err = cfg.Section("ONLINE").Key("sshError").Bool()
-		if err != nil {
-			cfg.Section("ONLINE").Key("sshError").SetValue("true")
-		}
-		Config["netPinEnabled"], err = cfg.Section("ONLINE").Key("netPinEnabled").Bool()
-		if err != nil {
-			cfg.Section("ONLINE").Key("netPinEnabled").SetValue("false")
-		}
-		Config["remoteUser"] = cfg.Section("ONLINE").Key("remoteUser").String()
-		Config["remoteIP"] = cfg.Section("ONLINE").Key("remoteIP").String()
-		Config["remotePort"], err = cfg.Section("ONLINE").Key("remotePort").Int()
-		if err != nil {
-			fmt.Println(AnsiError + "Failed to enable online (synced) mode - [ONLINE]/remotePort in libmutton.ini must be an integer value- continuing in offline mode" + AnsiReset)
-			// remotePort == 0 represents offline-only mode
-			Config["remotePort"] = 0
-		}
-		Config["identityFile"] = cfg.Section("ONLINE").Key("identityFile").String()
-	} else {
-		// remotePort == 0 represents offline-only mode
-		Config["remotePort"] = 0
+	for _, key := range readKeys {
+		config = append(config, cfg.Section("LIBMUTTON").Key(key).String())
 	}
 
-	// DEBUG config
-	//for key, value := range Config {
-	//	fmt.Print(key + ": ")
-	//	fmt.Println(value)
-	//}
-
+	return config
 }
+
+// libmuttn.ini layout
+// [LIBMUTTON]
+// gpgID = <gpg key id>
+// textEditor = <editor command>
+// onlineMode = <true/false>
+// sshError = <true/false>
+// netPinEnabled = <true/false>
+// remoteUser = <ssh user>
+// remoteIP = <ssh ip>
+// remotePort = <ssh port>
+// identityFile = <path to private key>

@@ -87,16 +87,17 @@ func main() {
 					switch args[3] {
 					case "password", "-p":
 						if argsCount == 4 {
-							cli.AddPasswordEntry(targetLocation, true)
+							cli.AddEntry(targetLocation, true, false)
 						} else {
 							switch args[4] {
 							case "show", "-s":
-								cli.AddPasswordEntry(targetLocation, false)
+								cli.AddEntry(targetLocation, false, false)
 							default:
-								cli.AddPasswordEntry(targetLocation, true)
+								cli.AddEntry(targetLocation, true, false)
 							}
 						}
-					case "note", "-n": // TODO cli.AddNoteEntry(targetLocation)
+					case "note", "-n":
+						cli.AddEntry(targetLocation, true, true)
 					case "folder", "-f":
 						offline.AddFolder(targetLocation)
 					default:

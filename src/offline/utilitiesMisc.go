@@ -43,3 +43,23 @@ func writeToStdin(cmd *exec.Cmd, input string) {
 		io.WriteString(stdin, input)
 	}()
 }
+
+// CreateTempFile creates a temporary file and returns a pointer to it
+func CreateTempFile() *os.File {
+	tempFile, err := os.CreateTemp("", "")
+	if err != nil {
+		fmt.Println(AnsiError + "Failed to create temporary file: " + err.Error() + AnsiReset)
+		os.Exit(1)
+	}
+	return tempFile
+}
+
+// RemoveTrailingEmptyStrings removes empty strings from the end of a slice
+func RemoveTrailingEmptyStrings(slice []string) []string {
+	for i := len(slice) - 1; i >= 0; i-- {
+		if slice[i] != "" {
+			return slice[:i+1]
+		}
+	}
+	return []string{}
+}
