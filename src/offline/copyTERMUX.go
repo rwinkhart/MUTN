@@ -1,0 +1,51 @@
+//go:build termux
+
+package offline
+
+import (
+	"fmt"
+	"os"
+	"os/exec"
+	"strings"
+	"time"
+)
+
+// CopyField copies a field from an entry to the clipboard
+func copyField(copySubject string, executableName string) {
+	cmd := exec.Command("termux-clipboard-set")
+	writeToStdin(cmd, copySubject)
+	err := cmd.Run()
+	if err != nil {
+		fmt.Println(AnsiError + "Failed to copy to clipboard: " + err.Error() + AnsiReset)
+		os.Exit(1)
+	}
+
+	cmd = exec.Command(executableName, "clipclear")
+	writeToStdin(cmd, copySubject)
+	err = cmd.Start()
+	if err != nil {
+		fmt.Println(AnsiError + "Failed to launch automated clipboard clearing process - does this libmutton implementation support the \"clipclear\" argument?" + AnsiReset)
+		os.Exit(1)
+	}
+
+	os.Exit(0)
+}
+
+// ClipClear is called in a separate process to clear the clipboard after 30 seconds
+func clipClear(oldContents string) {
+	time.Sleep(30 * time.Second)
+
+	cmd := exec.Command("termux-clipboard-get")
+	newContents, _ := cmd.Output()
+
+	if oldContents == strings.TrimRight(string(newContents), "\r\n") {
+		cmd = exec.Command("termux-clipboard-set")
+		writeToStdin(cmd, "")
+		err := cmd.Run()
+		if err != nil {
+			fmt.Println(AnsiError + "Failed to clear clipboard: " + err.Error() + AnsiReset)
+			os.Exit(1)
+		}
+	}
+	os.Exit(0)
+}

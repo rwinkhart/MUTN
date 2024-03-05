@@ -1,4 +1,4 @@
-//go:build !windows && !darwin
+//go:build !windows && !darwin && !termux
 
 package offline
 
@@ -9,8 +9,6 @@ import (
 	"strings"
 	"time"
 )
-
-// TODO Implement support for Termux via termux-clipboard-set (in separate file)
 
 // CopyField copies a field from an entry to the clipboard
 func copyField(copySubject string, executableName string) {
