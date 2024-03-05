@@ -33,7 +33,8 @@ func main() {
 				switch args[2] {
 				case "show", "-s":
 					cli.EntryReaderShortcut(targetLocation, false)
-				case "shear": // TODO offline.Shear(targetLocation), exit after run
+				case "shear":
+					offline.Shear(targetLocation)
 				case "gen": // TODO offline.Gen(targetLocation), exit after run
 				case "copy":
 					cli.HelpCopy()
