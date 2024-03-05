@@ -13,7 +13,7 @@ func EntryReader(decryptedEntry []string, hidePassword bool) {
 	fmt.Println()
 
 	// track if extended notes have been printed (to avoid printing an extra newline)
-	notesFlag := false
+	var notesFlag bool
 
 	for i := range decryptedEntry {
 
@@ -46,26 +46,32 @@ func EntryReader(decryptedEntry []string, hidePassword bool) {
 			// if the fourth field (notes begin) is not empty, print it
 			if decryptedEntry[3] != "" {
 				fmt.Println(ansiDirectoryHeader + "Notes:" + offline.AnsiReset + "\n" + decryptedEntry[3])
-			}
-		default:
-			// print extended notes line
-			fmt.Println(decryptedEntry[i])
-
-			// indicate that extended notes have been printed
-			if !notesFlag {
+				// indicate that the first notes line was printed (not empty)
 				notesFlag = true
 			}
+		default:
+			// print notes header if first notes line was blank
+			if !notesFlag {
+				fmt.Println(ansiDirectoryHeader + "Notes:" + offline.AnsiReset)
+				// indicate that notes have been printed
+				notesFlag = true
+			}
+
+			// print extended notes line
+			fmt.Println(decryptedEntry[i])
 		}
 	}
-	// print trailing newline if extended notes were printed
+	// print trailing newline if notes were printed
 	if notesFlag {
 		fmt.Println()
 	}
 	os.Exit(0)
 }
 
+// EntryReaderShortcut is a shortcut for EntryReader that decrypts a GPG-encrypted file and prints the contents
 func EntryReaderShortcut(targetLocation string, hidePassword bool) {
 	if isFile, _ := offline.TargetIsFile(targetLocation, true, 2); isFile {
 		EntryReader(offline.DecryptGPG(targetLocation), hidePassword)
 	}
+	// do not exit, as this is the job of EntryReader
 }
