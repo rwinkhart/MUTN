@@ -24,3 +24,16 @@ func DecryptGPG(targetLocation string) []string {
 	}
 	return outputSlice
 }
+
+// EncryptGPG encrypts a slice of strings using GPG and returns the encrypted data as a byte slice
+func EncryptGPG(input []string) []byte {
+	ReadConfig()
+	cmd := exec.Command("gpg", "-q", "-r", Config["gpgID"].(string), "-e")
+	writeToStdin(cmd, strings.Join(input, "\n"))
+	encryptedBytes, err := cmd.Output()
+	if err != nil {
+		fmt.Println(AnsiError + "Failed to encrypt data - ensure that your GPG key is valid and that you have a valid GPG ID set in libmutton.ini" + AnsiReset)
+		os.Exit(1)
+	}
+	return encryptedBytes
+}

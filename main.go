@@ -46,7 +46,7 @@ func main() {
 					cli.HelpMain()
 				}
 
-			} else if argsCount == 4 {
+			} else if argsCount >= 4 {
 
 				// declare entry field to perform target operation on
 
@@ -84,19 +84,24 @@ func main() {
 					}
 					// TODO offline.EditEntry(targetLocation, field), exit after run
 				case "add":
-					var field bool // indicates whether to add a password or note
-					field = field  // TODO temporary to avoid unused variable error
 					switch args[3] {
 					case "password", "-p":
-						field = true
-					case "note", "-n":
-						field = false
+						if argsCount == 4 {
+							cli.AddPasswordEntry(targetLocation, true)
+						} else {
+							switch args[4] {
+							case "show", "-s":
+								cli.AddPasswordEntry(targetLocation, false)
+							default:
+								cli.AddPasswordEntry(targetLocation, true)
+							}
+						}
+					case "note", "-n": // TODO cli.AddNoteEntry(targetLocation)
 					case "folder", "-f":
 						offline.AddFolder(targetLocation)
 					default:
 						cli.HelpAdd()
 					}
-					// TODO offline.AddEntry(targetLocation, field), exit after run
 				case "gen":
 					var field rune
 					field = field // TODO temporary to avoid unused variable error
