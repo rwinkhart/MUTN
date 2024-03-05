@@ -51,7 +51,7 @@ func main() {
 
 				switch args[2] {
 				case "copy":
-					var field int
+					var field int // indicates which (numbered) field to copy
 					switch args[3] {
 					case "password", "-p":
 						field = 0
@@ -83,14 +83,15 @@ func main() {
 					}
 					// TODO offline.EditEntry(targetLocation, field), exit after run
 				case "add":
-					var field rune
-					field = field // TODO temporary to avoid unused variable error
+					var field bool // indicates whether to add a password or note
+					field = field  // TODO temporary to avoid unused variable error
 					switch args[3] {
 					case "password", "-p":
-						field = 'p'
+						field = true
 					case "note", "-n":
-						field = 'n'
-					case "folder", "-f": // TODO offline.AddFolder(targetLocation), exit after run
+						field = false
+					case "folder", "-f":
+						offline.AddFolder(targetLocation)
 					default:
 						cli.HelpAdd()
 					}
