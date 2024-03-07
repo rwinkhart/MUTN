@@ -19,7 +19,15 @@ func ReadConfig(readKeys []string) []string {
 	var config []string
 
 	for _, key := range readKeys {
-		config = append(config, cfg.Section("LIBMUTTON").Key(key).String())
+		keyConfig := cfg.Section("LIBMUTTON").Key(key).String()
+
+		// ensure specified key has a value
+		if keyConfig == "" {
+			fmt.Println(AnsiError + "Failed to find value for key \"" + key + "\" in section \"[LIBMUTTON]\" in libmutton.ini" + AnsiReset)
+			os.Exit(1)
+		}
+
+		config = append(config, keyConfig)
 	}
 
 	return config
