@@ -5,8 +5,5 @@ package offline
 // EntryRoot path to libmutton entry directory
 var EntryRoot = home + "/.local/share/libmutton"
 
-// exported constants
-const (
-	PathSeparator = "/"
-	Windows       = false
-)
+// PathSeparator defines the character used to separate directories in a path (platform-specific)
+const PathSeparator = "/"
