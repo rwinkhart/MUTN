@@ -68,23 +68,21 @@ func main() {
 					}
 					offline.CopyArgument(targetLocation, field, args[0])
 				case "edit":
-					var field rune
-					field = field // TODO temporary to avoid unused variable error
+					var field int // indicates which field to edit
 					switch args[3] {
 					case "password", "-p":
-						field = 'p'
+						field = 0
 					case "username", "-u":
-						field = 'u'
+						field = 1
 					case "url", "-l":
-						field = 'l'
-					case "note", "-n":
-						field = 'n'
+						field = 2
+					case "note", "-n": // TODO cli.EditNote(targetLocation), exit after run
 					case "rename", "-r":
 						cli.RenameCli(targetLocation)
 					default:
 						cli.HelpEdit()
 					}
-					// TODO offline.EditEntry(targetLocation, field), exit after run
+					cli.EditEntry(targetLocation, true, field)
 				case "add":
 					switch args[3] {
 					case "password", "-p":

@@ -7,14 +7,15 @@ import (
 	"golang.org/x/crypto/ssh/terminal"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 // input prompts the user for input and returns the input as a string
 func input(prompt string) string {
 	fmt.Print("\n" + prompt + " ")
-	var userInput string
-	fmt.Scanln(&userInput)
-	return userInput
+	reader := bufio.NewReader(os.Stdin)
+	userInput, _ := reader.ReadString('\n')
+	return strings.TrimRight(userInput, "\n ") // remove trailing newlines and spaces
 }
 
 // inputHidden prompts the user for input and returns the input as a string, hiding the input from the terminal

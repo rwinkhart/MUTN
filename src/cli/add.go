@@ -40,16 +40,8 @@ func AddEntry(targetLocation string, hidePassword bool, entryType uint8) {
 		unencryptedEntry = append([]string{"", "", ""}, note...)
 	}
 
-	// ensure entry data is not empty
-	var entryDataPresent bool
-	for _, line := range unencryptedEntry {
-		if line != "" {
-			entryDataPresent = true
-			break
-		}
-	}
-
-	if entryDataPresent {
+	// write and preview the new entry
+	if offline.EntryIsNotEmpty(unencryptedEntry) {
 		offline.WriteEntry(targetLocation, unencryptedEntry)
 		fmt.Println(ansiBold + "\nEntry Preview:" + offline.AnsiReset)
 		EntryReader(unencryptedEntry, hidePassword)
