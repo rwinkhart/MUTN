@@ -17,11 +17,15 @@ func AddEntry(targetLocation string, hidePassword bool, isNote bool) {
 	var unencryptedEntry []string
 
 	if !isNote {
-		username := input("Username: ")
-		password := inputHidden("Password: ")
-		url := input("URL: ")
-		// TODO prompt for optional note
-		unencryptedEntry = []string{password, username, url}
+		username := input("Username:")
+		password := inputHidden("Password:")
+		url := input("URL:")
+		if inputBinary("Add a note to this entry?") {
+			note := newNote()
+			unencryptedEntry = append([]string{password, username, url}, note...)
+		} else {
+			unencryptedEntry = []string{password, username, url}
+		}
 	} else {
 		note := newNote()
 		unencryptedEntry = append([]string{"", "", ""}, note...)
