@@ -161,11 +161,7 @@ func EntryListGen() {
 					containsFiles = true
 					skippedDirList[i] = false                                                      // the directory header is being printed, indicate that it is not being skipped
 					indent, vanityDirectory = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
-					if !offline.Windows {                                                          // for consistency, format directories with UNIX-style path separators on all platforms
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+offline.AnsiReset+"\n", vanityDirectory)
-					} else {
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+offline.AnsiReset+"\n", strings.ReplaceAll(vanityDirectory, offline.PathSeparator, "/"))
-					}
+					printDirectoryHeader(vanityDirectory, indent)
 				}
 
 				charCounter, colorAlternator = printFileEntry(file, lastSlash, charCounter, colorAlternator, indent)
@@ -177,11 +173,7 @@ func EntryListGen() {
 				if dirListLength > 1 { // and directories besides the root-level exist... display directory header and empty directory warning
 					skippedDirList[i] = false                                                      // the directory header is being printed, indicate that it is not being skipped
 					indent, vanityDirectory = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
-					if !offline.Windows {                                                          // for consistency, format directories with UNIX-style path separators on all platforms
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+offline.AnsiReset+"\n", vanityDirectory)
-					} else {
-						fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+offline.AnsiReset+"\n", strings.ReplaceAll(vanityDirectory, offline.PathSeparator, "/"))
-					}
+					printDirectoryHeader(vanityDirectory, indent)
 					fmt.Print(strings.Repeat(" ", indent*2) + ansiEmptyDirectoryWarning + "-empty directory-" + offline.AnsiReset)
 				} else { // warn if the only thing that exists is the root-level directory
 					fmt.Print("\n\nNothing's here! For help creating your first entry, run \"mutn help\".")
