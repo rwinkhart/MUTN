@@ -38,7 +38,6 @@ func AddEntry(targetLocation string, hidePassword bool, entryType uint8) {
 	} else {
 		note := newNote()
 		unencryptedEntry = append([]string{"", "", ""}, note...)
-		fmt.Println()
 	}
 
 	// ensure entry data is not empty

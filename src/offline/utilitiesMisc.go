@@ -84,6 +84,7 @@ func StringGen(length int, complex bool, complexity float64) string {
 		extendedCharset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	}
 
+	// loop until a string of the desired complexity is generated
 	for {
 		// generate a random string
 		result := make([]byte, length)
