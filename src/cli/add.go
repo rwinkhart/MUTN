@@ -7,7 +7,8 @@ import (
 )
 
 // AddEntry creates a new entry at targetLocation by taking user input via CLI prompts
-func AddEntry(targetLocation string, hidePassword bool, isNote bool) {
+// entryType: 0 = standard (password), 1 = auto-generated password, 2 = note
+func AddEntry(targetLocation string, hidePassword bool, entryType uint8) {
 	_, isAccessible := offline.TargetIsFile(targetLocation, false, 0)
 	if isAccessible {
 		fmt.Println(offline.AnsiError + "Target location already exists" + offline.AnsiReset)
@@ -16,9 +17,17 @@ func AddEntry(targetLocation string, hidePassword bool, isNote bool) {
 
 	var unencryptedEntry []string
 
-	if !isNote {
+	if entryType < 2 {
 		username := input("Username:")
-		password := inputHidden("Password:")
+
+		// determine whether to generate the password
+		var password string
+		if entryType == 0 {
+			password = inputHidden("Password:")
+		} else {
+			password = offline.StringGen(inputInt("Password length:"), inputBinary("Generate a complex (special characters) password?"), 0.2)
+		}
+
 		url := input("URL:")
 		if inputBinary("Add a note to this entry?") {
 			note := newNote()

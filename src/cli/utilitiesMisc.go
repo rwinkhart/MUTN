@@ -12,9 +12,9 @@ import (
 // input prompts the user for input and returns the input as a string
 func input(prompt string) string {
 	fmt.Print("\n" + prompt + " ")
-	var input string
-	fmt.Scanln(&input)
-	return input
+	var userInput string
+	fmt.Scanln(&userInput)
+	return userInput
 }
 
 // inputHidden prompts the user for input and returns the input as a string, hiding the input from the terminal
@@ -24,6 +24,20 @@ func inputHidden(prompt string) string {
 	password := string(byteInput)
 	fmt.Println()
 	return password
+}
+
+// inputInt prompts the user for input and returns the input as an integer
+func inputInt(prompt string) int {
+
+	// loop until a valid integer is entered
+	for {
+		fmt.Print("\n" + prompt + " ")
+		var userInput int
+		_, err := fmt.Scanln(&userInput)
+		if err == nil {
+			return userInput
+		}
+	}
 }
 
 // inputBinary prompts the user with a yes/no question and returns the response as a boolean

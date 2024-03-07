@@ -1,10 +1,14 @@
 package offline
 
 import (
+	"crypto/rand"
 	"fmt"
 	"io"
+	"math"
+	"math/big"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 // TargetIsFile TargetStatusCheck checks if the targetLocation is a file, directory, or is inaccessible
@@ -62,4 +66,51 @@ func RemoveTrailingEmptyStrings(slice []string) []string {
 		}
 	}
 	return []string{}
+}
+
+// StringGen generates a random string of a specified length and complexity
+// complexity: minimum percentage of special characters to be returned in the generated string (only impacts complex strings)
+func StringGen(length int, complex bool, complexity float64) string {
+	var extendedCharset string // hold extended character set used for complex strings
+	var actualSpecialChars int // track the number of special characters in the generated string
+	var minSpecialChars int    // track the minimum number of special characters to accept
+
+	charset := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" // default character set used for all strings
+	if complex {
+		minSpecialChars = int(math.Round(float64(length) * complexity)) // determine minimum number of special characters to accept
+		extendedCharset = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+		charset = charset + extendedCharset
+	} else {
+		extendedCharset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	}
+
+	for {
+		// generate a random string
+		result := make([]byte, length)
+		for i := range result {
+			val, _ := rand.Int(rand.Reader, big.NewInt(int64(len(charset))))
+			result[i] = charset[val.Int64()]
+		}
+
+		// return early if the string is not complex
+		if !complex {
+			return string(result)
+		}
+
+		// count the number of special characters in the generated string
+		for _, char := range string(result) {
+			if strings.ContainsRune(extendedCharset, char) {
+				actualSpecialChars++
+			}
+		}
+
+		// return the generated string if it contains enough special characters
+		if actualSpecialChars >= minSpecialChars {
+			return string(result)
+		}
+
+		// reset special character counter
+		fmt.Println("Regenerating string until desired complexity is achieved...")
+		actualSpecialChars = 0
+	}
 }

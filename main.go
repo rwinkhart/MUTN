@@ -35,7 +35,8 @@ func main() {
 					cli.EntryReaderShortcut(targetLocation, false)
 				case "shear":
 					offline.Shear(targetLocation)
-				case "gen": // TODO offline.Gen(targetLocation), exit after run
+				case "gen":
+					cli.AddEntry(targetLocation, true, 1)
 				case "copy":
 					cli.HelpCopy()
 				case "edit":
@@ -87,30 +88,40 @@ func main() {
 					switch args[3] {
 					case "password", "-p":
 						if argsCount == 4 {
-							cli.AddEntry(targetLocation, true, false)
+							cli.AddEntry(targetLocation, true, 0)
 						} else {
 							switch args[4] {
 							case "show", "-s":
-								cli.AddEntry(targetLocation, false, false)
+								cli.AddEntry(targetLocation, false, 0)
 							default:
-								cli.AddEntry(targetLocation, true, false)
+								cli.AddEntry(targetLocation, true, 0)
 							}
 						}
 					case "note", "-n":
-						cli.AddEntry(targetLocation, true, true)
+						cli.AddEntry(targetLocation, true, 2)
 					case "folder", "-f":
 						offline.AddFolder(targetLocation)
 					default:
 						cli.HelpAdd()
 					}
 				case "gen":
-					var field rune
-					field = field // TODO temporary to avoid unused variable error
-					switch args[3] {
-					case "update", "-u": // TODO offline.GenUpdate(targetLocation), exit after run
-					default:
-						cli.HelpGen()
+					if argsCount == 4 {
+						switch args[3] {
+						case "show", "-s":
+							cli.AddEntry(targetLocation, false, 1)
+						case "update", "-u": // TODO offline.GenUpdate(targetLocation), exit after run
+						default:
+							cli.HelpGen()
+						}
+					} else if args[3] == "update" || args[3] == "-u" {
+						switch args[4] {
+						case "show", "-s":
+							cli.AddEntry(targetLocation, false, 1)
+						default:
+							cli.AddEntry(targetLocation, true, 1)
+						}
 					}
+					cli.HelpGen()
 				default:
 					cli.HelpMain()
 				}
