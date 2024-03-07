@@ -10,7 +10,7 @@ import (
 // requires readMap: a map of section names to key names (indicates requested values)
 // returns configMap: a map of key names to values (sections are irrelevant)
 func ReadConfig(readKeys []string) []string {
-	cfg, err := ini.Load(home + "/.config/libmutton/libmutton.ini")
+	cfg, err := ini.Load(ConfigPath)
 	if err != nil {
 		fmt.Println(AnsiError + "Failed to load libmutton.ini" + AnsiReset)
 		os.Exit(1)
