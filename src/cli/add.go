@@ -32,7 +32,21 @@ func AddEntry(targetLocation string, hidePassword bool, isNote bool) {
 		fmt.Println()
 	}
 
-	offline.WriteEntry(targetLocation, unencryptedEntry)
-	fmt.Println(ansiBold + "\nEntry Preview:" + offline.AnsiReset)
-	EntryReader(unencryptedEntry, hidePassword)
+	// ensure entry data is not empty
+	var entryDataPresent bool
+	for _, line := range unencryptedEntry {
+		if line != "" {
+			entryDataPresent = true
+			break
+		}
+	}
+
+	if entryDataPresent {
+		offline.WriteEntry(targetLocation, unencryptedEntry)
+		fmt.Println(ansiBold + "\nEntry Preview:" + offline.AnsiReset)
+		EntryReader(unencryptedEntry, hidePassword)
+	} else {
+		fmt.Println(offline.AnsiError + "No data supplied for entry" + offline.AnsiReset)
+		os.Exit(1)
+	}
 }
