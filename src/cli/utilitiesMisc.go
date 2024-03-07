@@ -28,7 +28,6 @@ func inputHidden(prompt string) string {
 
 // inputInt prompts the user for input and returns the input as an integer
 func inputInt(prompt string) int {
-
 	// loop until a valid integer is entered
 	for {
 		fmt.Print("\n" + prompt + " ")
