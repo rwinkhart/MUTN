@@ -79,9 +79,10 @@ func main() {
 						field = 'l'
 					case "note", "-n":
 						field = 'n'
-					case "rename", "-r": // TODO prompt for newLocation, offline.Rename(targetLocation, newLocation), exit after run
+					case "rename", "-r":
+						cli.RenameCli(targetLocation)
 					default:
-						cli.HelpCopy()
+						cli.HelpEdit()
 					}
 					// TODO offline.EditEntry(targetLocation, field), exit after run
 				case "add":

@@ -37,7 +37,7 @@ This program comes with absolutely no warranty; type "mutn version" for details.
   note/-n                Add a note entry
   folder/-f              Add a new folder for entries
  edit:
-  rename/relocate/-r     Rename or relocate an entry
+  rename/-r     Rename or relocate an entry
   username/-u            Change the username of an entry
   password/-p            Change the password of an entry
   url/-l                 Change the url attached to an entry
