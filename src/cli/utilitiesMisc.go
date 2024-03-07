@@ -11,7 +11,7 @@ import (
 
 // input prompts the user for input and returns the input as a string
 func input(prompt string) string {
-	fmt.Print("\n" + prompt)
+	fmt.Print("\n" + prompt + " ")
 	var input string
 	fmt.Scanln(&input)
 	return input
@@ -19,11 +19,22 @@ func input(prompt string) string {
 
 // inputHidden prompts the user for input and returns the input as a string, hiding the input from the terminal
 func inputHidden(prompt string) string {
-	fmt.Print("\n" + prompt)
+	fmt.Print("\n" + prompt + " ")
 	byteInput, _ := terminal.ReadPassword(int(os.Stdin.Fd()))
 	password := string(byteInput)
 	fmt.Println()
 	return password
+}
+
+// inputBinary prompts the user with a yes/no question and returns the response as a boolean
+func inputBinary(prompt string) bool {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("\n" + prompt + " (y/N) ")
+	char, _, _ := reader.ReadRune()
+	if char == 'y' || char == 'Y' {
+		return true
+	}
+	return false
 }
 
 // newNote uses the user-specified text editor to create a new note and returns the note as a slice of strings
