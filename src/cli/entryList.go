@@ -89,10 +89,10 @@ func EntryListGen() {
 			// check for errors encountered while walking directory
 			if err != nil {
 				if os.IsNotExist(err) {
-					fmt.Println(offline.AnsiError + "The entry directory does not exist - run \"mutn init\" to create it" + offline.AnsiReset)
+					fmt.Println(offline.AnsiError + "\nThe entry directory does not exist - run \"mutn init\" to create it" + offline.AnsiReset)
 				} else {
 					// otherwise, print the source of the error
-					fmt.Println(offline.AnsiError + "An unexpected error occurred while generating the entry list: " + err.Error() + offline.AnsiReset)
+					fmt.Println(offline.AnsiError + "\nAn unexpected error occurred while generating the entry list: " + err.Error() + offline.AnsiReset)
 				}
 				os.Exit(1)
 			}
