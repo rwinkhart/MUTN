@@ -3,7 +3,9 @@ package offline
 import (
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
+	"time"
 )
 
 // TempInit ensures libmutton directories exist and writes the libmutton configuration file
@@ -44,13 +46,14 @@ func GpgUIDListGen() []string {
 	return uidSlice
 }
 
-// GpgKeyGen generates a new GPG key - it does not return it due to GPG's unreliable output
-func GpgKeyGen() {
+// GpgKeyGen generates a new GPG key and returns the key ID
+func GpgKeyGen() string {
 	gpgGenTempFile := CreateTempFile()
 	defer os.Remove(gpgGenTempFile.Name())
 
 	// create and write gpg-gen file
-	gpgGenTempFile.WriteString(strings.Join([]string{"Key-Type: eddsa", "Key-Curve: ed25519", "Key-Usage: sign", "Subkey-Type: ecdh", "Subkey-Curve: cv25519", "Subkey-Usage: encrypt", "Name-Real: libmutton", "Name-Comment: gpg-libmutton", "Name-Email: github.com/rwinkhart/libmutton", "Expire-Date: 0"}, "\n"))
+	unixTime := strconv.FormatInt(time.Now().Unix(), 10)
+	gpgGenTempFile.WriteString(strings.Join([]string{"Key-Type: eddsa", "Key-Curve: ed25519", "Key-Usage: sign", "Subkey-Type: ecdh", "Subkey-Curve: cv25519", "Subkey-Usage: encrypt", "Name-Real: libmutton-" + unixTime, "Name-Comment: gpg-libmutton", "Name-Email: github.com/rwinkhart/libmutton", "Expire-Date: 0"}, "\n"))
 
 	// generate GPG key based on gpg-gen file
 	cmd := exec.Command("gpg", "-q", "--batch", "--generate-key", gpgGenTempFile.Name())
@@ -58,4 +61,6 @@ func GpgKeyGen() {
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
 	cmd.Run()
+
+	return "libmutton-" + unixTime + " (gpg-libmutton) <github.com/rwinkhart/libmutton>"
 }
