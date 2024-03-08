@@ -22,7 +22,7 @@ This program comes with absolutely no warranty; type "mutn version" for details.
 ` + ansiBold + "Arguments:" + offline.AnsiReset + `
  help/--help/-h          Bring up this menu
  version/-v              Display version and license information
- init                    Set up MUTN
+ init                    Set up MUTN (generates libmutton.ini)
  tweak                   Change configuration options
  add                     Add an entry
  gen                     Generate a new password
