@@ -22,7 +22,7 @@ func input(prompt string) string {
 	fmt.Print("\n" + prompt + " ")
 	reader := bufio.NewReader(os.Stdin)
 	userInput, _ := reader.ReadString('\n')
-	return strings.TrimRight(userInput, "\n ") // remove trailing newlines and spaces
+	return strings.TrimRight(userInput, "\n\r ") // remove trailing newlines, carriage returns, and spaces
 }
 
 // inputHidden prompts the user for input and returns the input as a string, hiding the input from the terminal

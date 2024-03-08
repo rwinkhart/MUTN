@@ -130,7 +130,7 @@ func editNote(baseNote []string) ([]string, bool) {
 		note = append(note, scanner.Text())
 	}
 
-	// close the tempFile
+	// close tempFile
 	tempFile.Close()
 
 	// return the edited note if it is different from baseNote
