@@ -102,6 +102,9 @@ func editNote(baseNote []string) ([]string, bool) {
 		}
 	}
 
+	// close tempFile
+	tempFile.Close()
+
 	// edit the tempFile (note) with the user's text editor
 	cmd := exec.Command(editor, tempFile.Name())
 	cmd.Stdout = os.Stdout
@@ -114,19 +117,21 @@ func editNote(baseNote []string) ([]string, bool) {
 	}
 
 	// open the tempFile for reading
-	file, err := os.Open(tempFile.Name())
+	tempFile, err = os.Open(tempFile.Name())
 	if err != nil {
 		fmt.Println(offline.AnsiError + "Failed to open temporary file (\"" + tempFile.Name() + "\") " + err.Error() + offline.AnsiReset)
 		os.Exit(1)
 	}
-	defer file.Close()
 
 	// read the edited note from the tempFile
 	var note []string
-	scanner := bufio.NewScanner(file)
+	scanner := bufio.NewScanner(tempFile)
 	for scanner.Scan() {
 		note = append(note, scanner.Text())
 	}
+
+	// close the tempFile
+	tempFile.Close()
 
 	// return the edited note if it is different from baseNote
 	if !reflect.DeepEqual(offline.RemoveTrailingEmptyStrings(note), baseNote) {

@@ -55,6 +55,9 @@ func GpgKeyGen() string {
 	unixTime := strconv.FormatInt(time.Now().Unix(), 10)
 	gpgGenTempFile.WriteString(strings.Join([]string{"Key-Type: eddsa", "Key-Curve: ed25519", "Key-Usage: sign", "Subkey-Type: ecdh", "Subkey-Curve: cv25519", "Subkey-Usage: encrypt", "Name-Real: libmutton-" + unixTime, "Name-Comment: gpg-libmutton", "Name-Email: github.com/rwinkhart/libmutton", "Expire-Date: 0"}, "\n"))
 
+	// close gpg-gen file
+	gpgGenTempFile.Close()
+
 	// generate GPG key based on gpg-gen file
 	cmd := exec.Command("gpg", "-q", "--batch", "--generate-key", gpgGenTempFile.Name())
 	cmd.Stdout = os.Stdout
