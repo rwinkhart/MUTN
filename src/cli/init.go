@@ -9,12 +9,13 @@ func TempInitCli() {
 	// gpgID
 	var gpgID string
 	if inputBinary("Auto-generate GPG key?") {
-		gpgID = offline.GpgKeyGen()
-	} else {
-		uidSlice := offline.GpgUIDListGen()
-		gpgIDInt := inputMenuGen("Select GPG key:", uidSlice)
-		gpgID = uidSlice[gpgIDInt-1]
+		offline.GpgKeyGen()
 	}
+
+	// select GPG key
+	uidSlice := offline.GpgUIDListGen()
+	gpgIDInt := inputMenuGen("Select GPG key:", uidSlice)
+	gpgID = uidSlice[gpgIDInt-1]
 
 	// textEditor
 	textEditor := input("Text editor (leave blank for $EDITOR, falls back to \"" + offline.FallbackEditor + "\"):")
