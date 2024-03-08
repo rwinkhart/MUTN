@@ -6,8 +6,16 @@ import (
 	"github.com/rwinkhart/MUTN/src/offline"
 	"golang.org/x/crypto/ssh/terminal"
 	"os"
+	"os/exec"
 	"strings"
 )
+
+// TODO remove after native sync is implemented
+func SshypSync() {
+	cmd := exec.Command("sshyp", "sync")
+	cmd.Stdout = os.Stdout
+	cmd.Run()
+}
 
 // input prompts the user for input and returns the input as a string
 func input(prompt string) string {
@@ -56,7 +64,7 @@ func writeEntryShortcut(targetLocation string, unencryptedEntry []string, hidePa
 		trimmedEntry := offline.RemoveTrailingEmptyStrings(unencryptedEntry)
 		offline.WriteEntry(targetLocation, trimmedEntry)
 		fmt.Println(ansiBold + "\nEntry Preview:" + offline.AnsiReset)
-		EntryReader(trimmedEntry, hidePassword)
+		EntryReader(trimmedEntry, hidePassword, true)
 	} else {
 		fmt.Println(offline.AnsiError + "No data supplied for entry" + offline.AnsiReset)
 		os.Exit(1)
