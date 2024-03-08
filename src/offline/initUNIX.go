@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-const fallbackEditor = "vi" // vi is pre-installed on most UNIX systems
+const FallbackEditor = "vi" // vi is pre-installed on most UNIX systems
 
 // dirInit creates the libmutton directories
 func dirInit() {

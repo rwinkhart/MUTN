@@ -16,9 +16,9 @@ func TempInit(configFileMap map[string]string) {
 
 	// ensure textEditor is set
 	if configFileMap["textEditor"] == "" {
-		textEditor := os.Getenv("EDITOR")
-		if textEditor == "" {
-			textEditor = fallbackEditor
+		textEditor, editorEnvPresent := os.LookupEnv("EDITOR")
+		if !editorEnvPresent {
+			textEditor = FallbackEditor
 		}
 		configFileMap["textEditor"] = textEditor
 	}

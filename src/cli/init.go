@@ -17,7 +17,7 @@ func TempInitCli() {
 	}
 
 	// textEditor
-	textEditor := input("Text editor (leave blank for $EDITOR, falls back to \"vi\"):")
+	textEditor := input("Text editor (leave blank for $EDITOR, falls back to \"" + offline.FallbackEditor + "\"):")
 
 	offline.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID})
 }

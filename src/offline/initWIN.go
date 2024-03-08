@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-const fallbackEditor = "nvim" // since there is no pre-installed CLI editor on Windows, default to the most popular one
+const FallbackEditor = "nvim" // since there is no pre-installed CLI editor on Windows, default to the most popular one
 
 // dirInit creates the libmutton directories
 func dirInit() {
