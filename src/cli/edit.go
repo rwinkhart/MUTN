@@ -51,3 +51,25 @@ func EditEntry(targetLocation string, hidePassword bool, field int) {
 		os.Exit(1)
 	}
 }
+
+// GenUpdate generates a new password for an entry at targetLocation (user input)
+func GenUpdate(targetLocation string, hidePassword bool) {
+	// ensure targetLocation exists
+	offline.TargetIsFile(targetLocation, true, 2)
+
+	// read old entry data
+	unencryptedEntry := offline.DecryptGPG(targetLocation)
+
+	// generate a new password
+	unencryptedEntry[0] = offline.StringGen(inputInt("Password length:"), inputBinary("Generate a complex (special characters) password?"), 0.2)
+
+	// write and preview the modified entry
+	if offline.EntryIsNotEmpty(unencryptedEntry) {
+		offline.WriteEntry(targetLocation, unencryptedEntry)
+		fmt.Println(ansiBold + "\nEntry Preview:" + offline.AnsiReset)
+		EntryReader(unencryptedEntry, hidePassword)
+	} else {
+		fmt.Println(offline.AnsiError + "No data supplied for entry" + offline.AnsiReset)
+		os.Exit(1)
+	}
+}

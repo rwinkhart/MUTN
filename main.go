@@ -108,16 +108,17 @@ func main() {
 						switch args[3] {
 						case "show", "-s":
 							cli.AddEntry(targetLocation, false, 1)
-						case "update", "-u": // TODO offline.GenUpdate(targetLocation), exit after run
+						case "update", "-u":
+							cli.GenUpdate(targetLocation, true)
 						default:
 							cli.HelpGen()
 						}
 					} else if args[3] == "update" || args[3] == "-u" {
 						switch args[4] {
 						case "show", "-s":
-							cli.AddEntry(targetLocation, false, 1)
+							cli.GenUpdate(targetLocation, false)
 						default:
-							cli.AddEntry(targetLocation, true, 1)
+							cli.GenUpdate(targetLocation, true)
 						}
 					}
 					cli.HelpGen()
