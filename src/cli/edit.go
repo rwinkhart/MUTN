@@ -113,7 +113,7 @@ func editNote(baseNote []string) ([]string, bool) {
 		os.Exit(1)
 	}
 
-	// TODO does it need to be reopened?
+	// open the tempFile for reading
 	file, err := os.Open(tempFile.Name())
 	if err != nil {
 		fmt.Println(offline.AnsiError + "Failed to open temporary file (\"" + tempFile.Name() + "\") " + err.Error() + offline.AnsiReset)
