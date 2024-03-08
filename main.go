@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/rwinkhart/MUTN/src/cli"
 	"github.com/rwinkhart/MUTN/src/offline"
 	"os"
@@ -22,7 +23,7 @@ func main() {
 		if strings.HasPrefix(args[1], "/") {
 
 			// store location of target entry
-			targetLocation := offline.EntryRoot + offline.PathSeparator + args[1][1:]
+			targetLocation := offline.TargetLocationFormat(args[1][1:])
 
 			// entry reader shortcut (if no other arguments are supplied)
 			if argsCount == 2 {
@@ -154,11 +155,16 @@ func main() {
 			case "sync":
 				if !offline.Windows {
 					cli.SshypSync() // TODO Remove after native sync is implemented
+				} else {
+					fmt.Println(offline.AnsiError + "\"sync\" is not yet implemented" + offline.AnsiReset)
 				}
 				os.Exit(0)
 			case "init":
 				cli.TempInitCli()
-			case "tweak": // TODO offline.Tweak(), exit after run
+			case "tweak":
+				fmt.Println(offline.AnsiError + "\"tweak\" is not yet implemented" + offline.AnsiReset)
+				os.Exit(0)
+				// TODO offline.Tweak()
 			case "add":
 				cli.HelpAdd()
 			case "edit":
