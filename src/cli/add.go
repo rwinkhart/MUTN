@@ -25,7 +25,7 @@ func AddEntry(targetLocation string, hidePassword bool, entryType uint8) {
 		if entryType == 0 {
 			password = inputHidden("Password:")
 		} else {
-			password = offline.StringGen(inputInt("Password length:"), inputBinary("Generate a complex (special characters) password?"), 0.2)
+			password = offline.StringGen(inputInt("Password length:", -1), inputBinary("Generate a complex (special characters) password?"), 0.2)
 		}
 
 		url := input("URL:")

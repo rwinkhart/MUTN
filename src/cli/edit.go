@@ -82,7 +82,7 @@ func GenUpdate(targetLocation string, hidePassword bool) {
 	unencryptedEntry := offline.DecryptGPG(targetLocation)
 
 	// generate a new password
-	unencryptedEntry[0] = offline.StringGen(inputInt("Password length:"), inputBinary("Generate a complex (special characters) password?"), 0.2)
+	unencryptedEntry[0] = offline.StringGen(inputInt("Password length:", -1), inputBinary("Generate a complex (special characters) password?"), 0.2)
 
 	// write and preview the modified entry
 	writeEntryShortcut(targetLocation, unencryptedEntry, hidePassword)

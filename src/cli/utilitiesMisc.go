@@ -34,14 +34,19 @@ func inputHidden(prompt string) string {
 	return password
 }
 
-// inputInt prompts the user for input and returns the input as an integer (0 is not a valid input)
-func inputInt(prompt string) int {
+// inputInt prompts the user for input and returns the input as an integer
+// a maxValue of 0 will cause the function to return 0, an error - a negative maxValue will disable the maxValue check
+func inputInt(prompt string, maxValue int) int {
+	if maxValue == 0 {
+		return 0
+	}
+
 	// loop until a valid integer is entered
 	for {
 		fmt.Print("\n" + prompt + " ")
 		var userInput int
 		_, err := fmt.Scanln(&userInput)
-		if err == nil && userInput > 0 {
+		if err == nil && userInput > 0 && (userInput <= maxValue || maxValue < 0) {
 			return userInput
 		}
 	}
@@ -63,7 +68,7 @@ func inputMenuGen(prompt string, options []string) int {
 	for i, option := range options {
 		fmt.Printf("%d. %s\n", i+1, option)
 	}
-	return inputInt(prompt)
+	return inputInt(prompt, len(options))
 }
 
 // writeEntryShortcut writes an entry to targetLocation (trimming trailing blank lines) and previews it, or errors if no data is supplied
