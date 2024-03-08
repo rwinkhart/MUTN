@@ -9,7 +9,7 @@ import (
 const ansiShownPassword = "\033[38;5;10m"
 
 // EntryReader prints the decrypted contents of a libmutton entry in a human-readable format
-func EntryReader(decryptedEntry []string, hidePassword bool) {
+func EntryReader(decryptedEntry []string, hidePassword bool, sync bool) {
 	fmt.Println()
 
 	// track if extended notes have been printed (to avoid printing an extra newline)
@@ -67,13 +67,18 @@ func EntryReader(decryptedEntry []string, hidePassword bool) {
 	if notesFlag {
 		fmt.Println()
 	}
+
+	if sync {
+		SshypSync() // TODO Remove after native sync is implemented
+	}
+
 	os.Exit(0)
 }
 
 // EntryReaderShortcut is a shortcut for EntryReader that decrypts a GPG-encrypted file and prints the contents
-func EntryReaderShortcut(targetLocation string, hidePassword bool) {
+func EntryReaderShortcut(targetLocation string, hidePassword bool, sync bool) {
 	if isFile, _ := offline.TargetIsFile(targetLocation, true, 2); isFile {
-		EntryReader(offline.DecryptGPG(targetLocation), hidePassword)
+		EntryReader(offline.DecryptGPG(targetLocation), hidePassword, sync)
 	}
 	// do not exit, as this is the job of EntryReader
 }

@@ -26,13 +26,13 @@ func main() {
 
 			// entry reader shortcut (if no other arguments are supplied)
 			if argsCount == 2 {
-				cli.EntryReaderShortcut(targetLocation, true)
+				cli.EntryReaderShortcut(targetLocation, true, false)
 				// perform other operations on the entry (if other arguments are supplied)
 			} else if argsCount == 3 {
 
 				switch args[2] {
 				case "show", "-s":
-					cli.EntryReaderShortcut(targetLocation, false)
+					cli.EntryReaderShortcut(targetLocation, false, false)
 				case "shear":
 					offline.Shear(targetLocation)
 				case "gen":
@@ -151,7 +151,8 @@ func main() {
 			switch args[1] {
 			case "clipclear":
 				offline.ClipClearArgument()
-			case "sync": // TODO online.Sync(), exit after run
+			case "sync":
+				cli.SshypSync() // TODO Remove after native sync is implemented
 			case "init": // TODO offline.Init(), exit after run
 			case "tweak": // TODO offline.Tweak(), exit after run
 			case "add":
