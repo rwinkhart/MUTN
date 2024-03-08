@@ -76,32 +76,31 @@ func main() {
 						field = 1
 					case "url", "-l":
 						field = 2
-					case "note", "-n": // TODO cli.EditNote(targetLocation), exit after run
+					case "note", "-n":
+						if argsCount == 4 {
+							cli.EditEntryNote(targetLocation, true)
+						} else {
+							switch args[4] {
+							case "show", "-s":
+								cli.EditEntryNote(targetLocation, false)
+							default:
+								cli.EditEntryNote(targetLocation, true)
+							}
+						}
 					case "rename", "-r":
 						cli.RenameCli(targetLocation)
 					default:
 						cli.HelpEdit()
 					}
-					cli.EditEntry(targetLocation, true, field)
-				case "add":
-					switch args[3] {
-					case "password", "-p":
-						if argsCount == 4 {
-							cli.AddEntry(targetLocation, true, 0)
-						} else {
-							switch args[4] {
-							case "show", "-s":
-								cli.AddEntry(targetLocation, false, 0)
-							default:
-								cli.AddEntry(targetLocation, true, 0)
-							}
+					if argsCount == 4 {
+						cli.EditEntry(targetLocation, true, field)
+					} else {
+						switch args[4] {
+						case "show", "-s":
+							cli.EditEntry(targetLocation, false, field)
+						default:
+							cli.EditEntry(targetLocation, true, field)
 						}
-					case "note", "-n":
-						cli.AddEntry(targetLocation, true, 2)
-					case "folder", "-f":
-						offline.AddFolder(targetLocation)
-					default:
-						cli.HelpAdd()
 					}
 				case "gen":
 					if argsCount == 4 {
@@ -122,6 +121,26 @@ func main() {
 						}
 					}
 					cli.HelpGen()
+				case "add":
+					switch args[3] {
+					case "password", "-p":
+						if argsCount == 4 {
+							cli.AddEntry(targetLocation, true, 0)
+						} else {
+							switch args[4] {
+							case "show", "-s":
+								cli.AddEntry(targetLocation, false, 0)
+							default:
+								cli.AddEntry(targetLocation, true, 0)
+							}
+						}
+					case "note", "-n":
+						cli.AddEntry(targetLocation, true, 2)
+					case "folder", "-f":
+						offline.AddFolder(targetLocation)
+					default:
+						cli.HelpAdd()
+					}
 				default:
 					cli.HelpMain()
 				}

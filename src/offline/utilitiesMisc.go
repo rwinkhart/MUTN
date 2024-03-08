@@ -39,6 +39,16 @@ func TargetIsFile(targetLocation string, errorOnFail bool, failCondition uint8) 
 	}
 }
 
+// WriteEntry writes entryData to an encrypted file at targetLocation
+func WriteEntry(targetLocation string, entryData []string) {
+	encryptedBytes := EncryptGPG(entryData)
+	err := os.WriteFile(targetLocation, encryptedBytes, 0600)
+	if err != nil {
+		fmt.Println(AnsiError + "Failed to write to file: " + err.Error() + AnsiReset)
+		os.Exit(1)
+	}
+}
+
 // writeToStdin writes a string to a command's stdin
 func writeToStdin(cmd *exec.Cmd, input string) {
 	stdin, _ := cmd.StdinPipe()

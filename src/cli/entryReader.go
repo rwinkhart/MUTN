@@ -50,15 +50,17 @@ func EntryReader(decryptedEntry []string, hidePassword bool) {
 				notesFlag = true
 			}
 		default:
-			// print notes header if first notes line was blank
-			if !notesFlag {
+			// print notes header if current line is not empty and notes have not been printed
+			if !notesFlag && decryptedEntry[i] != "" {
 				fmt.Println(ansiDirectoryHeader + "Notes:" + offline.AnsiReset)
 				// indicate that notes have been printed
 				notesFlag = true
 			}
 
-			// print extended notes line
-			fmt.Println(decryptedEntry[i])
+			// print extended notes line if header was printed
+			if notesFlag {
+				fmt.Println(decryptedEntry[i])
+			}
 		}
 	}
 	// print trailing newline if notes were printed

@@ -30,23 +30,16 @@ func AddEntry(targetLocation string, hidePassword bool, entryType uint8) {
 
 		url := input("URL:")
 		if inputBinary("Add a note to this entry?") {
-			note := newNote()
+			note, _ := editNote([]string{})
 			unencryptedEntry = append([]string{password, username, url}, note...)
 		} else {
 			unencryptedEntry = []string{password, username, url}
 		}
 	} else {
-		note := newNote()
+		note, _ := editNote([]string{})
 		unencryptedEntry = append([]string{"", "", ""}, note...)
 	}
 
 	// write and preview the new entry
-	if offline.EntryIsNotEmpty(unencryptedEntry) {
-		offline.WriteEntry(targetLocation, unencryptedEntry)
-		fmt.Println(ansiBold + "\nEntry Preview:" + offline.AnsiReset)
-		EntryReader(unencryptedEntry, hidePassword)
-	} else {
-		fmt.Println(offline.AnsiError + "No data supplied for entry" + offline.AnsiReset)
-		os.Exit(1)
-	}
+	writeEntryShortcut(targetLocation, unencryptedEntry, hidePassword)
 }
