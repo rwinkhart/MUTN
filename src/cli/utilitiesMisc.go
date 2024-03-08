@@ -6,7 +6,6 @@ import (
 	"github.com/rwinkhart/MUTN/src/offline"
 	"golang.org/x/crypto/ssh/terminal"
 	"os"
-	"os/exec"
 	"strings"
 )
 
@@ -51,33 +50,15 @@ func inputBinary(prompt string) bool {
 	return false
 }
 
-// newNote uses the user-specified text editor to create a new note and returns the note as a slice of strings
-func newNote() []string {
-	tempFile := offline.CreateTempFile()
-	defer os.Remove(tempFile.Name())
-	editor := offline.ReadConfig([]string{"textEditor"})[0]
-	cmd := exec.Command(editor, tempFile.Name())
-	cmd.Stdout = os.Stdout
-	cmd.Stdin = os.Stdin
-	cmd.Stderr = os.Stderr
-	err := cmd.Run()
-	if err != nil {
-		fmt.Println(offline.AnsiError + "Failed to write note with " + editor + offline.AnsiReset)
+// writeEntryShortcut writes an entry to targetLocation (trimming trailing blank lines) and previews it, or errors if no data is supplied
+func writeEntryShortcut(targetLocation string, unencryptedEntry []string, hidePassword bool) {
+	if offline.EntryIsNotEmpty(unencryptedEntry) {
+		trimmedEntry := offline.RemoveTrailingEmptyStrings(unencryptedEntry)
+		offline.WriteEntry(targetLocation, trimmedEntry)
+		fmt.Println(ansiBold + "\nEntry Preview:" + offline.AnsiReset)
+		EntryReader(trimmedEntry, hidePassword)
+	} else {
+		fmt.Println(offline.AnsiError + "No data supplied for entry" + offline.AnsiReset)
 		os.Exit(1)
 	}
-
-	file, err := os.Open(tempFile.Name())
-	if err != nil {
-		fmt.Println(offline.AnsiError + "Failed to open temporary file (\"" + tempFile.Name() + "\") " + err.Error() + offline.AnsiReset)
-		os.Exit(1)
-	}
-	defer file.Close()
-
-	var note []string
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		note = append(note, scanner.Text())
-	}
-
-	return offline.RemoveTrailingEmptyStrings(note)
 }
