@@ -68,7 +68,7 @@ func EntryReader(decryptedEntry []string, hidePassword bool, sync bool) {
 		fmt.Println()
 	}
 
-	if sync {
+	if sync && !offline.Windows {
 		SshypSync() // TODO Remove after native sync is implemented
 	}
 

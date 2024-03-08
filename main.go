@@ -152,7 +152,10 @@ func main() {
 			case "clipclear":
 				offline.ClipClearArgument()
 			case "sync":
-				cli.SshypSync() // TODO Remove after native sync is implemented
+				if !offline.Windows {
+					cli.SshypSync() // TODO Remove after native sync is implemented
+				}
+				os.Exit(0)
 			case "init":
 				cli.TempInitCli()
 			case "tweak": // TODO offline.Tweak(), exit after run
