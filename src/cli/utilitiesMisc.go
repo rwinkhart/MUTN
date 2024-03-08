@@ -34,14 +34,14 @@ func inputHidden(prompt string) string {
 	return password
 }
 
-// inputInt prompts the user for input and returns the input as an integer
+// inputInt prompts the user for input and returns the input as an integer (0 is not a valid input)
 func inputInt(prompt string) int {
 	// loop until a valid integer is entered
 	for {
 		fmt.Print("\n" + prompt + " ")
 		var userInput int
 		_, err := fmt.Scanln(&userInput)
-		if err == nil {
+		if err == nil && userInput > 0 {
 			return userInput
 		}
 	}
@@ -56,6 +56,14 @@ func inputBinary(prompt string) bool {
 		return true
 	}
 	return false
+}
+
+// inputMenu prompts the user with a menu and returns the user's choice as an integer
+func inputMenuGen(prompt string, options []string) int {
+	for i, option := range options {
+		fmt.Printf("%d. %s\n", i+1, option)
+	}
+	return inputInt(prompt)
 }
 
 // writeEntryShortcut writes an entry to targetLocation (trimming trailing blank lines) and previews it, or errors if no data is supplied

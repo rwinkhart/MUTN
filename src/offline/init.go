@@ -3,6 +3,8 @@ package offline
 import (
 	"fmt"
 	"os"
+	"os/exec"
+	"strings"
 )
 
 func TempInit(configFileMap map[string]string) {
@@ -36,4 +38,19 @@ func TempInit(configFileMap map[string]string) {
 	}
 
 	os.Exit(0)
+}
+
+// GpgUIDListGen generates a list of all GPG key IDs on the system and returns them as a slice of strings
+func GpgUIDListGen() []string {
+	cmd := exec.Command("gpg", "-k", "--with-colons")
+	gpgOutputBytes, _ := cmd.Output()
+	gpgOutputLines := strings.Split(string(gpgOutputBytes), "\n")
+	var uidSlice []string
+	for _, line := range gpgOutputLines {
+		if strings.HasPrefix(line, "uid") {
+			uid := strings.Split(line, ":")[9]
+			uidSlice = append(uidSlice, uid)
+		}
+	}
+	return uidSlice
 }
