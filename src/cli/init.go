@@ -1,7 +1,9 @@
 package cli
 
 import (
+	"fmt"
 	"github.com/rwinkhart/MUTN/src/offline"
+	"os"
 )
 
 // TempInitCli initializes the MUTN environment based on user input
@@ -14,6 +16,10 @@ func TempInitCli() {
 		// select GPG key from menu
 		uidSlice := offline.GpgUIDListGen()
 		gpgIDInt := inputMenuGen("Select GPG key:", uidSlice)
+		if gpgIDInt == 0 {
+			fmt.Println(offline.AnsiError + "No GPG keys found - please generate one" + offline.AnsiReset)
+			os.Exit(1)
+		}
 		gpgID = uidSlice[gpgIDInt-1]
 	}
 
