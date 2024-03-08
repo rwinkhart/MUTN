@@ -88,16 +88,12 @@ func EntryListGen() {
 
 			// check for errors encountered while walking directory
 			if err != nil {
-				// create EntryRoot if the error is the result of it not existing on the system
 				if os.IsNotExist(err) {
-					_ = os.Mkdir(offline.EntryRoot, 0700)
-					dirList = append(dirList, "")
+					fmt.Println(offline.AnsiError + "The entry directory does not exist - run \"mutn init\" to create it" + offline.AnsiReset)
 				} else {
 					// otherwise, print the source of the error
 					fmt.Println(offline.AnsiError + "An unexpected error occurred while generating the entry list: " + err.Error() + offline.AnsiReset)
 				}
-				// quit walking EntryRoot and return nil to allow the program to continue
-				return nil
 			}
 
 			// trim root path from each path before storing
