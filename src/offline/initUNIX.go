@@ -9,6 +9,7 @@ import (
 
 const fallbackEditor = "vi" // vi is pre-installed on most UNIX systems
 
+// dirInit creates the libmutton directories
 func dirInit() {
 	// create EntryRoot
 	err := os.MkdirAll(EntryRoot, 0700)

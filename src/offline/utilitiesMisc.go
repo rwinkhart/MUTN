@@ -126,6 +126,7 @@ func StringGen(length int, complex bool, complexity float64) string {
 	}
 }
 
+// EntryIsNotEmpty iterates through entryData and returns true if any line is not empty
 func EntryIsNotEmpty(entryData []string) bool {
 	for _, line := range entryData {
 		if line != "" {

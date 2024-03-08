@@ -4,6 +4,7 @@ import (
 	"github.com/rwinkhart/MUTN/src/offline"
 )
 
+// TempInitCli initializes the MUTN environment based on user input
 func TempInitCli() {
 	// gpgID
 	var gpgID string

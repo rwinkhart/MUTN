@@ -9,6 +9,7 @@ import (
 
 const fallbackEditor = "nvim" // since there is no pre-installed CLI editor on Windows, default to the most popular one
 
+// dirInit creates the libmutton directories
 func dirInit() {
 	// create EntryRoot (includes config directory on Windows)
 	err := os.MkdirAll(EntryRoot, 0700)
