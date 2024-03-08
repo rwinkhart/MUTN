@@ -25,3 +25,13 @@ func dirInit() {
 		os.Exit(1)
 	}
 }
+
+// textEditorFallback returns the value of the $EDITOR environment variable, or FallbackEditor if it is not set
+func textEditorFallback() string {
+	// ensure textEditor is set
+	textEditor := os.Getenv("EDITOR")
+	if textEditor == "" {
+		textEditor = FallbackEditor
+	}
+	return textEditor
+}

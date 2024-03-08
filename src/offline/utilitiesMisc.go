@@ -68,6 +68,18 @@ func CreateTempFile() *os.File {
 	return tempFile
 }
 
+// removeFile removes a file at targetLocation and does not error if the file does not exist
+func removeFile(targetLocation string) {
+	// remove existing config file
+	err := os.Remove(targetLocation)
+	if err != nil {
+		// ignore error if file does not exist
+		if !os.IsNotExist(err) {
+			fmt.Println(AnsiError + "Failed to remove \"" + targetLocation + "\":" + err.Error() + AnsiReset)
+		}
+	}
+}
+
 // RemoveTrailingEmptyStrings removes empty strings from the end of a slice
 func RemoveTrailingEmptyStrings(slice []string) []string {
 	for i := len(slice) - 1; i >= 0; i-- {
@@ -134,28 +146,4 @@ func EntryIsNotEmpty(entryData []string) bool {
 		}
 	}
 	return false
-}
-
-// removeFile removes a file at targetLocation and does not error if the file does not exist
-func removeFile(targetLocation string) {
-	// remove existing config file
-	err := os.Remove(targetLocation)
-	if err != nil {
-		// ignore error if file does not exist
-		if !os.IsNotExist(err) {
-			fmt.Println(AnsiError + "Failed to remove \"" + targetLocation + "\":" + err.Error() + AnsiReset)
-		}
-	}
-}
-
-// createFile creates and writes a file at targetLocation with fileData - it removes the file if it already exists
-func createFile(targetLocation string, fileData []string) {
-	removeFile(targetLocation)
-	file, err := os.OpenFile(targetLocation, os.O_CREATE|os.O_WRONLY, 0600)
-	if err != nil {
-		fmt.Println(AnsiError + "Failed to create \"" + targetLocation + "\":" + err.Error() + AnsiReset)
-		os.Exit(1)
-	}
-	defer file.Close()
-	file.WriteString(strings.Join(fileData, "\n"))
 }

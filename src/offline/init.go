@@ -14,13 +14,8 @@ func TempInit(configFileMap map[string]string) {
 	// remove existing config file
 	removeFile(ConfigPath)
 
-	// ensure textEditor is set
 	if configFileMap["textEditor"] == "" {
-		textEditor, editorEnvPresent := os.LookupEnv("EDITOR")
-		if !editorEnvPresent {
-			textEditor = FallbackEditor
-		}
-		configFileMap["textEditor"] = textEditor
+		configFileMap["textEditor"] = textEditorFallback()
 	}
 
 	// create and write config file
@@ -49,24 +44,18 @@ func GpgUIDListGen() []string {
 	return uidSlice
 }
 
-// GpgKeyGen generates a new GPG key and returns the key ID as a string
-func GpgKeyGen() string {
+// GpgKeyGen generates a new GPG key - it does not return it due to GPG's unreliable output
+func GpgKeyGen() {
+	gpgGenTempFile := CreateTempFile()
+	defer os.Remove(gpgGenTempFile.Name())
+
 	// create and write gpg-gen file
-	createFile(ConfigDir+"/gpg-gen", []string{"Key-Type: eddsa", "Key-Curve: ed25519", "Key-Usage: sign", "Subkey-Type: ecdh", "Subkey-Curve: cv25519", "Subkey-Usage: encrypt", "Name-Real: libmutton", "Name-Comment: gpg-libmutton", "Name-Email: github.com/rwinkhart/libmutton", "Expire-Date: 0"})
-	cmd := exec.Command("gpg", "-q", "--batch", "--generate-key", ConfigDir+"/gpg-gen")
+	gpgGenTempFile.WriteString(strings.Join([]string{"Key-Type: eddsa", "Key-Curve: ed25519", "Key-Usage: sign", "Subkey-Type: ecdh", "Subkey-Curve: cv25519", "Subkey-Usage: encrypt", "Name-Real: libmutton", "Name-Comment: gpg-libmutton", "Name-Email: github.com/rwinkhart/libmutton", "Expire-Date: 0"}, "\n"))
+
+	// generate GPG key based on gpg-gen file
+	cmd := exec.Command("gpg", "-q", "--batch", "--generate-key", gpgGenTempFile.Name())
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
 	cmd.Run()
-
-	// generate GPG key based on gog-gen file
-	cmd = exec.Command("gpg", "-k", "--with-colons")
-	gpgOutputBytes, _ := cmd.Output()
-	gpgOutputLines := strings.Split(string(gpgOutputBytes), "\n")
-	uid := strings.Split(gpgOutputLines[len(gpgOutputLines)-4], ":")[9]
-
-	// remove gpg-gen file
-	removeFile(ConfigDir + "/gpg-gen")
-
-	return uid
 }

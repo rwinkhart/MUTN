@@ -18,3 +18,8 @@ func dirInit() {
 		os.Exit(1)
 	}
 }
+
+// textEditorFallback returns FallbackEditor
+func textEditorFallback() string {
+	return FallbackEditor
+}
