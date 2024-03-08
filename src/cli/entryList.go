@@ -94,6 +94,7 @@ func EntryListGen() {
 					// otherwise, print the source of the error
 					fmt.Println(offline.AnsiError + "An unexpected error occurred while generating the entry list: " + err.Error() + offline.AnsiReset)
 				}
+				os.Exit(1)
 			}
 
 			// trim root path from each path before storing
