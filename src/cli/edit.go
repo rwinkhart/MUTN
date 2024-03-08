@@ -112,15 +112,13 @@ func editNote(baseNote []string) ([]string, bool) {
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
 	if err != nil {
-		fmt.Println(offline.AnsiError + "Failed to write note with " + editor + offline.AnsiReset)
-		os.Exit(1)
+		panic(offline.AnsiError + "Failed to write note with " + editor + offline.AnsiReset)
 	}
 
 	// open the tempFile for reading
 	tempFile, err = os.Open(tempFile.Name())
 	if err != nil {
-		fmt.Println(offline.AnsiError + "Failed to open temporary file (\"" + tempFile.Name() + "\") " + err.Error() + offline.AnsiReset)
-		os.Exit(1)
+		panic(offline.AnsiError + "Failed to write note with " + editor + offline.AnsiReset)
 	}
 
 	// read the edited note from the tempFile
