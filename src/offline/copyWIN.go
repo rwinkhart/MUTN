@@ -12,7 +12,7 @@ import (
 
 // CopyField copies a field from an entry to the clipboard
 func copyField(copySubject string, executableName string) {
-	cmd := exec.Command("powershell.exe", "-c", fmt.Sprintf("echo '%s' | Set-Clipboard", copySubject))
+	cmd := exec.Command("powershell.exe", "-c", fmt.Sprintf("echo '%s' | Set-Clipboard", strings.ReplaceAll(copySubject, "'", "''")))
 	err := cmd.Run()
 	if err != nil {
 		fmt.Println(AnsiError + "Failed to copy to clipboard: " + err.Error() + AnsiReset)

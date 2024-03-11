@@ -11,6 +11,8 @@ import (
 	"strings"
 )
 
+const extendedCharset = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+
 // TargetIsFile TargetStatusCheck checks if the targetLocation is a file, directory, or is inaccessible
 // failCondition: 0 = fail on inaccessible, 1 = fail on inaccessible/file, 2 = fail on inaccessible/directory
 // returns: isFile, isAccessible
@@ -93,17 +95,13 @@ func RemoveTrailingEmptyStrings(slice []string) []string {
 // StringGen generates a random string of a specified length and complexity
 // complexity: minimum percentage of special characters to be returned in the generated string (only impacts complex strings)
 func StringGen(length int, complex bool, complexity float64) string {
-	var extendedCharset string // hold extended character set used for complex strings
 	var actualSpecialChars int // track the number of special characters in the generated string
 	var minSpecialChars int    // track the minimum number of special characters to accept
 
 	charset := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" // default character set used for all strings
 	if complex {
 		minSpecialChars = int(math.Round(float64(length) * complexity)) // determine minimum number of special characters to accept
-		extendedCharset = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
 		charset = charset + extendedCharset
-	} else {
-		extendedCharset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	}
 
 	// loop until a string of the desired complexity is generated
