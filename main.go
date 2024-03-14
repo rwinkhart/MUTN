@@ -32,7 +32,7 @@ func main() {
 			} else if argsCount == 3 {
 
 				switch args[2] {
-				case "show", "-s":
+				case "show", cli.OptionFlag + "s":
 					cli.EntryReaderShortcut(targetLocation, false, false)
 				case "shear":
 					offline.Shear(targetLocation)
@@ -56,13 +56,13 @@ func main() {
 				case "copy":
 					var field int // indicates which (numbered) field to copy
 					switch args[3] {
-					case "password", "-p":
+					case "password", cli.OptionFlag + "p":
 						field = 0
-					case "username", "-u":
+					case "username", cli.OptionFlag + "u":
 						field = 1
-					case "url", "-l":
+					case "url", cli.OptionFlag + "l":
 						field = 2
-					case "note", "-n":
+					case "note", cli.OptionFlag + "n":
 						field = 3
 					default:
 						cli.HelpCopy()
@@ -71,24 +71,24 @@ func main() {
 				case "edit":
 					var field int // indicates which field to edit
 					switch args[3] {
-					case "password", "-p":
+					case "password", cli.OptionFlag + "p":
 						field = 0
-					case "username", "-u":
+					case "username", cli.OptionFlag + "u":
 						field = 1
-					case "url", "-l":
+					case "url", cli.OptionFlag + "l":
 						field = 2
-					case "note", "-n":
+					case "note", cli.OptionFlag + "n":
 						if argsCount == 4 {
 							cli.EditEntryNote(targetLocation, true)
 						} else {
 							switch args[4] {
-							case "show", "-s":
+							case "show", cli.OptionFlag + "s":
 								cli.EditEntryNote(targetLocation, false)
 							default:
 								cli.EditEntryNote(targetLocation, true)
 							}
 						}
-					case "rename", "-r":
+					case "rename", cli.OptionFlag + "r":
 						cli.RenameCli(targetLocation)
 					default:
 						cli.HelpEdit()
@@ -97,7 +97,7 @@ func main() {
 						cli.EditEntry(targetLocation, true, field)
 					} else {
 						switch args[4] {
-						case "show", "-s":
+						case "show", cli.OptionFlag + "s":
 							cli.EditEntry(targetLocation, false, field)
 						default:
 							cli.EditEntry(targetLocation, true, field)
@@ -106,16 +106,16 @@ func main() {
 				case "gen":
 					if argsCount == 4 {
 						switch args[3] {
-						case "show", "-s":
+						case "show", cli.OptionFlag + "s":
 							cli.AddEntry(targetLocation, false, 1)
-						case "update", "-u":
+						case "update", cli.OptionFlag + "u":
 							cli.GenUpdate(targetLocation, true)
 						default:
 							cli.HelpGen()
 						}
-					} else if args[3] == "update" || args[3] == "-u" {
+					} else if args[3] == "update" || args[3] == cli.OptionFlag+"u" {
 						switch args[4] {
-						case "show", "-s":
+						case "show", cli.OptionFlag + "s":
 							cli.GenUpdate(targetLocation, false)
 						default:
 							cli.GenUpdate(targetLocation, true)
@@ -124,20 +124,20 @@ func main() {
 					cli.HelpGen()
 				case "add":
 					switch args[3] {
-					case "password", "-p":
+					case "password", cli.OptionFlag + "p":
 						if argsCount == 4 {
 							cli.AddEntry(targetLocation, true, 0)
 						} else {
 							switch args[4] {
-							case "show", "-s":
+							case "show", cli.OptionFlag + "s":
 								cli.AddEntry(targetLocation, false, 0)
 							default:
 								cli.AddEntry(targetLocation, true, 0)
 							}
 						}
-					case "note", "-n":
+					case "note", cli.OptionFlag + "n":
 						cli.AddEntry(targetLocation, true, 2)
-					case "folder", "-f":
+					case "folder", cli.OptionFlag + "f":
 						offline.AddFolder(targetLocation)
 					default:
 						cli.HelpAdd()
@@ -173,7 +173,7 @@ func main() {
 				cli.HelpCopy()
 			case "gen":
 				cli.HelpGen()
-			case "version", "-v":
+			case "version", cli.OptionFlag + "v":
 				cli.Version()
 			default:
 				cli.HelpMain()

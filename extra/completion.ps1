@@ -45,6 +45,6 @@ function mutn {
         [ArgumentCompleter({ MUTNArgumentCompleter @args })]
         [string]$option
       )
-    #Invoke-Expression -Command ('/usr/local/bin/mutn ' + ($entry -replace ' ', '` '), $argument, $option).Trim() # UNIX testing
+    #Invoke-Expression -Command ('/usr/local/bin/mutn ' + ($entry -replace ' ', '` '), $argument, ($option -replace ':', '-')).Trim() # UNIX testing
     Invoke-Expression -Command ('mutn.exe ' + ($entry -replace ' ', '` '), $argument, $option).Trim()
 }

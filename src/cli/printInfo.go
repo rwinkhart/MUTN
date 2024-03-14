@@ -20,8 +20,8 @@ This program comes with absolutely no warranty; type "mutn version" for details.
 ` + ansiBold + "Usage:" + offline.AnsiReset + ` mutn [/<entry name> [argument] [option]] | [argument]
 
 ` + ansiBold + "Arguments:" + offline.AnsiReset + `
- help/--help/-h          Bring up this menu
- version/-v              Display version and license information
+ help|` + OptionFlag + `h                 Bring up this menu
+ version|` + OptionFlag + `v              Display version and license information
  init                    Set up MUTN (generates libmutton.ini)
  tweak                   Change configuration options
  add                     Add an entry
@@ -33,22 +33,22 @@ This program comes with absolutely no warranty; type "mutn version" for details.
 
 ` + ansiBold + "Options:" + offline.AnsiReset + `
  add:
-  password/-p            Add a password entry
-  note/-n                Add a note entry
-  folder/-f              Add a new folder for entries
+  password|` + OptionFlag + `p            Add a password entry
+  note|` + OptionFlag + `n                Add a note entry
+  folder|` + OptionFlag + `f              Add a new folder for entries
  edit:
-  rename/-r              Rename or relocate an entry
-  username/-u            Change the username of an entry
-  password/-p            Change the password of an entry
-  url/-l                 Change the url attached to an entry
-  note/-n                Change the note attached to an entry
+  rename|` + OptionFlag + `r              Rename or relocate an entry
+  username|` + OptionFlag + `u            Change the username of an entry
+  password|` + OptionFlag + `p            Change the password of an entry
+  url|` + OptionFlag + `l                 Change the url attached to an entry
+  note|` + OptionFlag + `n                Change the note attached to an entry
  copy:
-  username/-u            Copy the username of an entry to your clipboard
-  password/-p            Copy the password of an entry to your clipboard
-  url/-l                 Copy the url of an entry to your clipboard
-  note/-n                Copy the note of an entry to your clipboard
+  username|` + OptionFlag + `u            Copy the username of an entry to your clipboard
+  password|` + OptionFlag + `p            Copy the password of an entry to your clipboard
+  url|` + OptionFlag + `l                 Copy the url of an entry to your clipboard
+  note|` + OptionFlag + `n                Copy the note of an entry to your clipboard
  gen:
-  update/-u              Generate a password for an existing entry
+  update|` + OptionFlag + `u              Generate a password for an existing entry
 
 ` + ansiBold + "Tip 1:" + offline.AnsiReset + ` You can quickly read an entry with "mutn /<entry name>"
 ` + ansiBold + "Tip 2:" + offline.AnsiReset + ` Type "mutn" (no arguments/options) to view a list of saved entries
@@ -61,9 +61,9 @@ func HelpAdd() {
 
 ` + ansiBold + "Options:" + offline.AnsiReset + `
  add:
-  password/-p            Add a password entry
-  note/-n                Add a note entry
-  folder/-f              Add a new folder for entries` + "\n\n")
+  password|` + OptionFlag + `p            Add a password entry
+  note|` + OptionFlag + `n                Add a note entry
+  folder|` + OptionFlag + `f              Add a new folder for entries` + "\n\n")
 	os.Exit(0)
 }
 
@@ -72,11 +72,11 @@ func HelpEdit() {
 
 ` + ansiBold + "Options:" + offline.AnsiReset + `
  edit:
-  rename/-r              Rename or relocate an entry
-  username/-u            Change the username of an entry
-  password/-p            Change the password of an entry
-  url/-l                 Change the url attached to an entry
-  note/-n                Change the note attached to an entry` + "\n\n")
+  rename|` + OptionFlag + `r              Rename or relocate an entry
+  username|` + OptionFlag + `u            Change the username of an entry
+  password|` + OptionFlag + `p            Change the password of an entry
+  url|` + OptionFlag + `l                 Change the url attached to an entry
+  note|` + OptionFlag + `n                Change the note attached to an entry` + "\n\n")
 	os.Exit(0)
 }
 
@@ -85,10 +85,10 @@ func HelpCopy() {
 
 ` + ansiBold + "Options:" + offline.AnsiReset + `
  copy:
-  username/-u            Copy the username in an entry to your clipboard
-  password/-p            Copy the password in an entry to your clipboard
-  url/-l                 Copy the url in an entry to your clipboard
-  note/-n                Copy the first note line in an entry to your clipboard` + "\n\n")
+  username|` + OptionFlag + `u            Copy the username in an entry to your clipboard
+  password|` + OptionFlag + `p            Copy the password in an entry to your clipboard
+  url|` + OptionFlag + `l                 Copy the url in an entry to your clipboard
+  note|` + OptionFlag + `n                Copy the first note line in an entry to your clipboard` + "\n\n")
 	os.Exit(0)
 }
 
@@ -97,7 +97,7 @@ func HelpGen() {
 
 ` + ansiBold + "Options:" + offline.AnsiReset + `
  gen:
-  update/-u              Generate a password for an existing entry
+  update|` + OptionFlag + `u              Generate a password for an existing entry
 
 ` + ansiBold + "Tip:" + offline.AnsiReset + " If no options are provided, a new password entry is generated\n\n")
 	os.Exit(0)
