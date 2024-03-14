@@ -1,5 +1,6 @@
 Class libmuttonEntries : System.Management.Automation.IValidateSetValuesGenerator {
     [string[]] GetValidValues() {
+        #$entryPath = (Resolve-Path '~/.local/share/libmutton').Path
         $entryPath = (Resolve-Path '~/AppData/Local/libmutton/entries').Path
         $entryNames = If (Test-Path $entryPath) {(Get-ChildItem -Path $entryPath -Recurse).FullName.Substring($entryPath.Length) -replace '\\', '/'}
         return [string[]] $entryNames
@@ -38,10 +39,11 @@ function mutn {
 
         [Parameter(Position = 1)]
         [ArgumentCompletions('add', 'gen', 'edit', 'copy', 'shear')]
-        $argument,
+        [string]$argument,
 
         [Parameter(Position = 2)]
         [ArgumentCompleter({ MUTNArgumentCompleter @args })]
-        $option
+        [string]$option
       )
+    Invoke-Expression -Command "mutn.exe $entry $argument $option".Trim()
 }
