@@ -1,7 +1,7 @@
 function MUTNEntryCompleter {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
-    $entryPath = (Resolve-Path '~/.local/share/libmutton').Path # UNIX testing
-    #$entryPath = (Resolve-Path '~/AppData/Local/libmutton/entries').Path
+    #$entryPath = (Resolve-Path '~/.local/share/libmutton').Path # UNIX testing
+    $entryPath = (Resolve-Path '~/AppData/Local/libmutton/entries').Path
     $entryNames = If (Test-Path $entryPath) {(Get-ChildItem -Path $entryPath -Recurse).FullName.Substring($entryPath.Length) -replace '\\', '/' -replace ' ', '` '}
     $entryNames | Where-Object { $_ -like "$wordToComplete*" }
 }
@@ -38,9 +38,12 @@ function mutn {
 
         [Parameter(Position = 2)]
         [ArgumentCompleter({ MUTNOptionCompleter @args })]
-        [string]$option
+        [string]$option,
+
+        [Parameter(Position = 3)]
+        [string]$potentialShowFlag
       )
 
-    Invoke-Expression -Command ('/usr/local/bin/mutn ' + ($entry -replace ' ', '` '), $argument, ($option -replace ':', '-')).Trim() # UNIX testing
-    #Invoke-Expression -Command ('mutn.exe ' + ($entry -replace ' ', '` '), $argument, $option).Trim()
+    #Invoke-Expression -Command ('/usr/local/bin/mutn ' + ($entry -replace ' ', '` '), $argument, ($option -replace ':', '-'), ($potentialShowFlag -replace ':', '-')).Trim() # UNIX testing
+    Invoke-Expression -Command ('./mutn.exe ' + ($entry -replace ' ', '` '), $argument, $option, $potentialShowFlag).Trim()
 }
