@@ -30,9 +30,7 @@ func EditEntry(targetLocation string, hidePassword bool, field int) {
 	unencryptedEntry := offline.DecryptGPG(targetLocation)
 
 	// ensure slice is long enough for field
-	for len(unencryptedEntry) <= field {
-		unencryptedEntry = append(unencryptedEntry, "")
-	}
+	unencryptedEntry = offline.EnsureSliceLength(unencryptedEntry, field)
 
 	// edit the field
 	switch field {
@@ -48,12 +46,17 @@ func EditEntry(targetLocation string, hidePassword bool, field int) {
 	writeEntryShortcut(targetLocation, unencryptedEntry, hidePassword)
 }
 
+// EditEntryNote edits the note of an entry at targetLocation (user input)
 func EditEntryNote(targetLocation string, hidePassword bool) {
 	// ensure targetLocation exists
 	offline.TargetIsFile(targetLocation, true, 2)
 
 	// read old entry data
 	unencryptedEntry := offline.DecryptGPG(targetLocation)
+
+	// ensure slice is long enough for note
+	// avoids errors when storing non-note data
+	unencryptedEntry = offline.EnsureSliceLength(unencryptedEntry, 2) // 2 is used because it is the index of URL, the last non-note field
 
 	// store non-note data separately
 	nonNoteData := unencryptedEntry[:3]
