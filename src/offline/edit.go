@@ -23,3 +23,11 @@ func Rename(oldLocation string, newLocation string) {
 	// TODO If in online mode, check if oldLocation is a directory and rename it on the server
 	os.Exit(0)
 }
+
+// EnsureSliceLength ensures slice is long enough to contain the specified index
+func EnsureSliceLength(slice []string, index int) []string {
+	for len(slice) <= index {
+		slice = append(slice, "")
+	}
+	return slice
+}
