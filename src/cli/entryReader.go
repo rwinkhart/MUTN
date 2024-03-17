@@ -34,7 +34,7 @@ func EntryReader(decryptedEntry []string, hidePassword bool, sync bool) {
 				if !hidePassword {
 					fmt.Print(ansiDirectoryHeader + "Password:" + offline.AnsiReset + "\n" + ansiShownPassword + decryptedEntry[0] + offline.AnsiReset + "\n\n")
 				} else {
-					fmt.Print(ansiDirectoryHeader + "Password:" + offline.AnsiReset + "\n" + ansiEmptyDirectoryWarning + "End command in \"show\" or \"" + OptionFlag + "s\" to view" + offline.AnsiReset + "\n\n")
+					fmt.Print(ansiDirectoryHeader + "Password:" + offline.AnsiReset + "\n" + ansiEmptyDirectoryWarning + "End command in \"show\" or \"-s\" to view" + offline.AnsiReset + "\n\n")
 				}
 			}
 		case 2:
