@@ -36,14 +36,11 @@ function mutn {
         [ArgumentCompletions('add', 'gen', 'edit', 'copy', 'shear')]
         [string]$argument,
 
-        [Parameter(Position = 2)]
+        [Parameter(Position = 2, ValueFromRemainingArguments=$true)]
         [ArgumentCompleter({ MUTNOptionCompleter @args })]
-        [string]$option,
-
-        [Parameter(Position = 3)]
-        [string]$potentialShowFlag
+        [string]$option
       )
 
-    #Invoke-Expression -Command ('/usr/local/bin/mutn ' + ($entry -replace ' ', '` '), $argument, ($option -replace ':', '-'), ($potentialShowFlag -replace ':', '-')).Trim() # UNIX testing
-    Invoke-Expression -Command ('./mutn.exe ' + ($entry -replace ' ', '` '), $argument, $option, $potentialShowFlag).Trim()
+    #Invoke-Expression -Command ('/usr/local/bin/mutn ' + ($entry -replace ' ', '` '), $argument, $option).Trim() # UNIX testing
+    Invoke-Expression -Command ('./mutn.exe ' + ($entry -replace ' ', '` '), $argument, $option).Trim()
 }

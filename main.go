@@ -29,23 +29,35 @@ func main() {
 			if argsCount == 2 {
 				cli.EntryReaderShortcut(targetLocation, true, false)
 				// perform other operations on the entry (if other arguments are supplied)
-			} else if argsCount == 3 {
-
-				switch args[2] {
-				case "show", cli.OptionFlag + "s":
-					cli.EntryReaderShortcut(targetLocation, false, false)
-				case "shear":
-					offline.Shear(targetLocation)
-				case "gen":
-					cli.AddEntry(targetLocation, true, 1)
-				case "copy":
-					cli.HelpCopy()
-				case "edit":
-					cli.HelpEdit()
-				case "add":
-					cli.HelpAdd()
-				default:
-					cli.HelpMain()
+			} else if argsCount == 3 || (argsCount == 4 && (args[3] == "show" || args[3] == "-s")) {
+				if argsCount == 3 { // default to "password" if no field is specified (for copy, edit, and add)
+					switch args[2] {
+					case "show", "-s":
+						cli.EntryReaderShortcut(targetLocation, false, false)
+					case "shear":
+						offline.Shear(targetLocation)
+					case "gen":
+						cli.AddEntry(targetLocation, true, 1)
+					case "copy":
+						offline.CopyArgument(targetLocation, 0, args[0])
+					case "edit":
+						cli.EditEntry(targetLocation, true, 0)
+					case "add":
+						cli.AddEntry(targetLocation, true, 0)
+					default:
+						cli.HelpMain()
+					}
+				} else { // handle "show" or "-s" argument for gen, edit, and add
+					switch args[2] {
+					case "gen":
+						cli.AddEntry(targetLocation, false, 1)
+					case "edit":
+						cli.EditEntry(targetLocation, false, 0)
+					case "add":
+						cli.AddEntry(targetLocation, false, 0)
+					default:
+						cli.HelpMain()
+					}
 				}
 
 			} else if argsCount >= 4 {
@@ -56,13 +68,13 @@ func main() {
 				case "copy":
 					var field int // indicates which (numbered) field to copy
 					switch args[3] {
-					case "password", cli.OptionFlag + "p":
+					case "password", "-pw":
 						field = 0
-					case "username", cli.OptionFlag + "u":
+					case "username", "-u":
 						field = 1
-					case "url", cli.OptionFlag + "l":
+					case "url", "-l":
 						field = 2
-					case "note", cli.OptionFlag + "n":
+					case "note", "-n":
 						field = 3
 					default:
 						cli.HelpCopy()
@@ -71,24 +83,24 @@ func main() {
 				case "edit":
 					var field int // indicates which field to edit
 					switch args[3] {
-					case "password", cli.OptionFlag + "p":
+					case "password", "-pw":
 						field = 0
-					case "username", cli.OptionFlag + "u":
+					case "username", "-u":
 						field = 1
-					case "url", cli.OptionFlag + "l":
+					case "url", "-l":
 						field = 2
-					case "note", cli.OptionFlag + "n":
+					case "note", "-n":
 						if argsCount == 4 {
 							cli.EditEntryNote(targetLocation, true)
 						} else {
 							switch args[4] {
-							case "show", cli.OptionFlag + "s":
+							case "show", "-s":
 								cli.EditEntryNote(targetLocation, false)
 							default:
 								cli.EditEntryNote(targetLocation, true)
 							}
 						}
-					case "rename", cli.OptionFlag + "r":
+					case "rename", "-r":
 						cli.RenameCli(targetLocation)
 					default:
 						cli.HelpEdit()
@@ -97,7 +109,7 @@ func main() {
 						cli.EditEntry(targetLocation, true, field)
 					} else {
 						switch args[4] {
-						case "show", cli.OptionFlag + "s":
+						case "show", "-s":
 							cli.EditEntry(targetLocation, false, field)
 						default:
 							cli.EditEntry(targetLocation, true, field)
@@ -106,16 +118,14 @@ func main() {
 				case "gen":
 					if argsCount == 4 {
 						switch args[3] {
-						case "show", cli.OptionFlag + "s":
-							cli.AddEntry(targetLocation, false, 1)
-						case "update", cli.OptionFlag + "u":
+						case "update", "-u":
 							cli.GenUpdate(targetLocation, true)
 						default:
 							cli.HelpGen()
 						}
-					} else if args[3] == "update" || args[3] == cli.OptionFlag+"u" {
+					} else if args[3] == "update" || args[3] == "-u" {
 						switch args[4] {
-						case "show", cli.OptionFlag + "s":
+						case "show", "-s":
 							cli.GenUpdate(targetLocation, false)
 						default:
 							cli.GenUpdate(targetLocation, true)
@@ -124,20 +134,20 @@ func main() {
 					cli.HelpGen()
 				case "add":
 					switch args[3] {
-					case "password", cli.OptionFlag + "p":
+					case "password", "-pw":
 						if argsCount == 4 {
 							cli.AddEntry(targetLocation, true, 0)
 						} else {
 							switch args[4] {
-							case "show", cli.OptionFlag + "s":
+							case "show", "-s":
 								cli.AddEntry(targetLocation, false, 0)
 							default:
 								cli.AddEntry(targetLocation, true, 0)
 							}
 						}
-					case "note", cli.OptionFlag + "n":
+					case "note", "-n":
 						cli.AddEntry(targetLocation, true, 2)
-					case "folder", cli.OptionFlag + "f":
+					case "folder", "-f":
 						offline.AddFolder(targetLocation)
 					default:
 						cli.HelpAdd()
@@ -173,7 +183,7 @@ func main() {
 				cli.HelpCopy()
 			case "gen":
 				cli.HelpGen()
-			case "version", cli.OptionFlag + "v":
+			case "version", "-v":
 				cli.Version()
 			default:
 				cli.HelpMain()
