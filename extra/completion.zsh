@@ -13,7 +13,7 @@ case ${words[-2]} in
     compadd $trimmed_paths
     ;;
   /* )
-    compadd {add,gen,edit,copy,shear}
+    compadd {copy,edit,gen,add,shear}
     ;;
   add )
     compadd {password,note,folder}

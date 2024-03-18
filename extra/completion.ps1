@@ -33,7 +33,7 @@ function mutn {
         [string]$entry,
 
         [Parameter(Position = 1)]
-        [ArgumentCompletions('add', 'gen', 'edit', 'copy', 'shear')]
+        [ArgumentCompletions('copy', 'edit', 'gen', 'add', 'shear')]
         [string]$argument,
 
         [Parameter(Position = 2, ValueFromRemainingArguments=$true)]

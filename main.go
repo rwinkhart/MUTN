@@ -34,25 +34,25 @@ func main() {
 					switch args[2] {
 					case "show", "-s":
 						cli.EntryReaderShortcut(targetLocation, false, false)
-					case "shear":
-						offline.Shear(targetLocation)
-					case "gen":
-						cli.AddEntry(targetLocation, true, 1)
 					case "copy":
 						offline.CopyArgument(targetLocation, 0, args[0])
 					case "edit":
 						cli.EditEntry(targetLocation, true, 0)
+					case "gen":
+						cli.AddEntry(targetLocation, true, 1)
 					case "add":
 						cli.AddEntry(targetLocation, true, 0)
+					case "shear":
+						offline.Shear(targetLocation)
 					default:
 						cli.HelpMain()
 					}
 				} else { // handle "show" or "-s" argument for gen, edit, and add
 					switch args[2] {
-					case "gen":
-						cli.AddEntry(targetLocation, false, 1)
 					case "edit":
 						cli.EditEntry(targetLocation, false, 0)
+					case "gen":
+						cli.AddEntry(targetLocation, false, 1)
 					case "add":
 						cli.AddEntry(targetLocation, false, 0)
 					default:
@@ -175,14 +175,14 @@ func main() {
 				fmt.Println(offline.AnsiError + "\"tweak\" is not yet implemented" + offline.AnsiReset)
 				os.Exit(0)
 				// TODO offline.Tweak()
-			case "add":
-				cli.HelpAdd()
-			case "edit":
-				cli.HelpEdit()
 			case "copy":
 				cli.HelpCopy()
+			case "edit":
+				cli.HelpEdit()
 			case "gen":
 				cli.HelpGen()
+			case "add":
+				cli.HelpAdd()
 			case "version", "-v":
 				cli.Version()
 			default:

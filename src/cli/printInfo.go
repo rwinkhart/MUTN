@@ -24,35 +24,35 @@ This program comes with absolutely no warranty; type "mutn version" for details.
  version|-v              Display version and license information
  init                    Set up MUTN (generates libmutton.ini)
  tweak                   Change configuration options
- add                     Add an entry
- gen                     Generate a new password
- edit                    Edit an existing entry
  copy                    Copy details of an entry to your clipboard
+ edit                    Edit an existing entry
+ gen                     Generate a new password
+ add                     Add an entry
  shear                   Delete an existing entry
  sync                    Manually sync the entry directory
 
 ` + ansiBold + "Options:" + offline.AnsiReset + `
- add:
-  password|-pw            Add a password entry
-  note|-n                Add a note entry
-  folder|-f              Add a new folder for entries
- edit:
-  rename|-r              Rename or relocate an entry
-  username|-u            Change the username of an entry
-  password|-pw            Change the password of an entry
-  url|-l                 Change the url attached to an entry
-  note|-n                Change the note attached to an entry
  copy:
+  password|-pw|<blank>   Copy the password of an entry to your clipboard
   username|-u            Copy the username of an entry to your clipboard
-  password|-pw            Copy the password of an entry to your clipboard
   url|-l                 Copy the url of an entry to your clipboard
   note|-n                Copy the note of an entry to your clipboard
+ edit:
+  password|-pw|<blank>   Change the password of an entry
+  username|-u            Change the username of an entry
+  url|-l                 Change the url attached to an entry
+  note|-n                Change the note attached to an entry
+  rename|-r              Rename or relocate an entry
  gen:
   update|-u              Generate a password for an existing entry
+ add:
+  password|-pw|<blank>   Add a password entry
+  note|-n                Add a note entry
+  folder|-f              Add a new folder for entries
 
 ` + ansiBold + "Tip 1:" + offline.AnsiReset + ` You can quickly read an entry with "mutn /<entry name>"
 ` + ansiBold + "Tip 2:" + offline.AnsiReset + ` Type "mutn" (no arguments/options) to view a list of saved entries
-` + ansiBold + "Tip 3:" + offline.AnsiReset + ` Provide "add", "edit", "copy", or "gen" as the only argument to receive more specific help\n\n
+` + ansiBold + "Tip 3:" + offline.AnsiReset + ` Provide "add", "edit", "copy", or "gen" as the only argument to receive more specific help
 ` + ansiBold + "Tip 4:" + offline.AnsiReset + " Using \"add\", \"edit\", or \"copy\" without specifying an option (field) will default to \"password\"\n\n")
 	os.Exit(0)
 }
@@ -62,7 +62,7 @@ func HelpAdd() {
 
 ` + ansiBold + "Options:" + offline.AnsiReset + `
  add:
-  password|-pw            Add a password entry
+  password|-pw|<blank>   Add a password entry
   note|-n                Add a note entry
   folder|-f              Add a new folder for entries` + "\n\n")
 	os.Exit(0)
@@ -73,11 +73,11 @@ func HelpEdit() {
 
 ` + ansiBold + "Options:" + offline.AnsiReset + `
  edit:
-  rename|-r              Rename or relocate an entry
+  password|-pw|<blank>   Change the password of an entry
   username|-u            Change the username of an entry
-  password|-pw            Change the password of an entry
   url|-l                 Change the url attached to an entry
-  note|-n                Change the note attached to an entry` + "\n\n")
+  note|-n                Change the note attached to an entry
+  rename|-r              Rename or relocate an entry` + "\n\n")
 	os.Exit(0)
 }
 
@@ -86,8 +86,8 @@ func HelpCopy() {
 
 ` + ansiBold + "Options:" + offline.AnsiReset + `
  copy:
+  password|-pw|<blank>   Copy the password in an entry to your clipboard
   username|-u            Copy the username in an entry to your clipboard
-  password|-pw            Copy the password in an entry to your clipboard
   url|-l                 Copy the url in an entry to your clipboard
   note|-n                Copy the first note line in an entry to your clipboard` + "\n\n")
 	os.Exit(0)

@@ -21,7 +21,7 @@ _mutn_completions() {
       while read -r; do ITEM=${REPLY// /\\ }; COMPREPLY+=( "$ITEM" ); done < <( compgen -W "$(printf "'%s' " "${trimmed_paths[@]}")" -- "$cur" )
       ;;
     /* )
-      while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "add gen edit copy shear" -- "$cur" )
+      while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "copy edit gen add shear" -- "$cur" )
       ;;
     add )
       while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "password note folder" -- "$cur" )
