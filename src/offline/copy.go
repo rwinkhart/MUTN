@@ -28,19 +28,19 @@ func CopyArgument(targetLocation string, field int, executableName string) {
 				copySubject = decryptedEntry[field]
 			} else { // TOTP mode
 				var err error
-				var currentSecond int // track current second for TOTP code refresh
-				var copied bool       // track whether the TOTP code has been copied to the clipboard for the first time
-				for {                 // keep field copied to clipboard, refresh on 30-second intervals
-					currentSecond = time.Now().Second()
-					if currentSecond == 0 || currentSecond == 30 || !copied {
-						copySubject, err = totp.GenerateCode(decryptedEntry[5], time.Now())
-						if err != nil {
-							fmt.Println(AnsiError + "Error generating TOTP code" + AnsiReset)
-							os.Exit(1)
-						}
-						copyField(copySubject, "")
+				var copied bool // track whether the TOTP code has been copied to the clipboard for the first time
+				for {           // keep field copied to clipboard, refresh on 30-second intervals
+					copySubject, err = totp.GenerateCode(decryptedEntry[5], time.Now())
+					if err != nil {
+						fmt.Println(AnsiError + "Error generating TOTP code" + AnsiReset)
+						os.Exit(1)
 					}
-					time.Sleep(1 * time.Second)
+					copyField(copySubject, "")
+					if !copied {
+						copied = true
+					}
+					// sleep until next 30-second interval
+					time.Sleep(time.Duration(30-(time.Now().Second()%30)) * time.Second)
 				}
 			}
 		} else {
