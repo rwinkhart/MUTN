@@ -1,12 +1,21 @@
-function MUTNEntryCompleter {
+function cliMUTNEntryCompleter {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
-    #$entryPath = (Resolve-Path '~/.local/share/libmutton').Path # UNIX testing
-    $entryPath = (Resolve-Path '~/AppData/Local/libmutton/entries').Path
-    $entryNames = If (Test-Path $entryPath) {(Get-ChildItem -Path $entryPath -Recurse -File).FullName.Substring($entryPath.Length) -replace '\\', '/' -replace ' ', '` '}
-    $entryNames | Where-Object { $_ -like "$wordToComplete*" }
+    #$mutnPath = (Resolve-Path '~/.local/share/libmutton').Path # UNIX testing
+    $mutnPath = (Resolve-Path '~/AppData/Local/libmutton/entries').Path
+    try {
+        $trimmedPaths = If (Test-Path $mutnPath) {
+            (Get-ChildItem -Path $mutnPath -Recurse -File).FullName.Substring($mutnPath.Length) -replace '\\', '/' -replace ' ', '` '
+        }
+    } catch {
+        $trimmedPaths = $null # If any errors occur (especially, "You cannot call a method on a null-valued expression", set $trimmedPaths to $null
+    }
+    if ($null -eq $trimmedPaths) { # If no entries are found, add 'help' to $trimmedPaths
+        $trimmedPaths = 'help'
+    }
+    $trimmedPaths | Where-Object { $_ -like "$wordToComplete*" }
 }
 
-function MUTNOptionCompleter {
+function cliMUTNOptionCompleter {
     param ($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameters)
 
     $possibleValues = @{
@@ -29,7 +38,7 @@ function mutn {
     [CmdletBinding()]
     param (
         [Parameter(Position = 0)]
-        [ArgumentCompleter({ MUTNEntryCompleter @args })]
+        [ArgumentCompleter({ cliMUTNEntryCompleter @args })]
         [string]$entry,
 
         [Parameter(Position = 1)]
@@ -37,7 +46,7 @@ function mutn {
         [string]$argument,
 
         [Parameter(Position = 2, ValueFromRemainingArguments=$true)]
-        [ArgumentCompleter({ MUTNOptionCompleter @args })]
+        [ArgumentCompleter({ cliMUTNOptionCompleter @args })]
         [string]$option
       )
 
