@@ -35,6 +35,7 @@ This program comes with absolutely no warranty; type "mutn version" for details.
  copy:
   password|-pw|<blank>   Copy the password of an entry to your clipboard
   username|-u            Copy the username of an entry to your clipboard
+  totp|-t                Copy the TOTP code of an entry to your clipboard
   url|-l                 Copy the url of an entry to your clipboard
   note|-n                Copy the note of an entry to your clipboard
  edit:
@@ -88,6 +89,7 @@ func HelpCopy() {
  copy:
   password|-pw|<blank>   Copy the password in an entry to your clipboard
   username|-u            Copy the username in an entry to your clipboard
+  totp|-t                Copy the TOTP code of an entry to your clipboard
   url|-l                 Copy the url in an entry to your clipboard
   note|-n                Copy the first note line in an entry to your clipboard` + "\n\n")
 	os.Exit(0)

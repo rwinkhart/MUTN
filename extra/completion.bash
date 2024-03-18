@@ -28,7 +28,7 @@ _mutnCompletions() {
       while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "password note folder" -- "$cur" )
       ;;
     copy )
-      while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "password username url note" -- "$cur" )
+      while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "password username totp url note" -- "$cur" )
       ;;
     edit )
       while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "password username url note rename" -- "$cur" )

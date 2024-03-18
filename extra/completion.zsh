@@ -20,7 +20,7 @@ case ${words[-2]} in
     compadd {password,note,folder}
     ;;
   copy )
-    compadd {password,username,url,note}
+    compadd {password,username,totp,url,note}
     ;;
   edit )
     compadd {password,username,url,note,rename}
