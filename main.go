@@ -76,6 +76,9 @@ func main() {
 						field = 2
 					case "note", "-n":
 						field = 3
+					case "totp", "-t":
+						fmt.Println("TOTP code copied to clipboard - until this process is closed, your clipboard will be kept up to date with the current TOTP code")
+						field = 5 // TODO Update field after removed from notes (breaking sshyp entry compatibility)
 					default:
 						cli.HelpCopy()
 					}
