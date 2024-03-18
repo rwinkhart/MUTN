@@ -16,19 +16,8 @@ func EntryReader(decryptedEntry []string, hidePassword bool, sync bool) {
 	var notesFlag bool
 
 	for i := range decryptedEntry {
-
-		// if the entry only contains a password, skip the username field to avoid an index out of range error
-		if len(decryptedEntry) == 1 {
-			i = 1
-		}
-
 		switch i {
 		case 0:
-			// if the second field (username) is not empty, print it
-			if decryptedEntry[1] != "" {
-				fmt.Print(ansiDirectoryHeader + "Username:" + offline.AnsiReset + "\n" + decryptedEntry[1] + "\n\n")
-			}
-		case 1:
 			// if the first field (password) is not empty, print it
 			if decryptedEntry[0] != "" {
 				if !hidePassword {
@@ -36,6 +25,11 @@ func EntryReader(decryptedEntry []string, hidePassword bool, sync bool) {
 				} else {
 					fmt.Print(ansiDirectoryHeader + "Password:" + offline.AnsiReset + "\n" + ansiEmptyDirectoryWarning + "End command in \"show\" or \"-s\" to view" + offline.AnsiReset + "\n\n")
 				}
+			}
+		case 1:
+			// if the second field (username) is not empty, print it
+			if decryptedEntry[1] != "" {
+				fmt.Print(ansiDirectoryHeader + "Username:" + offline.AnsiReset + "\n" + decryptedEntry[1] + "\n\n")
 			}
 		case 2:
 			// if the third field (url) is not empty, print it
