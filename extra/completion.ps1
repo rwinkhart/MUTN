@@ -2,7 +2,7 @@ function MUTNEntryCompleter {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
     #$entryPath = (Resolve-Path '~/.local/share/libmutton').Path # UNIX testing
     $entryPath = (Resolve-Path '~/AppData/Local/libmutton/entries').Path
-    $entryNames = If (Test-Path $entryPath) {(Get-ChildItem -Path $entryPath -Recurse).FullName.Substring($entryPath.Length) -replace '\\', '/' -replace ' ', '` '}
+    $entryNames = If (Test-Path $entryPath) {(Get-ChildItem -Path $entryPath -Recurse -File).FullName.Substring($entryPath.Length) -replace '\\', '/' -replace ' ', '` '}
     $entryNames | Where-Object { $_ -like "$wordToComplete*" }
 }
 
