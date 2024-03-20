@@ -27,18 +27,8 @@ func CopyArgument(targetLocation string, field int, executableName string) {
 			if field != 5 { // TODO Update field after removed from notes (breaking sshyp entry compatibility)
 				copySubject = decryptedEntry[field]
 			} else { // TOTP mode
-				var err error
-				var copied bool // track whether the TOTP code has been copied to the clipboard for the first time
-				for {           // keep field copied to clipboard, refresh on 30-second intervals
-					copySubject, err = totp.GenerateCode(decryptedEntry[5], time.Now())
-					if err != nil {
-						fmt.Println(AnsiError + "Error generating TOTP code" + AnsiReset)
-						os.Exit(1)
-					}
-					copyField(copySubject, "")
-					if !copied {
-						copied = true
-					}
+				for { // keep field copied to clipboard, refresh on 30-second intervals
+					copyField(genTOTP(decryptedEntry[5]), "")
 					// sleep until next 30-second interval
 					time.Sleep(time.Duration(30-(time.Now().Second()%30)) * time.Second)
 				}
@@ -63,4 +53,14 @@ func ClipClearArgument() {
 	} else {
 		os.Exit(0)
 	}
+}
+
+// genTOTP generates a TOTP token from a secret
+func genTOTP(secret string) string {
+	totpToken, err := totp.GenerateCode(secret, time.Now())
+	if err != nil {
+		fmt.Println(AnsiError + "Error generating TOTP code" + AnsiReset)
+		os.Exit(1)
+	}
+	return totpToken
 }
