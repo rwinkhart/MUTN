@@ -28,9 +28,10 @@ func CopyArgument(targetLocation string, field int, executableName string) {
 				copySubject = decryptedEntry[field]
 			} else { // TOTP mode
 				for { // keep field copied to clipboard, refresh on 30-second intervals
-					copyField(genTOTP(decryptedEntry[5]), "")
+					currentTime := time.Now()
+					copyField(genTOTP(decryptedEntry[5], currentTime), "")
 					// sleep until next 30-second interval
-					time.Sleep(time.Duration(30-(time.Now().Second()%30)) * time.Second)
+					time.Sleep(time.Duration(30-(currentTime.Second()%30)) * time.Second)
 				}
 			}
 		} else {
@@ -56,8 +57,8 @@ func ClipClearArgument() {
 }
 
 // genTOTP generates a TOTP token from a secret
-func genTOTP(secret string) string {
-	totpToken, err := totp.GenerateCode(secret, time.Now())
+func genTOTP(secret string, time time.Time) string {
+	totpToken, err := totp.GenerateCode(secret, time)
 	if err != nil {
 		fmt.Println(AnsiError + "Error generating TOTP code" + AnsiReset)
 		os.Exit(1)
