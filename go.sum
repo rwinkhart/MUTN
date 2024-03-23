@@ -3,6 +3,8 @@ github.com/boombuler/barcode v1.0.1-0.20190219062509-6c824513bacc/go.mod h1:paBW
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/fortis/go-steam-totp v0.0.0-20171114202746-18e928674727 h1:1RkPJqfzrncAuh9xgoslr9OplZskm+VRA9lkucHPQZ4=
+github.com/fortis/go-steam-totp v0.0.0-20171114202746-18e928674727/go.mod h1:wRAWHbTlpt0C4kwnKoa42L2Phrv6uIq+c50P2uKpb7I=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/pquerna/otp v1.4.1-0.20231130234153-3357de7c0481 h1:FkxbO331O7mS5EJkP+MCi0o2gswh/Aezs+//NmefrR8=
