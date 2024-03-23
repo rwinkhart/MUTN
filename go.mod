@@ -3,6 +3,7 @@ module github.com/rwinkhart/MUTN
 go 1.22.0
 
 require (
+	github.com/fortis/go-steam-totp v0.0.0-20171114202746-18e928674727
 	github.com/pquerna/otp v1.4.1-0.20231130234153-3357de7c0481
 	golang.org/x/crypto v0.20.0
 	gopkg.in/ini.v1 v1.67.0
