@@ -2,8 +2,12 @@ package cli
 
 import (
 	"fmt"
-	"github.com/rwinkhart/MUTN/src/offline"
 	"os"
+	"strings"
+
+	"github.com/rwinkhart/MUTN/src/offline"
+
+	"github.com/charmbracelet/glamour"
 )
 
 const ansiShownPassword = "\033[38;5;10m"
@@ -11,9 +15,6 @@ const ansiShownPassword = "\033[38;5;10m"
 // EntryReader prints the decrypted contents of a libmutton entry in a human-readable format
 func EntryReader(decryptedEntry []string, hidePassword bool, sync bool) {
 	fmt.Println()
-
-	// track if extended notes have been printed (to avoid printing an extra newline)
-	var notesFlag bool
 
 	for i := range decryptedEntry {
 		switch i {
@@ -37,29 +38,20 @@ func EntryReader(decryptedEntry []string, hidePassword bool, sync bool) {
 				fmt.Print(ansiDirectoryHeader + "URL:" + offline.AnsiReset + "\n" + decryptedEntry[2] + "\n\n")
 			}
 		case 3:
-			// if the fourth field (notes begin) is not empty, print it
-			if decryptedEntry[3] != "" {
-				fmt.Println(ansiDirectoryHeader + "Notes:" + offline.AnsiReset + "\n" + decryptedEntry[3])
-				// indicate that the first notes line was printed (not empty)
-				notesFlag = true
-			}
-		default:
-			// print notes header if current line is not empty and notes have not been printed
-			if !notesFlag && decryptedEntry[i] != "" {
-				fmt.Println(ansiDirectoryHeader + "Notes:" + offline.AnsiReset)
-				// indicate that notes have been printed
-				notesFlag = true
-			}
+			// print the notes header
+			fmt.Println(ansiDirectoryHeader + "Notes:" + offline.AnsiReset)
 
-			// print extended notes line if header was printed
-			if notesFlag {
-				fmt.Println(decryptedEntry[i])
+			// combine remaining fields into a single string (for markdown rendering)
+			var markdownNotes []string
+			for field := 3; field < len(decryptedEntry); field++ {
+				markdownNotes = append(markdownNotes, decryptedEntry[field])
 			}
+			r, _ := glamour.NewTermRenderer(glamour.WithStylePath("glamour-styles/gruvbox.json"))
+			markdownNotesString, _ := r.Render(strings.Join(markdownNotes, "\n"))
+
+			// print markdown-rendered notes
+			fmt.Print(markdownNotesString)
 		}
-	}
-	// print trailing newline if notes were printed
-	if notesFlag {
-		fmt.Println()
 	}
 
 	if sync && !offline.Windows {
