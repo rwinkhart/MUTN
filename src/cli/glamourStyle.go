@@ -1,4 +1,7 @@
-{
+package cli
+
+func glamourStyle() []byte {
+	return []byte(`{
   "document": {
     "block_prefix": "\n",
     "block_suffix": "\n",
@@ -193,4 +196,6 @@
   },
   "html_block": {},
   "html_span": {}
+}
+`)
 }
