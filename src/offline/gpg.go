@@ -19,9 +19,6 @@ func DecryptGPG(targetLocation string) []string {
 		os.Exit(1)
 	}
 	outputSlice := strings.Split(string(output), "\n")
-	for i, lineData := range outputSlice {
-		outputSlice[i] = strings.TrimRight(lineData, " \t") // remove trailing whitespace
-	}
 	return outputSlice
 }
 
