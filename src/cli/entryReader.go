@@ -51,6 +51,9 @@ func EntryReader(decryptedEntry []string, hidePassword bool, sync bool) {
 
 			// print markdown-rendered notes
 			fmt.Print(markdownNotesString)
+
+			// break after all lines have been printed
+			break
 		}
 	}
 
