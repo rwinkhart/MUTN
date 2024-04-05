@@ -138,6 +138,6 @@ func editNote(baseNote []string) ([]string, bool) {
 	if !reflect.DeepEqual(offline.RemoveTrailingEmptyStrings(note), baseNote) {
 		return note, true
 	} else {
-		return note, false
+		return []string{}, false
 	}
 }
