@@ -87,8 +87,8 @@ func glamourStyle() []byte {
     "format": "Image: {{.text}} →"
   },
   "code": {
-    "prefix": " ",
-    "suffix": " ",
+    "prefix": "",
+    "suffix": "",
     "color": "203",
     "background_color": "236"
   },
