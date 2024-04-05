@@ -46,7 +46,7 @@ func EntryReader(decryptedEntry []string, hidePassword bool, sync bool) {
 			for field := 3; field < len(decryptedEntry); field++ {
 				markdownNotes = append(markdownNotes, decryptedEntry[field])
 			}
-			r, _ := glamour.NewTermRenderer(glamour.WithStylesFromJSONBytes(glamourStyle()), glamour.WithPreservedNewLines())
+			r, _ := glamour.NewTermRenderer(glamour.WithStylesFromJSONBytes(glamourStyle()), glamour.WithPreservedNewLines(), glamour.WithWordWrap(width))
 			markdownNotesString, _ := r.Render(strings.Join(markdownNotes, "\n"))
 
 			// print markdown-rendered notes
