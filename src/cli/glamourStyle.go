@@ -1,7 +1,10 @@
 package cli
 
-func glamourStyle() []byte {
-	return []byte(`{
+func glamourStyle(styleName string) []byte {
+	if styleName == "custom" {
+		return []byte(`{}`) // TODO add support for custom color schemes
+	} else if styleName == "gruvbox" {
+		return []byte(`{
   "document": {
     "block_prefix": "\n",
     "block_suffix": "\n",
@@ -198,4 +201,7 @@ func glamourStyle() []byte {
   "html_span": {}
 }
 `)
+	} else {
+		return []byte(`{}`) // TODO add Go color scheme
+	}
 }
