@@ -4,10 +4,7 @@ import "strings"
 
 func glamourStyle(styleName string) []byte {
 	quarterHRString := strings.Repeat("─", width/4)
-	if styleName == "custom" {
-		return []byte(`{}`) // TODO add support for custom color schemes
-	} else if styleName == "gruvbox" {
-		return []byte(`{
+	return []byte(`{
   "document": {
     "block_prefix": "\n",
     "block_suffix": "\n",
@@ -31,14 +28,13 @@ func glamourStyle(styleName string) []byte {
   "h1": {
     "prefix": "──────",
     "suffix": "──────",
-    "color": "#689d6a",
-    "background_color": "#fbf1c7"
+    "color": "#fbf1c7",
+    "background_color": "#b16286"
   },
   "h2": {
     "prefix": "+++++",
     "suffix": "+++++",
-    "color": "#b16286",
-    "background_color": "#fbf1c7"
+    "color": "#689d6a"
   },
   "h3": {
     "prefix": "────",
@@ -212,7 +208,4 @@ func glamourStyle(styleName string) []byte {
   "html_block": {},
   "html_span": {}
 }`)
-	} else {
-		return []byte(`{}`) // TODO add Go color scheme
-	}
 }
