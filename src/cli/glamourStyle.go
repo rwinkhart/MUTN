@@ -26,31 +26,39 @@ func glamourStyle(styleName string) []byte {
   },
   "heading": {
     "block_suffix": "\n",
-    "color": "#b16286",
     "bold": true
   },
   "h1": {
-    "prefix": " ",
-    "suffix": " ",
-    "color": "#b16286",
-    "background_color": "229",
-    "bold": true
+    "prefix": "──────",
+    "suffix": "──────",
+    "color": "#689d6a",
+    "background_color": "#fbf1c7"
   },
   "h2": {
-    "prefix": "## "
+    "prefix": "+++++",
+    "suffix": "+++++",
+    "color": "#b16286",
+    "background_color": "#fbf1c7"
   },
   "h3": {
-    "prefix": "### "
+    "prefix": "────",
+    "suffix": "────",
+    "color": "#458588"
   },
   "h4": {
-    "prefix": "#### "
+    "prefix": "+++",
+    "suffix": "+++",
+    "color": "#d79921"
   },
   "h5": {
-    "prefix": "##### "
+    "prefix": "──",
+    "suffix": "──",
+    "color": "#98971a"
   },
   "h6": {
-    "prefix": "###### ",
-    "bold": false
+    "prefix": "+",
+    "suffix": "+",
+    "color": "#cc241d"
   },
   "text": {},
   "strikethrough": {
@@ -203,8 +211,7 @@ func glamourStyle(styleName string) []byte {
   },
   "html_block": {},
   "html_span": {}
-}
-`)
+}`)
 	} else {
 		return []byte(`{}`) // TODO add Go color scheme
 	}
