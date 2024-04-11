@@ -3,7 +3,7 @@ package cli
 import "strings"
 
 func glamourStyle(styleName string) []byte {
-	hrString := strings.Repeat("─", width)
+	quarterHRString := strings.Repeat("─", width/4)
 	if styleName == "custom" {
 		return []byte(`{}`) // TODO add support for custom color schemes
 	} else if styleName == "gruvbox" {
@@ -64,7 +64,7 @@ func glamourStyle(styleName string) []byte {
   },
   "hr": {
     "color": "246",
-    "format": "\n` + hrString + `\n"
+    "format": "\n` + strings.Repeat(quarterHRString, 4) + `\n"
   },
   "item": {
     "block_prefix": "• "
@@ -99,8 +99,9 @@ func glamourStyle(styleName string) []byte {
     "background_color": "236"
   },
   "code_block": {
+    "block_prefix": "` + quarterHRString + "code" + quarterHRString + "\\n" + `",
+    "block_suffix": "` + strings.Repeat(quarterHRString, 2) + "────\\n" + `",
     "color": "248",
-    "margin": 4,
     "chroma": {
       "text": {
         "color": "#C4C4C4"
