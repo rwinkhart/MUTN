@@ -32,8 +32,8 @@ func glamourStyle(styleName string) []byte {
     "background_color": "#B16286"
   },
   "h2": {
-    "prefix": "+++++",
-    "suffix": "+++++",
+    "prefix": "++",
+    "suffix": "++",
     "color": "#689D6A"
   },
   "h3": {
@@ -42,8 +42,8 @@ func glamourStyle(styleName string) []byte {
     "color": "#458588"
   },
   "h4": {
-    "prefix": "+++",
-    "suffix": "+++",
+    "prefix": "+",
+    "suffix": "+",
     "color": "#D79921"
   },
   "h5": {
@@ -52,8 +52,6 @@ func glamourStyle(styleName string) []byte {
     "color": "#98971A"
   },
   "h6": {
-    "prefix": "+",
-    "suffix": "+",
     "color": "#CC241D"
   },
   "text": {},
