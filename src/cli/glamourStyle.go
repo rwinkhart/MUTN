@@ -28,7 +28,7 @@ func glamourStyle(styleName string) []byte {
   "h1": {
     "prefix": "──────",
     "suffix": "──────",
-    "color": "#fbf1c7",
+    "color": "#FBF1C7",
     "background_color": "#b16286"
   },
   "h2": {
@@ -108,41 +108,41 @@ func glamourStyle(styleName string) []byte {
     "color": "248",
     "chroma": {
       "text": {
-        "color": "#C4C4C4"
+        "color": "#A89984"
       },
       "error": {
         "color": "#F1F1F1",
         "background_color": "#F05B5B"
       },
       "comment": {
-        "color": "#676767"
+        "color": "#928374"
       },
       "comment_preproc": {
         "color": "#FF875F"
       },
       "keyword": {
-        "color": "#00AAFF"
+        "color": "#D65E5E"
       },
       "keyword_reserved": {
         "color": "#FF5FD2"
       },
       "keyword_namespace": {
-        "color": "#FF5F87"
+        "color": "#D65E5E"
       },
       "keyword_type": {
-        "color": "#6E6ED8"
+        "color": "#FABD2F"
       },
       "operator": {
-        "color": "#EF8080"
+        "color": "#FBF1C7"
       },
       "punctuation": {
         "color": "#E8E8A8"
       },
       "name": {
-        "color": "#C4C4C4"
+        "color": "#A89984"
       },
       "name_builtin": {
-        "color": "#FF8EC7"
+        "color": "#FE8019"
       },
       "name_tag": {
         "color": "#B083EA"
@@ -161,16 +161,16 @@ func glamourStyle(styleName string) []byte {
       },
       "name_exception": {},
       "name_function": {
-        "color": "#00D787"
+        "color": "#FBF1C7"
       },
       "name_other": {},
       "literal": {},
       "literal_number": {
-        "color": "#6EEFC0"
+        "color": "#D3869B"
       },
       "literal_date": {},
       "literal_string": {
-        "color": "#C69669"
+        "color": "#B8BB26"
       },
       "literal_string_escape": {
         "color": "#AFFFD7"
@@ -182,7 +182,7 @@ func glamourStyle(styleName string) []byte {
         "italic": true
       },
       "generic_inserted": {
-        "color": "#00D787"
+        "color": "#FBF1C7"
       },
       "generic_strong": {
         "bold": true
