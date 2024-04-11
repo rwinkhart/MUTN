@@ -1,6 +1,9 @@
 package cli
 
+import "strings"
+
 func glamourStyle(styleName string) []byte {
+	hrString := strings.Repeat("─", width)
 	if styleName == "custom" {
 		return []byte(`{}`) // TODO add support for custom color schemes
 	} else if styleName == "gruvbox" {
@@ -61,7 +64,7 @@ func glamourStyle(styleName string) []byte {
   },
   "hr": {
     "color": "246",
-    "format": "\n--------\n"
+    "format": "\n` + hrString + `\n"
   },
   "item": {
     "block_prefix": "• "
