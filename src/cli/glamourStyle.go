@@ -8,7 +8,7 @@ func glamourStyle(styleName string) []byte {
   "document": {
     "block_prefix": "\n",
     "block_suffix": "\n",
-    "color": "#ebdbb2",
+    "color": "#EBDBB2",
     "margin": 0
   },
   "block_quote": {
@@ -29,12 +29,12 @@ func glamourStyle(styleName string) []byte {
     "prefix": "──────",
     "suffix": "──────",
     "color": "#FBF1C7",
-    "background_color": "#b16286"
+    "background_color": "#B16286"
   },
   "h2": {
     "prefix": "+++++",
     "suffix": "+++++",
-    "color": "#689d6a"
+    "color": "#689D6A"
   },
   "h3": {
     "prefix": "────",
@@ -44,17 +44,17 @@ func glamourStyle(styleName string) []byte {
   "h4": {
     "prefix": "+++",
     "suffix": "+++",
-    "color": "#d79921"
+    "color": "#D79921"
   },
   "h5": {
     "prefix": "──",
     "suffix": "──",
-    "color": "#98971a"
+    "color": "#98971A"
   },
   "h6": {
     "prefix": "+",
     "suffix": "+",
-    "color": "#cc241d"
+    "color": "#CC241D"
   },
   "text": {},
   "strikethrough": {
@@ -67,7 +67,7 @@ func glamourStyle(styleName string) []byte {
     "bold": true
   },
   "hr": {
-    "color": "246",
+    "color": "#7C6F64",
     "format": "\n` + strings.Repeat(quarterHRString, 4) + `\n"
   },
   "item": {
@@ -81,19 +81,19 @@ func glamourStyle(styleName string) []byte {
     "unticked": "[ ] "
   },
   "link": {
-    "color": "108",
+    "color": "#427B58",
     "underline": true
   },
   "link_text": {
-    "color": "72",
+    "color": "#8EC07C",
     "bold": true
   },
   "image": {
-    "color": "208",
+    "color": "#AF3A03",
     "underline": true
   },
   "image_text": {
-    "color": "246",
+    "color": "#FE8019",
     "format": "Image: {{.text}} →"
   },
   "code": {
@@ -173,7 +173,7 @@ func glamourStyle(styleName string) []byte {
         "color": "#B8BB26"
       },
       "literal_string_escape": {
-        "color": "#AFFFD7"
+        "color": "#FE8019"
       },
       "generic_deleted": {
         "color": "#FD5B5B"
@@ -201,7 +201,9 @@ func glamourStyle(styleName string) []byte {
     "row_separator": "─"
   },
   "definition_list": {},
-  "definition_term": {},
+  "definition_term": {
+	"block_suffix": "\n"
+  },
   "definition_description": {
     "block_prefix": "\n🠶 "
   },
