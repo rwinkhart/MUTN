@@ -2,19 +2,18 @@ package cli
 
 import "strings"
 
-func glamourStyle(styleName string) []byte {
+func glamourStyle() []byte {
 	quarterHRString := strings.Repeat("─", width/4)
 	return []byte(`{
   "document": {
+	"color": "#EBDBB2",
     "block_prefix": "\n",
-    "block_suffix": "\n",
-    "color": "#EBDBB2",
-    "margin": 0
+    "block_suffix": "\n"
   },
   "block_quote": {
-    "indent": 2,
-    "indent_token": "│ ",
-    "color": "109"
+	"color": "#A89984",
+    "indent": 4,
+    "indent_token": "│ "
   },
   "paragraph": {},
   "list": {
@@ -97,13 +96,12 @@ func glamourStyle(styleName string) []byte {
   "code": {
     "prefix": "",
     "suffix": "",
-    "color": "203",
-    "background_color": "236"
+    "color": "#FB4934",
+    "background_color": "#3C3836"
   },
   "code_block": {
     "block_prefix": "` + quarterHRString + "code" + quarterHRString + "\\n" + `",
     "block_suffix": "` + strings.Repeat(quarterHRString, 2) + "────\\n" + `",
-    "color": "248",
     "chroma": {
       "text": {
         "color": "#A89984"
