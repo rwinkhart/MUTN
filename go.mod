@@ -1,6 +1,6 @@
 module github.com/rwinkhart/MUTN
 
-go 1.22.1
+go 1.22.2
 
 require (
 	github.com/charmbracelet/glamour v0.7.0
