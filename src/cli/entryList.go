@@ -17,10 +17,13 @@ const (
 )
 
 // calculates and returns the final visual indentation multiplier (needed to adjust indentation for skipped parent directories) - also subtracts "old" text from directory header
-func indentSubtractor(skippedDirList []bool, dirList []string, currentDirIndex int, indent int) (int, string) {
+func determineIndentation(skippedDirList []bool, dirList []string, currentDirIndex int) (int, string) {
 	var subtractor int      // tracks how much to subtract from expected indentation multiplier
 	var lastPrefixIndex int // tracks the index (in both skippedDirList and dirList) of the last displayed parent directory
 	var trimmedDirectory = dirList[currentDirIndex]
+
+	// determine initial indentation multiplier based on PathSeparator occurrences
+	indent := strings.Count(trimmedDirectory, offline.PathSeparator) - 1 // subtract 1 to avoid indenting root-level directories
 
 	for i, skipped := range skippedDirList[:currentDirIndex] { // checks each skipped directory to determine if it is a parent to the current directory
 		if strings.HasPrefix(trimmedDirectory, dirList[i]+offline.PathSeparator) { // if the current directory is the child of this iteration's directory...
@@ -132,9 +135,6 @@ func EntryListGen() {
 			skippedDirList[i] = true
 		}
 
-		// determine directory's indentation multiplier based on PathSeparator occurrences
-		indent = strings.Count(directory, offline.PathSeparator) - 1 // subtract 1 to avoid indenting root-level directories
-
 		// check if next directory is within the current one
 		if dirListLength > i+1 {
 			if nextDir := dirList[i+1]; directory == nextDir[:strings.LastIndex(nextDir, offline.PathSeparator)] {
@@ -156,8 +156,8 @@ func EntryListGen() {
 				// print directory header if this is the first run of the loop
 				if !containsFiles {
 					containsFiles = true
-					skippedDirList[i] = false                                                      // the directory header is being printed, indicate that it is not being skipped
-					indent, vanityDirectory = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
+					skippedDirList[i] = false                                                  // the directory header is being printed, indicate that it is not being skipped
+					indent, vanityDirectory = determineIndentation(skippedDirList, dirList, i) // calculate the final indentation multiplier
 					printDirectoryHeader(vanityDirectory, indent)
 				}
 
@@ -168,8 +168,8 @@ func EntryListGen() {
 		if !containsFiles { // if the current directory contains no files...
 			if !containsSubdirectory { // nor does it contain any subdirectories...
 				if dirListLength > 1 { // and directories besides the root-level exist... display directory header and empty directory warning
-					skippedDirList[i] = false                                                      // the directory header is being printed, indicate that it is not being skipped
-					indent, vanityDirectory = indentSubtractor(skippedDirList, dirList, i, indent) // calculate the final indentation multiplier
+					skippedDirList[i] = false                                                  // the directory header is being printed, indicate that it is not being skipped
+					indent, vanityDirectory = determineIndentation(skippedDirList, dirList, i) // calculate the final indentation multiplier
 					printDirectoryHeader(vanityDirectory, indent)
 					fmt.Print(strings.Repeat(" ", indent*2) + ansiEmptyDirectoryWarning + "-empty directory-" + offline.AnsiReset)
 				} else { // warn if the only thing that exists is the root-level directory
