@@ -76,8 +76,6 @@ func printFileEntry(entry string, lastSlash int, charCounter int, colorAlternato
 
 // EntryListGen generates and displays full libmutton entry list
 func EntryListGen() {
-	fmt.Print("\n" + ansiBlackOnWhite + "libmutton entries:" + offline.AnsiReset)
-
 	// define file/directory containing slices so that they may be accessed by the anonymous WalkDir function
 	var fileList []string
 	var dirList []string
@@ -100,8 +98,7 @@ func EntryListGen() {
 			// trim root path from each path before storing
 			trimmedPath := fullPath[rootLength:]
 
-			// create three separate slices for root-level entries, all other entries, and all subdirectories
-			// root-level entries get their own slice so that they can be alphabetically sorted without the chance of directories being placed in from of them
+			// create separate slices for entries and directories
 			if !entry.IsDir() {
 				fileList = append(fileList, trimmedPath)
 			} else {
@@ -110,6 +107,9 @@ func EntryListGen() {
 
 			return nil
 		})
+
+	// print header bar w/total entry count
+	fmt.Print("\n"+ansiBlackOnWhite, len(fileList), " libmutton entries:"+offline.AnsiReset)
 
 	// dirList iteration
 	dirListLength := len(dirList)                    // save length for multiple references below
