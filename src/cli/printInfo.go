@@ -2,14 +2,15 @@ package cli
 
 import (
 	"fmt"
-	"github.com/rwinkhart/MUTN/src/offline"
 	"os"
+
+	"github.com/rwinkhart/MUTN/src/offline"
 )
 
 // global constants used only in this file
 const (
-	ansiGoFuchsia = "\033[38;2;206;48;98m"
-	ansiGoGopher  = "\033[38;2;1;173;216m"
+	ansiVersionMeat    = "\033[38;2;157;0;6m"
+	ansiVersionOutline = "\033[38;2;131;165;152m"
 )
 
 func HelpMain() {
@@ -135,17 +136,17 @@ ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
 		"\n\n---------------------------------------------------------" +
 		"\n\n             MUTN is a simple, self-hosted,\n  SSH-synchronized password manager based on libmutton\n\n" +
 		"         ..                                     ..\n" +
-		"        /()\\''.''.    " + ansiGoFuchsia + "♥♥♥♥" + offline.AnsiReset + "               .''.''/()\\   _)\n" +
-		"     _.   :       *  " + ansiGoFuchsia + "♥♥♥♥♥♥   ♥♥♥♥♥♥♥♥" + offline.AnsiReset + "  *       :   <[◎]|_|=\n" +
-		" }-}-*]    `..'..'    " + ansiGoFuchsia + "♥♥♥♥♥♥♥♥♥♥♥♥♥" + offline.AnsiReset + "      `..'..'      |\n" +
-		"    ◎-◎    //   \\\\     " + ansiGoFuchsia + "♥♥♥♥♥♥♥♥♥" + offline.AnsiReset + "         //   \\\\     /|\\\n" +
-		ansiGoGopher + "<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" +
-		"\\" + ansiBlackOnWhite + "                                                       " + offline.AnsiReset + ansiGoGopher + "/\n" +
-		"\\" + ansiBlackOnWhite + "                  MUTN Version 0.0.1                   " + offline.AnsiReset + ansiGoGopher + "/\n" +
-		"\\" + ansiBlackOnWhite + "                 The Butchered Update                  " + offline.AnsiReset + ansiGoGopher + "/\n" +
-		"\\" + ansiBlackOnWhite + "                                                       " + offline.AnsiReset + ansiGoGopher + "/\n" +
-		"\\" + ansiBlackOnWhite + "          Copyright (c) 2024 Randall Winkhart          " + offline.AnsiReset + ansiGoGopher + "/\n" +
-		"\\" + ansiBlackOnWhite + "                                                       " + offline.AnsiReset + ansiGoGopher + "/\n" +
+		"        /()\\''.''.    " + ansiVersionMeat + "♥♥♥♥" + offline.AnsiReset + "               .''.''/()\\   _)\n" +
+		"     _.   :       *  " + ansiVersionMeat + "♥♥♥♥♥♥   ♥♥♥♥♥♥♥♥" + offline.AnsiReset + "  *       :   <[◎]|_|=\n" +
+		" }-}-*]    `..'..'    " + ansiVersionMeat + "♥♥♥♥♥♥♥♥♥♥♥♥♥" + offline.AnsiReset + "      `..'..'      |\n" +
+		"    ◎-◎    //   \\\\     " + ansiVersionMeat + "♥♥♥♥♥♥♥♥♥" + offline.AnsiReset + "         //   \\\\     /|\\\n" +
+		ansiVersionOutline + "<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" +
+		"\\" + ansiBlackOnWhite + "                                                       " + offline.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "                  MUTN Version 0.0.1                   " + offline.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "                 The Butchered Update                  " + offline.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "                                                       " + offline.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "          Copyright (c) 2024 Randall Winkhart          " + offline.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "                                                       " + offline.AnsiReset + ansiVersionOutline + "/\n" +
 		"<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" + offline.AnsiReset +
 		"\n               For more information, see:\n\n" +
 		"           https://github.com/rwinkhart/MUTN\n" +
