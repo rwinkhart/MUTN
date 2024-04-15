@@ -1,6 +1,6 @@
 //go:build !windows
 
-package offline
+package backend
 
 // EntryRoot path to libmutton entry directory
 var EntryRoot = home + "/.local/share/libmutton"

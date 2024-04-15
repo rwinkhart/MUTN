@@ -1,9 +1,25 @@
-package offline
+package backend
 
 import (
 	"fmt"
 	"os"
 )
+
+// GetOldEntryData decrypts and returns old entry data (with all required lines present)
+func GetOldEntryData(targetLocation string, field int) []string {
+	// ensure targetLocation exists
+	TargetIsFile(targetLocation, true, 2)
+
+	// read old entry data
+	unencryptedEntry := DecryptGPG(targetLocation)
+
+	// return the old entry data with all required lines present
+	if field > 0 {
+		return EnsureSliceLength(unencryptedEntry, field)
+	} else {
+		return unencryptedEntry
+	}
+}
 
 // Rename renames oldLocation to newLocation
 func Rename(oldLocation string, newLocation string) {

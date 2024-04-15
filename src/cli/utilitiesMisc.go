@@ -3,7 +3,7 @@ package cli
 import (
 	"bufio"
 	"fmt"
-	"github.com/rwinkhart/MUTN/src/offline"
+	"github.com/rwinkhart/MUTN/src/backend"
 	"golang.org/x/crypto/ssh/terminal"
 	"os"
 	"os/exec"
@@ -71,16 +71,16 @@ func inputMenuGen(prompt string, options []string) int {
 	return inputInt(prompt, len(options))
 }
 
-// writeEntryShortcut writes an entry to targetLocation and previews it (errors if no data is supplied)
-func writeEntryShortcut(targetLocation string, unencryptedEntry []string, hidePassword bool) {
-	if offline.EntryIsNotEmpty(unencryptedEntry) {
+// writeEntryCLI writes an entry to targetLocation and previews it (errors if no data is supplied)
+func writeEntryCLI(targetLocation string, unencryptedEntry []string, hidePassword bool) {
+	if backend.EntryIsNotEmpty(unencryptedEntry) {
 		// write the entry to the target location
-		offline.WriteEntry(targetLocation, unencryptedEntry)
+		backend.WriteEntry(targetLocation, unencryptedEntry)
 		// preview the entry
-		fmt.Println(ansiBold + "\nEntry Preview:" + offline.AnsiReset)
+		fmt.Println(ansiBold + "\nEntry Preview:" + backend.AnsiReset)
 		EntryReader(unencryptedEntry, hidePassword, true)
 	} else {
-		fmt.Println(offline.AnsiError + "No data supplied for entry" + offline.AnsiReset)
+		fmt.Println(backend.AnsiError + "No data supplied for entry" + backend.AnsiReset)
 		os.Exit(1)
 	}
 }

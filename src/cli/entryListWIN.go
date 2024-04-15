@@ -4,10 +4,10 @@ package cli
 
 import (
 	"fmt"
-	"github.com/rwinkhart/MUTN/src/offline"
+	"github.com/rwinkhart/MUTN/src/backend"
 	"strings"
 )
 
 func printDirectoryHeader(vanityDirectory string, indent int) {
-	fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+offline.AnsiReset+"\n", strings.ReplaceAll(vanityDirectory, offline.PathSeparator, "/"))
+	fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+backend.AnsiReset+"\n", strings.ReplaceAll(vanityDirectory, backend.PathSeparator, "/"))
 }

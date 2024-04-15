@@ -1,4 +1,4 @@
-package offline
+package backend
 
 import (
 	"bufio"
@@ -41,7 +41,7 @@ func CopyArgument(targetLocation string, field int, executableName string) {
 
 				for { // keep field copied to clipboard, refresh on 30-second intervals
 					currentTime := time.Now()
-					copyField(genTOTP(secret, currentTime, forSteam), "")
+					copyField(GenTOTP(secret, currentTime, forSteam), "")
 					// sleep until next 30-second interval
 					time.Sleep(time.Duration(30-(currentTime.Second()%30)) * time.Second)
 				}
@@ -68,8 +68,8 @@ func ClipClearArgument() {
 	}
 }
 
-// genTOTP generates a TOTP token from a secret (supports standard and Steam TOTP)
-func genTOTP(secret string, time time.Time, forSteam bool) string {
+// GenTOTP generates a TOTP token from a secret (supports standard and Steam TOTP)
+func GenTOTP(secret string, time time.Time, forSteam bool) string {
 	var totpToken string
 	var err error
 

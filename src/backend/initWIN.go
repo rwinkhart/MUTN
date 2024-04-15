@@ -1,6 +1,6 @@
 //go:build windows
 
-package offline
+package backend
 
 import (
 	"fmt"

@@ -1,6 +1,6 @@
-//go:build darwin
+//go:build !windows && !darwin && !termux
 
-package offline
+package backend
 
 import (
 	"fmt"
@@ -10,11 +10,20 @@ import (
 	"time"
 )
 
-// TODO MacOS support is entirely untested - I would appreciate feedback on this implementation
-
 // copyField copies a field from an entry to the clipboard
 func copyField(copySubject string, executableName string) {
-	cmd := exec.Command("pbcopy")
+	var envSet bool // track whether environment variables are set
+	var cmd *exec.Cmd
+	// determine whether to use wl-copy (Wayland) or xclip (X11)
+	if _, envSet = os.LookupEnv("WAYLAND_DISPLAY"); envSet {
+		cmd = exec.Command("wl-copy")
+	} else if _, envSet = os.LookupEnv("DISPLAY"); envSet {
+		cmd = exec.Command("xclip", "-sel", "c")
+	} else {
+		fmt.Println(AnsiError + "Clipboard platform could not be determined - note that the clipboard does not function in a raw TTY" + AnsiReset)
+		os.Exit(1)
+	}
+
 	writeToStdin(cmd, copySubject)
 	err := cmd.Run()
 	if err != nil {
@@ -39,12 +48,25 @@ func copyField(copySubject string, executableName string) {
 func clipClear(oldContents string) {
 	time.Sleep(30 * time.Second)
 
-	cmd := exec.Command("pbpaste")
+	var envSet bool   // track whether environment variables are set
+	var platform bool // track clipboard platform, false for Wayland, true for X11
+	var cmd *exec.Cmd
+	// determine whether to use wl-copy (Wayland) or xclip (X11)
+	if _, envSet = os.LookupEnv("WAYLAND_DISPLAY"); envSet {
+		cmd = exec.Command("wl-paste")
+	} else if _, envSet = os.LookupEnv("DISPLAY"); envSet {
+		cmd = exec.Command("xclip", "-o", "-sel", "c")
+		platform = true
+	}
 	newContents, _ := cmd.Output()
 
 	if oldContents == strings.TrimRight(string(newContents), "\r\n") {
-		cmd = exec.Command("pbcopy")
-		writeToStdin(cmd, "")
+		switch platform {
+		case false:
+			cmd = exec.Command("wl-copy", "-c")
+		case true:
+			cmd = exec.Command("xclip", "-i", "/dev/null", "-sel", "c")
+		}
 		err := cmd.Run()
 		if err != nil {
 			fmt.Println(AnsiError + "Failed to clear clipboard: " + err.Error() + AnsiReset)

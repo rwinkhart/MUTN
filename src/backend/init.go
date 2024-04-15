@@ -1,4 +1,4 @@
-package offline
+package backend
 
 import (
 	"os"

@@ -1,6 +1,6 @@
-//go:build termux
+//go:build windows
 
-package offline
+package backend
 
 import (
 	"fmt"
@@ -12,8 +12,7 @@ import (
 
 // copyField copies a field from an entry to the clipboard
 func copyField(copySubject string, executableName string) {
-	cmd := exec.Command("termux-clipboard-set")
-	writeToStdin(cmd, copySubject)
+	cmd := exec.Command("powershell.exe", "-c", fmt.Sprintf("echo '%s' | Set-Clipboard", strings.ReplaceAll(copySubject, "'", "''")))
 	err := cmd.Run()
 	if err != nil {
 		fmt.Println(AnsiError + "Failed to copy to clipboard: " + err.Error() + AnsiReset)
@@ -37,12 +36,11 @@ func copyField(copySubject string, executableName string) {
 func clipClear(oldContents string) {
 	time.Sleep(30 * time.Second)
 
-	cmd := exec.Command("termux-clipboard-get")
+	cmd := exec.Command("powershell.exe", "-c", "Get-Clipboard")
 	newContents, _ := cmd.Output()
 
 	if oldContents == strings.TrimRight(string(newContents), "\r\n") {
-		cmd = exec.Command("termux-clipboard-set")
-		writeToStdin(cmd, "")
+		cmd = exec.Command("powershell.exe", "-c", "Set-Clipboard")
 		err := cmd.Run()
 		if err != nil {
 			fmt.Println(AnsiError + "Failed to clear clipboard: " + err.Error() + AnsiReset)
