@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"reflect"
+	"strings"
 )
 
 // RenameCli renames an entry at oldLocation to a new location (user input)
@@ -134,8 +135,16 @@ func editNote(baseNote []string) ([]string, bool) {
 	// close tempFile
 	tempFile.Close()
 
+	// remove trailing empty strings from the edited note
+	note = offline.RemoveTrailingEmptyStrings(note)
+
+	// trim trailing whitespace from each note line
+	for i, line := range note {
+		note[i] = strings.TrimRight(line, " \t\r\n")
+	}
+
 	// return the edited note if it is different from baseNote
-	if !reflect.DeepEqual(offline.RemoveTrailingEmptyStrings(note), baseNote) {
+	if !reflect.DeepEqual(note, baseNote) {
 		return note, true
 	} else {
 		return []string{}, false

@@ -63,7 +63,7 @@ func inputBinary(prompt string) bool {
 	return false
 }
 
-// inputMenu prompts the user with a menu and returns the user's choice as an integer
+// inputMenuGen prompts the user with a menu and returns the user's choice as an integer
 func inputMenuGen(prompt string, options []string) int {
 	for i, option := range options {
 		fmt.Printf("%d. %s\n", i+1, option)
@@ -71,13 +71,14 @@ func inputMenuGen(prompt string, options []string) int {
 	return inputInt(prompt, len(options))
 }
 
-// writeEntryShortcut writes an entry to targetLocation (trimming trailing blank lines) and previews it, or errors if no data is supplied
+// writeEntryShortcut writes an entry to targetLocation and previews it (errors if no data is supplied)
 func writeEntryShortcut(targetLocation string, unencryptedEntry []string, hidePassword bool) {
 	if offline.EntryIsNotEmpty(unencryptedEntry) {
-		trimmedEntry := offline.RemoveTrailingEmptyStrings(unencryptedEntry)
-		offline.WriteEntry(targetLocation, trimmedEntry)
+		// write the entry to the target location
+		offline.WriteEntry(targetLocation, unencryptedEntry)
+		// preview the entry
 		fmt.Println(ansiBold + "\nEntry Preview:" + offline.AnsiReset)
-		EntryReader(trimmedEntry, hidePassword, true)
+		EntryReader(unencryptedEntry, hidePassword, true)
 	} else {
 		fmt.Println(offline.AnsiError + "No data supplied for entry" + offline.AnsiReset)
 		os.Exit(1)
