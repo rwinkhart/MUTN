@@ -2,7 +2,7 @@ package cli
 
 import (
 	"fmt"
-	"github.com/rwinkhart/MUTN/src/offline"
+	"github.com/rwinkhart/MUTN/src/backend"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -23,10 +23,10 @@ func determineIndentation(skippedDirList []bool, dirList []string, currentDirInd
 	var trimmedDirectory = dirList[currentDirIndex]
 
 	// determine initial indentation multiplier based on PathSeparator occurrences
-	indent := strings.Count(trimmedDirectory, offline.PathSeparator) - 1 // subtract 1 to avoid indenting root-level directories
+	indent := strings.Count(trimmedDirectory, backend.PathSeparator) - 1 // subtract 1 to avoid indenting root-level directories
 
 	for i, skipped := range skippedDirList[:currentDirIndex] { // checks each skipped directory to determine if it is a parent to the current directory
-		if strings.HasPrefix(trimmedDirectory, dirList[i]+offline.PathSeparator) { // if the current directory is the child of this iteration's directory...
+		if strings.HasPrefix(trimmedDirectory, dirList[i]+backend.PathSeparator) { // if the current directory is the child of this iteration's directory...
 			if skipped { // ...and this iteration's directory was skipped...
 				subtractor++ // increment the subtractor to indicate that the visual indentation should be reduced
 			} else {
@@ -72,7 +72,7 @@ func printFileEntry(entry string, lastSlash int, charCounter int, colorAlternato
 	}
 
 	// print fileEntryName to screen
-	fmt.Printf("%s%s%s ", colorCode, fileEntryName, offline.AnsiReset)
+	fmt.Printf("%s%s%s ", colorCode, fileEntryName, backend.AnsiReset)
 
 	return charCounter, colorAlternator
 }
@@ -84,16 +84,16 @@ func EntryListGen() {
 	var dirList []string
 
 	// walk entry directory
-	_ = filepath.WalkDir(offline.EntryRoot,
+	_ = filepath.WalkDir(backend.EntryRoot,
 		func(fullPath string, entry fs.DirEntry, err error) error {
 
 			// check for errors encountered while walking directory
 			if err != nil {
 				if os.IsNotExist(err) {
-					fmt.Println(offline.AnsiError + "\nThe entry directory does not exist - run \"mutn init\" to create it" + offline.AnsiReset)
+					fmt.Println(backend.AnsiError + "\nThe entry directory does not exist - run \"mutn init\" to create it" + backend.AnsiReset)
 				} else {
 					// otherwise, print the source of the error
-					fmt.Println(offline.AnsiError + "\nAn unexpected error occurred while generating the entry list: " + err.Error() + offline.AnsiReset)
+					fmt.Println(backend.AnsiError + "\nAn unexpected error occurred while generating the entry list: " + err.Error() + backend.AnsiReset)
 				}
 				os.Exit(1)
 			}
@@ -112,7 +112,7 @@ func EntryListGen() {
 		})
 
 	// print header bar w/total entry count
-	fmt.Print("\n"+ansiBlackOnWhite, len(fileList), " libmutton entries:"+offline.AnsiReset)
+	fmt.Print("\n"+ansiBlackOnWhite, len(fileList), " libmutton entries:"+backend.AnsiReset)
 
 	// dirList iteration
 	dirListLength := len(dirList)                    // save length for multiple references below
@@ -137,7 +137,7 @@ func EntryListGen() {
 
 		// check if next directory is within the current one
 		if dirListLength > i+1 {
-			if nextDir := dirList[i+1]; directory == nextDir[:strings.LastIndex(nextDir, offline.PathSeparator)] {
+			if nextDir := dirList[i+1]; directory == nextDir[:strings.LastIndex(nextDir, backend.PathSeparator)] {
 				containsSubdirectory = true
 			} else {
 				containsSubdirectory = false
@@ -151,7 +151,7 @@ func EntryListGen() {
 		for _, file := range fileList {
 
 			// print the current file if it belongs in the current directory - otherwise, break the loop and move on to the next directory
-			if lastSlash := strings.LastIndex(file, offline.PathSeparator) + 1; file[:lastSlash-1] == directory {
+			if lastSlash := strings.LastIndex(file, backend.PathSeparator) + 1; file[:lastSlash-1] == directory {
 
 				// print directory header if this is the first run of the loop
 				if !containsFiles {
@@ -171,7 +171,7 @@ func EntryListGen() {
 					skippedDirList[i] = false                                                  // the directory header is being printed, indicate that it is not being skipped
 					indent, vanityDirectory = determineIndentation(skippedDirList, dirList, i) // calculate the final indentation multiplier
 					printDirectoryHeader(vanityDirectory, indent)
-					fmt.Print(strings.Repeat(" ", indent*2) + ansiEmptyDirectoryWarning + "-empty directory-" + offline.AnsiReset)
+					fmt.Print(strings.Repeat(" ", indent*2) + ansiEmptyDirectoryWarning + "-empty directory-" + backend.AnsiReset)
 				} else { // warn if the only thing that exists is the root-level directory
 					fmt.Print("\n\nNothing's here! For help creating your first entry, run \"mutn help\".")
 				}

@@ -3,7 +3,7 @@ package cli
 import (
 	"bufio"
 	"fmt"
-	"github.com/rwinkhart/MUTN/src/offline"
+	"github.com/rwinkhart/MUTN/src/backend"
 	"os"
 	"os/exec"
 	"reflect"
@@ -13,25 +13,19 @@ import (
 // RenameCli renames an entry at oldLocation to a new location (user input)
 func RenameCli(oldLocation string) {
 	// ensure targetLocation exists
-	offline.TargetIsFile(oldLocation, true, 0)
+	backend.TargetIsFile(oldLocation, true, 0)
 
 	// prompt user for new location and rename
-	newLocation := offline.EntryRoot + offline.PathSeparator + input("New location:")
-	offline.Rename(oldLocation, newLocation)
+	newLocation := backend.EntryRoot + backend.PathSeparator + input("New location:")
+	backend.Rename(oldLocation, newLocation)
 
-	// exit is done from offline.Rename
+	// exit is done from backend.Rename
 }
 
-// EditEntry edits a field of an entry at targetLocation (user input), does not allow for editing notes
-func EditEntry(targetLocation string, hidePassword bool, field int) {
-	// ensure targetLocation exists
-	offline.TargetIsFile(targetLocation, true, 2)
-
-	// read old entry data
-	unencryptedEntry := offline.DecryptGPG(targetLocation)
-
-	// ensure slice is long enough for field
-	unencryptedEntry = offline.EnsureSliceLength(unencryptedEntry, field)
+// EditEntryField edits a field of an entry at targetLocation (user input), does not allow for editing notes
+func EditEntryField(targetLocation string, hidePassword bool, field int) {
+	// fetch old entry data (with all required lines present)
+	unencryptedEntry := backend.GetOldEntryData(targetLocation, field)
 
 	// edit the field
 	switch field {
@@ -44,20 +38,13 @@ func EditEntry(targetLocation string, hidePassword bool, field int) {
 	}
 
 	// write and preview the modified entry
-	writeEntryShortcut(targetLocation, unencryptedEntry, hidePassword)
+	writeEntryCLI(targetLocation, unencryptedEntry, hidePassword)
 }
 
 // EditEntryNote edits the note of an entry at targetLocation (user input)
 func EditEntryNote(targetLocation string, hidePassword bool) {
-	// ensure targetLocation exists
-	offline.TargetIsFile(targetLocation, true, 2)
-
-	// read old entry data
-	unencryptedEntry := offline.DecryptGPG(targetLocation)
-
-	// ensure slice is long enough for note
-	// avoids errors when storing non-note data
-	unencryptedEntry = offline.EnsureSliceLength(unencryptedEntry, 2) // 2 is used because it is the index of URL, the last non-note field
+	// fetch old entry data (with all required lines present)
+	unencryptedEntry := backend.GetOldEntryData(targetLocation, 2)
 
 	// store non-note data separately
 	nonNoteData := unencryptedEntry[:3]
@@ -68,36 +55,33 @@ func EditEntryNote(targetLocation string, hidePassword bool) {
 	// edit the note
 	editedNote, noteEdited := editNote(noteData)
 	if !noteEdited { // exit early if the note was not edited
-		fmt.Println(offline.AnsiError + "Entry is unchanged" + offline.AnsiReset)
+		fmt.Println(backend.AnsiError + "Entry is unchanged" + backend.AnsiReset)
 		os.Exit(1)
 	}
 	unencryptedEntry = append(nonNoteData, editedNote...)
 
 	// write and preview the modified entry
-	writeEntryShortcut(targetLocation, unencryptedEntry, hidePassword)
+	writeEntryCLI(targetLocation, unencryptedEntry, hidePassword)
 }
 
 // GenUpdate generates a new password for an entry at targetLocation (user input)
 func GenUpdate(targetLocation string, hidePassword bool) {
-	// ensure targetLocation exists
-	offline.TargetIsFile(targetLocation, true, 2)
-
-	// read old entry data
-	unencryptedEntry := offline.DecryptGPG(targetLocation)
+	// fetch old entry data
+	unencryptedEntry := backend.GetOldEntryData(targetLocation, 0)
 
 	// generate a new password
-	unencryptedEntry[0] = offline.StringGen(inputInt("Password length:", -1), inputBinary("Generate a complex (special characters) password?"), 0.2)
+	unencryptedEntry[0] = backend.StringGen(inputInt("Password length:", -1), inputBinary("Generate a complex (special characters) password?"), 0.2)
 
 	// write and preview the modified entry
-	writeEntryShortcut(targetLocation, unencryptedEntry, hidePassword)
+	writeEntryCLI(targetLocation, unencryptedEntry, hidePassword)
 }
 
 // editNote uses the user-specified text editor to edit an existing note (or create a new one if baseNote is empty)
 // returns the edited note and a boolean indicating whether the note was edited
 func editNote(baseNote []string) ([]string, bool) {
-	tempFile := offline.CreateTempFile()
+	tempFile := backend.CreateTempFile()
 	defer os.Remove(tempFile.Name())
-	editor := offline.ReadConfig([]string{"textEditor"})[0]
+	editor := backend.ReadConfig([]string{"textEditor"})[0]
 
 	// write baseNote to tempFile (if it is not empty)
 	if len(baseNote) > 0 {
@@ -116,13 +100,13 @@ func editNote(baseNote []string) ([]string, bool) {
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
 	if err != nil {
-		panic(offline.AnsiError + "Failed to write note with " + editor + offline.AnsiReset)
+		panic(backend.AnsiError + "Failed to write note with " + editor + backend.AnsiReset)
 	}
 
 	// open the tempFile for reading
 	tempFile, err = os.Open(tempFile.Name())
 	if err != nil {
-		panic(offline.AnsiError + "Failed to write note with " + editor + offline.AnsiReset)
+		panic(backend.AnsiError + "Failed to write note with " + editor + backend.AnsiReset)
 	}
 
 	// read the edited note from the tempFile
@@ -136,7 +120,7 @@ func editNote(baseNote []string) ([]string, bool) {
 	tempFile.Close()
 
 	// remove trailing empty strings from the edited note
-	note = offline.RemoveTrailingEmptyStrings(note)
+	note = backend.RemoveTrailingEmptyStrings(note)
 
 	// trim trailing whitespace from each note line
 	for i, line := range note {

@@ -2,16 +2,16 @@ package cli
 
 import (
 	"fmt"
-	"github.com/rwinkhart/MUTN/src/offline"
+	"github.com/rwinkhart/MUTN/src/backend"
 	"os"
 )
 
 // AddEntry creates a new entry at targetLocation by taking user input via CLI prompts
 // entryType: 0 = standard (password), 1 = auto-generated password, 2 = note
 func AddEntry(targetLocation string, hidePassword bool, entryType uint8) {
-	_, isAccessible := offline.TargetIsFile(targetLocation, false, 0)
+	_, isAccessible := backend.TargetIsFile(targetLocation, false, 0)
 	if isAccessible {
-		fmt.Println(offline.AnsiError + "Target location already exists" + offline.AnsiReset)
+		fmt.Println(backend.AnsiError + "Target location already exists" + backend.AnsiReset)
 		os.Exit(1)
 	}
 
@@ -25,7 +25,7 @@ func AddEntry(targetLocation string, hidePassword bool, entryType uint8) {
 		if entryType == 0 {
 			password = inputHidden("Password:")
 		} else {
-			password = offline.StringGen(inputInt("Password length:", -1), inputBinary("Generate a complex (special characters) password?"), 0.2)
+			password = backend.StringGen(inputInt("Password length:", -1), inputBinary("Generate a complex (special characters) password?"), 0.2)
 		}
 
 		url := input("URL:")
@@ -41,5 +41,5 @@ func AddEntry(targetLocation string, hidePassword bool, entryType uint8) {
 	}
 
 	// write and preview the new entry
-	writeEntryShortcut(targetLocation, unencryptedEntry, hidePassword)
+	writeEntryCLI(targetLocation, unencryptedEntry, hidePassword)
 }

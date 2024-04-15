@@ -1,14 +1,14 @@
 package cli
 
 import (
-	"github.com/rwinkhart/MUTN/src/offline"
+	"github.com/rwinkhart/MUTN/src/backend"
 	termy "golang.org/x/crypto/ssh/terminal"
 	"os"
 )
 
 // global variables used across multiple files
 var (
-	rootLength  = len(offline.EntryRoot)
+	rootLength  = len(backend.EntryRoot)
 	width, _, _ = termy.GetSize(int(os.Stdout.Fd()))
 )
 
