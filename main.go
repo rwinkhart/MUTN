@@ -93,16 +93,7 @@ func main() {
 					case "url", "-l":
 						field = 2
 					case "note", "-n":
-						if argsCount == 4 {
-							cli.EditEntryNote(targetLocation, true)
-						} else {
-							switch args[4] {
-							case "show", "-s":
-								cli.EditEntryNote(targetLocation, false)
-							default:
-								cli.EditEntryNote(targetLocation, true)
-							}
-						}
+						field = 3
 					case "rename", "-r":
 						cli.RenameCli(targetLocation)
 					default:

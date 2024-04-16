@@ -35,30 +35,19 @@ func EditEntryField(targetLocation string, hidePassword bool, field int) {
 		unencryptedEntry[field] = input("Username:")
 	case 2:
 		unencryptedEntry[field] = input("URL:")
+	case 3: // edit notes fields
+		// store note and non-note data separately
+		nonNoteData := unencryptedEntry[:3]
+		noteData := unencryptedEntry[3:]
+
+		// edit the note
+		editedNote, noteEdited := editNote(noteData)
+		if !noteEdited { // exit early if the note was not edited
+			fmt.Println(backend.AnsiError + "Entry is unchanged" + backend.AnsiReset)
+			os.Exit(1)
+		}
+		unencryptedEntry = append(nonNoteData, editedNote...)
 	}
-
-	// write and preview the modified entry
-	writeEntryCLI(targetLocation, unencryptedEntry, hidePassword)
-}
-
-// EditEntryNote edits the note of an entry at targetLocation (user input)
-func EditEntryNote(targetLocation string, hidePassword bool) {
-	// fetch old entry data (with all required lines present)
-	unencryptedEntry := backend.GetOldEntryData(targetLocation, 2)
-
-	// store non-note data separately
-	nonNoteData := unencryptedEntry[:3]
-
-	// store note data separately
-	noteData := unencryptedEntry[3:]
-
-	// edit the note
-	editedNote, noteEdited := editNote(noteData)
-	if !noteEdited { // exit early if the note was not edited
-		fmt.Println(backend.AnsiError + "Entry is unchanged" + backend.AnsiReset)
-		os.Exit(1)
-	}
-	unencryptedEntry = append(nonNoteData, editedNote...)
 
 	// write and preview the modified entry
 	writeEntryCLI(targetLocation, unencryptedEntry, hidePassword)
