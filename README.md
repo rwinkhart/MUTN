@@ -20,32 +20,27 @@ MUTN is currently in early development and does not yet have online synchronizat
 To build the current version of MUTN, simply clone this repository and run `go build` in its root directory.
 
 # Roadmap
-- Refactor for better modularity
-  - Release v0.1.0 - No binaries
-- Crete server software
-- Add native sync
-- Add netpin (quick-unlock replacement) functionality
-  - Release v0.2.0 - Make repo public - x86_64_v1 binary
-- Println text-wrapping
-- Markdown support for notes
-  - Release v0.2.1 - x86_64_v1 binary
-- Swap to native encryption, consider making GPG optional or removing entirely
-- Swap to native SSH if not already done
-  - Release v0.3.0 - x86_64_v1 binary
-- Replace init with interactive ttyPod-based menu
-  - Release v0.3.1 - x86_64_v1 binary
-- Password aging support
-  - Release v0.4.0 - x86_64_v1 binary
-- Perform extensive testing, fixing, and optimizing
-- Create artwork
-- Create manpage
-- Create packaging script
-  - Release v1.0.0
-    - Official packages for:
-      - Arch Linux (AUR PKGBUILD, source-based with user's architecture feature level)
-      - Debian 12+/Ubuntu 24.04+ Linux
-      - Alpine Linux
-      - Fedora Linux
-      - FreeBSD
-      - Windows
-      - MacOS (aarch64 only)
+- Release v0.2.0 - No binaries
+  - Crete server software
+  - Add native sync (based on golang.org/x/crypto/ssh)
+  - Update entry format with reserved space for TOTP
+- Release v0.2.1 - No binaries
+  - Replace init with interactive ttyPod-based menu
+- Release v0.3.0 - Make repo public - x86_64_v1 binary
+  - Swap to native encryption, consider making GPG optional or removing entirely
+- Release v0.4.0 - x86_64_v1 binary
+  - Password aging support
+    - Add password aging info to entry names
+      - Make constant character count to easily trim for user interaction
+- Release v1.0.0 - Distribution packages (from here on out)
+  - Perform extensive testing, fixing, and optimizing
+  - Create artwork
+  - Create manpage
+  - Create packaging script
+- Release v1.1.0
+  - Cascading encryption support
+- Release v1.2.0
+  - Custom color scheme support
+- Release v1.3.0
+  - Add build option for breaking markdown support and menus into separate binaries
+    - Greatly reduces startup time

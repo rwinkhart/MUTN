@@ -28,6 +28,7 @@ func main() {
 			// entry reader shortcut (if no other arguments are supplied)
 			if argsCount == 2 {
 				cli.EntryReaderDecrypt(targetLocation, true, false)
+
 				// perform other operations on the entry (if other arguments are supplied)
 			} else if argsCount == 3 || (argsCount == 4 && (args[3] == "show" || args[3] == "-s")) {
 				if argsCount == 3 { // default to "password" if no field is specified (for copy, edit, and add)
@@ -62,8 +63,6 @@ func main() {
 
 			} else if argsCount >= 4 {
 
-				// declare entry field to perform target operation on
-
 				switch args[2] {
 				case "copy":
 					var field int // indicates which (numbered) field to copy
@@ -84,7 +83,7 @@ func main() {
 					}
 					backend.CopyArgument(targetLocation, field, args[0])
 				case "edit":
-					var field int // indicates which field to edit
+					var field int // indicates which (numbered) field to edit
 					switch args[3] {
 					case "password", "-pw":
 						field = 0

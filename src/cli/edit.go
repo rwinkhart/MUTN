@@ -22,7 +22,7 @@ func RenameCli(oldLocation string) {
 	// exit is done from backend.Rename
 }
 
-// EditEntryField edits a field of an entry at targetLocation (user input), does not allow for editing notes
+// EditEntryField edits a field of an entry at targetLocation (user input)
 func EditEntryField(targetLocation string, hidePassword bool, field int) {
 	// fetch old entry data (with all required lines present)
 	unencryptedEntry := backend.GetOldEntryData(targetLocation, field)
