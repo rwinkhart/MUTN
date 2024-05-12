@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/rwinkhart/MUTN/src/backend"
 	"github.com/rwinkhart/MUTN/src/cli"
+	"github.com/rwinkhart/MUTN/src/sync"
 	"os"
 	"strings"
 )
@@ -162,6 +163,8 @@ func main() {
 					fmt.Println(backend.AnsiError + "\"sync\" is not yet implemented" + backend.AnsiReset)
 				}
 				os.Exit(0)
+			case "synctest": // TODO Remove after native sync is implemented
+				sync.RunJob(true)
 			case "init":
 				cli.TempInitCli()
 			case "tweak":

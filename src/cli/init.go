@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 	"github.com/rwinkhart/MUTN/src/backend"
+	"math/rand"
 	"os"
 )
 
@@ -26,5 +27,25 @@ func TempInitCli() {
 	// textEditor
 	textEditor := input("Text editor (leave blank for $EDITOR, falls back to \"" + backend.FallbackEditor + "\"):")
 
-	backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID})
+	// SSH info
+	configSSH := inputBinary("Configure SSH settings (for synchronization)?")
+	if configSSH {
+		// client device ID
+		deviceIDPrefix, _ := os.Hostname()
+		deviceIDSuffix := backend.StringGen(rand.Intn(48)+48, true, 0.2)
+		deviceID := deviceIDPrefix + "-" + deviceIDSuffix // TODO do not save in config file, encrypt in config directory
+
+		// necessary SSH info
+		sshUser := input("Remote SSH username:")
+		sshIP := input("Remote SSH IP address:")
+		sshPort := input("Remote SSH port:")
+		sshIdentity := input("SSH private identity file path:") // TODO implement generator and selector
+
+		// write config file
+		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID, "deviceID": deviceID, "sshUser": sshUser, "sshIP": sshIP, "sshPort": sshPort, "sshIdentity": sshIdentity})
+	} else {
+		// write config file
+		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID})
+	}
+
 }

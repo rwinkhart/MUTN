@@ -6,10 +6,11 @@ import (
 	"os"
 )
 
-// ReadConfig reads the libmutton.ini file and returns a map of the requested values
-// requires readMap: a map of section names to key names (indicates requested values)
-// returns configMap: a map of key names to values (sections are irrelevant)
-func ReadConfig(readKeys []string) []string {
+// ReadConfig reads the libmutton.ini file and returns a slice of values for the specified keys
+// requires readKeys: a slice of key names (indicates requested values)
+// requires missingValueError: an error message to display if a key is missing a value, set to "" for auto-generated or "0" to exit silently with status 0
+// returns config: a slice of values for the specified keys
+func ReadConfig(readKeys []string, missingValueError string) []string {
 	cfg, err := ini.Load(ConfigPath)
 	if err != nil {
 		fmt.Println(AnsiError + "Failed to load libmutton.ini" + AnsiReset)
@@ -23,7 +24,14 @@ func ReadConfig(readKeys []string) []string {
 
 		// ensure specified key has a value
 		if keyConfig == "" {
-			fmt.Println(AnsiError + "Failed to find value for key \"" + key + "\" in section \"[LIBMUTTON]\" in libmutton.ini" + AnsiReset)
+			switch missingValueError {
+			case "":
+				fmt.Println(AnsiError + "Failed to find value for key \"" + key + "\" in section \"[LIBMUTTON]\" in libmutton.ini" + AnsiReset)
+			case "0":
+				os.Exit(0)
+			default:
+				fmt.Println(AnsiError + missingValueError + AnsiReset)
+			}
 			os.Exit(1)
 		}
 
@@ -37,10 +45,9 @@ func ReadConfig(readKeys []string) []string {
 // [LIBMUTTON]
 // gpgID = <gpg key id>
 // textEditor = <editor command>
-// onlineMode = <true/false>
-// sshError = <true/false>
+// sshUser = <remote user>
+// sshIP = <remote ip>
+// sshPort = <remote ssh port>
+// sshIdentity = <ssh private key identity file path>
 // netPinEnabled = <true/false>
-// remoteUser = <ssh user>
-// remoteIP = <ssh ip>
-// remotePort = <ssh port>
-// identityFile = <path to private key>
+// deviceID = <device id> TODO remove from config file
