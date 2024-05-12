@@ -3,9 +3,8 @@ package cli
 import (
 	"fmt"
 	"github.com/rwinkhart/MUTN/src/backend"
-	"io/fs"
+	"github.com/rwinkhart/MUTN/src/sync"
 	"os"
-	"path/filepath"
 	"strings"
 )
 
@@ -79,37 +78,7 @@ func printFileEntry(entry string, lastSlash int, charCounter int, colorAlternato
 
 // EntryListGen generates and displays full libmutton entry list
 func EntryListGen() {
-	// define file/directory containing slices so that they may be accessed by the anonymous WalkDir function
-	var fileList []string
-	var dirList []string
-
-	// walk entry directory
-	_ = filepath.WalkDir(backend.EntryRoot,
-		func(fullPath string, entry fs.DirEntry, err error) error {
-
-			// check for errors encountered while walking directory
-			if err != nil {
-				if os.IsNotExist(err) {
-					fmt.Println(backend.AnsiError + "\nThe entry directory does not exist - run \"mutn init\" to create it" + backend.AnsiReset)
-				} else {
-					// otherwise, print the source of the error
-					fmt.Println(backend.AnsiError + "\nAn unexpected error occurred while generating the entry list: " + err.Error() + backend.AnsiReset)
-				}
-				os.Exit(1)
-			}
-
-			// trim root path from each path before storing
-			trimmedPath := fullPath[rootLength:]
-
-			// create separate slices for entries and directories
-			if !entry.IsDir() {
-				fileList = append(fileList, trimmedPath)
-			} else {
-				dirList = append(dirList, trimmedPath)
-			}
-
-			return nil
-		})
+	fileList, dirList := sync.WalkEntryDir()
 
 	// print header bar w/total entry count
 	fmt.Print("\n"+ansiBlackOnWhite, len(fileList), " libmutton entries:"+backend.AnsiReset)

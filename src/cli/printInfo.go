@@ -142,8 +142,8 @@ ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
 		"    ◎-◎    //   \\\\     " + ansiVersionMeat + "♥♥♥♥♥♥♥♥♥" + backend.AnsiReset + "         //   \\\\     /|\\\n" +
 		ansiVersionOutline + "<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + backend.AnsiReset + ansiVersionOutline + "/\n" +
-		"\\" + ansiBlackOnWhite + "                  MUTN Version 0.1.0                   " + backend.AnsiReset + ansiVersionOutline + "/\n" +
-		"\\" + ansiBlackOnWhite + "                 The Butchered Update                  " + backend.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "                  MUTN Version 0.2.X                   " + backend.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "                The Placeholder Update                 " + backend.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + backend.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "          Copyright (c) 2024 Randall Winkhart          " + backend.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + backend.AnsiReset + ansiVersionOutline + "/\n" +
