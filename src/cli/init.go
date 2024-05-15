@@ -33,7 +33,7 @@ func TempInitCli() {
 		// client device ID
 		deviceIDPrefix, _ := os.Hostname()
 		deviceIDSuffix := backend.StringGen(rand.Intn(48)+48, true, 0.2)
-		deviceID := deviceIDPrefix + "-" + deviceIDSuffix // TODO do not save in config file, encrypt in config directory
+		deviceID := deviceIDPrefix + "-" + deviceIDSuffix
 
 		// necessary SSH info
 		sshUser := input("Remote SSH username:")
