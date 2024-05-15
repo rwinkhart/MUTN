@@ -60,7 +60,7 @@ func getSSHOutput(cmd string, manualSync bool) string {
 		Auth: []ssh.AuthMethod{
 			ssh.PublicKeys(parsedKey),
 		},
-		HostKeyCallback: hostKeyCallback,
+		HostKeyCallback: hostKeyCallback, // TODO notify user that the server must already be in known_hosts
 	}
 
 	// connect to SSH server
@@ -128,9 +128,41 @@ func getLocalData() ([]string, []int64) {
 	return fileList, modList
 }
 
+// syncLists syncs entries between the client and server based on modification times
+func syncLists(entries [2][]string, modTimes [2][]int64) {
+	// create a map of all server entries to their mod times
+	serverMap := make(map[string]int64)
+	for i, entry := range entries[1] {
+		serverMap[entry] = modTimes[1][i]
+	}
+
+	// iterate over client entries
+	for i, entry := range entries[0] {
+		// check if the entry is present in serverMap
+		if serverModTime, present := serverMap[entry]; present {
+			// entry exists on both client and server, compare mod times
+			if serverModTime > modTimes[0][i] {
+				// TODO entry is newer on server, download
+			} else if serverModTime < modTimes[0][i] {
+				// TODO entry is newer on client, upload
+			}
+			// remove entry from serverMap (process of elimination)
+			delete(serverMap, entry)
+		} else {
+			// TODO entry does not exist on sever, upload
+		}
+	}
+
+	// iterate over remaining entries in serverMap
+	for entry := range serverMap {
+		fmt.Println(entry) // TODO placeholder
+		// TODO entry does not exist on client, download
+	}
+}
+
 // RunJob runs the SSH sync job
 func RunJob(manualSync bool) {
-	// TODO fetch remote lists
+	// fetch remote lists
 	remoteEntries, remoteMods, remoteFolders, remoteDeletions := getRemoteDataFromClient(manualSync)
 	fmt.Println(remoteEntries, remoteMods, remoteFolders, remoteDeletions) // TODO placeholder
 
@@ -139,8 +171,6 @@ func RunJob(manualSync bool) {
 	// fetch local lists
 	localEntries, localMods := getLocalData()
 	fmt.Println(localEntries, localMods) // TODO placeholder
-
-	// TODO sort both local and remote entry/mod lists to ensure common entries are listed first
 
 	// TODO sync new and updated entries
 
