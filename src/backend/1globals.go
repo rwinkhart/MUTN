@@ -6,7 +6,7 @@ import (
 
 // global variables used across multiple files
 var (
-	home, _ = os.UserHomeDir()
+	Home, _ = os.UserHomeDir()
 )
 
 // global constants used across multiple files

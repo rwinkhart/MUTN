@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/rwinkhart/MUTN/src/backend"
 	"golang.org/x/crypto/ssh"
+	"golang.org/x/crypto/ssh/knownhosts"
 	"os"
 	"strconv"
 	"strings"
@@ -46,14 +47,21 @@ func getSSHOutput(cmd string, manualSync bool) string {
 		os.Exit(1)
 	}
 
+	// read known hosts file
+	hostKeyCallback, err := knownhosts.New(backend.Home + "/.ssh/known_hosts")
+	if err != nil {
+		fmt.Println(backend.AnsiError + "Sync failed - Unable to read known hosts file:" + err.Error() + backend.AnsiReset)
+		os.Exit(1)
+	}
+
 	// configure SSH client
 	sshConfig := &ssh.ClientConfig{
 		User: user,
 		Auth: []ssh.AuthMethod{
 			ssh.PublicKeys(parsedKey),
 		},
+		HostKeyCallback: hostKeyCallback,
 	}
-	sshConfig.HostKeyCallback = ssh.InsecureIgnoreHostKey() // TODO remove
 
 	// connect to SSH server
 	sshClient, err := ssh.Dial("tcp", ip+":"+port, sshConfig)
