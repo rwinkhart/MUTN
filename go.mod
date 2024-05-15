@@ -6,7 +6,7 @@ require (
 	github.com/charmbracelet/glamour v0.7.0
 	github.com/fortis/go-steam-totp v0.0.0-20171114202746-18e928674727
 	github.com/pquerna/otp v1.4.1-0.20231130234153-3357de7c0481
-	golang.org/x/crypto v0.22.0
+	golang.org/x/crypto v0.23.0
 	gopkg.in/ini.v1 v1.67.0
 )
 
@@ -28,7 +28,7 @@ require (
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/yuin/goldmark v1.7.1 // indirect
 	github.com/yuin/goldmark-emoji v1.0.2 // indirect
-	golang.org/x/net v0.24.0 // indirect
-	golang.org/x/sys v0.19.0 // indirect
-	golang.org/x/term v0.19.0 // indirect
+	golang.org/x/net v0.25.0 // indirect
+	golang.org/x/sys v0.20.0 // indirect
+	golang.org/x/term v0.20.0 // indirect
 )
