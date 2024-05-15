@@ -9,6 +9,7 @@ import (
 )
 
 // WalkEntryDir walks the entry directory and returns lists of all files and directories found (two separate lists)
+// initCommand is used to specify to the end user how to generate the entry directory if it does not exists
 func WalkEntryDir() ([]string, []string) {
 	// define file/directory containing slices so that they may be accessed by the anonymous WalkDir function
 	var fileList []string
@@ -21,10 +22,10 @@ func WalkEntryDir() ([]string, []string) {
 			// check for errors encountered while walking directory
 			if err != nil {
 				if os.IsNotExist(err) {
-					fmt.Println(backend.AnsiError + "\nThe entry directory does not exist - run \"mutn init\" to create it" + backend.AnsiReset)
+					fmt.Println(backend.AnsiError+"The entry directory does not exist - run \""+os.Args[0], "init"+"\" to create it"+backend.AnsiReset) // TODO implement init command for libmuttonserver
 				} else {
 					// otherwise, print the source of the error
-					fmt.Println(backend.AnsiError + "\nAn unexpected error occurred while generating the entry list: " + err.Error() + backend.AnsiReset)
+					fmt.Println(backend.AnsiError + "An unexpected error occurred while generating the entry list: " + err.Error() + backend.AnsiReset)
 				}
 				os.Exit(1)
 			}
@@ -43,4 +44,15 @@ func WalkEntryDir() ([]string, []string) {
 		})
 
 	return fileList, dirList
+}
+
+func getModTimes(entryList []string) []int64 {
+	// get a list of all entry modification times
+	var modList []int64
+	for _, file := range entryList {
+		modTime, _ := os.Stat(backend.EntryRoot + file)
+		modList = append(modList, modTime.ModTime().Unix())
+	}
+
+	return modList
 }

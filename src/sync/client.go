@@ -84,15 +84,15 @@ func getSSHOutput(cmd string, manualSync bool) string {
 	return outputString
 }
 
-// getRemoteData returns lists of remote entries, mod times, folders, and deletions (four separate lists)
-func getRemoteData(manualSync bool) ([]string, []int64, []string, []string) {
+// getRemoteDataFromClient returns lists of remote entries, mod times, folders, and deletions (four separate lists)
+func getRemoteDataFromClient(manualSync bool) ([]string, []int64, []string, []string) {
 	// get remote output over SSH
-	output := getSSHOutput("ls && uname -r", manualSync) // TODO replace cmd with remote server command (e.g. "libmuttonserver fetch")
+	output := getSSHOutput("libmuttonserver", manualSync)
 
 	// split output into slice based on occurrences of "\x1f"
 	outputSlice := strings.Split(output, "\x1f")
 
-	// re-form the lists
+	// re-form the lists TODO handle error for index out of bounds (occurs if reading deletions directory on server fails)
 	entries := strings.Split(outputSlice[0], "\n")
 	modsStrings := strings.Split(outputSlice[1], "\n")
 	folders := strings.Split(outputSlice[2], "\n")
@@ -114,11 +114,7 @@ func getLocalData() ([]string, []int64) {
 	fileList, _ := WalkEntryDir()
 
 	// get a list of all entry modification times
-	var modList []int64
-	for _, file := range fileList {
-		modTime, _ := os.Stat(backend.EntryRoot + file)
-		modList = append(modList, modTime.ModTime().Unix())
-	}
+	modList := getModTimes(fileList)
 
 	// return the lists
 	return fileList, modList
@@ -127,7 +123,7 @@ func getLocalData() ([]string, []int64) {
 // RunJob runs the SSH sync job
 func RunJob(manualSync bool) {
 	// TODO fetch remote lists
-	remoteEntries, remoteMods, remoteFolders, remoteDeletions := getRemoteData(manualSync)
+	remoteEntries, remoteMods, remoteFolders, remoteDeletions := getRemoteDataFromClient(manualSync)
 	fmt.Println(remoteEntries, remoteMods, remoteFolders, remoteDeletions) // TODO placeholder
 
 	// TODO sync deletions and folders
