@@ -93,10 +93,10 @@ func getRemoteDataFromClient(manualSync bool) ([]string, []int64, []string, []st
 	outputSlice := strings.Split(output, "\x1f")
 
 	// re-form the lists TODO handle error for index out of bounds (occurs if reading deletions directory on server fails)
-	entries := strings.Split(outputSlice[0], "\n")
-	modsStrings := strings.Split(outputSlice[1], "\n")
-	folders := strings.Split(outputSlice[2], "\n")
-	deletions := strings.Split(outputSlice[3], "\n")
+	entries := strings.Split(outputSlice[0], "\n")[1:]
+	modsStrings := strings.Split(outputSlice[1], "\n")[1:]
+	folders := strings.Split(outputSlice[2], "\n")[2:]
+	deletions := strings.Split(outputSlice[3], "\n")[1:]
 
 	// convert the mod times to int64
 	var mods []int64

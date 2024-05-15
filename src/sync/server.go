@@ -20,18 +20,19 @@ func GetRemoteDataFromServer() {
 
 	// print the lists to stdout
 	for _, entry := range entryList {
-		fmt.Println(entry)
+		fmt.Print("\n" + entry)
 	}
-	fmt.Println("\x1f")
+	fmt.Print("\x1f")
 	for _, mod := range modList {
-		fmt.Println(mod)
+		fmt.Print("\n")
+		fmt.Print(mod)
 	}
-	fmt.Print("\x1f") // do not print new lines as the prior output is []int64
+	fmt.Print("\x1f")
 	for _, dir := range dirList {
-		fmt.Println(dir)
+		fmt.Print("\n" + dir)
 	}
-	fmt.Println("\x1f")
+	fmt.Print("\x1f")
 	for _, deletion := range deletionsList {
-		fmt.Println(deletion.Name())
+		fmt.Print("\n" + deletion.Name())
 	}
 }
