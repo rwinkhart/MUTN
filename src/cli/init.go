@@ -34,6 +34,7 @@ func TempInitCli() {
 		deviceIDPrefix, _ := os.Hostname()
 		deviceIDSuffix := backend.StringGen(rand.Intn(48)+48, true, 0.2)
 		deviceID := deviceIDPrefix + "-" + deviceIDSuffix
+		os.Create(backend.ConfigDir + backend.PathSeparator + "devices" + backend.PathSeparator + deviceID) // TODO remove existing device ID file if it exists, copy device ID to server
 
 		// necessary SSH info
 		sshUser := input("Remote SSH username:")
@@ -42,7 +43,7 @@ func TempInitCli() {
 		sshIdentity := input("SSH private identity file path:") // TODO implement generator and selector
 
 		// write config file
-		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID, "deviceID": deviceID, "sshUser": sshUser, "sshIP": sshIP, "sshPort": sshPort, "sshIdentity": sshIdentity})
+		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID, "sshUser": sshUser, "sshIP": sshIP, "sshPort": sshPort, "sshIdentity": sshIdentity})
 	} else {
 		// write config file
 		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID})

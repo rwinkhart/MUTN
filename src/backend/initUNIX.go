@@ -18,8 +18,8 @@ func dirInit() {
 		os.Exit(1)
 	}
 
-	// create config directory
-	err = os.MkdirAll(ConfigDir, 0700)
+	// create config directory w/devices subdirectory
+	err = os.MkdirAll(ConfigDir+"/devices", 0700)
 	if err != nil {
 		fmt.Println(AnsiError + "Failed to create \"" + ConfigDir + "\":" + err.Error() + AnsiReset)
 		os.Exit(1)

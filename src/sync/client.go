@@ -12,8 +12,9 @@ import (
 
 // global constants used only in this file
 const (
-	ansiUpload   = "\033[38;5;4m"
+	ansiDelete   = "\033[38;5;1m"
 	ansiDownload = "\033[38;5;2m"
+	ansiUpload   = "\033[38;5;4m"
 )
 
 // getSSHOutput runs a command over SSH and returns the output
@@ -54,7 +55,7 @@ func getSSHOutput(cmd string, manualSync bool) string {
 	}
 
 	// read known hosts file
-	hostKeyCallback, err := knownhosts.New(backend.Home + "/.ssh/known_hosts")
+	hostKeyCallback, err := knownhosts.New(backend.Home + backend.PathSeparator + ".ssh" + backend.PathSeparator + "known_hosts")
 	if err != nil {
 		fmt.Println(backend.AnsiError + "Sync failed - Unable to read known hosts file:" + err.Error() + backend.AnsiReset)
 		os.Exit(1)
@@ -101,7 +102,7 @@ func getSSHOutput(cmd string, manualSync bool) string {
 // getRemoteDataFromClient returns a map of remote entries to their modification times, a list of remote folders, and a list of queued deletions
 func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []string) {
 	// get remote output over SSH
-	output := getSSHOutput("libmuttonserver", manualSync)
+	output := getSSHOutput("libmuttonserver fetch", manualSync)
 
 	// split output into slice based on occurrences of "\x1d"
 	outputSlice := strings.Split(output, "\x1d")
@@ -176,13 +177,21 @@ func syncLists(localEntryModMap, remoteEntryModMap map[string]int64) {
 	}
 }
 
+func deletionSync(deletions []string) {
+	for _, deletion := range deletions {
+		fmt.Println(ansiDelete+deletion+backend.AnsiReset, "has been sheared, removing...")
+		//os.RemoveAll(backend.EntryRoot + deletion) TODO uncomment after testing
+	}
+}
+
 // RunJob runs the SSH sync job
 func RunJob(manualSync bool) {
 	// fetch remote lists
-	remoteEntryModMap, remoteFolders, remoteDeletions := getRemoteDataFromClient(manualSync)
-	fmt.Println(remoteFolders, remoteDeletions) // TODO placeholder
+	remoteEntryModMap, remoteFolders, deletions := getRemoteDataFromClient(manualSync)
+	fmt.Println(remoteFolders) // TODO placeholder
 
-	// TODO sync deletions and folders
+	// sync deletions
+	deletionSync(deletions)
 
 	// fetch local lists
 	localEntryModMap := getLocalData()

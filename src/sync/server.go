@@ -12,7 +12,7 @@ import (
 func GetRemoteDataFromServer() {
 	entryList, dirList := WalkEntryDir()
 	modList := getModTimes(entryList)
-	deletionsList, err := os.ReadDir(backend.ConfigDir + "/deletions")
+	deletionsList, err := os.ReadDir(backend.ConfigDir + backend.PathSeparator + "deletions")
 	if err != nil {
 		fmt.Println(backend.AnsiError + "Failed to read the deletions directory: " + err.Error() + backend.AnsiReset)
 		os.Exit(1)

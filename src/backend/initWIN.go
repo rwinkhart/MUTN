@@ -17,6 +17,7 @@ func dirInit() {
 		fmt.Println(AnsiError + "Failed to create \"" + EntryRoot + "\":" + err.Error() + AnsiReset)
 		os.Exit(1)
 	}
+	os.MkdirAll(ConfigDir+"\\devices", 0700)
 }
 
 // textEditorFallback returns FallbackEditor

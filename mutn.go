@@ -45,7 +45,7 @@ func main() {
 					case "add":
 						cli.AddEntry(targetLocation, true, 0)
 					case "shear":
-						backend.Shear(targetLocation)
+						sync.Shear(args[1], "") // pass the incomplete path for cleaner formatting in server deletions directory
 					default:
 						cli.HelpMain()
 					}

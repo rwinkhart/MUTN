@@ -50,4 +50,3 @@ func ReadConfig(readKeys []string, missingValueError string) []string {
 // sshPort = <remote ssh port>
 // sshIdentity = <ssh private key identity file path>
 // netPinEnabled = <true/false>
-// deviceID = <device id>
