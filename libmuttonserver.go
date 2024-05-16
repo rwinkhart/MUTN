@@ -18,7 +18,7 @@ func main() {
 	switch args[1] {
 	case "fetch":
 		// print all information needed for syncing to stdout for interpretation by the client
-		sync.GetRemoteDataFromServer()
+		sync.GetRemoteDataFromServer(args[2])
 	case "shear":
 		// shear an entry from the server and add it to the deletions directory
 		deviceIDTargetLocation := strings.Split(args[2], "\x1d")
