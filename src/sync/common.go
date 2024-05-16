@@ -90,13 +90,11 @@ func Shear(targetLocationIncomplete string, deviceID string) {
 				}
 			}
 		}
-	} else {
-		backend.ReadConfig([]string{"sshUser"}, "0") // exits if value does not exist (indicates offline mode)
-		// if running on the client in online mode...
+	} else { // if running on the client... (online mode determined dynamically in GetSSHOutput, will simply exit if not in online mode)
 		// determine client device ID (to send to server, avoids creating a deletion file for the client device)
 		deviceID = deviceIDList[0].Name()
 		// below: deviceID and targetLocationIncomplete are separated by \x1d, path separators are replaced with \x1e, and spaces are replaced with \x1f
-		getSSHOutput("libmuttonserver shear "+deviceID+"\x1d"+strings.ReplaceAll(strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, "\x1e"), " ", "\x1f"), true)
+		GetSSHOutput("libmuttonserver shear "+deviceID+"\x1d"+strings.ReplaceAll(strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, "\x1e"), " ", "\x1f"), false)
 	}
 
 	os.Exit(0)

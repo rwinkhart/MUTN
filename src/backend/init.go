@@ -11,7 +11,7 @@ import (
 // TempInit ensures libmutton directories exist and writes the libmutton configuration file
 func TempInit(configFileMap map[string]string) {
 	// create EntryRoot and ConfigDir
-	dirInit()
+	DirInit()
 
 	// remove existing config file
 	removeFile(ConfigPath)
@@ -27,8 +27,6 @@ func TempInit(configFileMap map[string]string) {
 	for key, value := range configFileMap {
 		configFile.WriteString(key + " = " + value + "\n")
 	}
-
-	os.Exit(0)
 }
 
 // GpgUIDListGen generates a list of all GPG key IDs on the system and returns them as a slice of strings

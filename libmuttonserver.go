@@ -17,11 +17,20 @@ func main() {
 
 	switch args[1] {
 	case "fetch":
+		// print all information needed for syncing to stdout for interpretation by the client
 		sync.GetRemoteDataFromServer()
 	case "shear":
+		// shear an entry from the server and add it to the deletions directory
 		deviceIDTargetLocation := strings.Split(args[2], "\x1d")
 		targetLocationIncomplete := strings.ReplaceAll(strings.ReplaceAll(deviceIDTargetLocation[1], "\x1f", " "), "\x1e", backend.PathSeparator)
 		sync.Shear(targetLocationIncomplete, deviceIDTargetLocation[0])
+	case "register":
+		// register a new device ID
+		os.Create(backend.ConfigDir + backend.PathSeparator + "devices" + backend.PathSeparator + args[2])
+	case "init":
+		// create the necessary directories for libmuttonserver to function TODO consider clearing out old directories first
+		backend.DirInit()
+		os.MkdirAll(backend.ConfigDir+backend.PathSeparator+"deletions", 0700)
 	default:
 		fmt.Println(backend.AnsiError + "Invalid argument" + backend.AnsiReset) // TODO add server help menu
 	}

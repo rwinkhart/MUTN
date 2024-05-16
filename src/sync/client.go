@@ -17,9 +17,9 @@ const (
 	ansiUpload   = "\033[38;5;4m"
 )
 
-// getSSHOutput runs a command over SSH and returns the output
+// GetSSHOutput runs a command over SSH and returns the output
 // currently only supports password-less key-based authentication TODO add password support, still require key
-func getSSHOutput(cmd string, manualSync bool) string {
+func GetSSHOutput(cmd string, manualSync bool) string {
 	// get SSH config info, exit if not configured (displaying an error if the sync job was called manually)
 	var sshUserIPPortIdentity []string
 	if manualSync {
@@ -102,7 +102,7 @@ func getSSHOutput(cmd string, manualSync bool) string {
 // getRemoteDataFromClient returns a map of remote entries to their modification times, a list of remote folders, and a list of queued deletions
 func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []string) {
 	// get remote output over SSH
-	output := getSSHOutput("libmuttonserver fetch", manualSync)
+	output := GetSSHOutput("libmuttonserver fetch", manualSync)
 
 	// split output into slice based on occurrences of "\x1d"
 	outputSlice := strings.Split(output, "\x1d")
@@ -172,7 +172,7 @@ func syncLists(localEntryModMap, remoteEntryModMap map[string]int64) {
 
 	// iterate over remaining entries in remoteEntryModMap
 	for entry := range remoteEntryModMap {
-		fmt.Println(ansiDownload+entry+backend.AnsiReset, "does not exist on server, downloading...")
+		fmt.Println(ansiDownload+entry+backend.AnsiReset, "does not exist on client, downloading...")
 		// TODO entry does not exist on client, download
 	}
 }
