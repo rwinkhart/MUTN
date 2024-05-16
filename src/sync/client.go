@@ -10,6 +10,12 @@ import (
 	"strings"
 )
 
+// global constants used only in this file
+const (
+	ansiUpload   = "\033[38;5;4m"
+	ansiDownload = "\033[38;5;2m"
+)
+
 // getSSHOutput runs a command over SSH and returns the output
 // currently only supports password-less key-based authentication TODO add password support, still require key
 func getSSHOutput(cmd string, manualSync bool) string {
@@ -92,19 +98,19 @@ func getSSHOutput(cmd string, manualSync bool) string {
 	return outputString
 }
 
-// getRemoteDataFromClient returns lists of remote entries, mod times, folders, and deletions (four separate lists)
-func getRemoteDataFromClient(manualSync bool) ([]string, []int64, []string, []string) {
+// getRemoteDataFromClient returns a map of remote entries to their modification times, a list of remote folders, and a list of queued deletions
+func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []string) {
 	// get remote output over SSH
 	output := getSSHOutput("libmuttonserver", manualSync)
 
-	// split output into slice based on occurrences of "\x1f"
-	outputSlice := strings.Split(output, "\x1f")
+	// split output into slice based on occurrences of "\x1d"
+	outputSlice := strings.Split(output, "\x1d")
 
 	// re-form the lists TODO handle error for index out of bounds (occurs if reading deletions directory on server fails)
-	entries := strings.Split(outputSlice[0], "\n")[1:]
-	modsStrings := strings.Split(outputSlice[1], "\n")[1:]
-	folders := strings.Split(outputSlice[2], "\n")[2:]
-	deletions := strings.Split(outputSlice[3], "\n")[1:]
+	entries := strings.Split(outputSlice[0], "\x1f")[1:]
+	modsStrings := strings.Split(outputSlice[1], "\x1f")[1:]
+	folders := strings.Split(outputSlice[2], "\x1f")[1:]
+	deletions := strings.Split(outputSlice[3], "\x1f")[1:]
 
 	// convert the mod times to int64
 	var mods []int64
@@ -113,49 +119,59 @@ func getRemoteDataFromClient(manualSync bool) ([]string, []int64, []string, []st
 		mods = append(mods, mod)
 	}
 
-	return entries, mods, folders, deletions
+	// map remote entries to their modification times
+	entryModMap := make(map[string]int64)
+	for i, entry := range entries {
+		entryModMap[entry] = mods[i]
+	}
+
+	return entryModMap, folders, deletions
 }
 
-// getLocalData returns lists of local entries and mod times (two separate lists)
-func getLocalData() ([]string, []int64) {
+// getLocalData returns a map of local entries to their modification times
+func getLocalData() map[string]int64 {
 	// get a list of all entries
-	fileList, _ := WalkEntryDir()
+	entries, _ := WalkEntryDir()
 
 	// get a list of all entry modification times
-	modList := getModTimes(fileList)
+	modList := getModTimes(entries)
+
+	// map the entries to their modification times
+	entryModMap := make(map[string]int64)
+	for i, entry := range entries {
+		entryModMap[entry] = modList[i]
+	}
 
 	// return the lists
-	return fileList, modList
+	return entryModMap
 }
 
 // syncLists syncs entries between the client and server based on modification times
-func syncLists(entries [2][]string, modTimes [2][]int64) {
-	// create a map of all server entries to their mod times
-	serverMap := make(map[string]int64)
-	for i, entry := range entries[1] {
-		serverMap[entry] = modTimes[1][i]
-	}
-
+// using maps means that syncing will be done in an arbitrary order, but it is a worthy tradeoff for speed and simplicity
+func syncLists(localEntryModMap, remoteEntryModMap map[string]int64) {
 	// iterate over client entries
-	for i, entry := range entries[0] {
-		// check if the entry is present in serverMap
-		if serverModTime, present := serverMap[entry]; present {
+	for entry, localModTime := range localEntryModMap {
+		// check if the entry is present in the server map
+		if remoteModTime, present := remoteEntryModMap[entry]; present {
 			// entry exists on both client and server, compare mod times
-			if serverModTime > modTimes[0][i] {
+			if remoteModTime > localModTime {
+				fmt.Println(ansiDownload+entry+backend.AnsiReset, "is newer on server, downloading...")
 				// TODO entry is newer on server, download
-			} else if serverModTime < modTimes[0][i] {
+			} else if remoteModTime < localModTime {
+				fmt.Println(ansiUpload+entry+backend.AnsiReset, "is newer on client, uploading...")
 				// TODO entry is newer on client, upload
 			}
-			// remove entry from serverMap (process of elimination)
-			delete(serverMap, entry)
+			// remove entry from remoteEntryModMap (process of elimination)
+			delete(remoteEntryModMap, entry)
 		} else {
-			// TODO entry does not exist on sever, upload
+			fmt.Println(ansiUpload+entry+backend.AnsiReset, "does not exist on server, uploading...")
+			// TODO entry does not exist on server, upload
 		}
 	}
 
-	// iterate over remaining entries in serverMap
-	for entry := range serverMap {
-		fmt.Println(entry) // TODO placeholder
+	// iterate over remaining entries in remoteEntryModMap
+	for entry := range remoteEntryModMap {
+		fmt.Println(ansiDownload+entry+backend.AnsiReset, "does not exist on server, downloading...")
 		// TODO entry does not exist on client, download
 	}
 }
@@ -163,16 +179,16 @@ func syncLists(entries [2][]string, modTimes [2][]int64) {
 // RunJob runs the SSH sync job
 func RunJob(manualSync bool) {
 	// fetch remote lists
-	remoteEntries, remoteMods, remoteFolders, remoteDeletions := getRemoteDataFromClient(manualSync)
-	fmt.Println(remoteEntries, remoteMods, remoteFolders, remoteDeletions) // TODO placeholder
+	remoteEntryModMap, remoteFolders, remoteDeletions := getRemoteDataFromClient(manualSync)
+	fmt.Println(remoteFolders, remoteDeletions) // TODO placeholder
 
 	// TODO sync deletions and folders
 
 	// fetch local lists
-	localEntries, localMods := getLocalData()
-	fmt.Println(localEntries, localMods) // TODO placeholder
+	localEntryModMap := getLocalData()
 
-	// TODO sync new and updated entries
+	// sync new and updated entries
+	syncLists(localEntryModMap, remoteEntryModMap)
 
 	// exit program after successful sync
 	os.Exit(0)
