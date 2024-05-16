@@ -182,7 +182,7 @@ func syncLists(localEntryModMap, remoteEntryModMap map[string]int64) {
 func deletionSync(deletions []string) {
 	for _, deletion := range deletions {
 		fmt.Println(ansiDelete+deletion+backend.AnsiReset, "has been sheared, removing...")
-		//os.RemoveAll(backend.EntryRoot + deletion) TODO uncomment after testing
+		os.RemoveAll(backend.EntryRoot + deletion)
 	}
 }
 
