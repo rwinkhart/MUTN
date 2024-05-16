@@ -62,7 +62,7 @@ func getModTimes(entryList []string) []int64 {
 // if running on the server, it will also add the target to the deletions list
 // if running on the client, it will call the server to add the target to the deletions list
 func Shear(targetLocationIncomplete string, deviceID string) {
-	// get the full targetLocation path and remove the target
+	// get the full targetLocation path and remove the target TODO move so that the target is not removed if the server fails to add it to the deletions list
 	targetLocationComplete := backend.TargetLocationFormat(targetLocationIncomplete[1:])
 	backend.TargetIsFile(targetLocationComplete, true, 0) // needed because os.RemoveAll does not return an error if target does not exist
 	err := os.RemoveAll(targetLocationComplete)

@@ -102,7 +102,8 @@ func GetSSHOutput(cmd string, manualSync bool) string {
 // getRemoteDataFromClient returns a map of remote entries to their modification times, a list of remote folders, and a list of queued deletions
 func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []string) {
 	// get remote output over SSH
-	output := GetSSHOutput("libmuttonserver fetch", manualSync)
+	clientDeviceID, _ := os.ReadDir(backend.ConfigDir + backend.PathSeparator + "devices")
+	output := GetSSHOutput("libmuttonserver fetch "+clientDeviceID[0].Name(), manualSync)
 
 	// split output into slice based on occurrences of "\x1d"
 	outputSlice := strings.Split(output, "\x1d")
