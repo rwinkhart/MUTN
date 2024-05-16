@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 	"github.com/rwinkhart/MUTN/src/backend"
+	"github.com/rwinkhart/MUTN/src/sync"
 	"math/rand"
 	"os"
 )
@@ -30,12 +31,6 @@ func TempInitCli() {
 	// SSH info
 	configSSH := inputBinary("Configure SSH settings (for synchronization)?")
 	if configSSH {
-		// client device ID
-		deviceIDPrefix, _ := os.Hostname()
-		deviceIDSuffix := backend.StringGen(rand.Intn(48)+48, true, 0.2)
-		deviceID := deviceIDPrefix + "-" + deviceIDSuffix
-		os.Create(backend.ConfigDir + backend.PathSeparator + "devices" + backend.PathSeparator + deviceID) // TODO remove existing device ID file if it exists, copy device ID to server
-
 		// necessary SSH info
 		sshUser := input("Remote SSH username:")
 		sshIP := input("Remote SSH IP address:")
@@ -44,6 +39,13 @@ func TempInitCli() {
 
 		// write config file
 		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID, "sshUser": sshUser, "sshIP": sshIP, "sshPort": sshPort, "sshIdentity": sshIdentity})
+
+		// client device ID (perform after writing config files, as sync.GetSSHOutput must be able to read it) TODO move to backend
+		deviceIDPrefix, _ := os.Hostname()
+		deviceIDSuffix := backend.StringGen(rand.Intn(48)+48, false, 0) // TODO consider using complex string generator and removing unsafe characters manually
+		deviceID := deviceIDPrefix + "-" + deviceIDSuffix
+		os.Create(backend.ConfigDir + backend.PathSeparator + "devices" + backend.PathSeparator + deviceID) // TODO remove existing device ID file if it exists (from both client and server)
+		sync.GetSSHOutput("libmuttonserver register "+deviceID, false)                                      // register device ID with server
 	} else {
 		// write config file
 		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID})
