@@ -178,6 +178,7 @@ func syncLists(localEntryModMap, remoteEntryModMap map[string]int64) {
 	}
 }
 
+// deletionSync removes entries from the client that have been deleted on the server (multi-client deletion)
 func deletionSync(deletions []string) {
 	for _, deletion := range deletions {
 		fmt.Println(ansiDelete+deletion+backend.AnsiReset, "has been sheared, removing...")
@@ -185,11 +186,28 @@ func deletionSync(deletions []string) {
 	}
 }
 
+// folderSync creates folders on the client (from the given list of folder names)
+func folderSync(folders []string) { // TODO also add folders on server when they are created from the client
+	for _, folder := range folders {
+		// check if folder already exists
+		isFile, isAccessible := backend.TargetIsFile(backend.EntryRoot+folder, false, 1)
+
+		if !isFile && !isAccessible {
+			os.MkdirAll(backend.EntryRoot+folder, 0700)
+		} else if isFile {
+			fmt.Println(backend.AnsiError + "Sync failed - Failed to create folder \"" + folder + "\" - a file with the same name already exists" + backend.AnsiReset)
+			os.Exit(1)
+		}
+	}
+}
+
 // RunJob runs the SSH sync job
 func RunJob(manualSync bool) {
 	// fetch remote lists
 	remoteEntryModMap, remoteFolders, deletions := getRemoteDataFromClient(manualSync)
-	fmt.Println(remoteFolders) // TODO placeholder
+
+	// sync folders
+	folderSync(remoteFolders)
 
 	// sync deletions
 	deletionSync(deletions)
