@@ -1,7 +1,9 @@
 package sync
 
 import (
+	"context"
 	"fmt"
+	"github.com/bramvdbogaerde/go-scp"
 	"github.com/rwinkhart/MUTN/src/backend"
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/knownhosts"
@@ -10,6 +12,11 @@ import (
 	"strings"
 )
 
+// TODO it is likely that all of this breaks on Windows, since the server returns unpredictable paths
+// See what libmuttonserver fetch returns on Windows
+// If the path separators are different, then we'll have to save the server OS during init and adjust accordingly
+// I would prefer not to unnecessarily replace the path separators if syncing from Unix->Unix or Windows->Windows
+
 // global constants used only in this file
 const (
 	ansiDelete   = "\033[38;5;1m"
@@ -17,9 +24,9 @@ const (
 	ansiUpload   = "\033[38;5;4m"
 )
 
-// GetSSHOutput runs a command over SSH and returns the output
+// getSSHClient returns an SSH client connection to the server (also returns the remote username as a string)
 // only supports key-based authentication (passphrases are supported for CLI-based implementations)
-func GetSSHOutput(cmd string, manualSync bool) string {
+func getSSHClient(manualSync bool) (*ssh.Client, string) {
 	// get SSH config info, exit if not configured (displaying an error if the sync job was called manually)
 	var sshUserConfig []string
 	if manualSync {
@@ -85,6 +92,13 @@ func GetSSHOutput(cmd string, manualSync bool) string {
 		fmt.Println(backend.AnsiError+"Sync failed - Unable to connect to remote server:", err.Error()+backend.AnsiReset)
 		os.Exit(1)
 	}
+
+	return sshClient, user
+}
+
+// GetSSHOutput runs a command over SSH and returns the output as a string
+func GetSSHOutput(cmd string, manualSync bool) string {
+	sshClient, _ := getSSHClient(manualSync)
 	defer sshClient.Close()
 
 	// create a session
@@ -106,6 +120,35 @@ func GetSSHOutput(cmd string, manualSync bool) string {
 	outputString = strings.TrimSpace(outputString)
 
 	return outputString
+}
+
+// scpTransfer uploads or downloads an entry over SCP // TODO consider using goroutines for multithreaded syncs
+// WARNING: does not close sshClient; it is left open for further operations
+// TODO does not yet support modification time preservation, needs https://github.com/bramvdbogaerde/go-scp/pull/81/commits
+func scpTransfer(sshClient *ssh.Client, entryName, sshUser string, download bool) {
+	// create an SCP client TODO see if one can be passed in and reused
+	scpClient, err := scp.NewClientBySSH(sshClient)
+
+	if err != nil {
+		fmt.Println(backend.AnsiError+"Sync failed - Unable to establish SCP session:", err.Error()+backend.AnsiReset)
+		os.Exit(1)
+	}
+
+	// upload or download the entry
+	if download {
+		f, _ := os.Create(backend.EntryRoot + entryName)
+		defer f.Close()
+		err = scpClient.CopyFromRemote(context.Background(), f, backend.PathSeparator+"home"+backend.PathSeparator+sshUser+bareEntryRoot+entryName) // TODO support remote home directories other than "/home/$USER" (maybe fetch home directory form server during init, transparently to the user)
+		if err != nil {
+			fmt.Println(backend.AnsiError+"Sync failed - Unable to download entry:", entryName, err.Error()+backend.AnsiReset)
+			os.Exit(1)
+
+		}
+	} else {
+		f, _ := os.Open(backend.EntryRoot + entryName)
+		defer f.Close()
+		err = scpClient.CopyFromFile(context.Background(), *f, backend.PathSeparator+"home"+backend.PathSeparator+sshUser+bareEntryRoot+entryName, "0600")
+	}
 }
 
 // getRemoteDataFromClient returns a map of remote entries to their modification times, a list of remote folders, and a list of queued deletions
@@ -167,7 +210,10 @@ func getLocalData() map[string]int64 {
 
 // syncLists syncs entries between the client and server based on modification times
 // using maps means that syncing will be done in an arbitrary order, but it is a worthy tradeoff for speed and simplicity
-func syncLists(localEntryModMap, remoteEntryModMap map[string]int64) {
+func syncLists(localEntryModMap, remoteEntryModMap map[string]int64, manualSync bool) {
+	// establish an SSH connection for transfers TODO only establish if needed
+	sshClient, sshUser := getSSHClient(manualSync)
+
 	// iterate over client entries
 	for entry, localModTime := range localEntryModMap {
 		// check if the entry is present in the server map
@@ -175,23 +221,23 @@ func syncLists(localEntryModMap, remoteEntryModMap map[string]int64) {
 			// entry exists on both client and server, compare mod times
 			if remoteModTime > localModTime {
 				fmt.Println(ansiDownload+entry+backend.AnsiReset, "is newer on server, downloading...")
-				// TODO entry is newer on server, download
+				scpTransfer(sshClient, entry, sshUser, true)
 			} else if remoteModTime < localModTime {
 				fmt.Println(ansiUpload+entry+backend.AnsiReset, "is newer on client, uploading...")
-				// TODO entry is newer on client, upload
+				scpTransfer(sshClient, entry, sshUser, false)
 			}
 			// remove entry from remoteEntryModMap (process of elimination)
 			delete(remoteEntryModMap, entry)
 		} else {
 			fmt.Println(ansiUpload+entry+backend.AnsiReset, "does not exist on server, uploading...")
-			// TODO entry does not exist on server, upload
+			scpTransfer(sshClient, entry, sshUser, false)
 		}
 	}
 
 	// iterate over remaining entries in remoteEntryModMap
 	for entry := range remoteEntryModMap {
 		fmt.Println(ansiDownload+entry+backend.AnsiReset, "does not exist on client, downloading...")
-		// TODO entry does not exist on client, download
+		scpTransfer(sshClient, entry, sshUser, true)
 	}
 }
 
@@ -233,7 +279,7 @@ func RunJob(manualSync bool) {
 	localEntryModMap := getLocalData()
 
 	// sync new and updated entries
-	syncLists(localEntryModMap, remoteEntryModMap)
+	syncLists(localEntryModMap, remoteEntryModMap, manualSync)
 
 	// exit program after successful sync
 	os.Exit(0)
