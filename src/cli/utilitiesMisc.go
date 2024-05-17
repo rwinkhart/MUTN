@@ -77,7 +77,7 @@ func writeEntryCLI(targetLocation string, unencryptedEntry []string, hidePasswor
 		// write the entry to the target location
 		backend.WriteEntry(targetLocation, unencryptedEntry)
 		// preview the entry
-		fmt.Println(ansiBold + "\nEntry Preview:" + backend.AnsiReset)
+		fmt.Println(AnsiBold + "\nEntry Preview:" + backend.AnsiReset)
 		EntryReader(unencryptedEntry, hidePassword, true)
 	} else {
 		fmt.Println(backend.AnsiError + "No data supplied for entry" + backend.AnsiReset)
