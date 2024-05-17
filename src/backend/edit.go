@@ -36,7 +36,7 @@ func Rename(oldLocation string, newLocation string) {
 		fmt.Println(AnsiError + "Failed to rename - does the target containing directory exists?" + AnsiReset)
 	}
 
-	// TODO If in online mode, check if oldLocation is a directory and rename it on the server
+	// TODO If in online mode, rename oldLocation to newLocation on the server
 	os.Exit(0)
 }
 

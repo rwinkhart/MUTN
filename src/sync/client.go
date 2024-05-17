@@ -187,7 +187,7 @@ func deletionSync(deletions []string) {
 }
 
 // folderSync creates folders on the client (from the given list of folder names)
-func folderSync(folders []string) { // TODO also add folders on server when they are created from the client
+func folderSync(folders []string) {
 	for _, folder := range folders {
 		// check if folder already exists
 		isFile, isAccessible := backend.TargetIsFile(backend.EntryRoot+folder, false, 1)
