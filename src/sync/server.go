@@ -10,7 +10,7 @@ import (
 // GetRemoteDataFromServer prints to stdout the remote entries, mod times, folders, and deletions
 // lists in output are separated by "\x1d"
 // output is meant to be captured over SSH for interpretation by the client
-func GetRemoteDataFromServer(clientDeviceID string) {
+func GetRemoteDataFromServer(clientDeviceID string, clientIsWindows bool) {
 	entryList, dirList := WalkEntryDir()
 	modList := getModTimes(entryList)
 	deletionsList, err := os.ReadDir(backend.ConfigDir + backend.PathSeparator + "deletions")
@@ -19,19 +19,36 @@ func GetRemoteDataFromServer(clientDeviceID string) {
 		os.Exit(1)
 	}
 
-	// print the lists to stdout
-	for _, entry := range entryList {
-		fmt.Print("\x1f" + entry)
+	// determine path separator expected by the client
+	var clientPathSeparator string
+	switch clientIsWindows {
+	case false:
+		clientPathSeparator = "/"
+	case true:
+		clientPathSeparator = "\\"
 	}
+
+	// print the lists to stdout
+
+	// entry list
+	for _, entry := range entryList {
+		printWithClientPathSeparator(entry, clientPathSeparator, clientIsWindows)
+	}
+
+	// modification time list
 	fmt.Print("\x1d")
 	for _, mod := range modList {
 		fmt.Print("\x1f")
 		fmt.Print(mod)
 	}
+
+	// directory/folder list
 	fmt.Print("\x1d")
 	for _, dir := range dirList {
-		fmt.Print("\x1f" + dir)
+		printWithClientPathSeparator(dir, clientPathSeparator, clientIsWindows)
 	}
+
+	// deletions list
 	fmt.Print("\x1d")
 	for _, deletion := range deletionsList {
 		// print deletion if it is relevant to the current client device
@@ -42,5 +59,15 @@ func GetRemoteDataFromServer(clientDeviceID string) {
 			// assume successful client deletion and remove deletions file (if assumption is somehow false, worst case scenario is that the client will re-upload the deleted entry)
 			os.Remove(backend.ConfigDir + backend.PathSeparator + "deletions" + backend.PathSeparator + deletion.Name())
 		}
+	}
+}
+
+// printWithClientPathSeparator prints the given string with the client's path separator
+// it does not alter the string if the client and server are of the same OS family
+func printWithClientPathSeparator(printable, clientPathSeparator string, clientIsWindows bool) {
+	if clientIsWindows == backend.IsWindows {
+		fmt.Print("\x1f" + printable)
+	} else {
+		fmt.Print("\x1f" + strings.ReplaceAll(printable, backend.PathSeparator, clientPathSeparator))
 	}
 }

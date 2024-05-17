@@ -12,11 +12,6 @@ import (
 	"strings"
 )
 
-// TODO it is likely that all of this breaks on Windows, since the server returns unpredictable paths
-// See what libmuttonserver fetch returns on Windows
-// If the path separators are different, then we'll have to save the server OS during init and adjust accordingly
-// I would prefer not to unnecessarily replace the path separators if syncing from Unix->Unix or Windows->Windows
-
 // global constants used only in this file
 const (
 	ansiDelete   = "\033[38;5;1m"
@@ -159,7 +154,7 @@ func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []str
 		fmt.Println(backend.AnsiError + "Sync failed - No device ID found; run \"mutn init\" to generate a device ID" + backend.AnsiReset)
 		os.Exit(1)
 	}
-	output := GetSSHOutput("libmuttonserver fetch "+clientDeviceID[0].Name(), manualSync)
+	output := GetSSHOutput("libmuttonserver fetch "+clientDeviceID[0].Name()+" "+strconv.FormatBool(backend.IsWindows), manualSync)
 
 	// split output into slice based on occurrences of "\x1d"
 	outputSlice := strings.Split(output, "\x1d")

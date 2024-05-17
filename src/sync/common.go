@@ -90,7 +90,7 @@ func Shear(targetLocationIncomplete string, deviceID string) {
 				}
 			}
 		}
-	} else { // if running on the client... (online mode determined dynamically in GetSSHOutput, will silently exit if not in online mode)
+	} else { // if running on the client... (online mode determined dynamically in GetSSHOutput, will silently exit if not in online mode) // TODO separate into own function to avoid server needing to build SSH
 		// determine client device ID (to send to server, avoids creating a deletion file for the client device)
 		deviceID = deviceIDList[0].Name()
 		// below: deviceID and targetLocationIncomplete are separated by \x1d, path separators are replaced with \x1e, and spaces are replaced with \x1f
@@ -116,7 +116,7 @@ func AddFolder(targetLocationIncomplete string, onServer bool) {
 		}
 	}
 
-	if !onServer { // if running on the client... (online mode determined dynamically in GetSSHOutput, will silently exit if not in online mode)
+	if !onServer { // if running on the client... (online mode determined dynamically in GetSSHOutput, will silently exit if not in online mode) // TODO separate into own function to avoid server needing to build SSH
 		GetSSHOutput("libmuttonserver addfolder "+strings.ReplaceAll(targetLocationIncomplete, " ", "\x1f"), false)
 	}
 

@@ -6,6 +6,7 @@ import (
 	"github.com/rwinkhart/MUTN/src/cli"
 	"github.com/rwinkhart/MUTN/src/sync"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -18,7 +19,8 @@ func main() {
 	switch args[1] {
 	case "fetch":
 		// print all information needed for syncing to stdout for interpretation by the client
-		sync.GetRemoteDataFromServer(args[2])
+		clientIsWindows, _ := strconv.ParseBool(args[3])
+		sync.GetRemoteDataFromServer(args[2], clientIsWindows)
 	case "shear":
 		// shear an entry from the server and add it to the deletions directory
 		deviceIDTargetLocation := strings.Split(args[2], "\x1d")
