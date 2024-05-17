@@ -11,6 +11,7 @@ var (
 
 // global constants used across multiple files
 const (
-	AnsiError = "\033[38;5;9m"
-	AnsiReset = "\033[0m"
+	AnsiError        = "\033[38;5;9m"
+	AnsiReset        = "\033[0m"
+	LibmuttonVersion = "0.2.X"
 )

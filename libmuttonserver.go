@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/rwinkhart/MUTN/src/backend"
+	"github.com/rwinkhart/MUTN/src/cli"
 	"github.com/rwinkhart/MUTN/src/sync"
 	"os"
 	"strings"
@@ -11,8 +12,7 @@ import (
 func main() {
 	args := os.Args
 	if len(args) < 2 {
-		fmt.Println(backend.AnsiError + "No arguments supplied" + backend.AnsiReset) // TODO add server help menu
-		os.Exit(0)
+		helpServer()
 	}
 
 	switch args[1] {
@@ -34,7 +34,30 @@ func main() {
 		// create the necessary directories for libmuttonserver to function
 		backend.DirInit()
 		os.MkdirAll(backend.ConfigDir+backend.PathSeparator+"deletions", 0700)
+	case "version", "-v":
+		versionServer()
 	default:
-		fmt.Println(backend.AnsiError + "Invalid argument" + backend.AnsiReset) // TODO add server help menu
+		helpServer()
 	}
+}
+
+func helpServer() {
+	fmt.Print(cli.AnsiBold + "\nlibmuttonserver | Copyright (c) 2024 Randall Winkhart\n" + backend.AnsiReset + `
+This software exists under the MIT license; you may redistribute it under certain conditions.
+This program comes with absolutely no warranty; type "libmuttonserver version" for details.
+
+` + cli.AnsiBold + "Usage:" + backend.AnsiReset + ` libmuttonserver <argument>
+	
+` + cli.AnsiBold + "Arguments (user):" + backend.AnsiReset + `
+ help|-h                 Bring up this menu
+ version|-v              Display version and license information
+ init                    Create the necessary directories for libmuttonserver to function` + "\n\n")
+	os.Exit(0)
+}
+
+func versionServer() {
+	cli.MITLicense()
+	fmt.Print(cli.AnsiBold + "\n\n              libmuttonserver" + backend.AnsiReset + " Version " + backend.LibmuttonVersion + `
+
+           Copyright (c) 2024 Randall Winkhart` + "\n\n")
 }
