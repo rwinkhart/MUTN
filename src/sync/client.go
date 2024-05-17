@@ -118,7 +118,11 @@ func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []str
 	// split output into slice based on occurrences of "\x1d"
 	outputSlice := strings.Split(output, "\x1d")
 
-	// re-form the lists TODO handle error for index out of bounds (occurs if reading deletions directory on server fails)
+	// re-form the lists
+	if len(outputSlice) != 4 { // ensure information from server is complete
+		fmt.Println(backend.AnsiError + "Sync failed - Unable to fetch remote data; server returned an unexpected response" + backend.AnsiReset)
+		os.Exit(1)
+	}
 	entries := strings.Split(outputSlice[0], "\x1f")[1:]
 	modsStrings := strings.Split(outputSlice[1], "\x1f")[1:]
 	folders := strings.Split(outputSlice[2], "\x1f")[1:]
