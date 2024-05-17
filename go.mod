@@ -3,6 +3,7 @@ module github.com/rwinkhart/MUTN
 go 1.22.2
 
 require (
+	github.com/bramvdbogaerde/go-scp v1.4.0
 	github.com/charmbracelet/glamour v0.7.0
 	github.com/fortis/go-steam-totp v0.0.0-20171114202746-18e928674727
 	github.com/pquerna/otp v1.4.1-0.20231130234153-3357de7c0481
