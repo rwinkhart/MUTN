@@ -28,14 +28,14 @@ func main() {
 
 			// entry reader shortcut (if no other arguments are supplied)
 			if argsCount == 2 {
-				cli.EntryReaderDecrypt(targetLocation, true, false)
+				cli.EntryReaderDecrypt(targetLocation, true)
 
 				// perform other operations on the entry (if other arguments are supplied)
 			} else if argsCount == 3 || (argsCount == 4 && (args[3] == "show" || args[3] == "-s")) {
 				if argsCount == 3 { // default to "password" if no field is specified (for copy, edit, and add)
 					switch args[2] {
 					case "show", "-s":
-						cli.EntryReaderDecrypt(targetLocation, false, false)
+						cli.EntryReaderDecrypt(targetLocation, false)
 					case "copy":
 						backend.CopyArgument(targetLocation, 0, args[0])
 					case "edit":
@@ -157,13 +157,6 @@ func main() {
 			case "clipclear":
 				backend.ClipClearArgument()
 			case "sync":
-				if !backend.Windows {
-					cli.SshypSync() // TODO Remove after native sync is implemented
-				} else {
-					fmt.Println(backend.AnsiError + "\"sync\" is not yet implemented" + backend.AnsiReset)
-				}
-				os.Exit(0)
-			case "synctest": // TODO Remove after native sync is implemented
 				sync.RunJob(true)
 			case "init":
 				cli.TempInitCli()
