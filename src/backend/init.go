@@ -1,6 +1,7 @@
 package backend
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"strconv"
@@ -64,4 +65,32 @@ func GpgKeyGen() string {
 	cmd.Run()
 
 	return "libmutton-" + unixTime + " (gpg-libmutton) <github.com/rwinkhart/libmutton>"
+}
+
+// DirInit creates the libmutton directories
+func DirInit() {
+	// create EntryRoot
+	err := os.MkdirAll(EntryRoot, 0700)
+	if err != nil {
+		fmt.Println(AnsiError + "Failed to create \"" + EntryRoot + "\":" + err.Error() + AnsiReset)
+		os.Exit(1)
+	}
+
+	// remove existing config directory (if it exists)
+	_, isAccessible := TargetIsFile(ConfigDir, false, 1)
+	if isAccessible {
+		err = os.RemoveAll(ConfigDir)
+		if err != nil {
+			fmt.Println(AnsiError + "Failed to remove existing config directory: " + err.Error() + AnsiReset)
+			os.Exit(1)
+
+		}
+	}
+
+	// create config directory w/devices subdirectory
+	err = os.MkdirAll(ConfigDir+PathSeparator+"devices", 0700)
+	if err != nil {
+		fmt.Println(AnsiError + "Failed to create \"" + ConfigDir + "\":" + err.Error() + AnsiReset)
+		os.Exit(1)
+	}
 }
