@@ -31,7 +31,7 @@ func main() {
 		// register a new device ID
 		os.Create(backend.ConfigDir + backend.PathSeparator + "devices" + backend.PathSeparator + args[2])
 	case "init":
-		// create the necessary directories for libmuttonserver to function TODO consider clearing out old directories first
+		// create the necessary directories for libmuttonserver to function
 		backend.DirInit()
 		os.MkdirAll(backend.ConfigDir+backend.PathSeparator+"deletions", 0700)
 	default:
