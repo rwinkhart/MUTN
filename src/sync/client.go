@@ -112,7 +112,11 @@ func GetSSHOutput(cmd string, manualSync bool) string {
 func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []string) {
 	// get remote output over SSH
 	clientDeviceID, _ := os.ReadDir(backend.ConfigDir + backend.PathSeparator + "devices")
-	output := GetSSHOutput("libmuttonserver fetch "+clientDeviceID[0].Name(), manualSync) // TODO fix potential index error if clientDeviceID was not configured
+	if len(clientDeviceID) == 0 {
+		fmt.Println(backend.AnsiError + "Sync failed - No device ID found; run \"mutn init\" to generate a device ID" + backend.AnsiReset)
+		os.Exit(1)
+	}
+	output := GetSSHOutput("libmuttonserver fetch "+clientDeviceID[0].Name(), manualSync)
 
 	// split output into slice based on occurrences of "\x1d"
 	outputSlice := strings.Split(output, "\x1d")
