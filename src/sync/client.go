@@ -3,7 +3,6 @@ package sync
 import (
 	"fmt"
 	"github.com/rwinkhart/MUTN/src/backend"
-	"github.com/rwinkhart/MUTN/src/cli"
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/knownhosts"
 	"os"
@@ -19,7 +18,7 @@ const (
 )
 
 // GetSSHOutput runs a command over SSH and returns the output
-// only supports key-based authentication (passphrase-protected keys are supported in a CLI environment) TODO create a more generic interface for passphrase input
+// only supports key-based authentication (passphrases are supported for CLI-based implementations)
 func GetSSHOutput(cmd string, manualSync bool) string {
 	// get SSH config info, exit if not configured (displaying an error if the sync job was called manually)
 	var sshUserConfig []string
@@ -57,7 +56,7 @@ func GetSSHOutput(cmd string, manualSync bool) string {
 	if keyFileProtected != "true" {
 		parsedKey, err = ssh.ParsePrivateKey(key)
 	} else {
-		parsedKey, err = ssh.ParsePrivateKeyWithPassphrase(key, []byte(cli.InputHidden("Enter passphrase for \""+keyFile+"\":"))) // TODO test passphrase-protected keys
+		parsedKey, err = ssh.ParsePrivateKeyWithPassphrase(key, inputKeyFilePassphrase()) // TODO test passphrase-protected keys
 	}
 	if err != nil {
 		fmt.Println(backend.AnsiError+"Sync failed - Unable to parse private key:", keyFile+backend.AnsiReset)
@@ -113,7 +112,7 @@ func GetSSHOutput(cmd string, manualSync bool) string {
 func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []string) {
 	// get remote output over SSH
 	clientDeviceID, _ := os.ReadDir(backend.ConfigDir + backend.PathSeparator + "devices")
-	output := GetSSHOutput("libmuttonserver fetch "+clientDeviceID[0].Name(), manualSync)
+	output := GetSSHOutput("libmuttonserver fetch "+clientDeviceID[0].Name(), manualSync) // TODO fix potential index error if clientDeviceID was not configured
 
 	// split output into slice based on occurrences of "\x1d"
 	outputSlice := strings.Split(output, "\x1d")
