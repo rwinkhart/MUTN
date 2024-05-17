@@ -3,6 +3,7 @@ package sync
 import (
 	"fmt"
 	"github.com/rwinkhart/MUTN/src/backend"
+	"github.com/rwinkhart/MUTN/src/cli"
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/knownhosts"
 	"os"
@@ -18,18 +19,18 @@ const (
 )
 
 // GetSSHOutput runs a command over SSH and returns the output
-// currently only supports password-less key-based authentication TODO add password support, still require key
+// only supports key-based authentication (passphrase-protected keys are supported in a CLI environment) TODO create a more generic interface for passphrase input
 func GetSSHOutput(cmd string, manualSync bool) string {
 	// get SSH config info, exit if not configured (displaying an error if the sync job was called manually)
-	var sshUserIPPortIdentity []string
+	var sshUserConfig []string
 	if manualSync {
-		sshUserIPPortIdentity = backend.ReadConfig([]string{"sshUser", "sshIP", "sshPort", "sshIdentity"}, "SSH settings not configured - run \"mutn init\" to configure")
+		sshUserConfig = backend.ReadConfig([]string{"sshUser", "sshIP", "sshPort", "sshKey", "sshKeyProtected"}, "SSH settings not configured - run \"mutn init\" to configure")
 	} else {
-		sshUserIPPortIdentity = backend.ReadConfig([]string{"sshUser", "sshIP", "sshPort", "sshIdentity"}, "0")
+		sshUserConfig = backend.ReadConfig([]string{"sshUser", "sshIP", "sshPort", "sshKey", "sshKeyProtected"}, "0")
 	}
 
-	var user, ip, port, identity string
-	for i, key := range sshUserIPPortIdentity {
+	var user, ip, port, keyFile, keyFileProtected string
+	for i, key := range sshUserConfig {
 		switch i {
 		case 0:
 			user = key
@@ -38,19 +39,28 @@ func GetSSHOutput(cmd string, manualSync bool) string {
 		case 2:
 			port = key
 		case 3:
-			identity = key
+			keyFile = key
+		case 4:
+			keyFileProtected = key
 		}
 	}
 
-	// read and parse private key
-	key, err := os.ReadFile(identity)
+	// read private key
+	key, err := os.ReadFile(keyFile)
 	if err != nil {
-		fmt.Println(backend.AnsiError+"Sync failed - unable to read private key file:", identity+backend.AnsiReset)
+		fmt.Println(backend.AnsiError+"Sync failed - unable to read private key file:", keyFile+backend.AnsiReset)
 		os.Exit(1)
 	}
-	parsedKey, err := ssh.ParsePrivateKey(key)
+
+	// parse private key
+	var parsedKey ssh.Signer
+	if keyFileProtected != "true" {
+		parsedKey, err = ssh.ParsePrivateKey(key)
+	} else {
+		parsedKey, err = ssh.ParsePrivateKeyWithPassphrase(key, []byte(cli.InputHidden("Enter passphrase for \""+keyFile+"\":"))) // TODO test passphrase-protected keys
+	}
 	if err != nil {
-		fmt.Println(backend.AnsiError+"Sync failed - Unable to parse private key:", identity+backend.AnsiReset)
+		fmt.Println(backend.AnsiError+"Sync failed - Unable to parse private key:", keyFile+backend.AnsiReset)
 		os.Exit(1)
 	}
 
@@ -67,7 +77,7 @@ func GetSSHOutput(cmd string, manualSync bool) string {
 		Auth: []ssh.AuthMethod{
 			ssh.PublicKeys(parsedKey),
 		},
-		HostKeyCallback: hostKeyCallback, // TODO notify user that the server must already be in known_hosts
+		HostKeyCallback: hostKeyCallback,
 	}
 
 	// connect to SSH server

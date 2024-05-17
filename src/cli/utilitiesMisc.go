@@ -25,8 +25,8 @@ func input(prompt string) string {
 	return strings.TrimRight(userInput, "\n\r ") // remove trailing newlines, carriage returns, and spaces
 }
 
-// inputHidden prompts the user for input and returns the input as a string, hiding the input from the terminal
-func inputHidden(prompt string) string {
+// InputHidden prompts the user for input and returns the input as a string, hiding the input from the terminal
+func InputHidden(prompt string) string {
 	fmt.Print("\n" + prompt + " ")
 	byteInput, _ := terminal.ReadPassword(int(os.Stdin.Fd()))
 	password := string(byteInput)
