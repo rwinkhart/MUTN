@@ -90,11 +90,34 @@ func Shear(targetLocationIncomplete string, deviceID string) {
 				}
 			}
 		}
-	} else { // if running on the client... (online mode determined dynamically in GetSSHOutput, will simply exit if not in online mode)
+	} else { // if running on the client... (online mode determined dynamically in GetSSHOutput, will silently exit if not in online mode)
 		// determine client device ID (to send to server, avoids creating a deletion file for the client device)
 		deviceID = deviceIDList[0].Name()
 		// below: deviceID and targetLocationIncomplete are separated by \x1d, path separators are replaced with \x1e, and spaces are replaced with \x1f
 		GetSSHOutput("libmuttonserver shear "+deviceID+"\x1d"+strings.ReplaceAll(strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, "\x1e"), " ", "\x1f"), false)
+	}
+
+	os.Exit(0)
+}
+
+// AddFolder creates a new directory at targetLocation
+// if running on the client, it will also call the server to create the directory
+func AddFolder(targetLocationIncomplete string, onServer bool) {
+	// get the full targetLocation path and create the target
+	targetLocationComplete := backend.TargetLocationFormat(targetLocationIncomplete[1:])
+	err := os.Mkdir(targetLocationComplete, 0700)
+	if err != nil {
+		if os.IsExist(err) {
+			fmt.Println(backend.AnsiError + "Directory already exists" + backend.AnsiReset)
+			os.Exit(1)
+		} else {
+			fmt.Println(backend.AnsiError + "Failed to create directory: " + err.Error() + backend.AnsiReset)
+			os.Exit(1)
+		}
+	}
+
+	if !onServer { // if running on the client... (online mode determined dynamically in GetSSHOutput, will silently exit if not in online mode)
+		GetSSHOutput("libmuttonserver addfolder "+strings.ReplaceAll(targetLocationIncomplete, " ", "\x1f"), false)
 	}
 
 	os.Exit(0)
