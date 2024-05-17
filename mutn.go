@@ -142,7 +142,7 @@ func main() {
 					case "note", "-n":
 						cli.AddEntry(targetLocation, true, 2)
 					case "folder", "-f":
-						backend.AddFolder(targetLocation)
+						sync.AddFolder(args[1], false)
 					default:
 						cli.HelpAdd()
 					}

@@ -24,6 +24,9 @@ func main() {
 		deviceIDTargetLocation := strings.Split(args[2], "\x1d")
 		targetLocationIncomplete := strings.ReplaceAll(strings.ReplaceAll(deviceIDTargetLocation[1], "\x1f", " "), "\x1e", backend.PathSeparator)
 		sync.Shear(targetLocationIncomplete, deviceIDTargetLocation[0])
+	case "addfolder":
+		// add a new folder to the server
+		sync.AddFolder(strings.ReplaceAll(args[2], "\x1f", " "), true)
 	case "register":
 		// register a new device ID
 		os.Create(backend.ConfigDir + backend.PathSeparator + "devices" + backend.PathSeparator + args[2])
