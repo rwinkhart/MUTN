@@ -151,8 +151,12 @@ func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []str
 	// get remote output over SSH
 	clientDeviceID, _ := os.ReadDir(backend.ConfigDir + backend.PathSeparator + "devices")
 	if len(clientDeviceID) == 0 {
-		fmt.Println(backend.AnsiError + "Sync failed - No device ID found; run \"mutn init\" to generate a device ID" + backend.AnsiReset)
-		os.Exit(1)
+		if manualSync {
+			fmt.Println(backend.AnsiError + "Sync failed - No device ID found; run \"mutn init\" to generate a device ID" + backend.AnsiReset)
+			os.Exit(1)
+		} else {
+			os.Exit(0) // exit silently if the sync job was called automatically, as the user may just be in offline mode
+		}
 	}
 	output := GetSSHOutput("libmuttonserver fetch "+clientDeviceID[0].Name()+" "+strconv.FormatBool(backend.IsWindows), manualSync)
 

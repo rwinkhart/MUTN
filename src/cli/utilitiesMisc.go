@@ -6,16 +6,8 @@ import (
 	"github.com/rwinkhart/MUTN/src/backend"
 	"golang.org/x/crypto/ssh/terminal"
 	"os"
-	"os/exec"
 	"strings"
 )
-
-// TODO remove after native sync is implemented
-func SshypSync() {
-	cmd := exec.Command("sshyp", "sync")
-	cmd.Stdout = os.Stdout
-	cmd.Run()
-}
 
 // input prompts the user for input and returns the input as a string
 func input(prompt string) string {

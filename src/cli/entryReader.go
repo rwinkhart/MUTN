@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"github.com/rwinkhart/MUTN/src/sync"
 	"os"
 	"strings"
 
@@ -13,7 +14,7 @@ import (
 const ansiShownPassword = "\033[38;5;10m"
 
 // EntryReader prints the decrypted contents of a libmutton entry in a human-readable format
-func EntryReader(decryptedEntry []string, hidePassword bool, sync bool) {
+func EntryReader(decryptedEntry []string, hidePassword bool, syncEnabled bool) {
 	fmt.Println()
 
 	for i := range decryptedEntry {
@@ -57,17 +58,17 @@ func EntryReader(decryptedEntry []string, hidePassword bool, sync bool) {
 		}
 	}
 
-	if sync && !backend.IsWindows {
-		SshypSync() // TODO Remove after native sync is implemented
+	if syncEnabled {
+		sync.RunJob(false)
 	}
 
 	os.Exit(0)
 }
 
 // EntryReaderDecrypt is a wrapper for EntryReader that first decrypts a GPG-encrypted file before sending it to EntryReader
-func EntryReaderDecrypt(targetLocation string, hidePassword bool, sync bool) {
+func EntryReaderDecrypt(targetLocation string, hidePassword bool) {
 	if isFile, _ := backend.TargetIsFile(targetLocation, true, 2); isFile {
-		EntryReader(backend.DecryptGPG(targetLocation), hidePassword, sync)
+		EntryReader(backend.DecryptGPG(targetLocation), hidePassword, false) // never sync if decrypting straight to EntryReader, as this means the entry could not have been modified
 	}
 	// do not exit, as this is the job of EntryReader
 }
