@@ -1,9 +1,8 @@
 package sync
 
 import (
-	"context"
 	"fmt"
-	"github.com/bramvdbogaerde/go-scp"
+	"github.com/pkg/sftp"
 	"github.com/rwinkhart/MUTN/src/backend"
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/knownhosts"
@@ -117,32 +116,68 @@ func GetSSHOutput(cmd string, manualSync bool) string {
 	return outputString
 }
 
-// scpTransfer uploads or downloads an entry over SCP // TODO consider using goroutines for multithreaded syncs
+// sftpTransfer uploads or downloads an entry over SFTP // TODO iterate over a map of operations to slices of entries, rather than repeatedly calling this function
 // WARNING: does not close sshClient; it is left open for further operations
-// TODO does not yet support modification time preservation, needs https://github.com/bramvdbogaerde/go-scp/pull/81/commits
-func scpTransfer(sshClient *ssh.Client, entryName, sshUser string, download bool) {
-	// create an SCP client TODO see if one can be passed in and reused
-	scpClient, err := scp.NewClientBySSH(sshClient)
-
+func sftpTransfer(sshClient *ssh.Client, entryName, sshUser string, download bool) {
+	// create an SFTP client
+	sftpClient, err := sftp.NewClient(sshClient)
 	if err != nil {
-		fmt.Println(backend.AnsiError+"Sync failed - Unable to establish SCP session:", err.Error()+backend.AnsiReset)
+		fmt.Println(backend.AnsiError+"Sync failed - Unable to establish SFTP session:", err.Error()+backend.AnsiReset)
 		os.Exit(1)
 	}
+	defer sftpClient.Close()
 
 	// upload or download the entry
 	if download {
-		f, _ := os.Create(backend.EntryRoot + entryName)
-		defer f.Close()
-		err = scpClient.CopyFromRemote(context.Background(), f, backend.PathSeparator+"home"+backend.PathSeparator+sshUser+bareEntryRoot+entryName) // TODO support remote home directories other than "/home/$USER" (maybe fetch home directory form server during init, transparently to the user)
+		// open remote file TODO fetch mod time and assign to downloaded file
+		var remoteFile *sftp.File
+		remoteFile, err = sftpClient.Open("/home/" + sshUser + bareEntryRoot + entryName)
 		if err != nil {
-			fmt.Println(backend.AnsiError+"Sync failed - Unable to download entry:", entryName, err.Error()+backend.AnsiReset)
+			fmt.Println(backend.AnsiError+"Sync failed - Unable to open remote file:", err.Error()+backend.AnsiReset)
 			os.Exit(1)
+		}
+		defer remoteFile.Close()
 
+		// create local file
+		var localFile *os.File
+		localFile, err = os.Create(backend.EntryRoot + entryName)
+		if err != nil {
+			fmt.Println(backend.AnsiError+"Sync failed - Unable to create local file:", err.Error()+backend.AnsiReset)
+			os.Exit(1)
+		}
+		defer localFile.Close()
+
+		// download the file
+		_, err = remoteFile.WriteTo(localFile)
+		if err != nil {
+			fmt.Println(backend.AnsiError+"Sync failed - Unable to download remote file:", err.Error()+backend.AnsiReset)
+			os.Exit(1)
 		}
 	} else {
-		f, _ := os.Open(backend.EntryRoot + entryName)
-		defer f.Close()
-		err = scpClient.CopyFromFile(context.Background(), *f, backend.PathSeparator+"home"+backend.PathSeparator+sshUser+bareEntryRoot+entryName, "0600")
+		// open local file TODO fetch mod time and assign to uploaded file
+		var localFile *os.File
+		localFile, err = os.Open(backend.EntryRoot + entryName)
+		if err != nil {
+			fmt.Println(backend.AnsiError+"Sync failed - Unable to open local file:", err.Error()+backend.AnsiReset)
+			os.Exit(1)
+		}
+		defer localFile.Close()
+
+		// create remote file
+		var remoteFile *sftp.File
+		remoteFile, err = sftpClient.Create("/home/" + sshUser + bareEntryRoot + entryName)
+		if err != nil {
+			fmt.Println(backend.AnsiError+"Sync failed - Unable to create remote file:", err.Error()+backend.AnsiReset)
+			os.Exit(1)
+		}
+		defer remoteFile.Close()
+
+		// upload the file
+		_, err = localFile.WriteTo(remoteFile)
+		if err != nil {
+			fmt.Println(backend.AnsiError+"Sync failed - Unable to upload local file:", err.Error()+backend.AnsiReset)
+			os.Exit(1)
+		}
 	}
 }
 
@@ -220,23 +255,23 @@ func syncLists(localEntryModMap, remoteEntryModMap map[string]int64, manualSync 
 			// entry exists on both client and server, compare mod times
 			if remoteModTime > localModTime {
 				fmt.Println(ansiDownload+entry+backend.AnsiReset, "is newer on server, downloading...")
-				scpTransfer(sshClient, entry, sshUser, true)
+				sftpTransfer(sshClient, entry, sshUser, true)
 			} else if remoteModTime < localModTime {
 				fmt.Println(ansiUpload+entry+backend.AnsiReset, "is newer on client, uploading...")
-				scpTransfer(sshClient, entry, sshUser, false)
+				sftpTransfer(sshClient, entry, sshUser, false)
 			}
 			// remove entry from remoteEntryModMap (process of elimination)
 			delete(remoteEntryModMap, entry)
 		} else {
 			fmt.Println(ansiUpload+entry+backend.AnsiReset, "does not exist on server, uploading...")
-			scpTransfer(sshClient, entry, sshUser, false)
+			sftpTransfer(sshClient, entry, sshUser, false)
 		}
 	}
 
 	// iterate over remaining entries in remoteEntryModMap
 	for entry := range remoteEntryModMap {
 		fmt.Println(ansiDownload+entry+backend.AnsiReset, "does not exist on client, downloading...")
-		scpTransfer(sshClient, entry, sshUser, true)
+		sftpTransfer(sshClient, entry, sshUser, true)
 	}
 }
 
