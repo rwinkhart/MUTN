@@ -58,51 +58,59 @@ func getModTimes(entryList []string) []int64 {
 	return modList
 }
 
-// Shear removes the target file or directory from the system
-// if running on the server, it will also add the target to the deletions list
-// if running on the client, it will call the server to add the target to the deletions list
-func Shear(targetLocationIncomplete string, deviceID string) {
-	// get the full targetLocation path and remove the target TODO move so that the target is not removed if the server fails to add it to the deletions list, on server do not error if target does not exist
-	targetLocationComplete := backend.TargetLocationFormat(targetLocationIncomplete[1:])
-	backend.TargetIsFile(targetLocationComplete, true, 0) // needed because os.RemoveAll does not return an error if target does not exist
-	err := os.RemoveAll(targetLocationComplete)
-	if err != nil {
-		fmt.Println(backend.AnsiError + "Failed to remove local target: " + err.Error() + backend.AnsiReset)
-		os.Exit(1)
+// ShearLocal removes the target file or directory from the local system
+// returns: deviceID (on client), for use in ShearRemoteFromClient
+// if the local system is a server, it will also add the target to the deletions list for all clients (except the requesting client)
+// this function should only be used directly by the server binary
+func ShearLocal(targetLocationIncomplete, clientDeviceID string) string {
+	// determine if running on a server
+	var onServer bool
+	if clientDeviceID != "" {
+		onServer = true
 	}
 
-	// read the devices directory
-	var deviceIDList []os.DirEntry
-	deviceIDList, err = os.ReadDir(backend.ConfigDir + backend.PathSeparator + "devices")
+	// create a slice of all registered devices
+	deviceIDList, err := os.ReadDir(backend.ConfigDir + backend.PathSeparator + "devices")
 	if err != nil {
 		fmt.Println(backend.AnsiError + "Failed to read the devices directory: " + err.Error() + backend.AnsiReset)
 		os.Exit(1)
 	}
 
-	// add the sheared target (incomplete, vanity) to the deletions list
-	if deviceID != "" { // if running on the server...
+	// add the sheared target (incomplete, vanity) to the deletions list (if running on a server)
+	if onServer {
 		for _, device := range deviceIDList {
-			if device.Name() != deviceID {
+			if device.Name() != clientDeviceID {
 				_, err = os.Create(backend.ConfigDir + backend.PathSeparator + "deletions" + backend.PathSeparator + device.Name() + "\x1d" + strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, "\x1e"))
 				if err != nil {
 					// do not print error as there is currently no way of seeing server-side errors
+					// failure to add the target to the deletions list will exit the program and result in a client re-uploading the target (non-critical)
 					os.Exit(1)
 				}
 			}
 		}
-	} else { // if running on the client... (online mode determined dynamically in GetSSHOutput, will silently exit if not in online mode) // TODO separate into own function to avoid server needing to build SSH
-		// determine client device ID (to send to server, avoids creating a deletion file for the client device)
-		deviceID = deviceIDList[0].Name()
-		// below: deviceID and targetLocationIncomplete are separated by \x1d, path separators are replaced with \x1e, and spaces are replaced with \x1f
-		GetSSHOutput("libmuttonserver shear "+deviceID+"\x1d"+strings.ReplaceAll(strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, "\x1e"), " ", "\x1f"), false)
 	}
 
-	os.Exit(0)
+	// get the full targetLocation path and remove the target
+	targetLocationComplete := backend.TargetLocationFormat(targetLocationIncomplete[1:])
+	if !onServer { // error if target does not exist on client, needed because os.RemoveAll does not return an error if target does not exist
+		backend.TargetIsFile(targetLocationComplete, true, 0)
+	}
+	err = os.RemoveAll(targetLocationComplete)
+	if err != nil {
+		fmt.Println(backend.AnsiError + "Failed to remove local target: " + err.Error() + backend.AnsiReset)
+		os.Exit(1)
+	}
+
+	if !onServer { // return the device ID if running on the client
+		return deviceIDList[0].Name()
+	}
+	return ""
+	// do not exit program, as this function is used as part of ShearRemoteFromClient
 }
 
-// AddFolder creates a new directory at targetLocation
-// if running on the client, it will also call the server to create the directory
-func AddFolder(targetLocationIncomplete string, onServer bool) {
+// AddFolderLocal creates a new entry-containing directory on the local system
+// this function should only be used directly by the server binary
+func AddFolderLocal(targetLocationIncomplete string) {
 	// get the full targetLocation path and create the target
 	targetLocationComplete := backend.TargetLocationFormat(targetLocationIncomplete[1:])
 	err := os.Mkdir(targetLocationComplete, 0700)
@@ -116,9 +124,5 @@ func AddFolder(targetLocationIncomplete string, onServer bool) {
 		}
 	}
 
-	if !onServer { // if running on the client... (online mode determined dynamically in GetSSHOutput, will silently exit if not in online mode) // TODO separate into own function to avoid server needing to build SSH
-		GetSSHOutput("libmuttonserver addfolder "+strings.ReplaceAll(targetLocationIncomplete, " ", "\x1f"), false)
-	}
-
-	os.Exit(0)
+	// do not exit program, as this function is used as part of AddFolderRemoteFromClient
 }

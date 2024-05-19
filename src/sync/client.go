@@ -275,12 +275,32 @@ func syncLists(localEntryModMap, remoteEntryModMap map[string]int64, manualSync 
 	}
 }
 
+// ShearRemoteFromClient removes the target file or directory from the local system and calls the server to remove it remotely and add it to the deletions list
+// can safely be called in offline mode, as well, so this is the intended interface for shearing (ShearLocal should only be used directly in the server binary)
+func ShearRemoteFromClient(targetLocationIncomplete string) {
+	deviceID := ShearLocal(targetLocationIncomplete, "") // remove the target from the local system and get the device ID of the client
+
+	// call the server to remotely shear the target and add it to the deletions list
+	// deviceID and targetLocationIncomplete are separated by \x1d, path separators are replaced with \x1e, and spaces are replaced with \x1f TODO is there a need to combine deviceID and targetLocationIncomplete into one argument?
+	GetSSHOutput("libmuttonserver shear "+deviceID+"\x1d"+strings.ReplaceAll(strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, "\x1e"), " ", "\x1f"), false)
+
+	os.Exit(0) // sync is not required after shearing since the target has already been removed from the local system
+}
+
 // deletionSync removes entries from the client that have been deleted on the server (multi-client deletion)
 func deletionSync(deletions []string) {
 	for _, deletion := range deletions {
 		fmt.Println(ansiDelete+deletion+backend.AnsiReset, "has been sheared, removing...")
 		os.RemoveAll(backend.EntryRoot + deletion)
 	}
+}
+
+// AddFolderRemoteFromClient creates a new entry-containing directory on the local system and calls the server to create the folder remotely
+func AddFolderRemoteFromClient(targetLocationIncomplete string) {
+	AddFolderLocal(targetLocationIncomplete)                                                                    // add the folder on the local system
+	GetSSHOutput("libmuttonserver addfolder "+strings.ReplaceAll(targetLocationIncomplete, " ", "\x1f"), false) // call the server to create the folder remotely
+
+	os.Exit(0)
 }
 
 // folderSync creates folders on the client (from the given list of folder names)

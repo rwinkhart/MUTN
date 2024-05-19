@@ -25,10 +25,10 @@ func main() {
 		// shear an entry from the server and add it to the deletions directory
 		deviceIDTargetLocation := strings.Split(args[2], "\x1d")
 		targetLocationIncomplete := strings.ReplaceAll(strings.ReplaceAll(deviceIDTargetLocation[1], "\x1f", " "), "\x1e", backend.PathSeparator)
-		sync.Shear(targetLocationIncomplete, deviceIDTargetLocation[0])
+		sync.ShearLocal(targetLocationIncomplete, deviceIDTargetLocation[0])
 	case "addfolder":
 		// add a new folder to the server
-		sync.AddFolder(strings.ReplaceAll(args[2], "\x1f", " "), true)
+		sync.AddFolderLocal(strings.ReplaceAll(args[2], "\x1f", " "))
 	case "register":
 		// register a new device ID
 		os.Create(backend.ConfigDir + backend.PathSeparator + "devices" + backend.PathSeparator + args[2])

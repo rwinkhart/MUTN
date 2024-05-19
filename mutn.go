@@ -45,7 +45,7 @@ func main() {
 					case "add":
 						cli.AddEntry(targetLocation, true, 0)
 					case "shear":
-						sync.Shear(args[1], "") // pass the incomplete path for cleaner formatting in server deletions directory
+						sync.ShearRemoteFromClient(args[1]) // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
 					default:
 						cli.HelpMain()
 					}
@@ -142,7 +142,7 @@ func main() {
 					case "note", "-n":
 						cli.AddEntry(targetLocation, true, 2)
 					case "folder", "-f":
-						sync.AddFolder(args[1], false)
+						sync.AddFolderRemoteFromClient(args[1]) // pass the incomplete path as the server will have a different home directory
 					default:
 						cli.HelpAdd()
 					}
