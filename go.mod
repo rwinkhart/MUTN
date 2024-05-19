@@ -3,9 +3,9 @@ module github.com/rwinkhart/MUTN
 go 1.22.2
 
 require (
-	github.com/bramvdbogaerde/go-scp v1.4.0
 	github.com/charmbracelet/glamour v0.7.0
 	github.com/fortis/go-steam-totp v0.0.0-20171114202746-18e928674727
+	github.com/pkg/sftp v1.13.6
 	github.com/pquerna/otp v1.4.1-0.20231130234153-3357de7c0481
 	golang.org/x/crypto v0.23.0
 	gopkg.in/ini.v1 v1.67.0
@@ -18,6 +18,7 @@ require (
 	github.com/boombuler/barcode v1.0.1 // indirect
 	github.com/dlclark/regexp2 v1.11.0 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
+	github.com/kr/fs v0.1.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.15 // indirect
