@@ -116,71 +116,6 @@ func GetSSHOutput(cmd string, manualSync bool) string {
 	return outputString
 }
 
-// sftpTransfer uploads or downloads an entry over SFTP // TODO iterate over a map of operations to slices of entries, rather than repeatedly calling this function
-// WARNING: does not close sshClient; it is left open for further operations
-func sftpTransfer(sshClient *ssh.Client, entryName, sshUser string, download bool) {
-	// create an SFTP client
-	sftpClient, err := sftp.NewClient(sshClient)
-	if err != nil {
-		fmt.Println(backend.AnsiError+"Sync failed - Unable to establish SFTP session:", err.Error()+backend.AnsiReset)
-		os.Exit(1)
-	}
-	defer sftpClient.Close()
-
-	// upload or download the entry
-	if download {
-		// open remote file TODO fetch mod time and assign to downloaded file
-		var remoteFile *sftp.File
-		remoteFile, err = sftpClient.Open("/home/" + sshUser + bareEntryRoot + entryName)
-		if err != nil {
-			fmt.Println(backend.AnsiError+"Sync failed - Unable to open remote file:", err.Error()+backend.AnsiReset)
-			os.Exit(1)
-		}
-		defer remoteFile.Close()
-
-		// create local file
-		var localFile *os.File
-		localFile, err = os.Create(backend.EntryRoot + entryName)
-		if err != nil {
-			fmt.Println(backend.AnsiError+"Sync failed - Unable to create local file:", err.Error()+backend.AnsiReset)
-			os.Exit(1)
-		}
-		defer localFile.Close()
-
-		// download the file
-		_, err = remoteFile.WriteTo(localFile)
-		if err != nil {
-			fmt.Println(backend.AnsiError+"Sync failed - Unable to download remote file:", err.Error()+backend.AnsiReset)
-			os.Exit(1)
-		}
-	} else {
-		// open local file TODO fetch mod time and assign to uploaded file
-		var localFile *os.File
-		localFile, err = os.Open(backend.EntryRoot + entryName)
-		if err != nil {
-			fmt.Println(backend.AnsiError+"Sync failed - Unable to open local file:", err.Error()+backend.AnsiReset)
-			os.Exit(1)
-		}
-		defer localFile.Close()
-
-		// create remote file
-		var remoteFile *sftp.File
-		remoteFile, err = sftpClient.Create("/home/" + sshUser + bareEntryRoot + entryName)
-		if err != nil {
-			fmt.Println(backend.AnsiError+"Sync failed - Unable to create remote file:", err.Error()+backend.AnsiReset)
-			os.Exit(1)
-		}
-		defer remoteFile.Close()
-
-		// upload the file
-		_, err = localFile.WriteTo(remoteFile)
-		if err != nil {
-			fmt.Println(backend.AnsiError+"Sync failed - Unable to upload local file:", err.Error()+backend.AnsiReset)
-			os.Exit(1)
-		}
-	}
-}
-
 // getRemoteDataFromClient returns a map of remote entries to their modification times, a list of remote folders, and a list of queued deletions
 func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []string) {
 	// get remote output over SSH
@@ -242,11 +177,93 @@ func getLocalData() map[string]int64 {
 	return entryModMap
 }
 
-// syncLists syncs entries between the client and server based on modification times
+// sftpSync takes two slices of entries (one for downloads and one for uploads) and syncs them between the client and server using SFTP
+func sftpSync(downloadList, uploadList []string, manualSync bool) {
+	// establish an SSH connection for transfers
+	sshClient, sshUser := getSSHClient(manualSync)
+	defer sshClient.Close()
+
+	// create an SFTP client
+	sftpClient, err := sftp.NewClient(sshClient)
+	if err != nil {
+		fmt.Println(backend.AnsiError+"Sync failed - Unable to establish SFTP session:", err.Error()+backend.AnsiReset)
+		os.Exit(1)
+	}
+	defer sftpClient.Close()
+
+	// iterate over the download list
+	for _, entryName := range downloadList {
+		fmt.Println("Downloading " + ansiDownload + entryName + backend.AnsiReset)
+
+		// open remote file TODO fetch mod time and assign to downloaded file
+		var remoteFile *sftp.File
+		remoteFile, err = sftpClient.Open("/home/" + sshUser + bareEntryRoot + entryName)
+		if err != nil {
+			fmt.Println(backend.AnsiError+"Sync failed - Unable to open remote file:", err.Error()+backend.AnsiReset)
+			os.Exit(1)
+		}
+
+		// create local file
+		var localFile *os.File
+		localFile, err = os.Create(backend.EntryRoot + entryName)
+		if err != nil {
+			fmt.Println(backend.AnsiError+"Sync failed - Unable to create local file:", err.Error()+backend.AnsiReset)
+			os.Exit(1)
+		}
+
+		// download the file
+		_, err = remoteFile.WriteTo(localFile)
+		if err != nil {
+			fmt.Println(backend.AnsiError+"Sync failed - Unable to download remote file:", err.Error()+backend.AnsiReset)
+			os.Exit(1)
+		}
+
+		// close the files
+		remoteFile.Close()
+		localFile.Close()
+	}
+
+	fmt.Println() // add a gap between download and upload messages
+
+	// iterate over the upload list
+	for _, entryName := range uploadList {
+		fmt.Println("Uploading " + ansiUpload + entryName + backend.AnsiReset)
+
+		// open local file TODO fetch mod time and assign to uploaded file
+		var localFile *os.File
+		localFile, err = os.Open(backend.EntryRoot + entryName)
+		if err != nil {
+			fmt.Println(backend.AnsiError+"Sync failed - Unable to open local file:", err.Error()+backend.AnsiReset)
+			os.Exit(1)
+		}
+
+		// create remote file
+		var remoteFile *sftp.File
+		remoteFile, err = sftpClient.Create("/home/" + sshUser + bareEntryRoot + entryName)
+		if err != nil {
+			fmt.Println(backend.AnsiError+"Sync failed - Unable to create remote file:", err.Error()+backend.AnsiReset)
+			os.Exit(1)
+		}
+
+		// upload the file
+		_, err = localFile.WriteTo(remoteFile)
+		if err != nil {
+			fmt.Println(backend.AnsiError+"Sync failed - Unable to upload local file:", err.Error()+backend.AnsiReset)
+			os.Exit(1)
+		}
+
+		// close the files
+		localFile.Close()
+		remoteFile.Close()
+	}
+	fmt.Println("\nClient is synchronized with server.")
+}
+
+// syncLists determines which entries need to be downloaded and uploaded for synchronizations and calls sftpSync with this information
 // using maps means that syncing will be done in an arbitrary order, but it is a worthy tradeoff for speed and simplicity
 func syncLists(localEntryModMap, remoteEntryModMap map[string]int64, manualSync bool) {
-	// establish an SSH connection for transfers TODO only establish if needed
-	sshClient, sshUser := getSSHClient(manualSync)
+	// initialize slices to store entries that need to be downloaded or uploaded
+	var downloadList, uploadList []string
 
 	// iterate over client entries
 	for entry, localModTime := range localEntryModMap {
@@ -254,25 +271,29 @@ func syncLists(localEntryModMap, remoteEntryModMap map[string]int64, manualSync 
 		if remoteModTime, present := remoteEntryModMap[entry]; present {
 			// entry exists on both client and server, compare mod times
 			if remoteModTime > localModTime {
-				fmt.Println(ansiDownload+entry+backend.AnsiReset, "is newer on server, downloading...")
-				sftpTransfer(sshClient, entry, sshUser, true)
+				fmt.Println(ansiDownload+entry+backend.AnsiReset, "is newer on server, adding to download list")
+				downloadList = append(downloadList, entry)
 			} else if remoteModTime < localModTime {
-				fmt.Println(ansiUpload+entry+backend.AnsiReset, "is newer on client, uploading...")
-				sftpTransfer(sshClient, entry, sshUser, false)
+				fmt.Println(ansiUpload+entry+backend.AnsiReset, "is newer on client, adding to upload list")
+				uploadList = append(uploadList, entry)
 			}
 			// remove entry from remoteEntryModMap (process of elimination)
 			delete(remoteEntryModMap, entry)
 		} else {
-			fmt.Println(ansiUpload+entry+backend.AnsiReset, "does not exist on server, uploading...")
-			sftpTransfer(sshClient, entry, sshUser, false)
+			fmt.Println(ansiUpload+entry+backend.AnsiReset, "does not exist on server, adding to upload list")
+			uploadList = append(uploadList, entry)
 		}
 	}
 
 	// iterate over remaining entries in remoteEntryModMap
 	for entry := range remoteEntryModMap {
-		fmt.Println(ansiDownload+entry+backend.AnsiReset, "does not exist on client, downloading...")
-		sftpTransfer(sshClient, entry, sshUser, true)
+		fmt.Println(ansiDownload+entry+backend.AnsiReset, "does not exist on client, adding to download list")
+		downloadList = append(downloadList, entry)
 	}
+
+	// call sftpSync with the download and upload lists
+	fmt.Println() // add a gap between list-add messages and the actual sync messages from sftpSync
+	sftpSync(downloadList, uploadList, manualSync)
 }
 
 // ShearRemoteFromClient removes the target file or directory from the local system and calls the server to remove it remotely and add it to the deletions list
