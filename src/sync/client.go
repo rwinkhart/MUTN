@@ -350,9 +350,15 @@ func ShearRemoteFromClient(targetLocationIncomplete string) {
 
 // deletionSync removes entries from the client that have been deleted on the server (multi-client deletion)
 func deletionSync(deletions []string) {
+	var filesDeleted bool
 	for _, deletion := range deletions {
-		fmt.Println(ansiDelete+deletion+backend.AnsiReset, "has been sheared, removing...")
+		filesDeleted = true // set a flag to indicate that files have been deleted (used to determine whether to print a gap between deletion and other messages)
+		fmt.Println(ansiDelete+deletion+backend.AnsiReset, "has been sheared, removing locally")
 		os.RemoveAll(backend.EntryRoot + deletion)
+	}
+
+	if filesDeleted {
+		fmt.Println() // add a gap between deletion and other messages
 	}
 }
 
