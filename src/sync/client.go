@@ -9,6 +9,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // global constants used only in this file
@@ -192,12 +193,24 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 	defer sftpClient.Close()
 
 	// iterate over the download list
+	var filesTransfered bool
 	for _, entryName := range downloadList {
+		filesTransfered = true // set a flag to indicate that files have been downloaded (used to determine whether to print a gap between download and upload messages)
+
 		fmt.Println("Downloading " + ansiDownload + entryName + backend.AnsiReset)
 
-		// open remote file TODO fetch mod time and assign to downloaded file
+		// save modification time of remote file
+		var fileInfo os.FileInfo
+		fileInfo, err = sftpClient.Stat("/home/" + sshUser + bareEntryRoot + entryName) // TODO does not work if server is hosted on Windows
+		if err != nil {
+			fmt.Println(backend.AnsiError+"Sync failed - Unable to get remote file info (modtime):", err.Error()+backend.AnsiReset)
+			os.Exit(1)
+		}
+		modTime := fileInfo.ModTime()
+
+		// open remote file
 		var remoteFile *sftp.File
-		remoteFile, err = sftpClient.Open("/home/" + sshUser + bareEntryRoot + entryName)
+		remoteFile, err = sftpClient.Open("/home/" + sshUser + bareEntryRoot + entryName) // TODO does not work if server is hosted on Windows
 		if err != nil {
 			fmt.Println(backend.AnsiError+"Sync failed - Unable to open remote file:", err.Error()+backend.AnsiReset)
 			os.Exit(1)
@@ -221,15 +234,32 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 		// close the files
 		remoteFile.Close()
 		localFile.Close()
+
+		// set the modification time of the local file to match the value saved from the remote file (from before the download)
+		err = os.Chtimes(backend.EntryRoot+entryName, time.Now(), modTime)
 	}
 
-	fmt.Println() // add a gap between download and upload messages
+	if filesTransfered {
+		fmt.Println() // add a gap between download and upload messages
+	}
 
 	// iterate over the upload list
+	filesTransfered = false
 	for _, entryName := range uploadList {
+		filesTransfered = true // set a flag to indicate that files have been uploaded (used to determine whether to print a gap between upload and sync complete messages)
+
 		fmt.Println("Uploading " + ansiUpload + entryName + backend.AnsiReset)
 
-		// open local file TODO fetch mod time and assign to uploaded file
+		// save modification time of local file
+		var fileInfo os.FileInfo
+		fileInfo, err = os.Stat(backend.EntryRoot + entryName)
+		if err != nil {
+			fmt.Println(backend.AnsiError+"Sync failed - Unable to get local file info (modtime):", err.Error()+backend.AnsiReset)
+			os.Exit(1)
+		}
+		modTime := fileInfo.ModTime()
+
+		// open local file
 		var localFile *os.File
 		localFile, err = os.Open(backend.EntryRoot + entryName)
 		if err != nil {
@@ -239,7 +269,7 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 
 		// create remote file
 		var remoteFile *sftp.File
-		remoteFile, err = sftpClient.Create("/home/" + sshUser + bareEntryRoot + entryName)
+		remoteFile, err = sftpClient.Create("/home/" + sshUser + bareEntryRoot + entryName) // TODO does not work if server is hosted on Windows
 		if err != nil {
 			fmt.Println(backend.AnsiError+"Sync failed - Unable to create remote file:", err.Error()+backend.AnsiReset)
 			os.Exit(1)
@@ -255,8 +285,14 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 		// close the files
 		localFile.Close()
 		remoteFile.Close()
+
+		// set the modification time of the remote file to match the value saved from the local file (from before the upload)
+		err = sftpClient.Chtimes("/home/"+sshUser+bareEntryRoot+entryName, time.Now(), modTime) // TODO does not work if server is hosted on Windows
 	}
-	fmt.Println("\nClient is synchronized with server")
+
+	if filesTransfered {
+		fmt.Println() // add a gap between upload and sync complete messages
+	}
 }
 
 // syncLists determines which entries need to be downloaded and uploaded for synchronizations and calls sftpSync with this information
@@ -296,6 +332,8 @@ func syncLists(localEntryModMap, remoteEntryModMap map[string]int64, manualSync 
 		fmt.Println() // add a gap between list-add messages and the actual sync messages from sftpSync
 		sftpSync(downloadList, uploadList, manualSync)
 	}
+
+	fmt.Println("Client is synchronized with server")
 }
 
 // ShearRemoteFromClient removes the target file or directory from the local system and calls the server to remove it remotely and add it to the deletions list
