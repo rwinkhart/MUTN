@@ -353,7 +353,7 @@ func deletionSync(deletions []string) {
 	var filesDeleted bool
 	for _, deletion := range deletions {
 		filesDeleted = true // set a flag to indicate that files have been deleted (used to determine whether to print a gap between deletion and other messages)
-		fmt.Println(ansiDelete+deletion+backend.AnsiReset, "has been sheared, removing locally")
+		fmt.Println(ansiDelete+deletion+backend.AnsiReset, "has been sheared, removing locally (if it exists)")
 		os.RemoveAll(backend.EntryRoot + deletion)
 	}
 
