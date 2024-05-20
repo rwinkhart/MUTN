@@ -256,7 +256,7 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 		localFile.Close()
 		remoteFile.Close()
 	}
-	fmt.Println("\nClient is synchronized with server.")
+	fmt.Println("\nClient is synchronized with server")
 }
 
 // syncLists determines which entries need to be downloaded and uploaded for synchronizations and calls sftpSync with this information
@@ -292,8 +292,10 @@ func syncLists(localEntryModMap, remoteEntryModMap map[string]int64, manualSync 
 	}
 
 	// call sftpSync with the download and upload lists
-	fmt.Println() // add a gap between list-add messages and the actual sync messages from sftpSync
-	sftpSync(downloadList, uploadList, manualSync)
+	if max(len(downloadList), len(uploadList)) > 0 { // only call sftpSync if there are entries to download or upload
+		fmt.Println() // add a gap between list-add messages and the actual sync messages from sftpSync
+		sftpSync(downloadList, uploadList, manualSync)
+	}
 }
 
 // ShearRemoteFromClient removes the target file or directory from the local system and calls the server to remove it remotely and add it to the deletions list
