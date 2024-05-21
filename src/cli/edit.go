@@ -34,11 +34,13 @@ func EditEntryField(targetLocation string, hidePassword bool, field int) {
 	case 1:
 		unencryptedEntry[field] = input("Username:")
 	case 2:
+		unencryptedEntry[field] = inputHidden("TOTP secret:")
+	case 3:
 		unencryptedEntry[field] = input("URL:")
-	case 3: // edit notes fields
+	case 4: // edit notes fields
 		// store note and non-note data separately
-		nonNoteData := unencryptedEntry[:3]
-		noteData := unencryptedEntry[3:]
+		nonNoteData := unencryptedEntry[:4]
+		noteData := unencryptedEntry[4:]
 
 		// edit the note
 		editedNote, noteEdited := editNote(noteData)

@@ -26,17 +26,17 @@ func CopyArgument(targetLocation string, field int, executableName string) {
 				os.Exit(1)
 			}
 
-			if field != 5 { // TODO Update field after removed from notes (breaking sshyp entry compatibility)
+			if field != 2 {
 				copySubject = decryptedEntry[field]
 			} else { // TOTP mode
 				var secret string // stores secret for TOTP generation
 				var forSteam bool // indicates whether to generate TOTP in Steam format
 
-				if strings.HasPrefix(decryptedEntry[5], "steam@") {
-					secret = decryptedEntry[5][6:]
+				if strings.HasPrefix(decryptedEntry[2], "steam@") {
+					secret = decryptedEntry[2][6:]
 					forSteam = true
 				} else {
-					secret = decryptedEntry[5]
+					secret = decryptedEntry[2]
 				}
 
 				for { // keep field copied to clipboard, refresh on 30-second intervals

@@ -23,7 +23,7 @@ case ${words[-2]} in
     compadd {password,username,totp,url,note}
     ;;
   edit )
-    compadd {password,username,url,note,rename}
+    compadd {password,username,totp,url,note,rename}
     ;;
   gen )
     compadd update

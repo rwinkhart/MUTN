@@ -7,9 +7,9 @@ function cliMUTNEntryCompleter {
             (Get-ChildItem -Path $mutnPath -Recurse -File).FullName.Substring($mutnPath.Length) -replace '\\', '/' -replace ' ', '` '
         }
     } catch {
-        $trimmedPaths = $null # If any errors occur (especially, "You cannot call a method on a null-valued expression", set $trimmedPaths to $null
+        $trimmedPaths = $null # if any errors occur (especially, "You cannot call a method on a null-valued expression", set $trimmedPaths to $null
     }
-    if ($null -eq $trimmedPaths) { # If no entries are found, add 'help' to $trimmedPaths
+    if ($null -eq $trimmedPaths) { # if no entries are found, add 'help' to $trimmedPaths
         $trimmedPaths = 'help'
     }
     $trimmedPaths | Where-Object { $_ -like "$wordToComplete*" }
@@ -21,7 +21,7 @@ function cliMUTNOptionCompleter {
     $possibleValues = @{
         add = @('password', 'note', 'folder')
         copy = @('password', 'username', 'totp', 'url', 'note')
-        edit = @('password', 'username', 'url', 'note', 'rename')
+        edit = @('password', 'username', 'totp', 'url', 'note', 'rename')
         gen = @('update')
     }
 

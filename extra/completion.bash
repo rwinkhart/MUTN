@@ -31,7 +31,7 @@ _mutnCompletions() {
       while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "password username totp url note" -- "$cur" )
       ;;
     edit )
-      while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "password username url note rename" -- "$cur" )
+      while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "password username totp url note rename" -- "$cur" )
       ;;
     gen )
       while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "update" -- "$cur" )

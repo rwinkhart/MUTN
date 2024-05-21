@@ -34,17 +34,26 @@ func EntryReader(decryptedEntry []string, hidePassword bool, syncEnabled bool) {
 				fmt.Print(ansiDirectoryHeader + "Username:" + backend.AnsiReset + "\n" + decryptedEntry[1] + "\n\n")
 			}
 		case 2:
-			// if the third field (url) is not empty, print it
+			// if the third field (TOTP secret) is not empty, print it
 			if decryptedEntry[2] != "" {
-				fmt.Print(ansiDirectoryHeader + "URL:" + backend.AnsiReset + "\n" + decryptedEntry[2] + "\n\n")
+				if !hidePassword {
+					fmt.Print(ansiDirectoryHeader + "TOTP Secret:" + backend.AnsiReset + "\n" + ansiShownPassword + decryptedEntry[2] + backend.AnsiReset + "\n\n")
+				} else {
+					fmt.Print(ansiDirectoryHeader + "TOTP Secret:" + backend.AnsiReset + "\n" + ansiEmptyDirectoryWarning + "End command in \"show\" or \"-s\" to view" + backend.AnsiReset + "\n\n")
+				}
 			}
 		case 3:
+			// if the fourth field (url) is not empty, print it
+			if decryptedEntry[3] != "" {
+				fmt.Print(ansiDirectoryHeader + "URL:" + backend.AnsiReset + "\n" + decryptedEntry[3] + "\n\n")
+			}
+		case 4:
 			// print the notes header
 			fmt.Println(ansiDirectoryHeader + "Notes:" + backend.AnsiReset)
 
 			// combine remaining fields into a single string (for markdown rendering)
 			var markdownNotes []string
-			for field := 3; field < len(decryptedEntry); field++ {
+			for field := 4; field < len(decryptedEntry); field++ {
 				markdownNotes = append(markdownNotes, decryptedEntry[field])
 			}
 			r, _ := glamour.NewTermRenderer(glamour.WithStylesFromJSONBytes(glamourStyle()), glamour.WithPreservedNewLines(), glamour.WithWordWrap(width))

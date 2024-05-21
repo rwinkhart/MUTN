@@ -28,16 +28,17 @@ func AddEntry(targetLocation string, hidePassword bool, entryType uint8) {
 			password = backend.StringGen(inputInt("Password length:", -1), inputBinary("Generate a complex (special characters) password?"), 0.2)
 		}
 
+		totp := inputHidden("TOTP secret:")
 		url := input("URL:")
 		if inputBinary("Add a note to this entry?") {
 			note, _ := editNote([]string{})
-			unencryptedEntry = append([]string{password, username, url}, note...)
+			unencryptedEntry = append([]string{password, username, totp, url}, note...)
 		} else {
-			unencryptedEntry = []string{password, username, url}
+			unencryptedEntry = []string{password, username, totp, url}
 		}
 	} else {
 		note, _ := editNote([]string{})
-		unencryptedEntry = append([]string{"", "", ""}, note...)
+		unencryptedEntry = append([]string{"", "", "", ""}, note...)
 	}
 
 	// write and preview the new entry
