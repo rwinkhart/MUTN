@@ -37,12 +37,13 @@ This program comes with absolutely no warranty; type "mutn version" for details.
   password|-pw|<blank>   Copy the password of an entry to your clipboard
   username|-u            Copy the username of an entry to your clipboard
   totp|-t                Copy the TOTP code of an entry to your clipboard
-  url|-l                 Copy the url of an entry to your clipboard
+  url|-l                 Copy the URL of an entry to your clipboard
   note|-n                Copy the note of an entry to your clipboard
  edit:
   password|-pw|<blank>   Change the password of an entry
   username|-u            Change the username of an entry
-  url|-l                 Change the url attached to an entry
+  totp|-t                Change the TOTP secret of an entry
+  url|-l                 Change the URL attached to an entry
   note|-n                Change the note attached to an entry
   rename|-r              Rename or relocate an entry
  gen:
@@ -77,7 +78,8 @@ func HelpEdit() {
  edit:
   password|-pw|<blank>   Change the password of an entry
   username|-u            Change the username of an entry
-  url|-l                 Change the url attached to an entry
+  totp|-t                Change the TOTP secret of an entry
+  url|-l                 Change the URL attached to an entry
   note|-n                Change the note attached to an entry
   rename|-r              Rename or relocate an entry` + "\n\n")
 	os.Exit(0)
@@ -91,7 +93,7 @@ func HelpCopy() {
   password|-pw|<blank>   Copy the password in an entry to your clipboard
   username|-u            Copy the username in an entry to your clipboard
   totp|-t                Copy the TOTP code of an entry to your clipboard
-  url|-l                 Copy the url in an entry to your clipboard
+  url|-l                 Copy the URL in an entry to your clipboard
   note|-n                Copy the first note line in an entry to your clipboard` + "\n\n")
 	os.Exit(0)
 }

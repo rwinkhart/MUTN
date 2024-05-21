@@ -72,13 +72,13 @@ func main() {
 						field = 0
 					case "username", "-u":
 						field = 1
-					case "url", "-l":
-						field = 2
-					case "note", "-n":
-						field = 3
 					case "totp", "-t":
 						fmt.Println("TOTP code will be copied to clipboard - your clipboard will be kept up to date with the current TOTP code until this process is closed")
-						field = 5 // TODO Update field after removed from notes (breaking sshyp entry compatibility)
+						field = 2
+					case "url", "-l":
+						field = 3
+					case "note", "-n":
+						field = 4
 					default:
 						cli.HelpCopy()
 					}
@@ -90,10 +90,12 @@ func main() {
 						field = 0
 					case "username", "-u":
 						field = 1
-					case "url", "-l":
+					case "totp", "-t":
 						field = 2
-					case "note", "-n":
+					case "url", "-l":
 						field = 3
+					case "note", "-n":
+						field = 4
 					case "rename", "-r":
 						cli.RenameCli(targetLocation)
 					default:
