@@ -101,7 +101,7 @@ func ShearLocal(targetLocationIncomplete, clientDeviceID string) string {
 		os.Exit(1)
 	}
 
-	if !onServer { // return the device ID if running on the client
+	if !onServer && len(deviceIDList) > 0 { // return the device ID if running on the client and a device ID exists (online mode)
 		return deviceIDList[0].Name()
 	}
 	return ""
