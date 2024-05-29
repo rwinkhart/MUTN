@@ -14,7 +14,7 @@ import (
 const ansiShownPassword = "\033[38;5;10m"
 
 // EntryReader prints the decrypted contents of a libmutton entry in a human-readable format
-func EntryReader(decryptedEntry []string, hidePassword bool, syncEnabled bool) {
+func EntryReader(decryptedEntry []string, hideSecrets bool, syncEnabled bool) {
 	fmt.Println()
 
 	for i := range decryptedEntry {
@@ -22,7 +22,7 @@ func EntryReader(decryptedEntry []string, hidePassword bool, syncEnabled bool) {
 		case 0:
 			// if the first field (password) is not empty, print it
 			if decryptedEntry[0] != "" {
-				if !hidePassword {
+				if !hideSecrets {
 					fmt.Print(ansiDirectoryHeader + "Password:" + backend.AnsiReset + "\n" + ansiShownPassword + decryptedEntry[0] + backend.AnsiReset + "\n\n")
 				} else {
 					fmt.Print(ansiDirectoryHeader + "Password:" + backend.AnsiReset + "\n" + ansiEmptyDirectoryWarning + "End command in \"show\" or \"-s\" to view" + backend.AnsiReset + "\n\n")
@@ -36,7 +36,7 @@ func EntryReader(decryptedEntry []string, hidePassword bool, syncEnabled bool) {
 		case 2:
 			// if the third field (TOTP secret) is not empty, print it
 			if decryptedEntry[2] != "" {
-				if !hidePassword {
+				if !hideSecrets {
 					fmt.Print(ansiDirectoryHeader + "TOTP Secret:" + backend.AnsiReset + "\n" + ansiShownPassword + decryptedEntry[2] + backend.AnsiReset + "\n\n")
 				} else {
 					fmt.Print(ansiDirectoryHeader + "TOTP Secret:" + backend.AnsiReset + "\n" + ansiEmptyDirectoryWarning + "End command in \"show\" or \"-s\" to view" + backend.AnsiReset + "\n\n")
@@ -75,9 +75,9 @@ func EntryReader(decryptedEntry []string, hidePassword bool, syncEnabled bool) {
 }
 
 // EntryReaderDecrypt is a wrapper for EntryReader that first decrypts a GPG-encrypted file before sending it to EntryReader
-func EntryReaderDecrypt(targetLocation string, hidePassword bool) {
+func EntryReaderDecrypt(targetLocation string, hideSecrets bool) {
 	if isFile, _ := backend.TargetIsFile(targetLocation, true, 2); isFile {
-		EntryReader(backend.DecryptGPG(targetLocation), hidePassword, false) // never sync if decrypting straight to EntryReader, as this means the entry could not have been modified
+		EntryReader(backend.DecryptGPG(targetLocation), hideSecrets, false) // never sync if decrypting straight to EntryReader, as this means the entry could not have been modified
 	}
 	// do not exit, as this is the job of EntryReader
 }
