@@ -8,7 +8,7 @@ import (
 
 // AddEntry creates a new entry at targetLocation by taking user input via CLI prompts
 // entryType: 0 = standard (password), 1 = auto-generated password, 2 = note
-func AddEntry(targetLocation string, hidePassword bool, entryType uint8) {
+func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
 	_, isAccessible := backend.TargetIsFile(targetLocation, false, 0)
 	if isAccessible {
 		fmt.Println(backend.AnsiError + "Target location already exists" + backend.AnsiReset)
@@ -42,5 +42,5 @@ func AddEntry(targetLocation string, hidePassword bool, entryType uint8) {
 	}
 
 	// write and preview the new entry
-	writeEntryCLI(targetLocation, unencryptedEntry, hidePassword)
+	writeEntryCLI(targetLocation, unencryptedEntry, hideSecrets)
 }

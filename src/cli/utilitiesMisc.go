@@ -64,13 +64,13 @@ func inputMenuGen(prompt string, options []string) int {
 }
 
 // writeEntryCLI writes an entry to targetLocation and previews it (errors if no data is supplied)
-func writeEntryCLI(targetLocation string, unencryptedEntry []string, hidePassword bool) {
+func writeEntryCLI(targetLocation string, unencryptedEntry []string, hideSecrets bool) {
 	if backend.EntryIsNotEmpty(unencryptedEntry) {
 		// write the entry to the target location
 		backend.WriteEntry(targetLocation, unencryptedEntry)
 		// preview the entry
 		fmt.Println(AnsiBold + "\nEntry Preview:" + backend.AnsiReset)
-		EntryReader(unencryptedEntry, hidePassword, true)
+		EntryReader(unencryptedEntry, hideSecrets, true)
 	} else {
 		fmt.Println(backend.AnsiError + "No data supplied for entry" + backend.AnsiReset)
 		os.Exit(1)

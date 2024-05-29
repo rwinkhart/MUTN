@@ -23,7 +23,7 @@ func RenameCli(oldLocation string) {
 }
 
 // EditEntryField edits a field of an entry at targetLocation (user input)
-func EditEntryField(targetLocation string, hidePassword bool, field int) {
+func EditEntryField(targetLocation string, hideSecrets bool, field int) {
 	// fetch old entry data (with all required lines present)
 	unencryptedEntry := backend.GetOldEntryData(targetLocation, field)
 
@@ -52,11 +52,11 @@ func EditEntryField(targetLocation string, hidePassword bool, field int) {
 	}
 
 	// write and preview the modified entry
-	writeEntryCLI(targetLocation, unencryptedEntry, hidePassword)
+	writeEntryCLI(targetLocation, unencryptedEntry, hideSecrets)
 }
 
 // GenUpdate generates a new password for an entry at targetLocation (user input)
-func GenUpdate(targetLocation string, hidePassword bool) {
+func GenUpdate(targetLocation string, hideSecrets bool) {
 	// fetch old entry data
 	unencryptedEntry := backend.GetOldEntryData(targetLocation, 0)
 
@@ -64,7 +64,7 @@ func GenUpdate(targetLocation string, hidePassword bool) {
 	unencryptedEntry[0] = backend.StringGen(inputInt("Password length:", -1), inputBinary("Generate a complex (special characters) password?"), 0.2)
 
 	// write and preview the modified entry
-	writeEntryCLI(targetLocation, unencryptedEntry, hidePassword)
+	writeEntryCLI(targetLocation, unencryptedEntry, hideSecrets)
 }
 
 // editNote uses the user-specified text editor to edit an existing note (or create a new one if baseNote is empty)
