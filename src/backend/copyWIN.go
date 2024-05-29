@@ -11,7 +11,7 @@ import (
 )
 
 // copyField copies a field from an entry to the clipboard
-func copyField(copySubject string, executableName string) {
+func copyField(executableName, copySubject string) {
 	cmd := exec.Command("powershell.exe", "-c", fmt.Sprintf("echo '%s' | Set-Clipboard", strings.ReplaceAll(copySubject, "'", "''")))
 	err := cmd.Run()
 	if err != nil {

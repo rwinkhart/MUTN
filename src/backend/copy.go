@@ -11,7 +11,7 @@ import (
 )
 
 // CopyArgument copies a field from an entry to the clipboard
-func CopyArgument(targetLocation string, field int, executableName string) {
+func CopyArgument(executableName, targetLocation string, field int) {
 	if isFile, _ := TargetIsFile(targetLocation, true, 2); isFile {
 
 		decryptedEntry := DecryptGPG(targetLocation)
@@ -41,7 +41,7 @@ func CopyArgument(targetLocation string, field int, executableName string) {
 
 				for { // keep field copied to clipboard, refresh on 30-second intervals
 					currentTime := time.Now()
-					copyField(GenTOTP(secret, currentTime, forSteam), "")
+					copyField("", GenTOTP(secret, currentTime, forSteam))
 					// sleep until next 30-second interval
 					time.Sleep(time.Duration(30-(currentTime.Second()%30)) * time.Second)
 				}
@@ -52,7 +52,7 @@ func CopyArgument(targetLocation string, field int, executableName string) {
 		}
 
 		// copy field to clipboard, launch clipboard clearing process
-		copyField(copySubject, executableName)
+		copyField(executableName, copySubject)
 	}
 }
 

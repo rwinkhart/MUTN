@@ -22,7 +22,7 @@ func GetOldEntryData(targetLocation string, field int) []string {
 }
 
 // Rename renames oldLocation to newLocation
-func Rename(oldLocation string, newLocation string) {
+func Rename(oldLocation, newLocation string) {
 	// ensure newLocation does not exist
 	_, isAccessible := TargetIsFile(newLocation, false, 0)
 	if isAccessible {

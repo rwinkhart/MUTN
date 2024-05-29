@@ -13,7 +13,7 @@ import (
 // TODO MacOS support is entirely untested - I would appreciate feedback on this implementation
 
 // copyField copies a field from an entry to the clipboard
-func copyField(copySubject string, executableName string) {
+func copyField(executableName, copySubject string) {
 	cmd := exec.Command("pbcopy")
 	writeToStdin(cmd, copySubject)
 	err := cmd.Run()

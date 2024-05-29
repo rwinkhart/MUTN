@@ -46,7 +46,7 @@ func determineIndentation(skippedDirList []bool, dirList []string, currentDirInd
 }
 
 // processing for printing file entries (determines color, line wrapping, and prints)
-func printFileEntry(entry string, lastSlash int, charCounter int, colorAlternator int8, indent int) (int, int8) {
+func printFileEntry(entry string, lastSlash, charCounter, indent int, colorAlternator int8) (int, int8) {
 	// determine color to print fileEntryName (alternate each time function is run)
 	var colorCode string
 	if colorAlternator > 0 {
@@ -130,7 +130,7 @@ func EntryListGen() {
 					printDirectoryHeader(vanityDirectory, indent)
 				}
 
-				charCounter, colorAlternator = printFileEntry(file, lastSlash, charCounter, colorAlternator, indent)
+				charCounter, colorAlternator = printFileEntry(file, lastSlash, charCounter, indent, colorAlternator)
 			}
 		}
 

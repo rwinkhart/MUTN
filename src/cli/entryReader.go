@@ -14,7 +14,7 @@ import (
 const ansiShownPassword = "\033[38;5;10m"
 
 // EntryReader prints the decrypted contents of a libmutton entry in a human-readable format
-func EntryReader(decryptedEntry []string, hideSecrets bool, syncEnabled bool) {
+func EntryReader(decryptedEntry []string, hideSecrets, syncEnabled bool) {
 	fmt.Println()
 
 	for i := range decryptedEntry {

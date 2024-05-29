@@ -11,7 +11,7 @@ import (
 )
 
 // copyField copies a field from an entry to the clipboard
-func copyField(copySubject string, executableName string) {
+func copyField(executableName, copySubject string) {
 	var envSet bool // track whether environment variables are set
 	var cmd *exec.Cmd
 	// determine whether to use wl-copy (Wayland) or xclip (X11)
