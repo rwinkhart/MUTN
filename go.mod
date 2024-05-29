@@ -1,6 +1,6 @@
 module github.com/rwinkhart/MUTN
 
-go 1.22.2
+go 1.22.3
 
 require (
 	github.com/charmbracelet/glamour v0.7.0
@@ -12,7 +12,7 @@ require (
 )
 
 require (
-	github.com/alecthomas/chroma/v2 v2.13.0 // indirect
+	github.com/alecthomas/chroma/v2 v2.14.0 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/boombuler/barcode v1.0.1 // indirect
