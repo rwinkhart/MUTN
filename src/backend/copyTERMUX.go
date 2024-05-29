@@ -1,4 +1,4 @@
-//go:build termux
+//go:build termux && !windows && !darwin
 
 package backend
 
