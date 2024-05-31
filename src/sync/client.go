@@ -19,18 +19,19 @@ const (
 	ansiUpload   = "\033[38;5;4m"
 )
 
-// getSSHClient returns an SSH client connection to the server (also returns the remote username as a string)
+// getSSHClient returns an SSH client connection to the server (also returns the remote EntryRoot as a string and the server's OS as a bool - IsWindows)
 // only supports key-based authentication (passphrases are supported for CLI-based implementations)
-func getSSHClient(manualSync bool) (*ssh.Client, string) {
+func getSSHClient(manualSync bool) (*ssh.Client, string, bool) {
 	// get SSH config info, exit if not configured (displaying an error if the sync job was called manually)
 	var sshUserConfig []string
 	if manualSync {
-		sshUserConfig = backend.ReadConfig([]string{"sshUser", "sshIP", "sshPort", "sshKey", "sshKeyProtected"}, "SSH settings not configured - run \"mutn init\" to configure")
+		sshUserConfig = backend.ReadConfig([]string{"sshUser", "sshIP", "sshPort", "sshKey", "sshKeyProtected", "sshEntryRoot", "sshIsWindows"}, "SSH settings not configured - run \"mutn init\" to configure")
 	} else {
 		sshUserConfig = backend.ReadConfig([]string{"sshUser", "sshIP", "sshPort", "sshKey", "sshKeyProtected"}, "0")
 	}
 
-	var user, ip, port, keyFile, keyFileProtected string
+	var user, ip, port, keyFile, keyFileProtected, entryRoot string
+	var isWindows bool
 	for i, key := range sshUserConfig {
 		switch i {
 		case 0:
@@ -43,6 +44,10 @@ func getSSHClient(manualSync bool) (*ssh.Client, string) {
 			keyFile = key
 		case 4:
 			keyFileProtected = key
+		case 5:
+			entryRoot = key
+		case 6:
+			isWindows, _ = strconv.ParseBool(key)
 		}
 	}
 
@@ -88,13 +93,13 @@ func getSSHClient(manualSync bool) (*ssh.Client, string) {
 		os.Exit(1)
 	}
 
-	return sshClient, user
+	return sshClient, entryRoot, isWindows
 }
 
 // GetSSHOutput runs a command over SSH and returns the output as a string
-// TODO run getSSHClient() in RunJob and pass to each function that needs it (to avoid multiple connections), move defer to RunJob
+// TODO run getSSHClient() ONCE in RunJob and pass to each function that needs it (to avoid multiple connections), move defer to RunJob
 func GetSSHOutput(cmd string, manualSync bool) string {
-	sshClient, _ := getSSHClient(manualSync)
+	sshClient, _, _ := getSSHClient(manualSync)
 	defer sshClient.Close()
 
 	// create a session
@@ -189,9 +194,10 @@ func targetLocationFormatSFTP(targetName, serverEntryRoot string, serverIsWindow
 }
 
 // sftpSync takes two slices of entries (one for downloads and one for uploads) and syncs them between the client and server using SFTP
+// TODO test Windows server hosting support
 func sftpSync(downloadList, uploadList []string, manualSync bool) {
 	// establish an SSH connection for transfers
-	sshClient, sshUser := getSSHClient(manualSync)
+	sshClient, sshEntryRoot, sshIsWindows := getSSHClient(manualSync)
 	defer sshClient.Close()
 
 	// create an SFTP client
@@ -210,7 +216,7 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 		fmt.Println("Downloading " + ansiDownload + entryName + backend.AnsiReset)
 
 		// store path to remote entry
-		remoteEntryFullPath := targetLocationFormatSFTP(entryName, "/home/"+sshUser+"/.local/share/libmutton", false) // TODO temporarily hard-coded to expect a default home folder location on a UNIX-like server
+		remoteEntryFullPath := targetLocationFormatSFTP(entryName, sshEntryRoot, sshIsWindows)
 
 		// save modification time of remote file
 		var fileInfo os.FileInfo
@@ -287,7 +293,7 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 		}
 
 		// store path to remote entry
-		remoteEntryFullPath := targetLocationFormatSFTP(entryName, "/home/"+sshUser+"/.local/share/libmutton", false) // TODO temporarily hard-coded to expect a default home folder location on a UNIX-like server
+		remoteEntryFullPath := targetLocationFormatSFTP(entryName, sshEntryRoot, sshIsWindows)
 
 		// create remote file
 		var remoteFile *sftp.File
