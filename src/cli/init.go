@@ -40,16 +40,16 @@ func TempInitCli() {
 		sshKeyProtected := inputBinary("Is the identity file password-protected?")
 
 		// write config file
-		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID, "sshUser": sshUser, "sshIP": sshIP, "sshPort": sshPort, "sshKey": sshKey, "sshKeyProtected": strconv.FormatBool(sshKeyProtected)})
+		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID, "sshUser": sshUser, "sshIP": sshIP, "sshPort": sshPort, "sshKey": sshKey, "sshKeyProtected": strconv.FormatBool(sshKeyProtected)}, false)
 
 		// generate device ID
 		sshEntryRoot, sshIsWindows := sync.DeviceIDGen()
 
 		// update config file with sshEntryRoot and sshIsWindows TODO append to existing config file
-		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID, "sshUser": sshUser, "sshIP": sshIP, "sshPort": sshPort, "sshKey": sshKey, "sshKeyProtected": strconv.FormatBool(sshKeyProtected), "sshEntryRoot": sshEntryRoot, "sshIsWindows": sshIsWindows})
+		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID, "sshUser": sshUser, "sshIP": sshIP, "sshPort": sshPort, "sshKey": sshKey, "sshKeyProtected": strconv.FormatBool(sshKeyProtected), "sshEntryRoot": sshEntryRoot, "sshIsWindows": sshIsWindows}, true)
 	} else {
 		// write config file
-		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID})
+		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID}, false)
 	}
 
 }
