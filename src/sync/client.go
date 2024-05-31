@@ -92,6 +92,7 @@ func getSSHClient(manualSync bool) (*ssh.Client, string) {
 }
 
 // GetSSHOutput runs a command over SSH and returns the output as a string
+// TODO run getSSHClient() in RunJob and pass to each function that needs it (to avoid multiple connections), move defer to RunJob
 func GetSSHOutput(cmd string, manualSync bool) string {
 	sshClient, _ := getSSHClient(manualSync)
 	defer sshClient.Close()
@@ -178,6 +179,15 @@ func getLocalData() map[string]int64 {
 	return entryModMap
 }
 
+// targetLocationFormatSFTP formats the target location to match the remote server's entry directory and path separator
+func targetLocationFormatSFTP(targetName, serverEntryRoot string, serverIsWindows bool) string {
+	if !serverIsWindows {
+		return serverEntryRoot + targetName
+	} else {
+		return serverEntryRoot + strings.ReplaceAll(targetName, "/", "\\")
+	}
+}
+
 // sftpSync takes two slices of entries (one for downloads and one for uploads) and syncs them between the client and server using SFTP
 func sftpSync(downloadList, uploadList []string, manualSync bool) {
 	// establish an SSH connection for transfers
@@ -199,9 +209,12 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 
 		fmt.Println("Downloading " + ansiDownload + entryName + backend.AnsiReset)
 
+		// store path to remote entry
+		remoteEntryFullPath := targetLocationFormatSFTP(entryName, "/home/"+sshUser+"/.local/share/libmutton", false) // TODO temporarily hard-coded to expect a default home folder location on a UNIX-like server
+
 		// save modification time of remote file
 		var fileInfo os.FileInfo
-		fileInfo, err = sftpClient.Stat("/home/" + sshUser + bareEntryRoot + entryName) // TODO does not work if server is hosted on Windows
+		fileInfo, err = sftpClient.Stat(remoteEntryFullPath)
 		if err != nil {
 			fmt.Println(backend.AnsiError+"Sync failed - Unable to get remote file info (modtime):", err.Error()+backend.AnsiReset)
 			os.Exit(1)
@@ -210,15 +223,18 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 
 		// open remote file
 		var remoteFile *sftp.File
-		remoteFile, err = sftpClient.Open("/home/" + sshUser + bareEntryRoot + entryName) // TODO does not work if server is hosted on Windows
+		remoteFile, err = sftpClient.Open(remoteEntryFullPath)
 		if err != nil {
 			fmt.Println(backend.AnsiError+"Sync failed - Unable to open remote file:", err.Error()+backend.AnsiReset)
 			os.Exit(1)
 		}
 
+		// store path to local entry
+		localEntryFullPath := backend.TargetLocationFormat(entryName)
+
 		// create local file
 		var localFile *os.File
-		localFile, err = os.Create(backend.EntryRoot + entryName)
+		localFile, err = os.Create(localEntryFullPath)
 		if err != nil {
 			fmt.Println(backend.AnsiError+"Sync failed - Unable to create local file:", err.Error()+backend.AnsiReset)
 			os.Exit(1)
@@ -236,7 +252,7 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 		localFile.Close()
 
 		// set the modification time of the local file to match the value saved from the remote file (from before the download)
-		err = os.Chtimes(backend.EntryRoot+entryName, time.Now(), modTime)
+		err = os.Chtimes(remoteEntryFullPath, time.Now(), modTime)
 	}
 
 	if filesTransfered {
@@ -250,9 +266,12 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 
 		fmt.Println("Uploading " + ansiUpload + entryName + backend.AnsiReset)
 
+		// store path to local entry
+		localEntryFullPath := backend.TargetLocationFormat(entryName)
+
 		// save modification time of local file
 		var fileInfo os.FileInfo
-		fileInfo, err = os.Stat(backend.EntryRoot + entryName)
+		fileInfo, err = os.Stat(localEntryFullPath)
 		if err != nil {
 			fmt.Println(backend.AnsiError+"Sync failed - Unable to get local file info (modtime):", err.Error()+backend.AnsiReset)
 			os.Exit(1)
@@ -261,15 +280,18 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 
 		// open local file
 		var localFile *os.File
-		localFile, err = os.Open(backend.EntryRoot + entryName)
+		localFile, err = os.Open(localEntryFullPath)
 		if err != nil {
 			fmt.Println(backend.AnsiError+"Sync failed - Unable to open local file:", err.Error()+backend.AnsiReset)
 			os.Exit(1)
 		}
 
+		// store path to remote entry
+		remoteEntryFullPath := targetLocationFormatSFTP(entryName, "/home/"+sshUser+"/.local/share/libmutton", false) // TODO temporarily hard-coded to expect a default home folder location on a UNIX-like server
+
 		// create remote file
 		var remoteFile *sftp.File
-		remoteFile, err = sftpClient.Create("/home/" + sshUser + bareEntryRoot + entryName) // TODO does not work if server is hosted on Windows
+		remoteFile, err = sftpClient.Create(remoteEntryFullPath)
 		if err != nil {
 			fmt.Println(backend.AnsiError+"Sync failed - Unable to create remote file:", err.Error()+backend.AnsiReset)
 			os.Exit(1)
@@ -287,7 +309,7 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 		remoteFile.Close()
 
 		// set the modification time of the remote file to match the value saved from the local file (from before the upload)
-		err = sftpClient.Chtimes("/home/"+sshUser+bareEntryRoot+entryName, time.Now(), modTime) // TODO does not work if server is hosted on Windows
+		err = sftpClient.Chtimes(remoteEntryFullPath, time.Now(), modTime)
 	}
 
 	if filesTransfered {
@@ -343,7 +365,7 @@ func ShearRemoteFromClient(targetLocationIncomplete string) {
 
 	// call the server to remotely shear the target and add it to the deletions list
 	// deviceID and targetLocationIncomplete are separated by \x1d, path separators are replaced with \x1e, and spaces are replaced with \x1f TODO is there a need to combine deviceID and targetLocationIncomplete into one argument?
-	GetSSHOutput("libmuttonserver shear "+deviceID+"\x1d"+strings.ReplaceAll(strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, "\x1e"), " ", "\x1f"), false)
+	GetSSHOutput("libmuttonserver shear "+deviceID+"\x1d"+strings.ReplaceAll(strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, "\x1e"), " ", "\x1f"), false) // TODO seems to already have Windows server support, perhaps copy this approach to AddFolderRemoteFromClient
 
 	os.Exit(0) // sync is not required after shearing since the target has already been removed from the local system
 }
@@ -354,7 +376,7 @@ func deletionSync(deletions []string) {
 	for _, deletion := range deletions {
 		filesDeleted = true // set a flag to indicate that files have been deleted (used to determine whether to print a gap between deletion and other messages)
 		fmt.Println(ansiDelete+deletion+backend.AnsiReset, "has been sheared, removing locally (if it exists)")
-		os.RemoveAll(backend.EntryRoot + deletion)
+		os.RemoveAll(backend.TargetLocationFormat(deletion))
 	}
 
 	if filesDeleted {
@@ -365,7 +387,7 @@ func deletionSync(deletions []string) {
 // AddFolderRemoteFromClient creates a new entry-containing directory on the local system and calls the server to create the folder remotely
 func AddFolderRemoteFromClient(targetLocationIncomplete string) {
 	AddFolderLocal(targetLocationIncomplete)                                                                    // add the folder on the local system
-	GetSSHOutput("libmuttonserver addfolder "+strings.ReplaceAll(targetLocationIncomplete, " ", "\x1f"), false) // call the server to create the folder remotely
+	GetSSHOutput("libmuttonserver addfolder "+strings.ReplaceAll(targetLocationIncomplete, " ", "\x1f"), false) // call the server to create the folder remotely TODO Windows server support
 
 	os.Exit(0)
 }
@@ -373,11 +395,14 @@ func AddFolderRemoteFromClient(targetLocationIncomplete string) {
 // folderSync creates folders on the client (from the given list of folder names)
 func folderSync(folders []string) {
 	for _, folder := range folders {
+		// store the full local path of the folder
+		folderFullPath := backend.TargetLocationFormat(folder)
+
 		// check if folder already exists
-		isFile, isAccessible := backend.TargetIsFile(backend.EntryRoot+folder, false, 1)
+		isFile, isAccessible := backend.TargetIsFile(folderFullPath, false, 1)
 
 		if !isFile && !isAccessible {
-			os.MkdirAll(backend.EntryRoot+folder, 0700)
+			os.MkdirAll(folderFullPath, 0700)
 		} else if isFile {
 			fmt.Println(backend.AnsiError + "Sync failed - Failed to create folder \"" + folder + "\" - a file with the same name already exists" + backend.AnsiReset)
 			os.Exit(1)

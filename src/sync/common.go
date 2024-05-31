@@ -10,7 +10,6 @@ import (
 )
 
 // WalkEntryDir walks the entry directory and returns lists of all files and directories found (two separate lists)
-// initCommand is used to specify to the end user how to generate the entry directory if it does not exists
 func WalkEntryDir() ([]string, []string) {
 	// define file/directory containing slices so that they may be accessed by the anonymous WalkDir function
 	var fileList []string
@@ -51,7 +50,7 @@ func getModTimes(entryList []string) []int64 {
 	// get a list of all entry modification times
 	var modList []int64
 	for _, file := range entryList {
-		modTime, _ := os.Stat(backend.EntryRoot + file)
+		modTime, _ := os.Stat(backend.TargetLocationFormat(file))
 		modList = append(modList, modTime.ModTime().Unix())
 	}
 
@@ -91,7 +90,7 @@ func ShearLocal(targetLocationIncomplete, clientDeviceID string) string {
 	}
 
 	// get the full targetLocation path and remove the target
-	targetLocationComplete := backend.TargetLocationFormat(targetLocationIncomplete[1:])
+	targetLocationComplete := backend.TargetLocationFormat(targetLocationIncomplete)
 	if !onServer { // error if target does not exist on client, needed because os.RemoveAll does not return an error if target does not exist
 		backend.TargetIsFile(targetLocationComplete, true, 0)
 	}
@@ -105,6 +104,7 @@ func ShearLocal(targetLocationIncomplete, clientDeviceID string) string {
 		return deviceIDList[0].Name()
 	}
 	return ""
+
 	// do not exit program, as this function is used as part of ShearRemoteFromClient
 }
 
@@ -112,7 +112,7 @@ func ShearLocal(targetLocationIncomplete, clientDeviceID string) string {
 // this function should only be used directly by the server binary
 func AddFolderLocal(targetLocationIncomplete string) {
 	// get the full targetLocation path and create the target
-	targetLocationComplete := backend.TargetLocationFormat(targetLocationIncomplete[1:])
+	targetLocationComplete := backend.TargetLocationFormat(targetLocationIncomplete)
 	err := os.Mkdir(targetLocationComplete, 0700)
 	if err != nil {
 		if os.IsExist(err) {

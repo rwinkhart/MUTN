@@ -16,7 +16,7 @@ func RenameCli(oldLocation string) {
 	backend.TargetIsFile(oldLocation, true, 0)
 
 	// prompt user for new location and rename
-	newLocation := backend.EntryRoot + backend.PathSeparator + input("New location:")
+	newLocation := backend.TargetLocationFormat(input("New location:"))
 	backend.Rename(oldLocation, newLocation)
 
 	// exit is done from backend.Rename

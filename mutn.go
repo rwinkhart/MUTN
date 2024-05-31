@@ -24,7 +24,7 @@ func main() {
 		if strings.HasPrefix(args[1], "/") {
 
 			// store location of target entry
-			targetLocation := backend.TargetLocationFormat(args[1][1:])
+			targetLocation := backend.TargetLocationFormat(args[1])
 
 			// entry reader shortcut (if no other arguments are supplied)
 			if argsCount == 2 {
