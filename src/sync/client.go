@@ -260,7 +260,7 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 		localFile.Close()
 
 		// set the modification time of the local file to match the value saved from the remote file (from before the download)
-		err = os.Chtimes(remoteEntryFullPath, time.Now(), modTime)
+		err = os.Chtimes(localEntryFullPath, time.Now(), modTime)
 	}
 
 	if filesTransfered {

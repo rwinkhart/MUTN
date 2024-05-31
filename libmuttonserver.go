@@ -35,7 +35,7 @@ func main() {
 		fmt.Print(backend.EntryRoot + "\x1d" + strconv.FormatBool(backend.IsWindows))
 	case "init":
 		// create the necessary directories for libmuttonserver to function
-		backend.DirInit()
+		backend.DirInit(false)
 		os.MkdirAll(backend.ConfigDir+backend.PathSeparator+"deletions", 0700)
 	case "version", "-v":
 		versionServer()

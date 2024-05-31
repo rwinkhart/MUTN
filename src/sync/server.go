@@ -23,7 +23,7 @@ func GetRemoteDataFromServer(clientDeviceID string) {
 
 	// entry list
 	for _, entry := range entryList {
-		printToStdout(entry)
+		fmt.Print("\x1f" + entry)
 	}
 
 	// modification time list
@@ -36,7 +36,7 @@ func GetRemoteDataFromServer(clientDeviceID string) {
 	// directory/folder list
 	fmt.Print("\x1d")
 	for _, dir := range dirList {
-		printToStdout(dir)
+		fmt.Print("\x1f" + dir)
 	}
 
 	// deletions list
@@ -45,7 +45,7 @@ func GetRemoteDataFromServer(clientDeviceID string) {
 		// print deletion if it is relevant to the current client device
 		affectedIDTargetLocationIncomplete := strings.Split(deletion.Name(), "\x1d")
 		if affectedIDTargetLocationIncomplete[0] == clientDeviceID {
-			fmt.Print("\x1f" + strings.ReplaceAll(affectedIDTargetLocationIncomplete[1], "\x1e", "/")) // do not use printToStdout as separators are filling in for \x1e
+			fmt.Print("\x1f" + strings.ReplaceAll(affectedIDTargetLocationIncomplete[1], "\x1e", "/"))
 
 			// assume successful client deletion and remove deletions file (if assumption is somehow false, worst case scenario is that the client will re-upload the deleted entry)
 			os.Remove(backend.ConfigDir + backend.PathSeparator + "deletions" + backend.PathSeparator + deletion.Name())

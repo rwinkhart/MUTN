@@ -40,7 +40,7 @@ func TempInitCli() {
 		sshKeyProtected := inputBinary("Is the identity file password-protected?")
 
 		// write config file
-		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID, "sshUser": sshUser, "sshIP": sshIP, "sshPort": sshPort, "sshKey": sshKey, "sshKeyProtected": strconv.FormatBool(sshKeyProtected)}, false)
+		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID, "sshUser": sshUser, "sshIP": sshIP, "sshPort": sshPort, "sshKey": sshKey, "sshKeyProtected": strconv.FormatBool(sshKeyProtected), "sshEntryRoot": "null", "sshIsWindows": "null"}, false)
 
 		// generate device ID
 		sshEntryRoot, sshIsWindows := sync.DeviceIDGen()
