@@ -43,7 +43,10 @@ func TempInitCli() {
 		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID, "sshUser": sshUser, "sshIP": sshIP, "sshPort": sshPort, "sshKey": sshKey, "sshKeyProtected": strconv.FormatBool(sshKeyProtected)})
 
 		// generate device ID
-		sync.DeviceIDGen()
+		sshEntryRoot, sshIsWindows := sync.DeviceIDGen()
+
+		// update config file with sshEntryRoot and sshIsWindows TODO append to existing config file
+		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID, "sshUser": sshUser, "sshIP": sshIP, "sshPort": sshPort, "sshKey": sshKey, "sshKeyProtected": strconv.FormatBool(sshKeyProtected), "sshEntryRoot": sshEntryRoot, "sshIsWindows": sshIsWindows})
 	} else {
 		// write config file
 		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID})

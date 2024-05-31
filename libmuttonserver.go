@@ -6,6 +6,7 @@ import (
 	"github.com/rwinkhart/MUTN/src/cli"
 	"github.com/rwinkhart/MUTN/src/sync"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -30,6 +31,8 @@ func main() {
 	case "register":
 		// register a new device ID
 		os.Create(backend.ConfigDir + backend.PathSeparator + "devices" + backend.PathSeparator + args[2])
+		// print EntryRoot and bool indicating OS type to stdout for client to store in config
+		fmt.Print(backend.EntryRoot + "\x1d" + strconv.FormatBool(backend.IsWindows))
 	case "init":
 		// create the necessary directories for libmuttonserver to function
 		backend.DirInit()
