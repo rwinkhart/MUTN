@@ -25,7 +25,7 @@ CGO_ENABLED=0 go build -ldflags="-s -w" ./libmuttonserver.go
 ```
 
 Additionally, some custom build tags can be used to create different binaries. The following tags are not used in official builds:
-- `wsl_clipboard`: Allows creating a Linux binary that can interact with the Windows clipboard (for WSL)
+- `wsl`: Allows creating a Linux binary that can interact with the Windows clipboard (for WSL)
 - `termux`: Allows creating a Linux binary that can interact with the Termux clipboard (for Android)
 
 # Roadmap

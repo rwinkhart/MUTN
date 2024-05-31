@@ -1,4 +1,4 @@
-//go:build !windows && !darwin && !termux && !wsl_clipboard
+//go:build !windows && !darwin && !termux && !wsl
 
 package backend
 
