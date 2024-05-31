@@ -21,11 +21,11 @@ func determineIndentation(skippedDirList []bool, dirList []string, currentDirInd
 	var lastPrefixIndex int // tracks the index (in both skippedDirList and dirList) of the last displayed parent directory
 	var trimmedDirectory = dirList[currentDirIndex]
 
-	// determine initial indentation multiplier based on PathSeparator occurrences
-	indent := strings.Count(trimmedDirectory, backend.PathSeparator) - 1 // subtract 1 to avoid indenting root-level directories
+	// determine initial indentation multiplier based on "/" occurrences
+	indent := strings.Count(trimmedDirectory, "/") - 1 // subtract 1 to avoid indenting root-level directories
 
 	for i, skipped := range skippedDirList[:currentDirIndex] { // checks each skipped directory to determine if it is a parent to the current directory
-		if strings.HasPrefix(trimmedDirectory, dirList[i]+backend.PathSeparator) { // if the current directory is the child of this iteration's directory...
+		if strings.HasPrefix(trimmedDirectory, dirList[i]+"/") { // if the current directory is the child of this iteration's directory...
 			if skipped { // ...and this iteration's directory was skipped...
 				subtractor++ // increment the subtractor to indicate that the visual indentation should be reduced
 			} else {
@@ -106,7 +106,7 @@ func EntryListGen() {
 
 		// check if next directory is within the current one
 		if dirListLength > i+1 {
-			if nextDir := dirList[i+1]; directory == nextDir[:strings.LastIndex(nextDir, backend.PathSeparator)] {
+			if nextDir := dirList[i+1]; directory == nextDir[:strings.LastIndex(nextDir, "/")] {
 				containsSubdirectory = true
 			} else {
 				containsSubdirectory = false
@@ -120,14 +120,14 @@ func EntryListGen() {
 		for _, file := range fileList {
 
 			// print the current file if it belongs in the current directory - otherwise, break the loop and move on to the next directory
-			if lastSlash := strings.LastIndex(file, backend.PathSeparator) + 1; file[:lastSlash-1] == directory {
+			if lastSlash := strings.LastIndex(file, "/") + 1; file[:lastSlash-1] == directory {
 
 				// print directory header if this is the first run of the loop
 				if !containsFiles {
 					containsFiles = true
 					skippedDirList[i] = false                                                  // the directory header is being printed, indicate that it is not being skipped
 					indent, vanityDirectory = determineIndentation(skippedDirList, dirList, i) // calculate the final indentation multiplier
-					printDirectoryHeader(vanityDirectory, indent)
+					fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+backend.AnsiReset+"\n", vanityDirectory)
 				}
 
 				charCounter, colorAlternator = printFileEntry(file, lastSlash, charCounter, indent, colorAlternator)
@@ -139,7 +139,7 @@ func EntryListGen() {
 				if dirListLength > 1 { // and directories besides the root-level exist... display directory header and empty directory warning
 					skippedDirList[i] = false                                                  // the directory header is being printed, indicate that it is not being skipped
 					indent, vanityDirectory = determineIndentation(skippedDirList, dirList, i) // calculate the final indentation multiplier
-					printDirectoryHeader(vanityDirectory, indent)
+					fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+backend.AnsiReset+"\n", vanityDirectory)
 					fmt.Print(strings.Repeat(" ", indent*2) + ansiEmptyDirectoryWarning + "-empty directory-" + backend.AnsiReset)
 				} else { // warn if the only thing that exists is the root-level directory
 					fmt.Print("\n\nNothing's here! For help creating your first entry, run \"mutn help\".")
