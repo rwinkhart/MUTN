@@ -10,12 +10,10 @@ import (
 )
 
 // TempInit ensures libmutton directories exist and writes the libmutton configuration file
-func TempInit(configFileMap map[string]string) {
+// TODO if run in append mode, extend old config file with new values, rather than creating from scratch
+func TempInit(configFileMap map[string]string, append bool) {
 	// create EntryRoot and ConfigDir
-	DirInit()
-
-	// remove existing config file
-	removeFile(ConfigPath)
+	DirInit(append)
 
 	if configFileMap["textEditor"] == "" {
 		configFileMap["textEditor"] = textEditorFallback()
@@ -68,7 +66,7 @@ func GpgKeyGen() string {
 }
 
 // DirInit creates the libmutton directories
-func DirInit() {
+func DirInit(preserveOldConfigDir bool) {
 	// create EntryRoot
 	err := os.MkdirAll(EntryRoot, 0700)
 	if err != nil {
@@ -76,14 +74,16 @@ func DirInit() {
 		os.Exit(1)
 	}
 
-	// remove existing config directory (if it exists)
-	_, isAccessible := TargetIsFile(ConfigDir, false, 1)
-	if isAccessible {
-		err = os.RemoveAll(ConfigDir)
-		if err != nil {
-			fmt.Println(AnsiError + "Failed to remove existing config directory: " + err.Error() + AnsiReset)
-			os.Exit(1)
+	// remove existing config directory (if it exists and not in append mode)
+	if !preserveOldConfigDir {
+		_, isAccessible := TargetIsFile(ConfigDir, false, 1)
+		if isAccessible {
+			err = os.RemoveAll(ConfigDir)
+			if err != nil {
+				fmt.Println(AnsiError + "Failed to remove existing config directory: " + err.Error() + AnsiReset)
+				os.Exit(1)
 
+			}
 		}
 	}
 

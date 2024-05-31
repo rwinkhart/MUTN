@@ -24,11 +24,13 @@ const (
 func getSSHClient(manualSync bool) (*ssh.Client, string, bool) {
 	// get SSH config info, exit if not configured (displaying an error if the sync job was called manually)
 	var sshUserConfig []string
+	var missingValueError string
 	if manualSync {
-		sshUserConfig = backend.ReadConfig([]string{"sshUser", "sshIP", "sshPort", "sshKey", "sshKeyProtected", "sshEntryRoot", "sshIsWindows"}, "SSH settings not configured - run \"mutn init\" to configure")
+		missingValueError = "SSH settings not configured - run \"mutn init\" to configure"
 	} else {
-		sshUserConfig = backend.ReadConfig([]string{"sshUser", "sshIP", "sshPort", "sshKey", "sshKeyProtected"}, "0")
+		missingValueError = "0"
 	}
+	sshUserConfig = backend.ReadConfig([]string{"sshUser", "sshIP", "sshPort", "sshKey", "sshKeyProtected", "sshEntryRoot", "sshIsWindows"}, missingValueError)
 
 	var user, ip, port, keyFile, keyFileProtected, entryRoot string
 	var isWindows bool
@@ -299,7 +301,7 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 		var remoteFile *sftp.File
 		remoteFile, err = sftpClient.Create(remoteEntryFullPath)
 		if err != nil {
-			fmt.Println(backend.AnsiError+"Sync failed - Unable to create remote file:", err.Error()+backend.AnsiReset)
+			fmt.Println(backend.AnsiError+"Sync failed - Unable to create remote file ("+remoteEntryFullPath+"):", err.Error()+backend.AnsiReset)
 			os.Exit(1)
 		}
 
