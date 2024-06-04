@@ -376,8 +376,7 @@ func ShearRemoteFromClient(targetLocationIncomplete string) {
 	deviceID := ShearLocal(targetLocationIncomplete, "") // remove the target from the local system and get the device ID of the client
 
 	// call the server to remotely shear the target and add it to the deletions list
-	// deviceID and targetLocationIncomplete are separated by \x1d, path separators are replaced with \x1e, and spaces are replaced with \x1f TODO is there a need to combine deviceID and targetLocationIncomplete into one argument?
-	GetSSHOutput("libmuttonserver shear "+deviceID+"\x1d"+strings.ReplaceAll(strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, "\x1e"), " ", "\x1f"), "", false)
+	GetSSHOutput("libmuttonserver shear", deviceID+"\n"+strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, "\x1d"), false)
 
 	os.Exit(0) // sync is not required after shearing since the target has already been removed from the local system
 }
