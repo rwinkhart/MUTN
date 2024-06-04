@@ -99,8 +99,8 @@ func getSSHClient(manualSync bool) (*ssh.Client, string, bool) {
 }
 
 // GetSSHOutput runs a command over SSH and returns the output as a string
-// TODO run getSSHClient() ONCE in RunJob and pass to each function that needs it (to avoid multiple connections), move defer to RunJob
-func GetSSHOutput(cmd string, manualSync bool) string {
+// TODO run getSSHClient() only ONCE (from RunJob) - this only saves re-creating the client, not re-establishing the connection, so it may not be worth it
+func GetSSHOutput(cmd, stdin string, manualSync bool) string {
 	sshClient, _, _ := getSSHClient(manualSync)
 	defer sshClient.Close()
 
@@ -111,8 +111,12 @@ func GetSSHOutput(cmd string, manualSync bool) string {
 		os.Exit(1)
 	}
 
+	// provide stdin data for session
+	sshSession.Stdin = strings.NewReader(stdin)
+
 	// run the provided command
-	output, err := sshSession.CombinedOutput(cmd)
+	var output []byte
+	output, err = sshSession.CombinedOutput(cmd)
 	if err != nil {
 		fmt.Println(backend.AnsiError+"Sync failed - Unable to run SSH command:", err.Error()+backend.AnsiReset)
 		os.Exit(1)
@@ -137,7 +141,7 @@ func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []str
 			os.Exit(0) // exit silently if the sync job was called automatically, as the user may just be in offline mode
 		}
 	}
-	output := GetSSHOutput("libmuttonserver fetch "+clientDeviceID[0].Name(), manualSync)
+	output := GetSSHOutput("libmuttonserver fetch "+clientDeviceID[0].Name(), "", manualSync)
 
 	// split output into slice based on occurrences of "\x1d"
 	outputSlice := strings.Split(output, "\x1d")
@@ -373,7 +377,7 @@ func ShearRemoteFromClient(targetLocationIncomplete string) {
 
 	// call the server to remotely shear the target and add it to the deletions list
 	// deviceID and targetLocationIncomplete are separated by \x1d, path separators are replaced with \x1e, and spaces are replaced with \x1f TODO is there a need to combine deviceID and targetLocationIncomplete into one argument?
-	GetSSHOutput("libmuttonserver shear "+deviceID+"\x1d"+strings.ReplaceAll(strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, "\x1e"), " ", "\x1f"), false) // TODO seems to already have Windows server support, perhaps copy this approach to AddFolderRemoteFromClient
+	GetSSHOutput("libmuttonserver shear "+deviceID+"\x1d"+strings.ReplaceAll(strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, "\x1e"), " ", "\x1f"), "", false) // TODO seems to already have Windows server support, perhaps copy this approach to AddFolderRemoteFromClient
 
 	os.Exit(0) // sync is not required after shearing since the target has already been removed from the local system
 }
@@ -394,8 +398,8 @@ func deletionSync(deletions []string) {
 
 // AddFolderRemoteFromClient creates a new entry-containing directory on the local system and calls the server to create the folder remotely
 func AddFolderRemoteFromClient(targetLocationIncomplete string) {
-	AddFolderLocal(targetLocationIncomplete)                                                                    // add the folder on the local system
-	GetSSHOutput("libmuttonserver addfolder "+strings.ReplaceAll(targetLocationIncomplete, " ", "\x1f"), false) // call the server to create the folder remotely TODO Windows server support
+	AddFolderLocal(targetLocationIncomplete)                                                                        // add the folder on the local system
+	GetSSHOutput("libmuttonserver addfolder "+strings.ReplaceAll(targetLocationIncomplete, " ", "\x1f"), "", false) // call the server to create the folder remotely TODO Windows server support
 
 	os.Exit(0)
 }

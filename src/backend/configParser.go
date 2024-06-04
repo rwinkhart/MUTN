@@ -13,7 +13,7 @@ import (
 func ReadConfig(readKeys []string, missingValueError string) []string {
 	cfg, err := ini.Load(ConfigPath)
 	if err != nil {
-		fmt.Println(AnsiError + "Failed to load libmutton.ini" + AnsiReset)
+		fmt.Println(AnsiError + "Failed to load libmutton.ini: " + err.Error() + AnsiReset)
 		os.Exit(1)
 	}
 

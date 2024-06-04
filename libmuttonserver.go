@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/rwinkhart/MUTN/src/backend"
 	"github.com/rwinkhart/MUTN/src/cli"
@@ -14,6 +15,19 @@ func main() {
 	args := os.Args
 	if len(args) < 2 {
 		helpServer()
+	}
+
+	// check if stdin was provided
+	stdinInfo, _ := os.Stdin.Stat()
+	stdinPresent := stdinInfo.Mode()&os.ModeNamedPipe != 0
+
+	var stdin []string
+	if stdinPresent {
+		// read stdin, appending each line to the stdin slice
+		scanner := bufio.NewScanner(os.Stdin)
+		for scanner.Scan() {
+			stdin = append(stdin, scanner.Text())
+		}
 	}
 
 	switch args[1] {
