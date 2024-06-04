@@ -41,15 +41,17 @@ func main() {
 	switch args[1] {
 	case "fetch":
 		// print all information needed for syncing to stdout for interpretation by the client
+		// stdin[0] is expected to be the device ID
 		sync.GetRemoteDataFromServer(stdin[0])
 	case "shear":
 		// shear an entry from the server and add it to the deletions directory
-		deviceIDTargetLocation := strings.Split(args[2], "\x1d")
-		targetLocationIncomplete := strings.ReplaceAll(strings.ReplaceAll(deviceIDTargetLocation[1], "\x1f", " "), "\x1e", backend.PathSeparator)
-		sync.ShearLocal(targetLocationIncomplete, deviceIDTargetLocation[0])
+		// stdin[0] is expected to be the device ID
+		// stdin[1] is expected to be the incomplete target location with "\x1d" representing path separators - always pass in UNIX format
+		sync.ShearLocal(strings.ReplaceAll(stdin[1], "\x1d", "/"), stdin[0])
 	case "addfolder":
-		// add a new folder to the server (using information from stdin)
-		sync.AddFolderLocal(strings.ReplaceAll(stdin[0], "\x1d", backend.PathSeparator))
+		// add a new folder to the server
+		// stdin[0] is expected to be the incomplete target location with "\x1d" representing path separators - always pass in UNIX format
+		sync.AddFolderLocal(strings.ReplaceAll(stdin[0], "\x1d", "/"))
 	case "register":
 		// register a new device ID
 		os.Create(backend.ConfigDir + backend.PathSeparator + "devices" + backend.PathSeparator + args[2])
