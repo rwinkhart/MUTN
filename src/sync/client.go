@@ -141,7 +141,7 @@ func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []str
 			os.Exit(0) // exit silently if the sync job was called automatically, as the user may just be in offline mode
 		}
 	}
-	output := GetSSHOutput("libmuttonserver fetch "+clientDeviceID[0].Name(), "", manualSync)
+	output := GetSSHOutput("libmuttonserver fetch", clientDeviceID[0].Name(), manualSync)
 
 	// split output into slice based on occurrences of "\x1d"
 	outputSlice := strings.Split(output, "\x1d")
