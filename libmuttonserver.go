@@ -28,6 +28,14 @@ func main() {
 		for scanner.Scan() {
 			stdin = append(stdin, scanner.Text())
 		}
+
+		// TODO debug, remove!!
+		// write stdin to file
+		//f, _ := os.Create(backend.ConfigDir + backend.PathSeparator + "stdindebug.txt")
+		//for _, line := range stdin {
+		//	f.WriteString(line + "\n")
+		//}
+		//f.Close()
 	}
 
 	switch args[1] {
@@ -40,8 +48,8 @@ func main() {
 		targetLocationIncomplete := strings.ReplaceAll(strings.ReplaceAll(deviceIDTargetLocation[1], "\x1f", " "), "\x1e", backend.PathSeparator)
 		sync.ShearLocal(targetLocationIncomplete, deviceIDTargetLocation[0])
 	case "addfolder":
-		// add a new folder to the server
-		sync.AddFolderLocal(strings.ReplaceAll(args[2], "\x1f", " "))
+		// add a new folder to the server (using information from stdin)
+		sync.AddFolderLocal(strings.ReplaceAll(stdin[0], "\x1d", backend.PathSeparator))
 	case "register":
 		// register a new device ID
 		os.Create(backend.ConfigDir + backend.PathSeparator + "devices" + backend.PathSeparator + args[2])
