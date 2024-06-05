@@ -52,13 +52,14 @@ func main() {
 	case "register":
 		// register a new device ID
 		// stdin[0] is expected to be the device ID
-		os.Create(backend.ConfigDir + backend.PathSeparator + "devices" + backend.PathSeparator + stdin[0])
+		_, _ = os.Create(backend.ConfigDir + backend.PathSeparator + "devices" + backend.PathSeparator + stdin[0]) // error ignored; failure unlikely to occur if init was successful; "register" is not a user-facing argument and thus the error would not be visible
 		// print EntryRoot and bool indicating OS type to stdout for client to store in config
 		fmt.Print(backend.EntryRoot + "\x1e" + strconv.FormatBool(backend.IsWindows))
 	case "init":
 		// create the necessary directories for libmuttonserver to function
 		backend.DirInit(false)
-		os.MkdirAll(backend.ConfigDir+backend.PathSeparator+"deletions", 0700)
+		_ = os.MkdirAll(backend.ConfigDir+backend.PathSeparator+"deletions", 0700) // error ignored; failure would have occurred by this point in backend.DirInit
+		fmt.Println("libmuttonserver directories initialized")
 	case "version", "-v":
 		versionServer()
 	default:

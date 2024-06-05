@@ -63,7 +63,6 @@ func DirInit(preserveOldConfigDir bool) {
 			if err != nil {
 				fmt.Println(AnsiError + "Failed to remove existing config directory: " + err.Error() + AnsiReset)
 				os.Exit(1)
-
 			}
 		}
 	}
