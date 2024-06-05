@@ -13,8 +13,8 @@ import (
 
 // Field separator key:
 // \x1d = path separator
-// \x1e = space separator
-// \x1f = misc. field separator
+// \x1e = space/list separator
+// \x1f = misc. field separator (if \x1e is already used)
 
 func main() {
 	args := os.Args
@@ -54,7 +54,7 @@ func main() {
 		// stdin[0] is expected to be the device ID
 		os.Create(backend.ConfigDir + backend.PathSeparator + "devices" + backend.PathSeparator + stdin[0])
 		// print EntryRoot and bool indicating OS type to stdout for client to store in config
-		fmt.Print(backend.EntryRoot + "\x1f" + strconv.FormatBool(backend.IsWindows))
+		fmt.Print(backend.EntryRoot + "\x1e" + strconv.FormatBool(backend.IsWindows))
 	case "init":
 		// create the necessary directories for libmuttonserver to function
 		backend.DirInit(false)
