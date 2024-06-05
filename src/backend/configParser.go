@@ -88,13 +88,13 @@ func WriteConfig(configFileMap map[string]string, append bool) {
 // libmutton.ini layout
 // [LIBMUTTON]
 // gpgID = <gpg key id>
-// textEditor = <editor command>
+// textEditor = <editor command> TODO move to MUTN section heading, as it only applies to the CLI implementation
 // sshUser = <remote user>
 // sshIP = <remote ip>
 // sshPort = <remote ssh port>
 // sshKey = <ssh private key identity file path>
 // sshKeyProtected = <true/false>
-// netPinEnabled = <true/false>
+// netPinEnabled = <true/false> TODO netPin functionality not yet implemented
 // sshEntryRoot = <remote entry root>
 // sshIsWindows = <true/false>
 

@@ -71,7 +71,11 @@ func GenUpdate(targetLocation string, hideSecrets bool) {
 // returns the edited note and a boolean indicating whether the note was edited
 func editNote(baseNote []string) ([]string, bool) {
 	tempFile := backend.CreateTempFile()
-	defer os.Remove(tempFile.Name())
+	defer func(name string) {
+		_ = os.Remove(name) // error ignored; if the file could be created, it can probably be removed
+	}(tempFile.Name())
+
+	// fetch the user's text editor
 	editor := backend.ParseConfig([]string{"textEditor"}, "")[0]
 
 	// write baseNote to tempFile (if it is not empty)
@@ -81,8 +85,8 @@ func editNote(baseNote []string) ([]string, bool) {
 		}
 	}
 
-	// close tempFile
-	tempFile.Close()
+	// close tempFile to allow it to be modified by the user's text editor
+	_ = tempFile.Close() // error ignored; if the file could be created, it can probably be closed
 
 	// edit the tempFile (note) with the user's text editor
 	cmd := exec.Command(editor, tempFile.Name())
@@ -97,7 +101,7 @@ func editNote(baseNote []string) ([]string, bool) {
 	// open the tempFile for reading
 	tempFile, err = os.Open(tempFile.Name())
 	if err != nil {
-		panic(backend.AnsiError + "Failed to write note with " + editor + backend.AnsiReset) // panic is used to ensure the tempFile is removed, as per the defer statement
+		panic(backend.AnsiError + "Failed to read note written with " + editor + backend.AnsiReset) // panic is used to ensure the tempFile is removed, as per the defer statement
 	}
 
 	// read the edited note from the tempFile
@@ -108,7 +112,7 @@ func editNote(baseNote []string) ([]string, bool) {
 	}
 
 	// close tempFile
-	tempFile.Close()
+	_ = tempFile.Close() // error ignored; if the file could be opened, it can probably be closed
 
 	// remove trailing empty strings from the edited note
 	note = backend.RemoveTrailingEmptyStrings(note)
