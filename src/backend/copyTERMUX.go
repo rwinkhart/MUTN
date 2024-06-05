@@ -38,12 +38,16 @@ func clipClear(oldContents string) {
 	time.Sleep(30 * time.Second)
 
 	cmd := exec.Command("termux-clipboard-get")
-	newContents, _ := cmd.Output()
+	newContents, err := cmd.Output()
+	if err != nil {
+		fmt.Println(AnsiError + "Failed to read clipboard contents: " + err.Error() + AnsiReset)
+		os.Exit(1)
+	}
 
 	if oldContents == strings.TrimRight(string(newContents), "\r\n") {
 		cmd = exec.Command("termux-clipboard-set")
 		writeToStdin(cmd, "")
-		err := cmd.Run()
+		err = cmd.Run()
 		if err != nil {
 			fmt.Println(AnsiError + "Failed to clear clipboard: " + err.Error() + AnsiReset)
 			os.Exit(1)
