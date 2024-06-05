@@ -72,7 +72,7 @@ func GenUpdate(targetLocation string, hideSecrets bool) {
 func editNote(baseNote []string) ([]string, bool) {
 	tempFile := backend.CreateTempFile()
 	defer os.Remove(tempFile.Name())
-	editor := backend.ReadConfig([]string{"textEditor"}, "")[0]
+	editor := backend.ParseConfig([]string{"textEditor"}, "")[0]
 
 	// write baseNote to tempFile (if it is not empty)
 	if len(baseNote) > 0 {
