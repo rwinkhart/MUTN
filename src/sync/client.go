@@ -30,7 +30,7 @@ func getSSHClient(manualSync bool) (*ssh.Client, string, bool) {
 	} else {
 		missingValueError = "0"
 	}
-	sshUserConfig = backend.ReadConfig([]string{"sshUser", "sshIP", "sshPort", "sshKey", "sshKeyProtected", "sshEntryRoot", "sshIsWindows"}, missingValueError)
+	sshUserConfig = backend.ParseConfig([]string{"sshUser", "sshIP", "sshPort", "sshKey", "sshKeyProtected", "sshEntryRoot", "sshIsWindows"}, missingValueError)
 
 	var user, ip, port, keyFile, keyFileProtected, entryRoot string
 	var isWindows bool
@@ -65,7 +65,7 @@ func getSSHClient(manualSync bool) (*ssh.Client, string, bool) {
 	if keyFileProtected != "true" {
 		parsedKey, err = ssh.ParsePrivateKey(key)
 	} else {
-		parsedKey, err = ssh.ParsePrivateKeyWithPassphrase(key, inputKeyFilePassphrase()) // TODO test passphrase-protected keys
+		parsedKey, err = ssh.ParsePrivateKeyWithPassphrase(key, inputKeyFilePassphrase())
 	}
 	if err != nil {
 		fmt.Println(backend.AnsiError+"Sync failed - Unable to parse private key:", keyFile+backend.AnsiReset)
@@ -99,7 +99,7 @@ func getSSHClient(manualSync bool) (*ssh.Client, string, bool) {
 }
 
 // GetSSHOutput runs a command over SSH and returns the output as a string
-// TODO run getSSHClient() only ONCE (from RunJob) - this only saves re-creating the client, not re-establishing the connection, so it may not be worth it
+// TODO run getSSHClient() only ONCE (from RunJob) - this saves re-creating the client AND prevents prompting for keyfile passphrase multiple times
 func GetSSHOutput(cmd, stdin string, manualSync bool) string {
 	sshClient, _, _ := getSSHClient(manualSync)
 	defer sshClient.Close()

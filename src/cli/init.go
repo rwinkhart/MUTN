@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-// TempInitCli initializes the MUTN environment based on user input
+// TempInitCli initializes the MUTN environment based on user input (will be replaced with a TUI menu)
 func TempInitCli() {
 	// gpgID
 	var gpgID string
@@ -39,17 +39,22 @@ func TempInitCli() {
 		sshKey := input("SSH private identity file path:") // TODO implement generator and selector
 		sshKeyProtected := inputBinary("Is the identity file password-protected?")
 
-		// write config file
-		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID, "sshUser": sshUser, "sshIP": sshIP, "sshPort": sshPort, "sshKey": sshKey, "sshKeyProtected": strconv.FormatBool(sshKeyProtected), "sshEntryRoot": "null", "sshIsWindows": "null"}, false)
+		// initialize libmutton directories
+		backend.DirInit(false)
 
-		// generate device ID
+		// write config file (temporarily assigns sshEntryRoot and sshIsWindows to null to pass initial device ID registration)
+		backend.WriteConfig(map[string]string{"textEditor": textEditor, "gpgID": gpgID, "sshUser": sshUser, "sshIP": sshIP, "sshPort": sshPort, "sshKey": sshKey, "sshKeyProtected": strconv.FormatBool(sshKeyProtected), "sshEntryRoot": "null", "sshIsWindows": "null"}, false)
+
+		// generate and register device ID
 		sshEntryRoot, sshIsWindows := sync.DeviceIDGen()
 
-		// update config file with sshEntryRoot and sshIsWindows TODO append to existing config file
-		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID, "sshUser": sshUser, "sshIP": sshIP, "sshPort": sshPort, "sshKey": sshKey, "sshKeyProtected": strconv.FormatBool(sshKeyProtected), "sshEntryRoot": sshEntryRoot, "sshIsWindows": sshIsWindows}, true)
+		// update config file with sshEntryRoot and sshIsWindows
+		backend.WriteConfig(map[string]string{"sshEntryRoot": sshEntryRoot, "sshIsWindows": sshIsWindows}, true)
 	} else {
-		// write config file
-		backend.TempInit(map[string]string{"textEditor": textEditor, "gpgID": gpgID}, false)
-	}
+		// initialize libmutton directories
+		backend.DirInit(false)
 
+		// write config file
+		backend.WriteConfig(map[string]string{"textEditor": textEditor, "gpgID": gpgID}, false)
+	}
 }

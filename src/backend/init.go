@@ -9,25 +9,6 @@ import (
 	"time"
 )
 
-// TempInit ensures libmutton directories exist and writes the libmutton configuration file
-// TODO if run in append mode, extend old config file with new values, rather than creating from scratch
-func TempInit(configFileMap map[string]string, append bool) {
-	// create EntryRoot and ConfigDir
-	DirInit(append)
-
-	if configFileMap["textEditor"] == "" {
-		configFileMap["textEditor"] = textEditorFallback()
-	}
-
-	// create and write config file
-	configFile, _ := os.OpenFile(ConfigPath, os.O_CREATE|os.O_WRONLY, 0600)
-	defer configFile.Close()
-	configFile.WriteString("[LIBMUTTON]\n")
-	for key, value := range configFileMap {
-		configFile.WriteString(key + " = " + value + "\n")
-	}
-}
-
 // GpgUIDListGen generates a list of all GPG key IDs on the system and returns them as a slice of strings
 func GpgUIDListGen() []string {
 	cmd := exec.Command("gpg", "-k", "--with-colons")
