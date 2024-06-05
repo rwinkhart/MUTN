@@ -91,13 +91,13 @@ func editNote(baseNote []string) ([]string, bool) {
 	cmd.Stderr = os.Stderr
 	err := cmd.Run()
 	if err != nil {
-		panic(backend.AnsiError + "Failed to write note with " + editor + backend.AnsiReset)
+		panic(backend.AnsiError + "Failed to write note with " + editor + backend.AnsiReset) // panic is used to ensure the tempFile is removed, as per the defer statement
 	}
 
 	// open the tempFile for reading
 	tempFile, err = os.Open(tempFile.Name())
 	if err != nil {
-		panic(backend.AnsiError + "Failed to write note with " + editor + backend.AnsiReset)
+		panic(backend.AnsiError + "Failed to write note with " + editor + backend.AnsiReset) // panic is used to ensure the tempFile is removed, as per the defer statement
 	}
 
 	// read the edited note from the tempFile

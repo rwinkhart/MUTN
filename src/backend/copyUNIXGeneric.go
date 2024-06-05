@@ -48,26 +48,30 @@ func copyField(executableName, copySubject string) {
 func clipClear(oldContents string) {
 	time.Sleep(30 * time.Second)
 
-	var envSet bool   // track whether environment variables are set
-	var platform bool // track clipboard platform, false for Wayland, true for X11
-	var cmd *exec.Cmd
-	// determine whether to use wl-copy (Wayland) or xclip (X11)
+	// determine clipboard tool to use (wl-clipboard VS xclip)
+	var envSet bool
+	var cmdClear, cmdPaste *exec.Cmd
 	if _, envSet = os.LookupEnv("WAYLAND_DISPLAY"); envSet {
-		cmd = exec.Command("wl-paste")
+		cmdClear = exec.Command("wl-copy", "-c")
+		cmdPaste = exec.Command("wl-paste")
 	} else if _, envSet = os.LookupEnv("DISPLAY"); envSet {
-		cmd = exec.Command("xclip", "-o", "-sel", "c")
-		platform = true
+		cmdClear = exec.Command("xclip", "-i", "/dev/null", "-sel", "c")
+		cmdPaste = exec.Command("xclip", "-o", "-sel", "c")
+	} else {
+		fmt.Println(AnsiError + "Clipboard platform could not be determined - neither $WAYLAND_DISPLAY nor $DISPLAY are set" + AnsiReset)
+		os.Exit(1)
 	}
-	newContents, _ := cmd.Output()
 
+	// read current clipboard contents
+	newContents, err := cmdPaste.Output()
+	if err != nil {
+		fmt.Println(AnsiError + "Failed to read clipboard contents: " + err.Error() + AnsiReset)
+		os.Exit(1)
+	}
+
+	// clear clipboard if contents have not been modified
 	if oldContents == strings.TrimRight(string(newContents), "\r\n") {
-		switch platform {
-		case false:
-			cmd = exec.Command("wl-copy", "-c")
-		case true:
-			cmd = exec.Command("xclip", "-i", "/dev/null", "-sel", "c")
-		}
-		err := cmd.Run()
+		err = cmdClear.Run()
 		if err != nil {
 			fmt.Println(AnsiError + "Failed to clear clipboard: " + err.Error() + AnsiReset)
 			os.Exit(1)
