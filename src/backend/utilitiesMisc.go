@@ -53,10 +53,17 @@ func WriteEntry(targetLocation string, entryData []string) {
 
 // writeToStdin writes a string to a command's stdin
 func writeToStdin(cmd *exec.Cmd, input string) {
-	stdin, _ := cmd.StdinPipe()
+	stdin, err := cmd.StdinPipe()
+	if err != nil {
+		fmt.Println(AnsiError + "Failed to access stdin for system command: " + err.Error() + AnsiReset)
+		os.Exit(1)
+	}
+
 	go func() {
-		defer stdin.Close()
-		io.WriteString(stdin, input)
+		defer func(stdin io.WriteCloser) {
+			_ = stdin.Close() // error ignored; if stdin could be accessed, it can probably be closed
+		}(stdin)
+		_, _ = io.WriteString(stdin, input)
 	}()
 }
 
@@ -68,18 +75,6 @@ func CreateTempFile() *os.File {
 		os.Exit(1)
 	}
 	return tempFile
-}
-
-// removeFile removes a file at targetLocation and does not error if the file does not exist
-func removeFile(targetLocation string) {
-	// remove existing config file
-	err := os.Remove(targetLocation)
-	if err != nil {
-		// ignore error if file does not exist
-		if !os.IsNotExist(err) {
-			fmt.Println(AnsiError + "Failed to remove \"" + targetLocation + "\":" + err.Error() + AnsiReset)
-		}
-	}
 }
 
 // RemoveTrailingEmptyStrings removes empty strings from the end of a slice
