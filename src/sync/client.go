@@ -143,8 +143,8 @@ func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []str
 	}
 	output := GetSSHOutput("libmuttonserver fetch", clientDeviceID[0].Name(), manualSync)
 
-	// split output into slice based on occurrences of "\x1d"
-	outputSlice := strings.Split(output, "\x1d")
+	// split output into slice based on occurrences of "\x1e"
+	outputSlice := strings.Split(output, "\x1e")
 
 	// re-form the lists
 	if len(outputSlice) != 4 { // ensure information from server is complete
