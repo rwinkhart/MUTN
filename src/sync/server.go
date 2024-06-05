@@ -48,7 +48,7 @@ func GetRemoteDataFromServer(clientDeviceID string) {
 			fmt.Print("\x1f" + strings.ReplaceAll(affectedIDTargetLocationIncomplete[1], "\x1d", "/"))
 
 			// assume successful client deletion and remove deletions file (if assumption is somehow false, worst case scenario is that the client will re-upload the deleted entry)
-			os.Remove(backend.ConfigDir + backend.PathSeparator + "deletions" + backend.PathSeparator + deletion.Name())
+			_ = os.Remove(backend.ConfigDir + backend.PathSeparator + "deletions" + backend.PathSeparator + deletion.Name()) // error ignored; function not run from a user-facing argument and thus the error would not be visible
 		}
 	}
 }
