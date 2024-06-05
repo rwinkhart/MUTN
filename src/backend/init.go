@@ -27,21 +27,27 @@ func GpgUIDListGen() []string {
 // GpgKeyGen generates a new GPG key and returns the key ID
 func GpgKeyGen() string {
 	gpgGenTempFile := CreateTempFile()
-	defer os.Remove(gpgGenTempFile.Name())
+	defer func(name string) {
+		_ = os.Remove(name) // error ignored; if the file could be created, it can probably be removed
+	}(gpgGenTempFile.Name())
 
 	// create and write gpg-gen file
 	unixTime := strconv.FormatInt(time.Now().Unix(), 10)
-	gpgGenTempFile.WriteString(strings.Join([]string{"Key-Type: eddsa", "Key-Curve: ed25519", "Key-Usage: sign", "Subkey-Type: ecdh", "Subkey-Curve: cv25519", "Subkey-Usage: encrypt", "Name-Real: libmutton-" + unixTime, "Name-Comment: gpg-libmutton", "Name-Email: github.com/rwinkhart/libmutton", "Expire-Date: 0"}, "\n"))
+	_, _ = gpgGenTempFile.WriteString(strings.Join([]string{"Key-Type: eddsa", "Key-Curve: ed25519", "Key-Usage: sign", "Subkey-Type: ecdh", "Subkey-Curve: cv25519", "Subkey-Usage: encrypt", "Name-Real: libmutton-" + unixTime, "Name-Comment: gpg-libmutton", "Name-Email: github.com/rwinkhart/libmutton", "Expire-Date: 0"}, "\n")) // error ignored; if the file could be created, it can probably be written to
 
 	// close gpg-gen file
-	gpgGenTempFile.Close()
+	_ = gpgGenTempFile.Close() // error ignored; if the file could be created, it can probably be closed
 
 	// generate GPG key based on gpg-gen file
 	cmd := exec.Command("gpg", "-q", "--batch", "--generate-key", gpgGenTempFile.Name())
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
-	cmd.Run()
+	err := cmd.Run()
+	if err != nil {
+		fmt.Println(AnsiError + "Failed to generate GPG key: " + err.Error() + AnsiReset)
+		os.Exit(1)
+	}
 
 	return "libmutton-" + unixTime + " (gpg-libmutton) <github.com/rwinkhart/libmutton>"
 }
