@@ -37,7 +37,7 @@ func Rename(oldLocation, newLocation string) {
 	}
 
 	// TODO implement synced renaming
-	os.Exit(0)
+	Exit(0)
 }
 
 // EnsureSliceLength ensures slice is long enough to contain the specified index

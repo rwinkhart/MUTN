@@ -40,7 +40,7 @@ func copyField(executableName, copySubject string) {
 			fmt.Println(AnsiError + "Failed to launch automated clipboard clearing process - does this libmutton implementation support the \"clipclear\" argument?" + AnsiReset)
 			os.Exit(1)
 		}
-		os.Exit(0) // only exit if clipboard clearing process is launched, otherwise assume continuous clipboard refresh
+		Exit(0) // only exit if clipboard clearing process is launched, otherwise assume continuous clipboard refresh
 	}
 }
 
@@ -77,5 +77,5 @@ func clipClear(oldContents string) {
 			os.Exit(1)
 		}
 	}
-	os.Exit(0)
+	os.Exit(0) // use os.Exit instead of backend.Exit, as this function runs out of a background subprocess that is invisible to the user (will never appear in GUI/TUI environment)
 }

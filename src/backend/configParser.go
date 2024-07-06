@@ -35,7 +35,7 @@ func ParseConfig(readKeys []string, missingValueError string) []string {
 			case "":
 				fmt.Println(AnsiError + "Failed to find value for key \"" + key + "\" in section \"[LIBMUTTON]\" in libmutton.ini" + AnsiReset)
 			case "0":
-				os.Exit(0)
+				Exit(0)
 			default:
 				fmt.Println(AnsiError + missingValueError + AnsiReset)
 			}

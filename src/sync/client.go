@@ -138,7 +138,7 @@ func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []str
 			fmt.Println(backend.AnsiError + "Sync failed - No device ID found; run \"" + os.Args[0] + " init\" to generate a device ID" + backend.AnsiReset)
 			os.Exit(1)
 		} else {
-			os.Exit(0) // exit silently if the sync job was called automatically, as the user may just be in offline mode
+			backend.Exit(0) // exit silently if the sync job was called automatically, as the user may just be in offline mode
 		}
 	}
 	output := GetSSHOutput("libmuttonserver fetch", clientDeviceID[0].Name(), manualSync)
@@ -378,7 +378,7 @@ func ShearRemoteFromClient(targetLocationIncomplete string) {
 	// call the server to remotely shear the target and add it to the deletions list
 	GetSSHOutput("libmuttonserver shear", deviceID+"\n"+strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, "\x1d"), false)
 
-	os.Exit(0) // sync is not required after shearing since the target has already been removed from the local system
+	backend.Exit(0) // sync is not required after shearing since the target has already been removed from the local system
 }
 
 // deletionSync removes entries from the client that have been deleted on the server (multi-client deletion)
@@ -400,7 +400,7 @@ func AddFolderRemoteFromClient(targetLocationIncomplete string) {
 	AddFolderLocal(targetLocationIncomplete)                                                                                      // add the folder on the local system
 	GetSSHOutput("libmuttonserver addfolder", strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, "\x1d"), false) // call the server to create the folder remotely
 
-	os.Exit(0)
+	backend.Exit(0)
 }
 
 // folderSync creates folders on the client (from the given list of folder names)
@@ -439,5 +439,5 @@ func RunJob(manualSync bool) {
 	syncLists(localEntryModMap, remoteEntryModMap, manualSync)
 
 	// exit program after successful sync
-	os.Exit(0)
+	backend.Exit(0)
 }
