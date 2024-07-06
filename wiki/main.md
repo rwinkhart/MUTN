@@ -9,7 +9,7 @@ Crossed out items have not yet been added to the wiki.
 
 [~~Windows Quirks~~](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/quirks.md)
 
-[~~Shell Completions Troubleshooting~~](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/completions.md)
+[Shell Completions Troubleshooting](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/completions.md)
 
 [~~Known Bugs~~](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/bugs.md)
 ### libmutton Information (will likely be moved to libmutton repository in the future)
