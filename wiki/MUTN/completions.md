@@ -1,3 +1,4 @@
+## Shell Completions Troubleshooting
 ### ZSH completions not working?
 Make sure your ~/.zshrc contains the following:
 ```shell
@@ -30,3 +31,4 @@ Currently, completions must be manually installed and sourced in your PowerShell
 Set-PSReadlineKeyHandler -Key Tab -Function Complete  # this line is optional; it makes tab completion function more similarly to Bash/ZSH
 . <drive letter>:\path\to\mutn.ps1
 ```
+...and then restart your shell.

@@ -1,3 +1,4 @@
+## Clipboard Troubleshooting + Clipboard Manager Rant
 ### Clipboard managers can break libmutton-based password managers
 ***
 The intended way for libmutton to interact with the system clipboard is for it to clear it 30 seconds after copying a field. **Unfortunately, this does not work by default on all systems due to the prevalence of clipboard managers.**

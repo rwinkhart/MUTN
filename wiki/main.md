@@ -7,7 +7,7 @@ Crossed out items have not yet been added to the wiki.
 
 [~~Usage~~](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/usage.md)
 
-[~~Windows Quirks~~](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/quirks.md)
+[Windows Quirks](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/quirks.md)
 
 [Shell Completions Troubleshooting](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/completions.md)
 
