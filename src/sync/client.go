@@ -26,7 +26,7 @@ func getSSHClient(manualSync bool) (*ssh.Client, string, bool) {
 	var sshUserConfig []string
 	var missingValueError string
 	if manualSync {
-		missingValueError = "SSH settings not configured - run \"mutn init\" to configure"
+		missingValueError = "SSH settings not configured - run \"" + os.Args[0] + " init\" to configure"
 	} else {
 		missingValueError = "0"
 	}
@@ -135,7 +135,7 @@ func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []str
 	clientDeviceID, _ := os.ReadDir(backend.ConfigDir + backend.PathSeparator + "devices")
 	if len(clientDeviceID) == 0 {
 		if manualSync {
-			fmt.Println(backend.AnsiError + "Sync failed - No device ID found; run \"mutn init\" to generate a device ID" + backend.AnsiReset)
+			fmt.Println(backend.AnsiError + "Sync failed - No device ID found; run \"" + os.Args[0] + " init\" to generate a device ID" + backend.AnsiReset)
 			os.Exit(1)
 		} else {
 			os.Exit(0) // exit silently if the sync job was called automatically, as the user may just be in offline mode
