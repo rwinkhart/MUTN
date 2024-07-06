@@ -174,7 +174,7 @@ func main() {
 				cli.HelpGen()
 			case "add":
 				cli.HelpAdd()
-			case "version", "-v":
+			case "version":
 				cli.Version()
 			default:
 				cli.HelpMain()

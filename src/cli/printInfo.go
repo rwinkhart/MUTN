@@ -21,8 +21,8 @@ This program comes with absolutely no warranty; type "mutn version" for details.
 ` + AnsiBold + "Usage:" + backend.AnsiReset + ` mutn [/<entry name> [argument] [option]] | [argument]
 
 ` + AnsiBold + "Arguments:" + backend.AnsiReset + `
- help|-h                 Bring up this menu
- version|-v              Display version and license information
+ help                    Bring up this menu
+ version                 Display version and license information
  init                    Set up MUTN (generates libmutton.ini)
  tweak                   Change configuration options
  copy                    Copy details of an entry to your clipboard
