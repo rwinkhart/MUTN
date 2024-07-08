@@ -13,7 +13,7 @@ Crossed out items have not yet been added to the wiki.
 
 [~~Known Bugs~~](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/bugs.md)
 ### libmutton Information (will likely be moved to libmutton repository in the future)
-[~~Planned Breaking Changes~~](https://github.com/rwinkhart/MUTN/blob/main/wiki/libmutton/breaking.md)
+[Planned Breaking Changes](https://github.com/rwinkhart/MUTN/blob/main/wiki/libmutton/breaking.md)
 
 [~~Migrating From Other Password Managers~~](https://github.com/rwinkhart/MUTN/blob/main/wiki/libmutton/migration.md)
 
