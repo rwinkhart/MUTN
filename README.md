@@ -1,11 +1,7 @@
 # MUTN Password Manager
 Pronounced as: "mutton", "muh·tn"
 
-MUTN is a simple, self-hosted, SSH-synchronized password manager based on libmutton.
-
-MUTN is an expanded re-implementation of [sshyp](https://github.com/rwinkhart/sshyp) written in Go.
-
-Though MUTN will feel very familiar to users of sshyp, it is intended to differ and breaks compatibility with its entry format.
+MUTN is a simple, self-hosted, SSH-synchronized password manager based on libmutton. It is the successor to [sshyp](https://github.com/rwinkhart/sshyp).
 
 > [!WARNING]
 >It is your responsibility to assess the security and stability of MUTN and to ensure it meets your needs before using it.
@@ -16,17 +12,7 @@ Though MUTN will feel very familiar to users of sshyp, it is intended to differ 
 MUTN aims to make it as simple as possible to manage passwords and notes via CLI across multiple devices in a secure, self-hosted fashion.
 
 # Building
-This repository is currently home to both the MUTN client and the general libmutton server software.
-
-Official binaries are stripped of debug info for size and built without CGO (except for distribution packages) for portability, as follows:
-```
-CGO_ENABLED=0 go build -ldflags="-s -w" ./mutn.go
-CGO_ENABLED=0 go build -ldflags="-s -w" ./libmuttonserver.go
-```
-
-Additionally, some custom build tags can be used to create different binaries. The following tags are not used in official builds:
-- `wsl`: Allows creating a Linux binary that can interact with the Windows clipboard (for WSL)
-- `termux`: Allows creating a Linux binary that can interact with the Termux clipboard (for Android)
+See the [building guide](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/build.md).
 
 # Roadmap
 #### Release v0.2.0 - Make repo public - No binaries

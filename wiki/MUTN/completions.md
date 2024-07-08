@@ -1,6 +1,6 @@
 ## Shell Completions Troubleshooting
 ### ZSH completions not working?
-Make sure your ~/.zshrc contains the following:
+Make sure your ~/.zshrc contains the following (if sourcing from default completions location, usually `/usr/share/zsh/functions/Completion/Unix/_mutn`):
 ```shell
 autoload -Uz compinit && compinit
 ```
@@ -9,7 +9,7 @@ autoload -Uz compinit && compinit
 ### Bash completions not working? 
 Install your distribution's 'bash-completion' package or source the completion script manually.
 
-For most environments, this would mean adding the following to your ~/.bashrc:
+For most environments, manual sourcing means adding the following to your ~/.bashrc:
 ```shell
 source /usr/share/bash-completion/completions/mutn
 ```
