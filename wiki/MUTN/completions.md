@@ -1,4 +1,5 @@
 ## Shell Completions Troubleshooting
+[Shell completions are provided for ZSH, Bash, and PowerShell 7+](https://github.com/rwinkhart/MUTN/tree/main/completions).
 ### ZSH completions not working?
 Make sure your ~/.zshrc contains the following (if sourcing from default completions location, usually `/usr/share/zsh/functions/Completion/Unix/_mutn`):
 ```shell
