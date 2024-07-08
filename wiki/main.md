@@ -3,7 +3,9 @@
 Crossed out items have not yet been added to the wiki.
 
 ### MUTN-specific Information
-[~~Installation~~](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/main.md)
+[Installation](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/install.md)
+
+[Building](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/build.md)
 
 [~~Usage~~](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/usage.md)
 
