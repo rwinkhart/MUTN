@@ -21,6 +21,6 @@ Crossed out items have not yet been added to the wiki.
 
 [Clipboard Troubleshooting](https://github.com/rwinkhart/MUTN/blob/main/wiki/libmutton/clipboard.md)
 
-[~~Developer Guide~~](https://github.com/rwinkhart/MUTN/blob/main/wiki/libmutton/developers.md)
+[Developer Guide](https://github.com/rwinkhart/MUTN/blob/main/wiki/libmutton/developers.md)
 
 [~~Known Bugs~~](https://github.com/rwinkhart/MUTN/blob/main/wiki/libmutton/bugs.md)
