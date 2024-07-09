@@ -34,8 +34,8 @@ func TempInitCli() {
 		// necessary SSH info
 		fmt.Println(AnsiBold + "\nNote:" + backend.AnsiReset + " Only key-based authentication is supported (keys may optionally be passphrase-protected).\nThe remote server must already be in your ~/.ssh/known_hosts file.")
 		sshUser := input("Remote SSH username:")
-		sshIP := input("Remote SSH IP address:")
 		sshPort := input("Remote SSH port:")
+		sshIP := input("Remote SSH IP/domain:")
 		sshKey := input("SSH private identity file path:") // TODO implement generator and selector
 		sshKeyProtected := inputBinary("Is the identity file password-protected?")
 
