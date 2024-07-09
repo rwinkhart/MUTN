@@ -25,7 +25,7 @@ func WalkEntryDir() ([]string, []string) {
 			// check for errors encountered while walking directory
 			if err != nil {
 				if os.IsNotExist(err) {
-					fmt.Println(backend.AnsiError+"The entry directory does not exist - run \""+vanityEXE, "init"+"\" to create it"+backend.AnsiReset)
+					fmt.Println(joinErrorWithEXE("The entry directory does not exist - run \"", " init"+"\" to create it"))
 				} else {
 					// otherwise, print the source of the error
 					fmt.Println(backend.AnsiError + "An unexpected error occurred while generating the entry list: " + err.Error() + backend.AnsiReset)
@@ -47,4 +47,9 @@ func WalkEntryDir() ([]string, []string) {
 		})
 
 	return fileList, dirList
+}
+
+// joinErrorWithEXE joins and returns the two strings it is provided (in error format) with the executable name inserted between them
+func joinErrorWithEXE(firstHalf, secondHalf string) string {
+	return backend.AnsiError + firstHalf + os.Args[0][strings.LastIndex(os.Args[0], "\\")+1:] + secondHalf + backend.AnsiReset
 }
