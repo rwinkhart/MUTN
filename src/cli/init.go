@@ -2,10 +2,11 @@ package cli
 
 import (
 	"fmt"
-	"github.com/rwinkhart/MUTN/src/backend"
-	"github.com/rwinkhart/MUTN/src/sync"
 	"os"
 	"strconv"
+
+	"github.com/rwinkhart/MUTN/src/backend"
+	"github.com/rwinkhart/MUTN/src/sync"
 )
 
 // TempInitCli initializes the MUTN environment based on user input (will be replaced with a TUI menu)
@@ -36,7 +37,7 @@ func TempInitCli() {
 		sshUser := input("Remote SSH username:")
 		sshPort := input("Remote SSH port:")
 		sshIP := input("Remote SSH IP/domain:")
-		sshKey := input("SSH private identity file path:") // TODO implement generator and selector
+		sshKey := expandPathWithHome(input("SSH private identity file path:")) // TODO implement generator and selector
 		sshKeyProtected := inputBinary("Is the identity file password-protected?")
 
 		// initialize libmutton directories

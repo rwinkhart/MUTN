@@ -3,10 +3,11 @@ package cli
 import (
 	"bufio"
 	"fmt"
-	"github.com/rwinkhart/MUTN/src/backend"
-	"golang.org/x/crypto/ssh/terminal"
 	"os"
 	"strings"
+
+	"github.com/rwinkhart/MUTN/src/backend"
+	"golang.org/x/crypto/ssh/terminal"
 )
 
 // input prompts the user for input and returns the input as a string
@@ -75,4 +76,9 @@ func writeEntryCLI(targetLocation string, unencryptedEntry []string, hideSecrets
 		fmt.Println(backend.AnsiError + "No data supplied for entry" + backend.AnsiReset)
 		os.Exit(1)
 	}
+}
+
+// expandPathWithHome, given a path (as a string) containing "~", returns the path with "~" expanded to the user's home directory
+func expandPathWithHome(path string) string {
+	return strings.Replace(path, "~", backend.Home, 1)
 }
