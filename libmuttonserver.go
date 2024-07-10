@@ -11,11 +11,6 @@ import (
 	"strings"
 )
 
-// Field separator key:
-// \x1d = path separator
-// \x1e = space/list separator
-// \x1f = misc. field separator (if \x1e is already used)
-
 func main() {
 	args := os.Args
 	if len(args) < 2 {
@@ -43,25 +38,25 @@ func main() {
 	case "rename":
 		// move an entry to a new location before using fallthrough to add its previous iteration to the deletions directory
 		// stdin[0] is evaluated after fallthrough
-		// stdin[1] is expected to be the OLD incomplete target location with "\x1d" representing path separators - always pass in UNIX format
-		// stdin[2] is expected to be the NEW incomplete target location with "\x1d" representing path separators - always pass in UNIX format
-		sync.RenameLocal(strings.ReplaceAll(stdin[1], "\x1d", "/"), strings.ReplaceAll(stdin[2], "\x1d", "/"))
+		// stdin[1] is expected to be the OLD incomplete target location with FSPath representing path separators - always pass in UNIX format
+		// stdin[2] is expected to be the NEW incomplete target location with FSPath representing path separators - always pass in UNIX format
+		sync.RenameLocal(strings.ReplaceAll(stdin[1], sync.FSPath, "/"), strings.ReplaceAll(stdin[2], sync.FSPath, "/"))
 		fallthrough // fallthrough to add the old entry to the deletions directory
 	case "shear":
 		// shear an entry from the server and add it to the deletions directory
 		// stdin[0] is expected to be the device ID
-		// stdin[1] is expected to be the incomplete target location with "\x1d" representing path separators - always pass in UNIX format
-		sync.ShearLocal(strings.ReplaceAll(stdin[1], "\x1d", "/"), stdin[0])
+		// stdin[1] is expected to be the incomplete target location with FSPath representing path separators - always pass in UNIX format
+		sync.ShearLocal(strings.ReplaceAll(stdin[1], sync.FSPath, "/"), stdin[0])
 	case "addfolder":
 		// add a new folder to the server
-		// stdin[0] is expected to be the incomplete target location with "\x1d" representing path separators - always pass in UNIX format
-		sync.AddFolderLocal(strings.ReplaceAll(stdin[0], "\x1d", "/"))
+		// stdin[0] is expected to be the incomplete target location with FSPath representing path separators - always pass in UNIX format
+		sync.AddFolderLocal(strings.ReplaceAll(stdin[0], sync.FSPath, "/"))
 	case "register":
 		// register a new device ID
 		// stdin[0] is expected to be the device ID
 		_, _ = os.Create(backend.ConfigDir + backend.PathSeparator + "devices" + backend.PathSeparator + stdin[0]) // error ignored; failure unlikely to occur if init was successful; "register" is not a user-facing argument and thus the error would not be visible
 		// print EntryRoot and bool indicating OS type to stdout for client to store in config
-		fmt.Print(backend.EntryRoot + "\x1e" + strconv.FormatBool(backend.IsWindows))
+		fmt.Print(backend.EntryRoot + sync.FSSpace + strconv.FormatBool(backend.IsWindows))
 	case "init":
 		// create the necessary directories for libmuttonserver to function
 		backend.DirInit(false)
