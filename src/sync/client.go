@@ -389,8 +389,11 @@ func deletionSync(deletions []string) {
 func ShearRemoteFromClient(targetLocationIncomplete string) {
 	deviceID := ShearLocal(targetLocationIncomplete, "") // remove the target from the local system and get the device ID of the client
 
-	// call the server to remotely shear the target and add it to the deletions list
-	GetSSHOutput("libmuttonserver shear", deviceID+"\n"+strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, "\x1d"), false)
+	if deviceID != "" { // ensure a device ID exists (online mode)
+		// call the server to remotely shear the target and add it to the deletions list
+		GetSSHOutput("libmuttonserver shear", deviceID+"\n"+
+			strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, "\x1d"), false)
+	}
 
 	backend.Exit(0) // sync is not required after shearing since the target has already been removed from the local system
 }
@@ -408,7 +411,7 @@ func RenameRemoteFromClient(oldLocationIncomplete, newLocationIncomplete string)
 				strings.ReplaceAll(oldLocationIncomplete, backend.PathSeparator, "\x1d")+"\n"+
 				strings.ReplaceAll(newLocationIncomplete, backend.PathSeparator, "\x1d"), false)
 	}
-	
+
 	backend.Exit(0)
 }
 
