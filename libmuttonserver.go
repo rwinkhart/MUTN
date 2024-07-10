@@ -67,7 +67,7 @@ func main() {
 		backend.DirInit(false)
 		_ = os.MkdirAll(backend.ConfigDir+backend.PathSeparator+"deletions", 0700) // error ignored; failure would have occurred by this point in backend.DirInit
 		fmt.Println("libmuttonserver directories initialized")
-	case "version", "-v":
+	case "version":
 		versionServer()
 	default:
 		helpServer()
@@ -82,8 +82,8 @@ This program comes with absolutely no warranty; type "libmuttonserver version" f
 ` + cli.AnsiBold + "Usage:" + backend.AnsiReset + ` libmuttonserver <argument>
 
 ` + cli.AnsiBold + "Arguments (user):" + backend.AnsiReset + `
- help|-h                 Bring up this menu
- version|-v              Display version and license information
+ help                    Bring up this menu
+ version                 Display version and license information
  init                    Create the necessary directories for libmuttonserver to function` + "\n\n")
 	os.Exit(0)
 }
