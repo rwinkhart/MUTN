@@ -30,42 +30,6 @@ func genDeviceIDList() *[]fs.DirEntry {
 	return &deviceIDList
 }
 
-// Rename renames oldLocation to newLocation
-// if running on the client, also calls the server to rename the entry and add the old entry name to the deletions list
-func Rename(oldLocationIncomplete, newLocationIncomplete string, onServer bool) {
-	// get full paths for both locations
-	oldLocation := backend.TargetLocationFormat(oldLocationIncomplete)
-	newLocation := backend.TargetLocationFormat(newLocationIncomplete)
-
-	// ensure oldLocation exists
-	backend.TargetIsFile(oldLocation, true, 0)
-
-	// ensure newLocation does not exist
-	_, isAccessible := backend.TargetIsFile(newLocation, false, 0)
-	if isAccessible {
-		fmt.Println(backend.AnsiError + "\"" + newLocation + "\" already exists" + backend.AnsiReset)
-		os.Exit(1)
-	}
-
-	// rename oldLocation to newLocation
-	err := os.Rename(oldLocation, newLocation)
-	if err != nil {
-		fmt.Println(backend.AnsiError + "Failed to rename - does the target containing directory exist?" + backend.AnsiReset)
-	}
-
-	// call server to complete rename
-	if !onServer {
-		deviceIDList := genDeviceIDList()
-		if len(*deviceIDList) > 0 { // ensure a device ID exists (online mode)
-			GetSSHOutput("libmuttonserver rename",
-				(*deviceIDList)[0].Name()+"\n"+
-					strings.ReplaceAll(oldLocationIncomplete, backend.PathSeparator, "\x1d")+"\n"+
-					strings.ReplaceAll(newLocationIncomplete, backend.PathSeparator, "\x1d"), false)
-		}
-		backend.Exit(0) // do not exit program on server, as fallthrough is used to add the old entry name to the deletions list
-	}
-}
-
 // ShearLocal removes the target file or directory from the local system
 // returns: deviceID (on client), for use in ShearRemoteFromClient
 // if the local system is a server, it will also add the target to the deletions list for all clients (except the requesting client)
@@ -110,6 +74,32 @@ func ShearLocal(targetLocationIncomplete, clientDeviceID string) string {
 	return ""
 
 	// do not exit program, as this function is used as part of ShearRemoteFromClient
+}
+
+// RenameLocal renames oldLocationIncomplete to newLocationIncomplete on the local system
+// this function should only be used directly by the server binary
+func RenameLocal(oldLocationIncomplete, newLocationIncomplete string) {
+	// get full paths for both locations
+	oldLocation := backend.TargetLocationFormat(oldLocationIncomplete)
+	newLocation := backend.TargetLocationFormat(newLocationIncomplete)
+
+	// ensure oldLocation exists
+	backend.TargetIsFile(oldLocation, true, 0)
+
+	// ensure newLocation does not exist
+	_, isAccessible := backend.TargetIsFile(newLocation, false, 0)
+	if isAccessible {
+		fmt.Println(backend.AnsiError + "\"" + newLocation + "\" already exists" + backend.AnsiReset)
+		os.Exit(1)
+	}
+
+	// rename oldLocation to newLocation
+	err := os.Rename(oldLocation, newLocation)
+	if err != nil {
+		fmt.Println(backend.AnsiError + "Failed to rename - does the target containing directory exist?" + backend.AnsiReset)
+	}
+
+	// do not exit program, as this function is used as part of RenameRemoteFromClient
 }
 
 // AddFolderLocal creates a new entry-containing directory on the local system
