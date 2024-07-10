@@ -40,6 +40,13 @@ func main() {
 		// print all information needed for syncing to stdout for interpretation by the client
 		// stdin[0] is expected to be the device ID
 		sync.GetRemoteDataFromServer(stdin[0])
+	case "rename":
+		// move an entry to a new location before using fallthrough to add its previous iteration to the deletions directory
+		// stdin[0] is evaluated after fallthrough
+		// stdin[1] is expected to be the OLD incomplete target location with "\x1d" representing path separators - always pass in UNIX format
+		// stdin[2] is expected to be the NEW incomplete target location with "\x1d" representing path separators - always pass in UNIX format
+		sync.Rename(strings.ReplaceAll(stdin[1], "\x1d", "/"), strings.ReplaceAll(stdin[2], "\x1d", "/"), true)
+		fallthrough // fallthrough to add the old entry to the deletions directory
 	case "shear":
 		// shear an entry from the server and add it to the deletions directory
 		// stdin[0] is expected to be the device ID
@@ -73,7 +80,7 @@ This software exists under the MIT license; you may redistribute it under certai
 This program comes with absolutely no warranty; type "libmuttonserver version" for details.
 
 ` + cli.AnsiBold + "Usage:" + backend.AnsiReset + ` libmuttonserver <argument>
-	
+
 ` + cli.AnsiBold + "Arguments (user):" + backend.AnsiReset + `
  help|-h                 Bring up this menu
  version|-v              Display version and license information
