@@ -97,7 +97,7 @@ func main() {
 					case "note", "-n":
 						field = 4
 					case "rename", "-r":
-						cli.RenameCli(targetLocation)
+						cli.RenameCli(args[1]) // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
 					default:
 						cli.HelpEdit()
 					}

@@ -4,22 +4,20 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/rwinkhart/MUTN/src/backend"
+	"github.com/rwinkhart/MUTN/src/sync"
 	"os"
 	"os/exec"
 	"reflect"
 	"strings"
 )
 
-// RenameCli renames an entry at oldLocation to a new location (user input)
-func RenameCli(oldLocation string) {
-	// ensure targetLocation exists
-	backend.TargetIsFile(oldLocation, true, 0)
-
+// RenameCli renames an entry at oldLocation to a new location (user input) on both the client and the server
+func RenameCli(oldLocationIncomplete string) {
 	// prompt user for new location and rename
-	newLocation := backend.TargetLocationFormat(input("New location:"))
-	backend.Rename(oldLocation, newLocation)
+	newLocationIncomplete := input("New location:")
+	sync.Rename(oldLocationIncomplete, newLocationIncomplete, false)
 
-	// exit is done from backend.Rename
+	// exit is done from sync.Rename
 }
 
 // EditEntryField edits a field of an entry at targetLocation (user input)
