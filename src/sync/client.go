@@ -143,18 +143,18 @@ func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []str
 	}
 	output := GetSSHOutput("libmuttonserver fetch", clientDeviceID[0].Name(), manualSync)
 
-	// split output into slice based on occurrences of "\x1e"
-	outputSlice := strings.Split(output, "\x1e")
+	// split output into slice based on occurrences of FSSpace
+	outputSlice := strings.Split(output, FSSpace)
 
 	// re-form the lists
 	if len(outputSlice) != 4 { // ensure information from server is complete
 		fmt.Println(backend.AnsiError + "Sync failed - Unable to fetch remote data; server returned an unexpected response" + backend.AnsiReset)
 		os.Exit(1)
 	}
-	entries := strings.Split(outputSlice[0], "\x1f")[1:]
-	modsStrings := strings.Split(outputSlice[1], "\x1f")[1:]
-	folders := strings.Split(outputSlice[2], "\x1f")[1:]
-	deletions := strings.Split(outputSlice[3], "\x1f")[1:]
+	entries := strings.Split(outputSlice[0], FSMisc)[1:]
+	modsStrings := strings.Split(outputSlice[1], FSMisc)[1:]
+	folders := strings.Split(outputSlice[2], FSMisc)[1:]
+	deletions := strings.Split(outputSlice[3], FSMisc)[1:]
 
 	// convert the mod times to int64
 	var mods []int64
@@ -200,7 +200,6 @@ func targetLocationFormatSFTP(targetName, serverEntryRoot string, serverIsWindow
 }
 
 // sftpSync takes two slices of entries (one for downloads and one for uploads) and syncs them between the client and server using SFTP
-// TODO test Windows server hosting support
 func sftpSync(downloadList, uploadList []string, manualSync bool) {
 	// establish an SSH connection for transfers
 	sshClient, sshEntryRoot, sshIsWindows := getSSHClient(manualSync)
@@ -215,9 +214,9 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 	defer sftpClient.Close()
 
 	// iterate over the download list
-	var filesTransfered bool
+	var filesTransferred bool
 	for _, entryName := range downloadList {
-		filesTransfered = true // set a flag to indicate that files have been downloaded (used to determine whether to print a gap between download and upload messages)
+		filesTransferred = true // set a flag to indicate that files have been downloaded (used to determine whether to print a gap between download and upload messages)
 
 		fmt.Println("Downloading " + ansiDownload + entryName + backend.AnsiReset)
 
@@ -228,7 +227,7 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 		var fileInfo os.FileInfo
 		fileInfo, err = sftpClient.Stat(remoteEntryFullPath)
 		if err != nil {
-			fmt.Println(backend.AnsiError+"Sync failed - Unable to get remote file info (modtime):", err.Error()+backend.AnsiReset)
+			fmt.Println(backend.AnsiError+"Sync failed - Unable to get remote file info (mod time):", err.Error()+backend.AnsiReset)
 			os.Exit(1)
 		}
 		modTime := fileInfo.ModTime()
@@ -267,14 +266,14 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 		err = os.Chtimes(localEntryFullPath, time.Now(), modTime)
 	}
 
-	if filesTransfered {
+	if filesTransferred {
 		fmt.Println() // add a gap between download and upload messages
 	}
 
 	// iterate over the upload list
-	filesTransfered = false
+	filesTransferred = false
 	for _, entryName := range uploadList {
-		filesTransfered = true // set a flag to indicate that files have been uploaded (used to determine whether to print a gap between upload and sync complete messages)
+		filesTransferred = true // set a flag to indicate that files have been uploaded (used to determine whether to print a gap between upload and sync complete messages)
 
 		fmt.Println("Uploading " + ansiUpload + entryName + backend.AnsiReset)
 
@@ -285,7 +284,7 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 		var fileInfo os.FileInfo
 		fileInfo, err = os.Stat(localEntryFullPath)
 		if err != nil {
-			fmt.Println(backend.AnsiError+"Sync failed - Unable to get local file info (modtime):", err.Error()+backend.AnsiReset)
+			fmt.Println(backend.AnsiError+"Sync failed - Unable to get local file info (mod time):", err.Error()+backend.AnsiReset)
 			os.Exit(1)
 		}
 		modTime := fileInfo.ModTime()
@@ -324,7 +323,7 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 		err = sftpClient.Chtimes(remoteEntryFullPath, time.Now(), modTime)
 	}
 
-	if filesTransfered {
+	if filesTransferred {
 		fmt.Println() // add a gap between upload and sync complete messages
 	}
 }
@@ -392,7 +391,7 @@ func ShearRemoteFromClient(targetLocationIncomplete string) {
 	if deviceID != "" { // ensure a device ID exists (online mode)
 		// call the server to remotely shear the target and add it to the deletions list
 		GetSSHOutput("libmuttonserver shear", deviceID+"\n"+
-			strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, "\x1d"), false)
+			strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, FSPath), false)
 	}
 
 	backend.Exit(0) // sync is not required after shearing since the target has already been removed from the local system
@@ -408,8 +407,8 @@ func RenameRemoteFromClient(oldLocationIncomplete, newLocationIncomplete string)
 		// call the server to move the target on the remote system and add the old target to the deletions list
 		GetSSHOutput("libmuttonserver rename",
 			(*deviceIDList)[0].Name()+"\n"+
-				strings.ReplaceAll(oldLocationIncomplete, backend.PathSeparator, "\x1d")+"\n"+
-				strings.ReplaceAll(newLocationIncomplete, backend.PathSeparator, "\x1d"), false)
+				strings.ReplaceAll(oldLocationIncomplete, backend.PathSeparator, FSPath)+"\n"+
+				strings.ReplaceAll(newLocationIncomplete, backend.PathSeparator, FSPath), false)
 	}
 
 	backend.Exit(0)
@@ -419,7 +418,7 @@ func RenameRemoteFromClient(oldLocationIncomplete, newLocationIncomplete string)
 // can safely be called in offline mode, as well, so this is the intended interface for adding folders (AddFolderLocal should only be used directly by the server binary)
 func AddFolderRemoteFromClient(targetLocationIncomplete string) {
 	AddFolderLocal(targetLocationIncomplete)                                                                                      // add the folder on the local system
-	GetSSHOutput("libmuttonserver addfolder", strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, "\x1d"), false) // call the server to create the folder remotely
+	GetSSHOutput("libmuttonserver addfolder", strings.ReplaceAll(targetLocationIncomplete, backend.PathSeparator, FSPath), false) // call the server to create the folder remotely
 
 	backend.Exit(0)
 }

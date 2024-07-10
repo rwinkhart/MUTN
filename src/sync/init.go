@@ -25,7 +25,7 @@ func DeviceIDGen() (string, string) {
 
 	// register device ID with server and fetch remote EntryRoot and OS type
 	//manualSync is true so the user is alerted if device ID registration fails
-	sshEntryRootSSHIsWindows := strings.Split(GetSSHOutput("libmuttonserver register", deviceID, true), "\x1e")
+	sshEntryRootSSHIsWindows := strings.Split(GetSSHOutput("libmuttonserver register", deviceID, true), FSSpace)
 
 	return sshEntryRootSSHIsWindows[0], sshEntryRootSSHIsWindows[1]
 }

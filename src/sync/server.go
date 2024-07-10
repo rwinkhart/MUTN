@@ -8,7 +8,7 @@ import (
 )
 
 // GetRemoteDataFromServer prints to stdout the remote entries, mod times, folders, and deletions
-// lists in output are separated by "\x1e"
+// lists in output are separated by FSSpace
 // output is meant to be captured over SSH for interpretation by the client
 func GetRemoteDataFromServer(clientDeviceID string) {
 	entryList, dirList := WalkEntryDir()
@@ -23,29 +23,29 @@ func GetRemoteDataFromServer(clientDeviceID string) {
 
 	// entry list
 	for _, entry := range entryList {
-		fmt.Print("\x1f" + entry)
+		fmt.Print(FSMisc + entry)
 	}
 
 	// modification time list
-	fmt.Print("\x1e")
+	fmt.Print(FSSpace)
 	for _, mod := range modList {
-		fmt.Print("\x1f")
+		fmt.Print(FSMisc)
 		fmt.Print(mod)
 	}
 
 	// directory/folder list
-	fmt.Print("\x1e")
+	fmt.Print(FSSpace)
 	for _, dir := range dirList {
-		fmt.Print("\x1f" + dir)
+		fmt.Print(FSMisc + dir)
 	}
 
 	// deletions list
-	fmt.Print("\x1e")
+	fmt.Print(FSSpace)
 	for _, deletion := range deletionsList {
 		// print deletion if it is relevant to the current client device
-		affectedIDTargetLocationIncomplete := strings.Split(deletion.Name(), "\x1e")
+		affectedIDTargetLocationIncomplete := strings.Split(deletion.Name(), FSSpace)
 		if affectedIDTargetLocationIncomplete[0] == clientDeviceID {
-			fmt.Print("\x1f" + strings.ReplaceAll(affectedIDTargetLocationIncomplete[1], "\x1d", "/"))
+			fmt.Print(FSMisc + strings.ReplaceAll(affectedIDTargetLocationIncomplete[1], FSPath, "/"))
 
 			// assume successful client deletion and remove deletions file (if assumption is somehow false, worst case scenario is that the client will re-upload the deleted entry)
 			_ = os.Remove(backend.ConfigDir + backend.PathSeparator + "deletions" + backend.PathSeparator + deletion.Name()) // error ignored; function not run from a user-facing argument and thus the error would not be visible

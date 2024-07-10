@@ -4,7 +4,7 @@ function cliMUTNEntryCompleter {
     $mutnPath = (Resolve-Path '~\AppData\Local\libmutton\entries').Path
     try {
         $trimmedPaths = If (Test-Path $mutnPath) {
-            (Get-ChildItem -Path $mutnPath -Recurse -File).FullName.Substring($mutnPath.Length) -replace '\\', '/' -replace ' ', [char]0x23bd
+            (Get-ChildItem -Path $mutnPath -Recurse -File).FullName.Substring($mutnPath.Length) -replace '\\', '/' -replace ' ', [char]0x259d
         }
     } catch {
         $trimmedPaths = $null # if any errors occur (especially, "You cannot call a method on a null-valued expression", set $trimmedPaths to $null
@@ -50,6 +50,6 @@ function mutn {
         [string]$option
       )
 
-    #Invoke-Expression -Command ('/usr/local/bin/mutn ' + ($entry -replace ' ', '` ' -replace [char]0x1a, '` '), $argument, $option).Trim() # UNIX testing
-    Invoke-Expression -Command ('mutn.exe ' + ($entry -replace ' ', '` ' -replace [char]0x23bd, '` '), $argument, $option).Trim()
+    #Invoke-Expression -Command ('/usr/local/bin/mutn ' + ($entry -replace ' ', '` ' -replace [char]0x259d, '` '), $argument, $option).Trim() # UNIX testing
+    Invoke-Expression -Command ('mutn.exe ' + ($entry -replace ' ', '` ' -replace [char]0x259d, '` '), $argument, $option).Trim()
 }

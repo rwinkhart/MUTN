@@ -47,7 +47,7 @@ func ShearLocal(targetLocationIncomplete, clientDeviceID string) string {
 	if onServer {
 		for _, device := range *deviceIDList {
 			if device.Name() != clientDeviceID {
-				_, err := os.Create(backend.ConfigDir + backend.PathSeparator + "deletions" + backend.PathSeparator + device.Name() + "\x1e" + strings.ReplaceAll(targetLocationIncomplete, "/", "\x1d"))
+				_, err := os.Create(backend.ConfigDir + backend.PathSeparator + "deletions" + backend.PathSeparator + device.Name() + FSSpace + strings.ReplaceAll(targetLocationIncomplete, "/", FSPath))
 				if err != nil {
 					// do not print error as there is currently no way of seeing server-side errors
 					// failure to add the target to the deletions list will exit the program and result in a client re-uploading the target (non-critical)
