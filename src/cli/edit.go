@@ -11,13 +11,13 @@ import (
 	"strings"
 )
 
-// RenameCli renames an entry at oldLocation to a new location (user input) on both the client and the server
+// RenameCli renames an entry at oldLocationIncomplete to a new location (user input) on both the client and the server
 func RenameCli(oldLocationIncomplete string) {
 	// prompt user for new location and rename
 	newLocationIncomplete := input("New location:")
-	sync.Rename(oldLocationIncomplete, newLocationIncomplete, false)
+	sync.RenameRemoteFromClient(oldLocationIncomplete, newLocationIncomplete)
 
-	// exit is done from sync.Rename
+	// exit is done from sync.RenameRemoteFromClient
 }
 
 // EditEntryField edits a field of an entry at targetLocation (user input)
