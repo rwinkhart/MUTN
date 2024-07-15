@@ -16,8 +16,8 @@ github.com/charmbracelet/glamour v0.7.0/go.mod h1:jUMh5MeihljJPQbJ/wf4ldw2+yBP59
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/dlclark/regexp2 v1.11.1 h1:CJs78ewKXO9PuNf6Xwlw6eibMadBkXTRpOeUdv+IcWM=
-github.com/dlclark/regexp2 v1.11.1/go.mod h1:DHkYz0B9wPfa6wondMfaivmHpzrQ3v9q8cnmRbL6yW8=
+github.com/dlclark/regexp2 v1.11.2 h1:/u628IuisSTwri5/UKloiIsH8+qF2Pu7xEQX+yIKg68=
+github.com/dlclark/regexp2 v1.11.2/go.mod h1:DHkYz0B9wPfa6wondMfaivmHpzrQ3v9q8cnmRbL6yW8=
 github.com/fortis/go-steam-totp v0.0.0-20171114202746-18e928674727 h1:1RkPJqfzrncAuh9xgoslr9OplZskm+VRA9lkucHPQZ4=
 github.com/fortis/go-steam-totp v0.0.0-20171114202746-18e928674727/go.mod h1:wRAWHbTlpt0C4kwnKoa42L2Phrv6uIq+c50P2uKpb7I=
 github.com/gorilla/css v1.0.1 h1:ntNaBIghp6JmvWnxbZKANoLyuXTPZ4cAMlo6RyhlbO8=
