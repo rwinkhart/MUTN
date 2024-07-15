@@ -7,8 +7,8 @@ autoload -Uz compinit && compinit
 ```
 ...and then restart your shell.
 ***
-### Bash completions not working? 
-Install your distribution's 'bash-completion' package or source the completion script manually.
+### Bash completions not working?
+Install your distribution's `bash-completion` package or source the completion script manually.
 
 For most environments, manual sourcing means adding the following to your ~/.bashrc:
 ```shell
