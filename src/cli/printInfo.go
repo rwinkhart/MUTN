@@ -24,27 +24,27 @@ This program comes with absolutely no warranty; type "mutn version" for details.
  help                    Bring up this menu
  version                 Display version and license information
  init                    Set up MUTN (generates libmutton.ini)
- tweak                   Change configuration options
+ tweak                   Change configuration options (NOT YET IMPLEMENTED)
  copy                    Copy details of an entry to your clipboard
  edit                    Edit an existing entry
  gen                     Generate a new password
- add                     Add an entry
+ add                     Add a new entry
  shear                   Delete an existing entry
  sync                    Manually sync the entry directory
 
 ` + AnsiBold + "Options:" + backend.AnsiReset + `
  copy:
-  password|-pw|<blank>   Copy the password of an entry to your clipboard
-  username|-u            Copy the username of an entry to your clipboard
-  totp|-t                Copy the TOTP code of an entry to your clipboard
-  url|-l                 Copy the URL of an entry to your clipboard
-  note|-n                Copy the note of an entry to your clipboard
+  password|-pw|<blank>   Copy the password in an entry to your clipboard
+  username|-u            Copy the username in an entry to your clipboard
+  totp|-t                Generate and copy the TOTP token for an entry to your clipboard
+  url|-l                 Copy the URL in an entry to your clipboard
+  note|-n                Copy the first note line in an entry to your clipboard
  edit:
-  password|-pw|<blank>   Change the password of an entry
-  username|-u            Change the username of an entry
-  totp|-t                Change the TOTP secret of an entry
-  url|-l                 Change the URL attached to an entry
-  note|-n                Change the note attached to an entry
+  password|-pw|<blank>   Change the password in an entry
+  username|-u            Change the username in an entry
+  totp|-t                Change the TOTP secret in an entry
+  url|-l                 Change the URL in an entry
+  note|-n                Change the note in an entry
   rename|-r              Rename or relocate an entry
  gen:
   update|-u              Generate a password for an existing entry
@@ -76,11 +76,11 @@ func HelpEdit() {
 
 ` + AnsiBold + "Options:" + backend.AnsiReset + `
  edit:
-  password|-pw|<blank>   Change the password of an entry
-  username|-u            Change the username of an entry
-  totp|-t                Change the TOTP secret of an entry
-  url|-l                 Change the URL attached to an entry
-  note|-n                Change the note attached to an entry
+  password|-pw|<blank>   Change the password in an entry
+  username|-u            Change the username in an entry
+  totp|-t                Change the TOTP secret in an entry
+  url|-l                 Change the URL in an entry
+  note|-n                Change the note in an entry
   rename|-r              Rename or relocate an entry` + "\n\n")
 	os.Exit(0)
 }
@@ -92,7 +92,7 @@ func HelpCopy() {
  copy:
   password|-pw|<blank>   Copy the password in an entry to your clipboard
   username|-u            Copy the username in an entry to your clipboard
-  totp|-t                Copy the TOTP code of an entry to your clipboard
+  totp|-t                Generate and copy the TOTP token for an entry to your clipboard
   url|-l                 Copy the URL in an entry to your clipboard
   note|-n                Copy the first note line in an entry to your clipboard` + "\n\n")
 	os.Exit(0)
