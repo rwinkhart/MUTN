@@ -2,13 +2,12 @@ package cli
 
 import (
 	"fmt"
-	"github.com/rwinkhart/MUTN/src/sync"
 	"os"
 	"strings"
 
-	"github.com/rwinkhart/MUTN/src/backend"
-
 	"github.com/charmbracelet/glamour"
+	"github.com/rwinkhart/MUTN/src/backend"
+	"github.com/rwinkhart/MUTN/src/sync"
 )
 
 const ansiShownPassword = "\033[38;5;10m"
@@ -17,8 +16,8 @@ const ansiShownPassword = "\033[38;5;10m"
 func EntryReader(decryptedEntry []string, hideSecrets, syncEnabled bool) {
 	fmt.Println()
 
-	for i := range decryptedEntry {
-		switch i {
+	for field := range decryptedEntry {
+		switch field {
 		case 0:
 			// if the first field (password) is not empty, print it
 			if decryptedEntry[0] != "" {
@@ -53,7 +52,7 @@ func EntryReader(decryptedEntry []string, hideSecrets, syncEnabled bool) {
 
 			// combine remaining fields into a single string (for markdown rendering)
 			var markdownNotes []string
-			for field := 4; field < len(decryptedEntry); field++ {
+			for ; field < len(decryptedEntry); field++ {
 				markdownNotes = append(markdownNotes, decryptedEntry[field])
 			}
 			r, _ := glamour.NewTermRenderer(glamour.WithStylesFromJSONBytes(glamourStyle()), glamour.WithPreservedNewLines(), glamour.WithWordWrap(width))
