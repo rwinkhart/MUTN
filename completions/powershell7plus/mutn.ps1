@@ -1,10 +1,18 @@
+if (!$IsWindows) {
+    # since the executable has the same name as the completion function (on non-Windows platforms), its path must be stored before the function is registered
+    $MUTNExecutablePath = (Get-Command mutn).Path
+}
+
 function cliMUTNEntryCompleter {
     param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
-    #$mutnPath = (Resolve-Path '~/.local/share/libmutton').Path # UNIX testing
-    $mutnPath = (Resolve-Path '~\AppData\Local\libmutton\entries').Path
+    if ($IsWindows) {
+        $entryRoot = (Resolve-Path '~\AppData\Local\libmutton\entries').Path
+    } else {
+        $entryRoot = (Resolve-Path '~/.local/share/libmutton').Path
+    }
     try {
-        $trimmedPaths = If (Test-Path $mutnPath) {
-            (Get-ChildItem -Path $mutnPath -Recurse -File).FullName.Substring($mutnPath.Length) -replace '\\', '/' -replace ' ', [char]0x259d
+        $trimmedPaths = If (Test-Path $entryRoot) {
+            (Get-ChildItem -Path $entryRoot -Recurse -File).FullName.Substring($entryRoot.Length) -replace '\\', '/' -replace ' ', [char]0x259d
         }
     } catch {
         $trimmedPaths = $null # if any errors occur (especially, "You cannot call a method on a null-valued expression", set $trimmedPaths to $null
@@ -50,6 +58,9 @@ function mutn {
         [string]$option
       )
 
-    #Invoke-Expression -Command ('/usr/local/bin/mutn ' + ($entry -replace ' ', '` ' -replace [char]0x259d, '` '), $argument, $option).Trim() # UNIX testing
-    Invoke-Expression -Command ('mutn.exe ' + ($entry -replace ' ', '` ' -replace [char]0x259d, '` '), $argument, $option).Trim()
+    if ($IsWindows) {
+        Invoke-Expression -Command ('mutn.exe ' + ($entry -replace ' ', '` ' -replace [char]0x259d, '` '), $argument, $option).Trim()
+    } else {
+        Invoke-Expression -Command ($MUTNExecutablePath + ' ' + ($entry -replace ' ', '` ' -replace [char]0x259d, '` '), $argument, $option).Trim()
+    }
 }
