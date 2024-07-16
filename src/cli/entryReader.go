@@ -5,7 +5,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/charmbracelet/glamour"
 	"github.com/rwinkhart/MUTN/src/backend"
 	"github.com/rwinkhart/MUTN/src/sync"
 )
@@ -50,18 +49,17 @@ func EntryReader(decryptedEntry []string, hideSecrets, syncEnabled bool) {
 			// print the notes header
 			fmt.Println(ansiDirectoryHeader + "Notes:" + backend.AnsiReset)
 
-			// combine remaining fields into a single string (for markdown rendering)
-			var markdownNotes []string
+			// combine remaining fields into a single string (to support Markdown rendering)
+			var notesSlice []string
 			for ; field < len(decryptedEntry); field++ {
-				markdownNotes = append(markdownNotes, decryptedEntry[field])
+				notesSlice = append(notesSlice, decryptedEntry[field])
 			}
-			r, _ := glamour.NewTermRenderer(glamour.WithStylesFromJSONBytes(glamourStyle()), glamour.WithPreservedNewLines(), glamour.WithWordWrap(width))
-			markdownNotesString, _ := r.Render(strings.Join(markdownNotes, "\n"))
+			joinedString := strings.Join(notesSlice, "\n")
 
-			// print markdown-rendered notes
-			fmt.Print(markdownNotesString)
+			// print notes to stdout
+			renderNote(&joinedString)
 
-			// break after all lines have been printed
+			// break after notes have been printed
 			break
 		}
 	}
