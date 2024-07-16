@@ -1,16 +1,16 @@
 # mutn(1) completion
 
 _path_gen() {
-    local mutnPath="$HOME/.local/share/libmutton"
+    local entryRoot="$HOME/.local/share/libmutton"
     local globStatus=$(shopt -p globstar)
     [ -z "${globStatus##*u*}" ] && shopt -s globstar  # if recursive globbing is disabled, enable it
-    local fullPaths=("$mutnPath"/**/*)
+    local fullPaths=("$entryRoot"/**/*)
     $globStatus  # set recursive globbing to user default
     for scanPath in "${fullPaths[@]}"; do
       # exclude directories
-      [ -f "$scanPath" ] && trimmedPaths+=("${scanPath#$mutnPath}")
+      [ -f "$scanPath" ] && libmuttonTrimmedPaths+=("${scanPath#$entryRoot}")
     done
-    if [ "${trimmedPaths[0]}" == '' ]; then trimmedPaths[0]=help; fi
+    if [ "${libmuttonTrimmedPaths[0]}" == '' ]; then libmuttonTrimmedPaths[0]=help; fi
 } &&
 
 _mutnCompletions() {
@@ -19,7 +19,7 @@ _mutnCompletions() {
 
   case $prev in
     mutn )
-      while read -r; do ITEM=${REPLY// /\\ }; COMPREPLY+=( "$ITEM" ); done < <( compgen -W "$(printf "'%s' " "${trimmedPaths[@]}")" -- "$cur" )
+      while read -r; do ITEM=${REPLY// /\\ }; COMPREPLY+=( "$ITEM" ); done < <( compgen -W "$(printf "'%s' " "${libmuttonTrimmedPaths[@]}")" -- "$cur" )
       ;;
     /* )
       while read -r; do COMPREPLY+=( "$REPLY" ); done < <( compgen -W "copy edit gen add shear" -- "$cur" )
