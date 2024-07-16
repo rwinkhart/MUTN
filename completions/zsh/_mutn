@@ -1,17 +1,17 @@
 #compdef mutn
 
-mutnPath="$HOME/.local/share/libmutton"
-fullPaths=("$mutnPath"/**/*)
-trimmedPaths=()
-for scanPath in "${fullPaths[@]}"; do
+libmuttonEntryRoot="$HOME/.local/share/libmutton"
+libmuttonFullPaths=("$libmuttonEntryRoot"/**/*)
+libmuttonTrimmedPaths=()
+for scanPath in "${libmuttonFullPaths[@]}"; do
   # exclude directories
-  [ -f "$scanPath" ] && trimmedPaths+=("${scanPath#$mutnPath}")
+  [ -f "$scanPath" ] && libmuttonTrimmedPaths+=("${scanPath#$libmuttonEntryRoot}")
 done
-[[ -z $trimmedPaths ]] && trimmedPaths=(help)
+[[ -z $libmuttonTrimmedPaths ]] && libmuttonTrimmedPaths=(help)
 
 case ${words[-2]} in
   mutn )
-    compadd $trimmedPaths
+    compadd $libmuttonTrimmedPaths
     ;;
   /* )
     compadd {copy,edit,gen,add,shear}
