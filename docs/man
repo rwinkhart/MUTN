@@ -1,4 +1,4 @@
-.TH MUTN 1 "15 July 2024" "v0.2.A" "MUTN man page"
+.TH MUTN 1 "16 July 2024" "v0.2.A" "MUTN man page"
 
 .SH NAME
 \fBmutn\fR - Simple, self-hosted, SSH-synchronized password management based on libmutton. It is the successor to sshyp.
@@ -7,7 +7,7 @@
 Usage: mutn [/<entry name> [argument] [option]] | [argument]
 
 .SH DESCRIPTION
-mutn is a lightweight password, TOTP, and note management program for the CLI. MUTN is self-hosted with a client-server model and expects that you have access to a personal server with a properly configured SSH server (ideally accepting remote connections).
+mutn is a lightweight password, TOTP, and note management program for the CLI. MUTN is self-hosted with a client-server model and expects that you have access to a personal server with a properly configured SSH server.
 
 .SH EXAMPLES
 Setting up MUTN for the first time:
@@ -91,6 +91,8 @@ add:
 
 .SH SETUP
 libmutton operates on a client-server model, and thus sync support requires you to have access to your own server (whether it be a physical home server or a cloud rental) with remote access via SSH.
+
+For security reasons, libmutton deliberately does not support password-based SSH authentication; you must use key-based authentication to connect to your server (password-protected keys are also supported). You are responsible for setting up SSH connectivity on your own.
 
 The libmutton server software is shipped as its own dedicated binary and must be installed and configured on the server.
 
