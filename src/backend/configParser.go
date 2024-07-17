@@ -66,11 +66,6 @@ func WriteConfig(configFileMap map[string]string, append bool) {
 
 		// create LIBMUTTON section
 		libmuttonSection, _ = cfg.NewSection("LIBMUTTON")
-
-		// set default textEditor value
-		if configFileMap["textEditor"] == "" {
-			configFileMap["textEditor"] = textEditorFallback()
-		}
 	}
 
 	// write provided configFileMap key-value pairs to the LIBMUTTON section
