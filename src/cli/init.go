@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"cmp"
 	"fmt"
 	"os"
 	"strconv"
@@ -27,10 +28,7 @@ func TempInitCli() {
 	}
 
 	// textEditor
-	textEditor := input("Text editor (leave blank for $EDITOR, falls back to \"" + fallbackEditor + "\"):")
-	if textEditor == "" {
-		textEditor = textEditorFallback()
-	}
+	textEditor := cmp.Or(input("Text editor (leave blank for $EDITOR, falls back to \""+fallbackEditor+"\"):"), os.Getenv("EDITOR"), fallbackEditor)
 
 	// SSH info
 	configSSH := inputBinary("Configure SSH settings (for synchronization)?")
