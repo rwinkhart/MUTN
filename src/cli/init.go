@@ -27,7 +27,10 @@ func TempInitCli() {
 	}
 
 	// textEditor
-	textEditor := input("Text editor (leave blank for $EDITOR, falls back to \"" + backend.FallbackEditor + "\"):")
+	textEditor := input("Text editor (leave blank for $EDITOR, falls back to \"" + fallbackEditor + "\"):")
+	if textEditor == "" {
+		textEditor = textEditorFallback()
+	}
 
 	// SSH info
 	configSSH := inputBinary("Configure SSH settings (for synchronization)?")
