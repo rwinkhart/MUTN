@@ -9,8 +9,6 @@ Crossed out items have not yet been added to the wiki.
 
 [~~Usage~~](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/usage.md)
 
-[Windows Quirks](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/quirks.md)
-
 [Shell Completions Troubleshooting](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/completions.md)
 
 [Known Bugs](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/bugs.md)
@@ -23,4 +21,4 @@ Crossed out items have not yet been added to the wiki.
 
 [Developer Guide](https://github.com/rwinkhart/MUTN/blob/main/wiki/libmutton/developers.md)
 
-[~~Known Bugs~~](https://github.com/rwinkhart/MUTN/blob/main/wiki/libmutton/bugs.md)
+[Known Bugs](https://github.com/rwinkhart/MUTN/blob/main/wiki/libmutton/bugs.md)
