@@ -3,12 +3,13 @@ package cli
 import (
 	"bufio"
 	"fmt"
-	"github.com/rwinkhart/MUTN/src/backend"
-	"github.com/rwinkhart/MUTN/src/sync"
 	"os"
 	"os/exec"
 	"reflect"
 	"strings"
+
+	"github.com/rwinkhart/MUTN/src/backend"
+	"github.com/rwinkhart/MUTN/src/sync"
 )
 
 // RenameCli renames an entry at oldLocationIncomplete to a new location (user input) on both the client and the server
@@ -74,7 +75,7 @@ func editNote(baseNote []string) ([]string, bool) {
 	}(tempFile.Name())
 
 	// fetch the user's text editor
-	editor := backend.ParseConfig([]string{"textEditor"}, "")[0]
+	editor := backend.ParseConfig([][2]string{{"LIBMUTTON", "textEditor"}}, "")[0]
 
 	// write baseNote to tempFile (if it is not empty)
 	if len(baseNote) > 0 {

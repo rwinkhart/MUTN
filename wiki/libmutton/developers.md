@@ -5,6 +5,8 @@ libmutton was designed to be usable as a library for building other compatible p
 
 All functionality in the `backend` and `sync` packages are designed to be used in other implementations.
 
+If any functionality in these two packages proves to be difficult to implement in a third-party client, please open an issue so that it can be addressed.
+
 ## Build Tags
 Custom build tags can (and sometimes must) be used to achieve desired results.
 

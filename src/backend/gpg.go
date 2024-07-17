@@ -23,7 +23,7 @@ func DecryptGPG(targetLocation string) []string {
 
 // EncryptGPG encrypts a slice of strings using GPG and returns the encrypted data as a byte slice
 func EncryptGPG(input []string) []byte {
-	cmd := exec.Command("gpg", "-q", "-r", ParseConfig([]string{"gpgID"}, "")[0], "-e")
+	cmd := exec.Command("gpg", "-q", "-r", ParseConfig([][2]string{{"LIBMUTTON", "gpgID"}}, "")[0], "-e")
 	writeToStdin(cmd, strings.Join(input, "\n"))
 	encryptedBytes, err := cmd.Output()
 	if err != nil {

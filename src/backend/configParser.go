@@ -2,8 +2,9 @@ package backend
 
 import (
 	"fmt"
-	"gopkg.in/ini.v1"
 	"os"
+
+	"gopkg.in/ini.v1"
 )
 
 // loadConfig loads the libmutton.ini file and returns the configuration
@@ -18,22 +19,22 @@ func loadConfig() *ini.File {
 }
 
 // ParseConfig reads the libmutton.ini file and returns a slice of values for the specified keys
-// requires readKeys: a slice of key names (indicates requested values)
-// requires missingValueError: an error message to display if a key is missing a value, set to "" for auto-generated or "0" to exit silently with status 0
+// requires requestedValues: a slice of arrays (length 2) each containing a section and a key name
+// requires missingValueError: an error message to display if a key is missing a value, set to "" for auto-generated or "0" to exit/return silently with code 0
 // returns config: a slice of values for the specified keys
-func ParseConfig(readKeys []string, missingValueError string) []string {
+func ParseConfig(requestedValues [][2]string, missingValueError string) []string {
 	cfg := loadConfig()
 
 	var config []string
 
-	for _, key := range readKeys {
-		keyConfig := cfg.Section("LIBMUTTON").Key(key).String()
+	for _, pair := range requestedValues {
+		value := cfg.Section(pair[0]).Key(pair[1]).String()
 
 		// ensure specified key has a value
-		if keyConfig == "" {
+		if value == "" {
 			switch missingValueError {
 			case "":
-				fmt.Println(AnsiError + "Failed to find value for key \"" + key + "\" in section \"[LIBMUTTON]\" in libmutton.ini" + AnsiReset)
+				fmt.Println(AnsiError + "Failed to find value for key \"" + pair[1] + "\" in section \"[" + pair[0] + "]\" in libmutton.ini" + AnsiReset)
 			case "0":
 				Exit(0)
 			default:
@@ -42,7 +43,7 @@ func ParseConfig(readKeys []string, missingValueError string) []string {
 			os.Exit(1)
 		}
 
-		config = append(config, keyConfig)
+		config = append(config, value)
 	}
 
 	return config

@@ -2,14 +2,15 @@ package sync
 
 import (
 	"fmt"
-	"github.com/pkg/sftp"
-	"github.com/rwinkhart/MUTN/src/backend"
-	"golang.org/x/crypto/ssh"
-	"golang.org/x/crypto/ssh/knownhosts"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/pkg/sftp"
+	"github.com/rwinkhart/MUTN/src/backend"
+	"golang.org/x/crypto/ssh"
+	"golang.org/x/crypto/ssh/knownhosts"
 )
 
 // global constants used only in this file
@@ -30,7 +31,7 @@ func getSSHClient(manualSync bool) (*ssh.Client, string, bool) {
 	} else {
 		missingValueError = "0"
 	}
-	sshUserConfig = backend.ParseConfig([]string{"sshUser", "sshIP", "sshPort", "sshKey", "sshKeyProtected", "sshEntryRoot", "sshIsWindows"}, missingValueError)
+	sshUserConfig = backend.ParseConfig([][2]string{{"LIBMUTTON", "sshUser"}, {"LIBMUTTON", "sshIP"}, {"LIBMUTTON", "sshPort"}, {"LIBMUTTON", "sshKey"}, {"LIBMUTTON", "sshKeyProtected"}, {"LIBMUTTON", "sshEntryRoot"}, {"LIBMUTTON", "sshIsWindows"}}, missingValueError)
 
 	var user, ip, port, keyFile, keyFileProtected, entryRoot string
 	var isWindows bool
