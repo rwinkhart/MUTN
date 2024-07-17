@@ -22,12 +22,12 @@ func loadConfig() *ini.File {
 // requires requestedValues: a slice of arrays (length 2) each containing a section and a key name
 // requires missingValueError: an error message to display if a key is missing a value, set to "" for auto-generated or "0" to exit/return silently with code 0
 // returns config: a slice of values for the specified keys
-func ParseConfig(requestedValues [][2]string, missingValueError string) []string {
+func ParseConfig(valuesRequested [][2]string, missingValueError string) []string {
 	cfg := loadConfig()
 
 	var config []string
 
-	for _, pair := range requestedValues {
+	for _, pair := range valuesRequested {
 		value := cfg.Section(pair[0]).Key(pair[1]).String()
 
 		// ensure specified key has a value
@@ -49,51 +49,38 @@ func ParseConfig(requestedValues [][2]string, missingValueError string) []string
 	return config
 }
 
-// WriteConfig writes the provided key-value pairs to the libmutton.ini file
-func WriteConfig(configFileMap map[string]string, append bool) {
+// WriteConfig writes the provided key-value pairs under the specified section headers in the libmutton.ini file
+// requires valuesToWrite: a slice of arrays (length 3) each containing a section, a key name, and a value
+func WriteConfig(valuesToWrite [][3]string, append bool) {
 	var cfg *ini.File
-	var libmuttonSection *ini.Section
 
 	if append {
 		// load existing ini file
 		cfg = loadConfig()
-
-		// acquire LIBMUTTON section
-		libmuttonSection, _ = cfg.GetSection("LIBMUTTON")
 	} else {
-		// create empty ini file
+		// create empty ini container
 		cfg = ini.Empty()
-
-		// create LIBMUTTON section
-		libmuttonSection, _ = cfg.NewSection("LIBMUTTON")
 	}
 
-	// write provided configFileMap key-value pairs to the LIBMUTTON section
-	for key, value := range configFileMap {
-		libmuttonSection.Key(key).SetValue(value)
+	// set all specified key-value pairs in their respective sections
+	var section *ini.Section
+	for _, trio := range valuesToWrite {
+		if cfg.Section(trio[0]) == nil {
+			// create and aquire section if it doesn't exist
+			section, _ = cfg.NewSection(trio[0])
+		} else {
+			// acquire existing section
+			section = cfg.Section(trio[0])
+		}
+
+		// set key-value pair
+		section.Key(trio[1]).SetValue(trio[2])
 	}
 
-	// save the new config file
+	// save to libmutton.ini
 	err := cfg.SaveTo(ConfigPath)
 	if err != nil {
 		fmt.Println(AnsiError + "Failed to save libmutton.ini: " + err.Error() + AnsiReset)
 		os.Exit(1)
 	}
 }
-
-// libmutton.ini layout
-// [LIBMUTTON]
-// gpgID = <gpg key id>
-// textEditor = <editor command> TODO move to MUTN section heading, as it only applies to the CLI implementation
-// sshUser = <remote user>
-// sshIP = <remote ip>
-// sshPort = <remote ssh port>
-// sshKey = <ssh private key identity file path>
-// sshKeyProtected = <true/false>
-// netPinEnabled = <true/false> TODO netPin functionality not yet implemented
-// sshEntryRoot = <remote entry root>
-// sshIsWindows = <true/false>
-
-// Developers of alternative clients:
-// If you are adding additional settings to the config file,
-// please create a new section heading for your app-specific settings.

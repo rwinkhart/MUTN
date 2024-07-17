@@ -47,18 +47,18 @@ func TempInitCli() {
 		backend.DirInit(false)
 
 		// write config file (temporarily assigns sshEntryRoot and sshIsWindows to null to pass initial device ID registration)
-		backend.WriteConfig(map[string]string{"textEditor": textEditor, "gpgID": gpgID, "sshUser": sshUser, "sshIP": sshIP, "sshPort": sshPort, "sshKey": sshKey, "sshKeyProtected": strconv.FormatBool(sshKeyProtected), "sshEntryRoot": "null", "sshIsWindows": "null"}, false)
+		backend.WriteConfig([][3]string{{"LIBMUTTON", "textEditor", textEditor}, {"LIBMUTTON", "gpgID", gpgID}, {"LIBMUTTON", "sshUser", sshUser}, {"LIBMUTTON", "sshIP", sshIP}, {"LIBMUTTON", "sshPort", sshPort}, {"LIBMUTTON", "sshKey", sshKey}, {"LIBMUTTON", "sshKeyProtected", strconv.FormatBool(sshKeyProtected)}, {"LIBMUTTON", "sshEntryRoot", "null"}, {"LIBMUTTON", "sshIsWindows", "null"}}, false)
 
 		// generate and register device ID
 		sshEntryRoot, sshIsWindows := sync.DeviceIDGen()
 
 		// update config file with sshEntryRoot and sshIsWindows
-		backend.WriteConfig(map[string]string{"sshEntryRoot": sshEntryRoot, "sshIsWindows": sshIsWindows}, true)
+		backend.WriteConfig([][3]string{{"LIBMUTTON", "sshEntryRoot", sshEntryRoot}, {"LIBMUTTON", "sshIsWindows", sshIsWindows}}, true)
 	} else {
 		// initialize libmutton directories
 		backend.DirInit(false)
 
 		// write config file
-		backend.WriteConfig(map[string]string{"textEditor": textEditor, "gpgID": gpgID}, false)
+		backend.WriteConfig([][3]string{{"LIBMUTTON", "textEditor", textEditor}, {"LIBMUTTON", "gpgID", gpgID}}, false)
 	}
 }
