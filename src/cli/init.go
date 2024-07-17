@@ -47,7 +47,7 @@ func TempInitCli() {
 		backend.DirInit(false)
 
 		// write config file (temporarily assigns sshEntryRoot and sshIsWindows to null to pass initial device ID registration)
-		backend.WriteConfig([][3]string{{"LIBMUTTON", "textEditor", textEditor}, {"LIBMUTTON", "gpgID", gpgID}, {"LIBMUTTON", "sshUser", sshUser}, {"LIBMUTTON", "sshIP", sshIP}, {"LIBMUTTON", "sshPort", sshPort}, {"LIBMUTTON", "sshKey", sshKey}, {"LIBMUTTON", "sshKeyProtected", strconv.FormatBool(sshKeyProtected)}, {"LIBMUTTON", "sshEntryRoot", "null"}, {"LIBMUTTON", "sshIsWindows", "null"}}, false)
+		backend.WriteConfig([][3]string{{"MUTN", "textEditor", textEditor}, {"LIBMUTTON", "gpgID", gpgID}, {"LIBMUTTON", "sshUser", sshUser}, {"LIBMUTTON", "sshIP", sshIP}, {"LIBMUTTON", "sshPort", sshPort}, {"LIBMUTTON", "sshKey", sshKey}, {"LIBMUTTON", "sshKeyProtected", strconv.FormatBool(sshKeyProtected)}, {"LIBMUTTON", "sshEntryRoot", "null"}, {"LIBMUTTON", "sshIsWindows", "null"}}, false)
 
 		// generate and register device ID
 		sshEntryRoot, sshIsWindows := sync.DeviceIDGen()
@@ -59,6 +59,6 @@ func TempInitCli() {
 		backend.DirInit(false)
 
 		// write config file
-		backend.WriteConfig([][3]string{{"LIBMUTTON", "textEditor", textEditor}, {"LIBMUTTON", "gpgID", gpgID}}, false)
+		backend.WriteConfig([][3]string{{"MUTN", "textEditor", textEditor}, {"LIBMUTTON", "gpgID", gpgID}}, false)
 	}
 }

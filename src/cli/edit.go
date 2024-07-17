@@ -75,7 +75,7 @@ func editNote(baseNote []string) ([]string, bool) {
 	}(tempFile.Name())
 
 	// fetch the user's text editor
-	editor := backend.ParseConfig([][2]string{{"LIBMUTTON", "textEditor"}}, "")[0]
+	editor := backend.ParseConfig([][2]string{{"MUTN", "textEditor"}}, "")[0]
 
 	// write baseNote to tempFile (if it is not empty)
 	if len(baseNote) > 0 {
