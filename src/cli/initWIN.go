@@ -3,8 +3,3 @@
 package cli
 
 const fallbackEditor = "nvim" // since there is no pre-installed CLI editor on Windows, default to the most popular one
-
-// textEditorFallback returns FallbackEditor
-func textEditorFallback() string {
-	return fallbackEditor
-}
