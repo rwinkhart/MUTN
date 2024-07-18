@@ -1,4 +1,4 @@
-## Developer Guide (for third-party libmutton implementations)
+## Developer Guide (for third-party libmutton-based clients)
 **Important Notice**: libmutton is in early development and is currently a moving target to develop off of. Feel free to jump in early, but greater change stability will be met with release v1.0.0. Check [here](https://github.com/rwinkhart/MUTN/blob/main/wiki/libmutton/breaking.md) for planned breaking changes.
 
 libmutton was designed to be usable as a library for building other compatible password managers off of. [MUTN](https://github.com/rwinkhart/MUTN) is the official reference CLI password manager, however libmutton can be implemented in many other unique ways.
@@ -44,3 +44,6 @@ If creating a third-party client that requires extra configuration to be stored,
 configKey = <value>
 ```
 This ensures that a user can use multiple client applications with the same configuration while avoiding conflicts.
+
+# Relevant Bugs Affecting Third-Party Implementations
+- Password-protected SSH identity files currently only prompt for password entry in the CLI, and thus they are not yet supported in GUI/TUI implementations
