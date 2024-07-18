@@ -342,7 +342,7 @@ func syncLists(localEntryModMap, remoteEntryModMap map[string]int64, manualSync 
 	timeDiff := serverTime - clientTime
 	if timeDiff < -45 || timeDiff > 45 {
 		timeSynced = false
-		fmt.Print(backend.AnsiError + "Client and server times are out of sync.\n\nPlease ensure both clocks are correct before attempting to sync again.\n\nA dry sync output will be printed below (if any operations would have been performed). It is strongly recommended to review it and manually update the modification times as applicable to ensure the correct version of each entry is kept.\n\n" + backend.AnsiReset)
+		fmt.Print(backend.AnsiError + "Client and server clocks are out of sync.\n\nPlease ensure both clocks are correct before attempting to sync again.\n\nA dry sync output will be printed below (if any operations would have been performed). It is strongly recommended to review it and manually update the modification times as applicable to ensure the correct version of each entry is kept.\n\nIf the client's clock is at fault, update the modification times of any entries pending upload, even if the correct (upload) operation is being performed on them. Failure to do so could result in entries being uploaded to the server with the incorrect modification times (could result in data loss).\n\n" + backend.AnsiReset)
 	}
 
 	// iterate over client entries
