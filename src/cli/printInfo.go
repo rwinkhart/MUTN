@@ -24,7 +24,6 @@ This program comes with absolutely no warranty; type "mutn version" for details.
  help                    Bring up this menu
  version                 Display version and license information
  init                    Set up MUTN (generates libmutton.ini)
- tweak                   Change configuration options (NOT YET IMPLEMENTED)
  copy                    Copy details of an entry to your clipboard
  edit                    Edit an existing entry
  gen                     Generate a new password
