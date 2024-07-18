@@ -2,8 +2,9 @@ package cli
 
 import (
 	"fmt"
-	"github.com/rwinkhart/MUTN/src/backend"
 	"os"
+
+	"github.com/rwinkhart/MUTN/src/backend"
 )
 
 // AddEntry creates a new entry at targetLocation by taking user input via CLI prompts
@@ -25,7 +26,7 @@ func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
 		if entryType == 0 {
 			password = inputHidden("Password:")
 		} else {
-			password = backend.StringGen(inputInt("Password length:", -1), inputBinary("Generate a complex (special characters) password?"), 0.2)
+			password = backend.StringGen(inputInt("Password length:", -1), inputBinary("Generate a complex (special characters) password?"), 0.2, false)
 		}
 
 		totp := inputHidden("TOTP secret:")

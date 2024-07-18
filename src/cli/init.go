@@ -38,7 +38,7 @@ func TempInitCli() {
 		sshUser := input("Remote SSH username:")
 		sshPort := input("Remote SSH port:")
 		sshIP := input("Remote SSH IP/domain:")
-		sshKey := expandPathWithHome(input("SSH private identity file path:")) // TODO implement generator and selector
+		sshKey := expandPathWithHome(input("SSH private identity file path:"))
 		sshKeyProtected := inputBinary("Is the identity file password-protected?")
 
 		// initialize libmutton directories

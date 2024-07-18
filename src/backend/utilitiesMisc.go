@@ -11,8 +11,6 @@ import (
 	"strings"
 )
 
-const extendedCharset = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
-
 // TargetIsFile TargetStatusCheck checks if the targetLocation is a file, directory, or is inaccessible
 // failCondition: 0 = fail on inaccessible, 1 = fail on inaccessible/file, 2 = fail on inaccessible/directory
 // returns: isFile, isAccessible
@@ -88,15 +86,24 @@ func RemoveTrailingEmptyStrings(slice []string) []string {
 }
 
 // StringGen generates a random string of a specified length and complexity
+// safeForFileName: if true, the generated string will only contain special characters that are safe for file names (only impacts complex strings)
 // complexity: minimum percentage of special characters to be returned in the generated string (only impacts complex strings)
-func StringGen(length int, complex bool, complexity float64) string {
+func StringGen(length int, complex bool, complexity float64, safeForFileName bool) string {
 	var actualSpecialChars int // track the number of special characters in the generated string
 	var minSpecialChars int    // track the minimum number of special characters to accept
+	var extendedCharset string // additions to character set used for complex strings
 
 	charset := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" // default character set used for all strings
+	const extendedCharsetFiles = "!#$%&'()+,-.;=@[]^_`{}~"                      // additional special characters for complex strings (safe in file names)
+	const extendedCharsetPassword = "\"*:><?/\\|"                               // additional special characters for complex strings (NOT safe in file names)
 	if complex {
 		minSpecialChars = int(math.Round(float64(length) * complexity)) // determine minimum number of special characters to accept
-		charset = charset + extendedCharset
+		if !safeForFileName {
+			extendedCharset = extendedCharsetFiles + extendedCharsetPassword
+		} else {
+			extendedCharset = extendedCharsetFiles
+		}
+		charset += extendedCharset
 	}
 
 	// loop until a string of the desired complexity is generated

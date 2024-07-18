@@ -2,12 +2,13 @@ package sync
 
 import (
 	"fmt"
-	"github.com/rwinkhart/MUTN/src/backend"
 	"math/rand"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/rwinkhart/MUTN/src/backend"
 )
 
 // DeviceIDGen generates a new client device ID and registers it with the server
@@ -16,7 +17,7 @@ import (
 // returns the remote EntryRoot and OS type (OS type is a bool: backend.IsWindows)
 func DeviceIDGen() (string, string) {
 	deviceIDPrefix, _ := os.Hostname()
-	deviceIDSuffix := backend.StringGen(rand.Intn(32)+48, false, 0) + "-" + strconv.FormatInt(time.Now().Unix(), 10) // TODO consider using complex string generator and removing unsafe characters manually
+	deviceIDSuffix := backend.StringGen(rand.Intn(32)+48, true, 0.2, true) + "-" + strconv.FormatInt(time.Now().Unix(), 10)
 	deviceID := deviceIDPrefix + "-" + deviceIDSuffix
 	_, err := os.Create(backend.ConfigDir + backend.PathSeparator + "devices" + backend.PathSeparator + deviceID) // TODO remove existing device ID file if it exists (from both client and server)
 	if err != nil {

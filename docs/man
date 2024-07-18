@@ -47,7 +47,6 @@ Manually synchronizing entries with the server:
  help                   Bring up the help menu
  version                Display version and license information
  init                   Set up MUTN (generates libmutton.ini)
- tweak                  Change configuration options (NOT YET IMPLEMENTED)
  copy                   Copy details of an entry to your clipboard
  edit                   Edit an existing entry
  gen                    Generate a new password

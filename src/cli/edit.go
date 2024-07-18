@@ -60,7 +60,7 @@ func GenUpdate(targetLocation string, hideSecrets bool) {
 	unencryptedEntry := backend.GetOldEntryData(targetLocation, 0)
 
 	// generate a new password
-	unencryptedEntry[0] = backend.StringGen(inputInt("Password length:", -1), inputBinary("Generate a complex (special characters) password?"), 0.2)
+	unencryptedEntry[0] = backend.StringGen(inputInt("Password length:", -1), inputBinary("Generate a complex (special characters) password?"), 0.2, false)
 
 	// write and preview the modified entry
 	writeEntryCLI(targetLocation, unencryptedEntry, hideSecrets)

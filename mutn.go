@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"strings"
+
 	"github.com/rwinkhart/MUTN/src/backend"
 	"github.com/rwinkhart/MUTN/src/cli"
 	"github.com/rwinkhart/MUTN/src/sync"
-	"os"
-	"strings"
 )
 
 func main() {
@@ -165,7 +166,6 @@ func main() {
 			case "tweak":
 				fmt.Println(backend.AnsiError + "\"tweak\" is not yet implemented" + backend.AnsiReset)
 				os.Exit(0)
-				// TODO backend.Tweak()
 			case "copy":
 				cli.HelpCopy()
 			case "edit":
