@@ -2,9 +2,11 @@ package sync
 
 import (
 	"fmt"
-	"github.com/rwinkhart/MUTN/src/backend"
 	"os"
 	"strings"
+	"time"
+
+	"github.com/rwinkhart/MUTN/src/backend"
 )
 
 // GetRemoteDataFromServer prints to stdout the remote entries, mod times, folders, and deletions
@@ -19,9 +21,12 @@ func GetRemoteDataFromServer(clientDeviceID string) {
 		os.Exit(1)
 	}
 
-	// print the lists to stdout
+	// print the current UNIX timestamp to stdout
+	fmt.Print(time.Now().Unix())
 
+	// print the lists to stdout
 	// entry list
+	fmt.Print(FSSpace)
 	for _, entry := range entryList {
 		fmt.Print(FSMisc + entry)
 	}

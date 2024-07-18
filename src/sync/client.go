@@ -130,8 +130,8 @@ func GetSSHOutput(cmd, stdin string, manualSync bool) string {
 	return outputString
 }
 
-// getRemoteDataFromClient returns a map of remote entries to their modification times, a list of remote folders, and a list of queued deletions
-func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []string) {
+// getRemoteDataFromClient returns a map of remote entries to their modification times, a list of remote folders, a list of queued deletions, and the current server+client times as UNIX timestamps
+func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []string, int64, int64) {
 	// get remote output over SSH
 	clientDeviceID, _ := os.ReadDir(backend.ConfigDir + backend.PathSeparator + "devices")
 	if len(clientDeviceID) == 0 {
@@ -142,20 +142,22 @@ func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []str
 			backend.Exit(0) // exit silently if the sync job was called automatically, as the user may just be in offline mode
 		}
 	}
+	clientTime := time.Now().Unix() // get client time now to avoid accuracy issues caused by unpredictable sync time
 	output := GetSSHOutput("libmuttonserver fetch", clientDeviceID[0].Name(), manualSync)
 
 	// split output into slice based on occurrences of FSSpace
 	outputSlice := strings.Split(output, FSSpace)
 
-	// re-form the lists
-	if len(outputSlice) != 4 { // ensure information from server is complete
+	// parse output/re-form lists
+	if len(outputSlice) != 5 { // ensure information from server is complete
 		fmt.Println(backend.AnsiError + "Sync failed - Unable to fetch remote data; server returned an unexpected response" + backend.AnsiReset)
 		os.Exit(1)
 	}
-	entries := strings.Split(outputSlice[0], FSMisc)[1:]
-	modsStrings := strings.Split(outputSlice[1], FSMisc)[1:]
-	folders := strings.Split(outputSlice[2], FSMisc)[1:]
-	deletions := strings.Split(outputSlice[3], FSMisc)[1:]
+	serverTime, _ := strconv.ParseInt(outputSlice[0], 10, 64)
+	entries := strings.Split(outputSlice[1], FSMisc)[1:]
+	modsStrings := strings.Split(outputSlice[2], FSMisc)[1:]
+	folders := strings.Split(outputSlice[3], FSMisc)[1:]
+	deletions := strings.Split(outputSlice[4], FSMisc)[1:]
 
 	// convert the mod times to int64
 	var mods []int64
@@ -170,7 +172,7 @@ func getRemoteDataFromClient(manualSync bool) (map[string]int64, []string, []str
 		entryModMap[entry] = mods[i]
 	}
 
-	return entryModMap, folders, deletions
+	return entryModMap, folders, deletions, serverTime, clientTime
 }
 
 // getLocalData returns a map of local entries to their modification times
@@ -331,9 +333,17 @@ func sftpSync(downloadList, uploadList []string, manualSync bool) {
 
 // syncLists determines which entries need to be downloaded and uploaded for synchronizations and calls sftpSync with this information
 // using maps means that syncing will be done in an arbitrary order, but it is a worthy tradeoff for speed and simplicity
-func syncLists(localEntryModMap, remoteEntryModMap map[string]int64, manualSync bool) {
+func syncLists(localEntryModMap, remoteEntryModMap map[string]int64, manualSync bool, serverTime int64, clientTime int64) {
 	// initialize slices to store entries that need to be downloaded or uploaded
 	var downloadList, uploadList []string
+
+	// ensure client and server times are synchronized
+	var timeSynced = true
+	timeDiff := serverTime - clientTime
+	if timeDiff < -45 || timeDiff > 45 {
+		timeSynced = false
+		fmt.Print(backend.AnsiError + "Client and server times are out of sync.\n\nPlease ensure both clocks are correct before attempting to sync again.\n\nA dry sync output will be printed below (if any operations would have been performed). It is strongly recommended to review it and manually update the modification times as applicable to ensure the correct version of each entry is kept.\n\n" + backend.AnsiReset)
+	}
 
 	// iterate over client entries
 	for entry, localModTime := range localEntryModMap {
@@ -362,9 +372,12 @@ func syncLists(localEntryModMap, remoteEntryModMap map[string]int64, manualSync 
 	}
 
 	// call sftpSync with the download and upload lists
-	if max(len(downloadList), len(uploadList)) > 0 { // only call sftpSync if there are entries to download or upload
+	if timeSynced && (max(len(downloadList), len(uploadList)) > 0) { // only call sftpSync if there are entries to download or upload
 		fmt.Println() // add a gap between list-add messages and the actual sync messages from sftpSync
 		sftpSync(downloadList, uploadList, manualSync)
+	} else if !timeSynced {
+		// do not call sftpSync if the client and server times are out of sync
+		backend.Exit(1)
 	}
 
 	fmt.Println("Client is synchronized with server")
@@ -445,7 +458,7 @@ func folderSync(folders []string) {
 // RunJob runs the SSH sync job
 func RunJob(manualSync bool) {
 	// fetch remote lists
-	remoteEntryModMap, remoteFolders, deletions := getRemoteDataFromClient(manualSync)
+	remoteEntryModMap, remoteFolders, deletions, serverTime, clientTime := getRemoteDataFromClient(manualSync)
 
 	// sync folders
 	folderSync(remoteFolders)
@@ -457,7 +470,7 @@ func RunJob(manualSync bool) {
 	localEntryModMap := getLocalData()
 
 	// sync new and updated entries
-	syncLists(localEntryModMap, remoteEntryModMap, manualSync)
+	syncLists(localEntryModMap, remoteEntryModMap, manualSync, serverTime, clientTime)
 
 	// exit program after successful sync
 	backend.Exit(0)

@@ -3,12 +3,13 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/rwinkhart/MUTN/src/backend"
-	"github.com/rwinkhart/MUTN/src/cli"
-	"github.com/rwinkhart/MUTN/src/sync"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/rwinkhart/MUTN/src/backend"
+	"github.com/rwinkhart/MUTN/src/cli"
+	"github.com/rwinkhart/MUTN/src/sync"
 )
 
 func main() {
