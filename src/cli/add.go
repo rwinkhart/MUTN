@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/rwinkhart/MUTN/src/backend"
 )
@@ -10,11 +11,15 @@ import (
 // AddEntry creates a new entry at targetLocation by taking user input via CLI prompts
 // entryType: 0 = standard (password), 1 = auto-generated password, 2 = note
 func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
+	// ensure target location does not already exist
 	_, isAccessible := backend.TargetIsFile(targetLocation, false, 0)
 	if isAccessible {
 		fmt.Println(backend.AnsiError + "Target location already exists" + backend.AnsiReset)
 		os.Exit(1)
 	}
+
+	// ensure target containing directory exists and is a directory (not a file)
+	backend.TargetIsFile(targetLocation[:strings.LastIndex(targetLocation, "/")], true, 1)
 
 	var unencryptedEntry []string
 
@@ -43,5 +48,5 @@ func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
 	}
 
 	// write and preview the new entry
-	writeEntryCLI(targetLocation, unencryptedEntry, hideSecrets)
+	writeEntryCLI(targetLocation, unencryptedEntry, hideSecrets, false)
 }
