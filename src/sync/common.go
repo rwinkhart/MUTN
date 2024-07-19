@@ -2,10 +2,11 @@ package sync
 
 import (
 	"fmt"
-	"github.com/rwinkhart/MUTN/src/backend"
 	"io/fs"
 	"os"
 	"strings"
+
+	"github.com/rwinkhart/MUTN/src/backend"
 )
 
 // getModTimes returns a list of all entry modification times
@@ -78,13 +79,14 @@ func ShearLocal(targetLocationIncomplete, clientDeviceID string) string {
 
 // RenameLocal renames oldLocationIncomplete to newLocationIncomplete on the local system
 // this function should only be used directly by the server binary
-func RenameLocal(oldLocationIncomplete, newLocationIncomplete string) {
+func RenameLocal(oldLocationIncomplete, newLocationIncomplete string, verifyOldLocationExists bool) {
 	// get full paths for both locations
 	oldLocation := backend.TargetLocationFormat(oldLocationIncomplete)
 	newLocation := backend.TargetLocationFormat(newLocationIncomplete)
 
-	// ensure oldLocation exists
-	backend.TargetIsFile(oldLocation, true, 0)
+	if verifyOldLocationExists {
+		backend.TargetIsFile(oldLocation, true, 0)
+	}
 
 	// ensure newLocation does not exist
 	_, isAccessible := backend.TargetIsFile(newLocation, false, 0)

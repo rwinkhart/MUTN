@@ -98,7 +98,8 @@ func main() {
 					case "note", "-n":
 						field = 4
 					case "rename", "-r":
-						cli.RenameCli(args[1]) // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
+						backend.TargetIsFile(targetLocation, true, 0) // ensure location exists before prompting for new location
+						cli.RenameCli(args[1])                        // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
 					default:
 						cli.HelpEdit()
 					}

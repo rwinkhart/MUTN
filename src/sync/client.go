@@ -414,7 +414,7 @@ func ShearRemoteFromClient(targetLocationIncomplete string) {
 // RenameRemoteFromClient renames oldLocationIncomplete to newLocationIncomplete on the local system and calls the server to perform the rename remotely and add the old target to the deletions list
 // can safely be called in offline mode, as well, so this is the intended interface for renaming (RenameLocal should only be used directly by the server binary)
 func RenameRemoteFromClient(oldLocationIncomplete, newLocationIncomplete string) {
-	RenameLocal(oldLocationIncomplete, newLocationIncomplete) // move the target on the local system
+	RenameLocal(oldLocationIncomplete, newLocationIncomplete, false) // move the target on the local system
 
 	deviceIDList := genDeviceIDList()
 	if len(*deviceIDList) > 0 { // ensure a device ID exists (online mode)
