@@ -1,7 +1,4 @@
 ## MUTN Wiki
-
-Crossed out items have not yet been added to the wiki.
-
 ### MUTN-specific Information
 [Installation](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/install.md)
 
@@ -12,6 +9,9 @@ Crossed out items have not yet been added to the wiki.
 [Shell Completions Troubleshooting](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/completions.md)
 
 [Known Bugs](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/bugs.md)
+
+---
+
 ### libmutton Information (will likely be moved to libmutton repository in the future)
 [Planned Breaking Changes](https://github.com/rwinkhart/MUTN/blob/main/wiki/libmutton/breaking.md)
 
