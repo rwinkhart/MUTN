@@ -93,7 +93,7 @@ libmutton operates on a client-server model, and thus sync support requires you 
 
 For security reasons, libmutton deliberately does not support password-based SSH authentication; you must use key-based authentication to connect to your server (password-protected keys are also supported). You are responsible for setting up SSH connectivity on your own.
 
-The libmutton server software is shipped as its own dedicated binary and must be installed and configured on the server.
+The libmutton server software is shipped as its own dedicated binary and must be installed on the server and configured with "libmuttonserver init".
 
 Once this has been done, you may proceed with the client setup:
     1. Install MUTN

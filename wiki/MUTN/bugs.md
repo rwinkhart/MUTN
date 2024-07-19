@@ -1,4 +1,4 @@
-# Known Bugs - MUTN CLI
+## Known Bugs - MUTN CLI
 - Various Markdown issues resulting from the use of [Glamour](https://github.com/charmbracelet/glamour)
   - [Odd handling of line breaks](https://github.com/charmbracelet/glamour/issues/84)
   - [Broken quotes](https://github.com/charmbracelet/glamour/issues/172) (seems related to line break issue)

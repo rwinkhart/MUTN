@@ -7,7 +7,7 @@ Crossed out items have not yet been added to the wiki.
 
 [Building](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/build.md)
 
-[~~Usage~~](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/usage.md)
+[Setup/Usage](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/usage.md)
 
 [Shell Completions Troubleshooting](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/completions.md)
 
