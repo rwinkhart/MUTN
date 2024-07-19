@@ -40,7 +40,15 @@ func TargetIsFile(targetLocation string, errorOnFail bool, failCondition uint8) 
 }
 
 // WriteEntry writes entryData to an encrypted file at targetLocation
-func WriteEntry(targetLocation string, entryData []string) {
+func WriteEntry(targetLocation string, entryData []string, verifyEntryDoesNotExist bool) {
+	if verifyEntryDoesNotExist {
+		_, isAccessible := TargetIsFile(targetLocation, false, 0)
+		if isAccessible {
+			fmt.Println(AnsiError + "Target location already exists" + AnsiReset)
+			os.Exit(1)
+		}
+	}
+
 	encryptedBytes := EncryptGPG(entryData)
 	err := os.WriteFile(targetLocation, encryptedBytes, 0600)
 	if err != nil {
