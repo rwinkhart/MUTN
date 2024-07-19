@@ -41,7 +41,7 @@ func main() {
 		// stdin[0] is evaluated after fallthrough
 		// stdin[1] is expected to be the OLD incomplete target location with FSPath representing path separators - always pass in UNIX format
 		// stdin[2] is expected to be the NEW incomplete target location with FSPath representing path separators - always pass in UNIX format
-		sync.RenameLocal(strings.ReplaceAll(stdin[1], sync.FSPath, "/"), strings.ReplaceAll(stdin[2], sync.FSPath, "/"))
+		sync.RenameLocal(strings.ReplaceAll(stdin[1], sync.FSPath, "/"), strings.ReplaceAll(stdin[2], sync.FSPath, "/"), true)
 		fallthrough // fallthrough to add the old entry to the deletions directory
 	case "shear":
 		// shear an entry from the server and add it to the deletions directory
