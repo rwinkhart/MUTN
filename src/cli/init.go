@@ -34,7 +34,7 @@ func TempInitCli() {
 	configSSH := inputBinary("Configure SSH settings (for synchronization)?")
 	if configSSH {
 		// necessary SSH info
-		fmt.Println(AnsiBold + "\nNote:" + backend.AnsiReset + " Only key-based authentication is supported (keys may optionally be passphrase-protected).\nThe remote server must already be in your ~/.ssh/known_hosts file.")
+		fmt.Println(AnsiBold + "\nNote:" + backend.AnsiReset + " Only key-based authentication is supported (keys may optionally be passphrase-protected).\nThe remote server must already be in your ~" + backend.PathSeparator + ".ssh" + backend.PathSeparator + "known_hosts file.")
 		sshUser := input("Remote SSH username:")
 		sshPort := input("Remote SSH port:")
 		sshIP := input("Remote SSH IP/domain:")
@@ -43,7 +43,8 @@ func TempInitCli() {
 		var sshKey string
 		var sshKeyIsFile bool
 		for !sshKeyIsFile {
-			sshKey = expandPathWithHome(input("SSH private identity file path:"))
+			fallbackSSHKey := backend.Home + backend.PathSeparator + ".ssh" + backend.PathSeparator + "id_ed25519"
+			sshKey = cmp.Or(expandPathWithHome(input("SSH private identity file path (falls back to \""+fallbackSSHKey+"\"):")), fallbackSSHKey)
 			sshKeyIsFile, _ = backend.TargetIsFile(sshKey, false, 0)
 			if !sshKeyIsFile {
 				fmt.Println(backend.AnsiError + "SSH identity file not found: " + sshKey + backend.AnsiReset)
