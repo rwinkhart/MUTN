@@ -38,7 +38,18 @@ func TempInitCli() {
 		sshUser := input("Remote SSH username:")
 		sshPort := input("Remote SSH port:")
 		sshIP := input("Remote SSH IP/domain:")
-		sshKey := expandPathWithHome(input("SSH private identity file path:"))
+
+		// prompt for and ensure existence of SSH identity file
+		var sshKey string
+		var sshKeyIsFile bool
+		for !sshKeyIsFile {
+			sshKey = expandPathWithHome(input("SSH private identity file path:"))
+			sshKeyIsFile, _ = backend.TargetIsFile(sshKey, false, 0)
+			if !sshKeyIsFile {
+				fmt.Println(backend.AnsiError + "SSH identity file not found: " + sshKey + backend.AnsiReset)
+			}
+		}
+
 		sshKeyProtected := inputBinary("Is the identity file password-protected?")
 
 		// initialize libmutton directories
