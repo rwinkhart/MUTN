@@ -3,11 +3,12 @@ package backend
 import (
 	"bufio"
 	"fmt"
-	steamtotp "github.com/fortis/go-steam-totp"
-	"github.com/pquerna/otp/totp"
 	"os"
 	"strings"
 	"time"
+
+	steamtotp "github.com/fortis/go-steam-totp"
+	"github.com/pquerna/otp/totp"
 )
 
 // CopyArgument copies a field from an entry to the clipboard
@@ -38,6 +39,8 @@ func CopyArgument(executableName, targetLocation string, field int) {
 				} else {
 					secret = decryptedEntry[2]
 				}
+
+				fmt.Println("TOTP code has been copied to the clipboard - your clipboard will be kept up to date with the current code until this process is closed")
 
 				for { // keep field copied to clipboard, refresh on 30-second intervals
 					currentTime := time.Now()

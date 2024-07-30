@@ -74,7 +74,6 @@ func main() {
 					case "username", "-u":
 						field = 1
 					case "totp", "-t":
-						fmt.Println("TOTP code will be copied to clipboard - your clipboard will be kept up to date with the current TOTP code until this process is closed")
 						field = 2
 					case "url", "-l":
 						field = 3
