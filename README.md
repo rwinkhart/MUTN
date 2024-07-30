@@ -1,4 +1,5 @@
-# MUTN Password Manager
+![banner](https://raw.githubusercontent.com/rwinkhart/sshyp-labs/main/extra/artwork/MUTN-banner.webp)
+---
 Pronounced as: "mutton", "muh·tn"
 
 MUTN is a simple, self-hosted, SSH-synchronized password and note manager based on libmutton. It is the successor to [sshyp](https://github.com/rwinkhart/sshyp).
@@ -8,14 +9,14 @@ MUTN is a simple, self-hosted, SSH-synchronized password and note manager based 
 >I am not responsible for any data loss or breaches of your information resulting from the use of MUTN.
 >MUTN is a new project that is constantly being updated, and though safety and security are priorities, they cannot be guaranteed.
 
-# Demo
+# Demo Tape
 ![mutn-demo.webp](https://raw.githubusercontent.com/rwinkhart/sshyp-labs/main/extra/mutn-vhs/mutn-demo.webp)
 
 # Mission Statement
 MUTN aims to make it as easy as possible to manage passwords and notes via CLI across multiple devices in a secure, self-hosted fashion.
 
-# Building
-See the [building guide](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/build.md).
+# Installation/Building
+See the [installation guide](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/install.md).
 
 # Roadmap
 #### Release v0.2.1
