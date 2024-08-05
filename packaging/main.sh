@@ -1,7 +1,11 @@
 #!/bin/sh
 
-# get version number from backend TODO embed Go code that reads the value of LibmuttonVersion
-version=$(grep 'LibmuttonVersion = "' ../src/backend/1globals.go | cut -c22-26)
+# get version number from LibmuttonVersion
+cd ..
+printf 'package main\nimport (\n"fmt"\n"github.com/rwinkhart/MUTN/src/backend"\n)\nfunc main() {\nfmt.Println(backend.LibmuttonVersion)\n}' > ./version.go
+version=$(go run ./version.go)
+rm ./version.go
+cd ./packaging
 
 # get revision number from user input, fallback to 1 if not provided
 if [ -z "$2" ]; then
