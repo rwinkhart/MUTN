@@ -25,11 +25,11 @@ build() {
     case \$CARCH in
         'x86_64')
             lscpuOutput=\$(lscpu | grep Flags)
-            if [ -z \"\$(echo \$lscpuOutput | grep avx512f)\" ]; then
+            if [ ! -z \"\$(echo \$lscpuOutput | grep avx512f)\" ]; then
                 export GOAMD64=v4
-            elif [ -z \"\$(echo \$lscpuOutput | grep avx2)\" ]; then
+            elif [ ! -z \"\$(echo \$lscpuOutput | grep avx2)\" ]; then
                 export GOAMD64=v3
-            elif [ -z \"\$(echo \$lscpuOutput | grep sse4_2)\" ]; then
+            elif [ ! -z \"\$(echo \$lscpuOutput | grep sse4_2)\" ]; then
                 export GOAMD64=v2
             else
                 export GOAMD64=v1
