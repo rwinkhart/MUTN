@@ -148,7 +148,7 @@ func Version() {
 		ansiVersionOutline + "<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + backend.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "                  MUTN Version " + backend.LibmuttonVersion + "                   " + backend.AnsiReset + ansiVersionOutline + "/\n" +
-		"\\" + ansiBlackOnWhite + "                The Placeholder Update                 " + backend.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "             The Tripe Transmission Update             " + backend.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + backend.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "          Copyright (c) 2024 Randall Winkhart          " + backend.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + backend.AnsiReset + ansiVersionOutline + "/\n" +
