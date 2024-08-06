@@ -18,6 +18,10 @@ MUTN aims to make it as easy as possible to manage passwords and notes via CLI a
 # Installation/Building
 See the [installation guide](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/install.md).
 
+Additionally, MUTN is available as a source package ("mutn") on the AUR.
+
+After installing, please review the [usage guide](https://github.com/rwinkhart/MUTN/blob/main/wiki/MUTN/usage.md).
+
 # Roadmap
 #### Release v0.2.1
 - [ ] Only run getSSHClient once to prevent being asked for keyfile password multiple times
