@@ -1,13 +1,14 @@
 package cli
 
 import (
-	termy "golang.org/x/crypto/ssh/terminal"
 	"os"
+
+	"golang.org/x/term"
 )
 
 // global variables used across multiple files
 var (
-	width, _, _ = termy.GetSize(int(os.Stdout.Fd()))
+	width, _, _ = term.GetSize(int(os.Stdout.Fd()))
 )
 
 // global constants used across multiple files
