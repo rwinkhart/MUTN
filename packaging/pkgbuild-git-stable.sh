@@ -7,7 +7,7 @@ create_pkgbuild_git_stable() {
 pkgname=mutn
 pkgver="$version"
 pkgrel="$revision"
-pkgdesc='A simple, self-hosted, SSH-synchronized password/note manager based on libmutton'
+pkgdesc='A simple, self-hosted, SSH-synchronized password/note manager for the CLI (based on libmutton)'
 arch=('x86_64' 'i686' 'i486' 'pentium4' 'aarch64' 'armv7h' 'riscv64')
 url='https://github.com/rwinkhart/MUTN'
 license=('MIT')
