@@ -55,6 +55,6 @@ package() {
     install -Dm644 ./completions/bash/mutn \${pkgdir}/usr/share/bash-completion/completions/mutn
     install -Dm644 ./docs/man.gz \${pkgdir}/usr/share/man/man1/mutn.1.gz
 }
-" > output/PKGBUILD
+" > 1output/PKGBUILD
     printf '\nPKGBUILD generated\n\n'
 }

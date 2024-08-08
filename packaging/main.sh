@@ -1,9 +1,9 @@
 #!/bin/sh
 
-# get version number from LibmuttonVersion
+# get version number from cli package
 cd ..
-printf 'package main\nimport (\n"fmt"\n"github.com/rwinkhart/MUTN/src/backend"\n)\nfunc main() {\nfmt.Println(backend.LibmuttonVersion)\n}' > ./version.go
-version=$(go run ./version.go)
+printf 'package main\nimport (\n"fmt"\n"github.com/rwinkhart/MUTN/src/cli"\n)\nfunc main() {\nfmt.Println(cli.MUTNVersion)\n}' > ./version.go
+version=$(go run -ldflags="-s -w" -tags noMarkdown ./version.go)
 rm ./version.go
 cd ./packaging
 
@@ -15,7 +15,7 @@ else
 fi
 
 # ensure output directory exists
-mkdir -p ./output
+mkdir -p ./1output
 
 case "$1" in
     pkgbuild-git-stable)

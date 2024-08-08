@@ -147,8 +147,10 @@ func Version() {
 		"    ◎-◎    //   \\\\     " + ansiVersionMeat + "♥♥♥♥♥♥♥♥♥" + core.AnsiReset + "         //   \\\\     /|\\\n" +
 		ansiVersionOutline + "<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + core.AnsiReset + ansiVersionOutline + "/\n" +
-		"\\" + ansiBlackOnWhite + "                  MUTN Version " + core.LibmuttonVersion + "                   " + core.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "                      MUTN v" + MUTNVersion + "                      " + core.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "             The Tripe Transmission Update             " + core.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "                                                       " + core.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "              Built with libmutton v" + core.LibmuttonVersion + "              " + core.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + core.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "          Copyright (c) 2024 Randall Winkhart          " + core.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + core.AnsiReset + ansiVersionOutline + "/\n" +
