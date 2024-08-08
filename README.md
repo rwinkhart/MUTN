@@ -18,7 +18,7 @@ MUTN aims to make it as easy as possible to manage passwords and notes via CLI a
 # Installation/Building
 See the [installation guide](https://github.com/rwinkhart/MUTN/blob/main/wiki/install.md).
 
-Additionally, MUTN is available as a source package ("mutn") on the AUR.
+Additionally, MUTN is available as a source package ("[mutn](https://aur.archlinux.org/packages/mutn)") on the AUR.
 
 After installing, please review the [usage guide](https://github.com/rwinkhart/MUTN/blob/main/wiki/usage.md).
 
@@ -28,6 +28,7 @@ After installing, please review the [usage guide](https://github.com/rwinkhart/M
     - [ ] Only run getSSHClient once to prevent being asked for keyfile password multiple times
     - [ ] Ensure all config files and entry files are created with 0600 permissions
     - [ ] Add fail-specific error codes
+        - [ ] Document in man page
 - [x] Split into separate repos
     1. libmutton: backend package (rename to core), sync package, libmuttonserver
     3. MUTN: cli package
@@ -45,7 +46,7 @@ After installing, please review the [usage guide](https://github.com/rwinkhart/M
     - [ ] Add refresh/re-encrypt functionality
 - [ ] Re-implement init menu
 - [ ] Implement tweak menu
-#### Release v1.0.0 - Distribution packages
+#### Release v1.0.0
 - [ ] Create packaging scripts
     - [x] Stable source PKGBUILD
     - [ ] Stable source APKBUILD
