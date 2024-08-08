@@ -4,7 +4,7 @@ go 1.22.6
 
 require (
 	github.com/charmbracelet/glamour v0.7.0
-	github.com/rwinkhart/libmutton v0.0.0-20240808205713-d82188f56655
+	github.com/rwinkhart/libmutton v0.0.0-20240808213918-f5e5cd31bb85
 	golang.org/x/term v0.23.0
 )
 
