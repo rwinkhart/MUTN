@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/rwinkhart/MUTN/src/backend"
 	"github.com/rwinkhart/MUTN/src/cli"
-	"github.com/rwinkhart/MUTN/src/sync"
+	"github.com/rwinkhart/libmutton/core"
+	"github.com/rwinkhart/libmutton/sync"
 )
 
 func main() {
@@ -55,13 +55,13 @@ func main() {
 	case "register":
 		// register a new device ID
 		// stdin[0] is expected to be the device ID
-		_, _ = os.Create(backend.ConfigDir + backend.PathSeparator + "devices" + backend.PathSeparator + stdin[0]) // error ignored; failure unlikely to occur if init was successful; "register" is not a user-facing argument and thus the error would not be visible
+		_, _ = os.Create(core.ConfigDir + core.PathSeparator + "devices" + core.PathSeparator + stdin[0]) // error ignored; failure unlikely to occur if init was successful; "register" is not a user-facing argument and thus the error would not be visible
 		// print EntryRoot and bool indicating OS type to stdout for client to store in config
-		fmt.Print(backend.EntryRoot + sync.FSSpace + strconv.FormatBool(backend.IsWindows))
+		fmt.Print(core.EntryRoot + sync.FSSpace + strconv.FormatBool(core.IsWindows))
 	case "init":
 		// create the necessary directories for libmuttonserver to function
-		backend.DirInit(false)
-		_ = os.MkdirAll(backend.ConfigDir+backend.PathSeparator+"deletions", 0700) // error ignored; failure would have occurred by this point in backend.DirInit
+		core.DirInit(false)
+		_ = os.MkdirAll(core.ConfigDir+core.PathSeparator+"deletions", 0700) // error ignored; failure would have occurred by this point in core.DirInit
 		fmt.Println("libmuttonserver directories initialized")
 	case "version":
 		versionServer()
@@ -71,13 +71,13 @@ func main() {
 }
 
 func helpServer() {
-	fmt.Print(cli.AnsiBold + "\nlibmuttonserver | Copyright (c) 2024 Randall Winkhart\n" + backend.AnsiReset + `
+	fmt.Print(cli.AnsiBold + "\nlibmuttonserver | Copyright (c) 2024 Randall Winkhart\n" + core.AnsiReset + `
 This software exists under the MIT license; you may redistribute it under certain conditions.
 This program comes with absolutely no warranty; type "libmuttonserver version" for details.
 
-` + cli.AnsiBold + "Usage:" + backend.AnsiReset + ` libmuttonserver <argument>
+` + cli.AnsiBold + "Usage:" + core.AnsiReset + ` libmuttonserver <argument>
 
-` + cli.AnsiBold + "Arguments (user):" + backend.AnsiReset + `
+` + cli.AnsiBold + "Arguments (user):" + core.AnsiReset + `
  help                    Bring up this menu
  version                 Display version and license information
  init                    Create the necessary directories for libmuttonserver to function` + "\n\n")
@@ -86,7 +86,7 @@ This program comes with absolutely no warranty; type "libmuttonserver version" f
 
 func versionServer() {
 	cli.MITLicense()
-	fmt.Print(cli.AnsiBold + "\n\n              libmuttonserver" + backend.AnsiReset + " Version " + backend.LibmuttonVersion + `
+	fmt.Print(cli.AnsiBold + "\n\n              libmuttonserver" + core.AnsiReset + " Version " + core.LibmuttonVersion + `
 
            Copyright (c) 2024 Randall Winkhart` + "\n\n")
 }

@@ -4,12 +4,8 @@ go 1.22.6
 
 require (
 	github.com/charmbracelet/glamour v0.7.0
-	github.com/fortis/go-steam-totp v0.0.0-20171114202746-18e928674727
-	github.com/pkg/sftp v1.13.6
-	github.com/pquerna/otp v1.4.1-0.20231130234153-3357de7c0481
-	golang.org/x/crypto v0.26.0
+	github.com/rwinkhart/libmutton v0.0.0-20240808205713-d82188f56655
 	golang.org/x/term v0.23.0
-	gopkg.in/ini.v1 v1.67.0
 )
 
 require (
@@ -18,6 +14,7 @@ require (
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/boombuler/barcode v1.0.2 // indirect
 	github.com/dlclark/regexp2 v1.11.4 // indirect
+	github.com/fortis/go-steam-totp v0.0.0-20171114202746-18e928674727 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/kr/fs v0.1.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
@@ -27,10 +24,14 @@ require (
 	github.com/muesli/reflow v0.3.0 // indirect
 	github.com/muesli/termenv v0.15.2 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
+	github.com/pkg/sftp v1.13.6 // indirect
+	github.com/pquerna/otp v1.4.1-0.20231130234153-3357de7c0481 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/yuin/goldmark v1.7.4 // indirect
 	github.com/yuin/goldmark-emoji v1.0.3 // indirect
+	golang.org/x/crypto v0.26.0 // indirect
 	golang.org/x/net v0.28.0 // indirect
 	golang.org/x/sys v0.23.0 // indirect
+	gopkg.in/ini.v1 v1.67.0 // indirect
 )

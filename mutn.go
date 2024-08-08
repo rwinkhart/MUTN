@@ -5,9 +5,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/rwinkhart/MUTN/src/backend"
 	"github.com/rwinkhart/MUTN/src/cli"
-	"github.com/rwinkhart/MUTN/src/sync"
+	"github.com/rwinkhart/libmutton/core"
+	"github.com/rwinkhart/libmutton/sync"
 )
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 		if strings.HasPrefix(args[1], "/") {
 
 			// store location of target entry
-			targetLocation := backend.TargetLocationFormat(args[1])
+			targetLocation := core.TargetLocationFormat(args[1])
 
 			// entry reader shortcut (if no other arguments are supplied)
 			if argsCount == 2 {
@@ -38,7 +38,7 @@ func main() {
 					case "show", "-s":
 						cli.EntryReaderDecrypt(targetLocation, false)
 					case "copy":
-						backend.CopyArgument(args[0], targetLocation, 0)
+						core.CopyArgument(args[0], targetLocation, 0)
 					case "edit":
 						cli.EditEntryField(targetLocation, true, 0)
 					case "gen":
@@ -82,7 +82,7 @@ func main() {
 					default:
 						cli.HelpCopy()
 					}
-					backend.CopyArgument(args[0], targetLocation, field)
+					core.CopyArgument(args[0], targetLocation, field)
 				case "edit":
 					var field int // indicates which (numbered) field to edit
 					switch args[3] {
@@ -97,8 +97,8 @@ func main() {
 					case "note", "-n":
 						field = 4
 					case "rename", "-r":
-						backend.TargetIsFile(targetLocation, true, 0) // ensure location exists before prompting for new location
-						cli.RenameCli(args[1])                        // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
+						core.TargetIsFile(targetLocation, true, 0) // ensure location exists before prompting for new location
+						cli.RenameCli(args[1])                     // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
 					default:
 						cli.HelpEdit()
 					}
@@ -158,13 +158,13 @@ func main() {
 		} else {
 			switch args[1] {
 			case "clipclear":
-				backend.ClipClearArgument()
+				core.ClipClearArgument()
 			case "sync":
 				sync.RunJob(true)
 			case "init":
 				cli.TempInitCli()
 			case "tweak":
-				fmt.Println(backend.AnsiError + "\"tweak\" is not yet implemented" + backend.AnsiReset)
+				fmt.Println(core.AnsiError + "\"tweak\" is not yet implemented" + core.AnsiReset)
 				os.Exit(0)
 			case "copy":
 				cli.HelpCopy()

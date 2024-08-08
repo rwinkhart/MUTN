@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/rwinkhart/MUTN/src/backend"
-	"golang.org/x/crypto/ssh/terminal"
+	"github.com/rwinkhart/libmutton/core"
+	"golang.org/x/term"
 )
 
 // input prompts the user for input and returns the input as a string
@@ -21,7 +21,7 @@ func input(prompt string) string {
 // inputHidden prompts the user for input and returns the input as a string, hiding the input from the terminal
 func inputHidden(prompt string) string {
 	fmt.Print("\n" + prompt + " ")
-	byteInput, _ := terminal.ReadPassword(int(os.Stdin.Fd()))
+	byteInput, _ := term.ReadPassword(int(os.Stdin.Fd()))
 	password := string(byteInput)
 	fmt.Println()
 	return password
@@ -66,19 +66,19 @@ func inputMenuGen(prompt string, options []string) int {
 
 // writeEntryCLI writes an entry to targetLocation and previews it (errors if no data is supplied)
 func writeEntryCLI(targetLocation string, unencryptedEntry []string, hideSecrets, verifyEntryDoesNotExist bool) {
-	if backend.EntryIsNotEmpty(unencryptedEntry) {
+	if core.EntryIsNotEmpty(unencryptedEntry) {
 		// write the entry to the target location
-		backend.WriteEntry(targetLocation, unencryptedEntry, verifyEntryDoesNotExist)
+		core.WriteEntry(targetLocation, unencryptedEntry, verifyEntryDoesNotExist)
 		// preview the entry
-		fmt.Println(AnsiBold + "\nEntry Preview:" + backend.AnsiReset)
+		fmt.Println(AnsiBold + "\nEntry Preview:" + core.AnsiReset)
 		EntryReader(unencryptedEntry, hideSecrets, true)
 	} else {
-		fmt.Println(backend.AnsiError + "No data supplied for entry" + backend.AnsiReset)
+		fmt.Println(core.AnsiError + "No data supplied for entry" + core.AnsiReset)
 		os.Exit(1)
 	}
 }
 
 // expandPathWithHome, given a path (as a string) containing "~", returns the path with "~" expanded to the user's home directory
 func expandPathWithHome(path string) string {
-	return strings.Replace(path, "~", backend.Home, 1)
+	return strings.Replace(path, "~", core.Home, 1)
 }

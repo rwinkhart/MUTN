@@ -2,10 +2,11 @@ package cli
 
 import (
 	"fmt"
-	"github.com/rwinkhart/MUTN/src/backend"
-	"github.com/rwinkhart/MUTN/src/sync"
 	"os"
 	"strings"
+
+	"github.com/rwinkhart/libmutton/core"
+	"github.com/rwinkhart/libmutton/sync"
 )
 
 // global constants used only in this file
@@ -71,7 +72,7 @@ func printFileEntry(entry string, lastSlash, charCounter, indent int, colorAlter
 	}
 
 	// print fileEntryName to screen
-	fmt.Printf("%s%s%s ", colorCode, fileEntryName, backend.AnsiReset)
+	fmt.Printf("%s%s%s ", colorCode, fileEntryName, core.AnsiReset)
 
 	return charCounter, colorAlternator
 }
@@ -81,7 +82,7 @@ func EntryListGen() {
 	fileList, dirList := sync.WalkEntryDir()
 
 	// print header bar w/total entry count
-	fmt.Print("\n"+ansiBlackOnWhite, len(fileList), " libmutton entries:"+backend.AnsiReset)
+	fmt.Print("\n"+ansiBlackOnWhite, len(fileList), " libmutton entries:"+core.AnsiReset)
 
 	// dirList iteration
 	dirListLength := len(dirList)                    // save length for multiple references below
@@ -127,7 +128,7 @@ func EntryListGen() {
 					containsFiles = true
 					skippedDirList[i] = false                                                  // the directory header is being printed, indicate that it is not being skipped
 					indent, vanityDirectory = determineIndentation(skippedDirList, dirList, i) // calculate the final indentation multiplier
-					fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+backend.AnsiReset+"\n", vanityDirectory)
+					fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+core.AnsiReset+"\n", vanityDirectory)
 				}
 
 				charCounter, colorAlternator = printFileEntry(file, lastSlash, charCounter, indent, colorAlternator)
@@ -139,8 +140,8 @@ func EntryListGen() {
 				if dirListLength > 1 { // and directories besides the root-level exist... display directory header and empty directory warning
 					skippedDirList[i] = false                                                  // the directory header is being printed, indicate that it is not being skipped
 					indent, vanityDirectory = determineIndentation(skippedDirList, dirList, i) // calculate the final indentation multiplier
-					fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+backend.AnsiReset+"\n", vanityDirectory)
-					fmt.Print(strings.Repeat(" ", indent*2) + ansiEmptyDirectoryWarning + "-empty directory-" + backend.AnsiReset)
+					fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+core.AnsiReset+"\n", vanityDirectory)
+					fmt.Print(strings.Repeat(" ", indent*2) + ansiEmptyDirectoryWarning + "-empty directory-" + core.AnsiReset)
 				} else { // warn if the only thing that exists is the root-level directory
 					fmt.Print("\n\nNothing's here! For help creating your first entry, run \"mutn help\".")
 				}
