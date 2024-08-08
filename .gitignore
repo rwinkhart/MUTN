@@ -1,6 +1,6 @@
 /mutn
 /mutn.exe
-/libmuttonserver
-/libmuttonserver.exe
+/main
+/main.exe
 /version.go
-output
+1output
