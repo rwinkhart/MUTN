@@ -6,3 +6,4 @@
   - [Extra blank lines after nested list items](https://github.com/charmbracelet/glamour/issues/102)
   - [Incorrect wrapping of text in lists](https://github.com/charmbracelet/glamour/issues/56)
   - [Excessive binary size and increased program startup time](https://github.com/charmbracelet/glamour/issues/288)
+- Relevant [libmutton bugs](https://github.com/rwinkhart/libmutton/blob/main/wiki/bugs.md)

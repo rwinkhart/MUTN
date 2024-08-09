@@ -3,7 +3,7 @@ MUTN is still in early development and thus no installation packages are officia
 
 For now, please manually install the binaries from the [latest release](https://github.com/rwinkhart/MUTN/releases) or [compile from source](https://github.com/rwinkhart/MUTN/blob/main/wiki/build.md). All pre-built binaries were compiled with CGO disabled and thus are libc-independent.
 
-Additionally, MUTN is available as a source package ("mutn") on the AUR.
+Additionally, MUTN is available as a source package ("[mutn](https://aur.archlinux.org/packages/mutn)") on the AUR.
 
 Please note that the server binary must be called "libmuttonserver" in order for clients to successfully reach it.
 
