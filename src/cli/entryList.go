@@ -9,14 +9,14 @@ import (
 	"github.com/rwinkhart/libmutton/sync"
 )
 
-// global constants used only in this file
+// ANSI color constants used only in this file
 const (
 	ansiAlternateEntryColor   = "\033[38;5;8m"
 	ansiDirectoryHeader       = "\033[38;5;7;48;5;8m"
 	ansiEmptyDirectoryWarning = "\033[38;5;11m"
 )
 
-// calculates and returns the final visual indentation multiplier (needed to adjust indentation for skipped parent directories) - also subtracts "old" text from directory header
+// determineIndentation calculates and returns the final visual indentation multiplier (needed to adjust indentation for skipped parent directories); also subtracts "old" text from directory header.
 func determineIndentation(skippedDirList []bool, dirList []string, currentDirIndex int) (int, string) {
 	var subtractor int      // tracks how much to subtract from expected indentation multiplier
 	var lastPrefixIndex int // tracks the index (in both skippedDirList and dirList) of the last displayed parent directory
@@ -46,7 +46,7 @@ func determineIndentation(skippedDirList []bool, dirList []string, currentDirInd
 	return indent, trimmedDirectory
 }
 
-// processing for printing file entries (determines color, line wrapping, and prints)
+// printFileEntry handles processing for printing file entries (determines color, wraps lines, and prints).
 func printFileEntry(entry string, lastSlash, charCounter, indent int, colorAlternator int8) (int, int8) {
 	// determine color to print fileEntryName (alternate each time function is run)
 	var colorCode string
@@ -77,7 +77,7 @@ func printFileEntry(entry string, lastSlash, charCounter, indent int, colorAlter
 	return charCounter, colorAlternator
 }
 
-// EntryListGen generates and displays full libmutton entry list
+// EntryListGen generates and displays the full libmutton entry list.
 func EntryListGen() {
 	fileList, dirList := sync.WalkEntryDir()
 

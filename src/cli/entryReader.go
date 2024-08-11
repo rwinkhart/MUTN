@@ -11,7 +11,7 @@ import (
 
 const ansiShownPassword = "\033[38;5;10m"
 
-// EntryReader prints the decrypted contents of a libmutton entry in a human-readable format
+// EntryReader prints the decrypted contents of a libmutton entry in a human-readable format.
 func EntryReader(decryptedEntry []string, hideSecrets, syncEnabled bool) {
 	fmt.Println()
 
@@ -71,7 +71,7 @@ func EntryReader(decryptedEntry []string, hideSecrets, syncEnabled bool) {
 	os.Exit(0)
 }
 
-// EntryReaderDecrypt is a wrapper for EntryReader that first decrypts a GPG-encrypted file before sending it to EntryReader
+// EntryReaderDecrypt is a wrapper for EntryReader that first decrypts a GPG-encrypted file before sending it to EntryReader.
 func EntryReaderDecrypt(targetLocation string, hideSecrets bool) {
 	if isFile, _ := core.TargetIsFile(targetLocation, true, 2); isFile {
 		EntryReader(core.DecryptGPG(targetLocation), hideSecrets, false) // never sync if decrypting straight to EntryReader, as this means the entry could not have been modified

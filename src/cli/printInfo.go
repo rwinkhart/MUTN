@@ -7,7 +7,7 @@ import (
 	"github.com/rwinkhart/libmutton/core"
 )
 
-// global constants used only in this file
+// ANSI color constants used only in this file
 const (
 	ansiVersionMeat    = "\033[38;2;157;0;6m"
 	ansiVersionOutline = "\033[38;2;131;165;152m"

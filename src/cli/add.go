@@ -8,8 +8,8 @@ import (
 	"github.com/rwinkhart/libmutton/core"
 )
 
-// AddEntry creates a new entry at targetLocation by taking user input via CLI prompts
-// entryType: 0 = standard (password), 1 = auto-generated password, 2 = note
+// AddEntry creates a new entry at targetLocation by taking user input via CLI prompts.
+// Requires: entryType (0 = standard password entry, 1 = auto-generated password entry, 2 = note-only entry).
 func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
 	// ensure target location does not already exist
 	_, isAccessible := core.TargetIsFile(targetLocation, false, 0)

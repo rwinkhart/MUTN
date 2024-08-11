@@ -10,7 +10,7 @@ import (
 	"github.com/rwinkhart/libmutton/sync"
 )
 
-// TempInitCli initializes the MUTN environment based on user input (will be replaced with a TUI menu)
+// TempInitCli initializes the MUTN environment based on user input.
 func TempInitCli() {
 	// gpgID
 	var gpgID string

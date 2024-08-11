@@ -10,7 +10,7 @@ import (
 	"golang.org/x/term"
 )
 
-// input prompts the user for input and returns the input as a string
+// input prompts the user for input and returns the input as a string.
 func input(prompt string) string {
 	fmt.Print("\n" + prompt + " ")
 	reader := bufio.NewReader(os.Stdin)
@@ -18,7 +18,7 @@ func input(prompt string) string {
 	return strings.TrimRight(userInput, "\n\r ") // remove trailing newlines, carriage returns, and spaces
 }
 
-// inputHidden prompts the user for input and returns the input as a string, hiding the input from the terminal
+// inputHidden prompts the user for input and returns the input as a string, hiding the input from the terminal.
 func inputHidden(prompt string) string {
 	fmt.Print("\n" + prompt + " ")
 	byteInput, _ := term.ReadPassword(int(os.Stdin.Fd()))
@@ -27,8 +27,8 @@ func inputHidden(prompt string) string {
 	return password
 }
 
-// inputInt prompts the user for input and returns the input as an integer
-// a maxValue of 0 will cause the function to return 0, an error - a negative maxValue will disable the maxValue check
+// inputInt prompts the user for input and returns the input as an integer.
+// A maxValue of 0 will cause the function to return 0, an error - a negative maxValue will disable the maxValue check.
 func inputInt(prompt string, maxValue int) int {
 	if maxValue == 0 {
 		return 0
@@ -45,7 +45,7 @@ func inputInt(prompt string, maxValue int) int {
 	}
 }
 
-// inputBinary prompts the user with a yes/no question and returns the response as a boolean
+// inputBinary prompts the user with a yes/no question and returns the response as a boolean.
 func inputBinary(prompt string) bool {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("\n" + prompt + " (y/N) ")
@@ -56,7 +56,7 @@ func inputBinary(prompt string) bool {
 	return false
 }
 
-// inputMenuGen prompts the user with a menu and returns the user's choice as an integer
+// inputMenuGen prompts the user with a menu and returns the user's choice as an integer.
 func inputMenuGen(prompt string, options []string) int {
 	for i, option := range options {
 		fmt.Printf("%d. %s\n", i+1, option)
@@ -64,7 +64,7 @@ func inputMenuGen(prompt string, options []string) int {
 	return inputInt(prompt, len(options))
 }
 
-// writeEntryCLI writes an entry to targetLocation and previews it (errors if no data is supplied)
+// writeEntryCLI writes an entry to targetLocation and previews it (errors if no data is supplied).
 func writeEntryCLI(targetLocation string, unencryptedEntry []string, hideSecrets, verifyEntryDoesNotExist bool) {
 	if core.EntryIsNotEmpty(unencryptedEntry) {
 		// write the entry to the target location
@@ -78,7 +78,7 @@ func writeEntryCLI(targetLocation string, unencryptedEntry []string, hideSecrets
 	}
 }
 
-// expandPathWithHome, given a path (as a string) containing "~", returns the path with "~" expanded to the user's home directory
+// expandPathWithHome, given a path (as a string) containing "~", returns the path with "~" expanded to the user's home directory.
 func expandPathWithHome(path string) string {
 	return strings.Replace(path, "~", core.Home, 1)
 }

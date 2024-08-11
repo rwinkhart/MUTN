@@ -12,7 +12,7 @@ import (
 	"github.com/rwinkhart/libmutton/sync"
 )
 
-// RenameCli renames an entry at oldLocationIncomplete to a new location (user input) on both the client and the server
+// RenameCli renames an entry at oldLocationIncomplete to a new location (user input) on both the client and the server.
 func RenameCli(oldLocationIncomplete string) {
 	// prompt user for new location and rename
 	newLocationIncomplete := input("New location:")
@@ -21,7 +21,7 @@ func RenameCli(oldLocationIncomplete string) {
 	// exit is done from sync.RenameRemoteFromClient
 }
 
-// EditEntryField edits a field of an entry at targetLocation (user input)
+// EditEntryField edits a field of an entry at targetLocation (user input).
 func EditEntryField(targetLocation string, hideSecrets bool, field int) {
 	// fetch old entry data (with all required lines present)
 	unencryptedEntry := core.GetOldEntryData(targetLocation, field)
@@ -54,7 +54,7 @@ func EditEntryField(targetLocation string, hideSecrets bool, field int) {
 	writeEntryCLI(targetLocation, unencryptedEntry, hideSecrets, false)
 }
 
-// GenUpdate generates a new password for an entry at targetLocation (user input)
+// GenUpdate generates a new password for an entry at targetLocation (user input).
 func GenUpdate(targetLocation string, hideSecrets bool) {
 	// fetch old entry data
 	unencryptedEntry := core.GetOldEntryData(targetLocation, 0)
@@ -66,8 +66,8 @@ func GenUpdate(targetLocation string, hideSecrets bool) {
 	writeEntryCLI(targetLocation, unencryptedEntry, hideSecrets, false)
 }
 
-// editNote uses the user-specified text editor to edit an existing note (or create a new one if baseNote is empty)
-// returns the edited note and a boolean indicating whether the note was edited
+// editNote uses the user-specified text editor to edit an existing note (or create a new one if baseNote is empty).
+// Returns the edited note and a boolean indicating whether the note was edited.
 func editNote(baseNote []string) ([]string, bool) {
 	tempFile := core.CreateTempFile()
 	defer func(name string) {
