@@ -144,8 +144,30 @@ Once this has been done, you may proceed with the client setup:
 
         ...and then restart your shell.
 
-.SH EXIT CODES
-TBD
+.SH EXIT CODES (defined by libmutton)
+0: no error
+
+101: read error
+
+102: write error
+
+103: sync process error
+
+104: server connection error
+
+105: target not found
+
+106: target already exists
+
+107: target wrong type (file/directory)
+
+108: decryption error
+
+109: encryption error
+
+110: clipboard error
+
+111: other error
 
 .SH AUTHOR
 Randall Winkhart (https://github.com/rwinkhart)

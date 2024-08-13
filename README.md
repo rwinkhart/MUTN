@@ -27,8 +27,8 @@ After installing, please review the [usage guide](https://github.com/rwinkhart/M
 - [ ] libmutton v0.2.1
     - [ ] Only run getSSHClient once to prevent being asked for keyfile password multiple times
     - [ ] Ensure all config files and entry files are created with 0600 permissions
-    - [ ] Add fail-specific error codes
-        - [ ] Document in man page
+    - [x] Add fail-specific error codes
+        - [x] Document in man page
 - [x] Split into separate repos
     1. libmutton: backend package (rename to core), sync package, libmuttonserver
     3. MUTN: cli package

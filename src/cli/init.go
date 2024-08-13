@@ -22,7 +22,7 @@ func TempInitCli() {
 		gpgIDInt := inputMenuGen("Select GPG key:", uidSlice)
 		if gpgIDInt == 0 {
 			fmt.Println(core.AnsiError + "No GPG keys found - please generate one" + core.AnsiReset)
-			os.Exit(1)
+			os.Exit(105)
 		}
 		gpgID = uidSlice[gpgIDInt-1]
 	}
@@ -47,7 +47,7 @@ func TempInitCli() {
 			sshKey = cmp.Or(expandPathWithHome(input("SSH private identity file path (falls back to \""+fallbackSSHKey+"\"):")), fallbackSSHKey)
 			sshKeyIsFile, _ = core.TargetIsFile(sshKey, false, 0)
 			if !sshKeyIsFile {
-				fmt.Println(core.AnsiError + "SSH identity file not found: " + sshKey + core.AnsiReset)
+				fmt.Println(core.AnsiError+"SSH identity file not found:", sshKey+core.AnsiReset)
 			}
 		}
 

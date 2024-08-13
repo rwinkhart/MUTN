@@ -45,7 +45,7 @@ func EditEntryField(targetLocation string, hideSecrets bool, field int) {
 		editedNote, noteEdited := editNote(noteData)
 		if !noteEdited { // exit early if the note was not edited
 			fmt.Println(core.AnsiError + "Entry is unchanged" + core.AnsiReset)
-			os.Exit(1)
+			os.Exit(0)
 		}
 		unencryptedEntry = append(nonNoteData, editedNote...)
 	}
