@@ -23,15 +23,6 @@ Additionally, MUTN is available as a source package ("[mutn](https://aur.archlin
 After installing, please review the [usage guide](https://github.com/rwinkhart/MUTN/blob/main/wiki/usage.md).
 
 # Roadmap
-#### Release v0.2.1
-- [x] libmutton v0.2.1
-    - [x] Only run getSSHClient once to prevent being asked for keyfile password multiple times
-    - [x] Ensure all config files and entry files are created with 0600 permissions
-    - [x] Add fail-specific error codes
-        - [x] Document in man page
-- [x] Split into separate repos
-    1. libmutton: backend package (rename to core), sync package, libmuttonserver
-    3. MUTN: cli package
 #### Release v0.3.0
 - [ ] Replace Glamour with a more minimal Markdown renderer (likely custom)
 #### Release v0.4.0
