@@ -15,7 +15,7 @@ func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
 	_, isAccessible := core.TargetIsFile(targetLocation, false, 0)
 	if isAccessible {
 		fmt.Println(core.AnsiError + "Target location already exists" + core.AnsiReset)
-		os.Exit(106)
+		os.Exit(core.ErrorTargetExists)
 	}
 
 	// ensure target containing directory exists and is a directory (not a file)

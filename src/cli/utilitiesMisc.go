@@ -74,7 +74,7 @@ func writeEntryCLI(targetLocation string, unencryptedEntry []string, hideSecrets
 		EntryReader(unencryptedEntry, hideSecrets, true)
 	} else {
 		fmt.Println(core.AnsiError + "No data supplied for entry" + core.AnsiReset)
-		os.Exit(105)
+		os.Exit(core.ErrorTargetNotFound)
 	}
 }
 

@@ -18,11 +18,15 @@ fi
 mkdir -p ./1output
 
 case "$1" in
+    release-binaries)
+        . ./resources/release-binaries.sh
+        create_release_binaries
+        ;;
     pkgbuild-git-stable)
-        . ./pkgbuild-git-stable.sh
+        . ./resources/pkgbuild-git-stable.sh
         create_pkgbuild_git_stable
         ;;
     *)
-    printf '\nusage: package.sh [target] <revision>\n\ntargets: pkgbuild-git-stable\n\n'
+    printf '\nusage: package.sh [target] <revision>\n\ntargets: release-binaries pkgbuild-git-stable\n\n'
     ;;
 esac

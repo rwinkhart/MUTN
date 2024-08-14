@@ -4,7 +4,7 @@ go 1.22.6
 
 require (
 	github.com/charmbracelet/glamour v0.7.0
-	github.com/rwinkhart/libmutton v0.0.0-20240808213918-f5e5cd31bb85
+	github.com/rwinkhart/libmutton v0.2.1
 	golang.org/x/term v0.23.0
 )
 
@@ -32,6 +32,6 @@ require (
 	github.com/yuin/goldmark-emoji v1.0.3 // indirect
 	golang.org/x/crypto v0.26.0 // indirect
 	golang.org/x/net v0.28.0 // indirect
-	golang.org/x/sys v0.23.0 // indirect
+	golang.org/x/sys v0.24.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 )

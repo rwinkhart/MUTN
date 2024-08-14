@@ -22,7 +22,7 @@ func TempInitCli() {
 		gpgIDInt := inputMenuGen("Select GPG key:", uidSlice)
 		if gpgIDInt == 0 {
 			fmt.Println(core.AnsiError + "No GPG keys found - please generate one" + core.AnsiReset)
-			os.Exit(105)
+			os.Exit(core.ErrorTargetNotFound)
 		}
 		gpgID = uidSlice[gpgIDInt-1]
 	}
@@ -54,13 +54,13 @@ func TempInitCli() {
 		sshKeyProtected := inputBinary("Is the identity file password-protected?")
 
 		// initialize libmutton directories
-		core.DirInit(false)
+		oldDeviceID := core.DirInit(false)
 
 		// write config file (temporarily assigns sshEntryRoot and sshIsWindows to null to pass initial device ID registration)
-		core.WriteConfig([][3]string{{"MUTN", "textEditor", textEditor}, {"LIBMUTTON", "gpgID", gpgID}, {"LIBMUTTON", "sshUser", sshUser}, {"LIBMUTTON", "sshIP", sshIP}, {"LIBMUTTON", "sshPort", sshPort}, {"LIBMUTTON", "sshKey", sshKey}, {"LIBMUTTON", "sshKeyProtected", strconv.FormatBool(sshKeyProtected)}, {"LIBMUTTON", "sshEntryRoot", "null"}, {"LIBMUTTON", "sshIsWindows", "null"}}, false)
+		core.WriteConfig([][3]string{{"MUTN", "textEditor", textEditor}, {"LIBMUTTON", "gpgID", gpgID}, {"LIBMUTTON", "sshUser", sshUser}, {"LIBMUTTON", "sshIP", sshIP}, {"LIBMUTTON", "sshPort", sshPort}, {"LIBMUTTON", "sshKey", sshKey}, {"LIBMUTTON", "sshKeyProtected", strconv.FormatBool(sshKeyProtected)}, {"LIBMUTTON", "sshEntryRoot", "null"}, {"LIBMUTTON", "sshIsWindows", "false"}}, false)
 
 		// generate and register device ID
-		sshEntryRoot, sshIsWindows := sync.DeviceIDGen()
+		sshEntryRoot, sshIsWindows := sync.DeviceIDGen(oldDeviceID)
 
 		// update config file with sshEntryRoot and sshIsWindows
 		core.WriteConfig([][3]string{{"LIBMUTTON", "sshEntryRoot", sshEntryRoot}, {"LIBMUTTON", "sshIsWindows", sshIsWindows}}, true)

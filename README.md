@@ -24,9 +24,9 @@ After installing, please review the [usage guide](https://github.com/rwinkhart/M
 
 # Roadmap
 #### Release v0.2.1
-- [ ] libmutton v0.2.1
-    - [ ] Only run getSSHClient once to prevent being asked for keyfile password multiple times
-    - [ ] Ensure all config files and entry files are created with 0600 permissions
+- [x] libmutton v0.2.1
+    - [x] Only run getSSHClient once to prevent being asked for keyfile password multiple times
+    - [x] Ensure all config files and entry files are created with 0600 permissions
     - [x] Add fail-specific error codes
         - [x] Document in man page
 - [x] Split into separate repos

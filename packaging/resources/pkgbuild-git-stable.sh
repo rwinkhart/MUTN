@@ -1,7 +1,7 @@
 #!/bin/sh
 
 create_pkgbuild_git_stable() {
-    printf '\ngenerating PKGBUILD...\n'
+    printf '\nGenerating PKGBUILD...\n'
     local source="git+https://github.com/rwinkhart/MUTN.git#tag=v\${pkgver}"
     printf "# Maintainer: Randall Winkhart <idgr at tutanota dot com>
 pkgname=mutn
