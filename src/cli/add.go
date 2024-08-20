@@ -19,7 +19,7 @@ func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
 	}
 
 	// ensure target containing directory exists and is a directory (not a file)
-	core.TargetIsFile(targetLocation[:strings.LastIndex(targetLocation, "/")], true, 1)
+	core.TargetIsFile(targetLocation[:strings.LastIndex(targetLocation, core.PathSeparator)], true, 1)
 
 	var unencryptedEntry []string
 
