@@ -26,7 +26,11 @@ case "$1" in
         . ./resources/pkgbuild-git-stable-optimized.sh
         create_pkgbuild_git_stable_optimized
         ;;
+    apkbuild-source-stable-optimized)
+        . ./resources/apkbuild-source-stable-optimized.sh
+        create_apkbuild_source_stable_optimized
+        ;;
     *)
-    printf '\nusage: package.sh [target] <revision>\n\ntargets: release-binaries pkgbuild-git-stable-optimized\n\n'
+    printf '\nusage: package.sh [target] <revision>\n\ntargets: release-binaries pkgbuild-git-stable-optimized apkbuild-source-stable-optimized\n\n'
     ;;
 esac
