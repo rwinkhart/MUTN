@@ -4,8 +4,8 @@ go 1.23.2
 
 require (
 	github.com/charmbracelet/glamour v0.7.0
-	github.com/rwinkhart/libmutton v0.2.2
-	golang.org/x/term v0.23.0
+	github.com/rwinkhart/libmutton v0.2.3
+	golang.org/x/term v0.25.0
 )
 
 require (
@@ -28,10 +28,10 @@ require (
 	github.com/pquerna/otp v1.4.1-0.20231130234153-3357de7c0481 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
-	github.com/yuin/goldmark v1.7.4 // indirect
-	github.com/yuin/goldmark-emoji v1.0.3 // indirect
-	golang.org/x/crypto v0.26.0 // indirect
-	golang.org/x/net v0.28.0 // indirect
-	golang.org/x/sys v0.24.0 // indirect
+	github.com/yuin/goldmark v1.7.8 // indirect
+	github.com/yuin/goldmark-emoji v1.0.4 // indirect
+	golang.org/x/crypto v0.28.0 // indirect
+	golang.org/x/net v0.30.0 // indirect
+	golang.org/x/sys v0.26.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 )
