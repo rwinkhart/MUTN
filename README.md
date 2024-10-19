@@ -23,26 +23,36 @@ Additionally, MUTN is available as a source package ("[mutn](https://aur.archlin
 After installing, please review the [usage guide](https://github.com/rwinkhart/MUTN/blob/main/wiki/usage.md).
 
 # Roadmap
-#### Release v0.3.0
-- [ ] Replace Glamour with a more minimal Markdown renderer (likely custom)
-#### Release v0.4.0
+### Release v0.3.0
 - [ ] libmutton v0.3.0
-    - [ ] Swap to native (cascade) encryption (custom)
-    - [ ] Implement "netpin" (quick-unlock) with new encryption
-#### Release v0.5.0
-- [ ] libmutton v0.4.0
-    - [ ] Password aging support
-#### Release v0.6.0
-- [ ] libmutton v0.5.0
     - [ ] Add refresh/re-encrypt functionality
 - [ ] Re-implement init menu
 - [ ] Implement tweak menu
-#### Release v1.0.0
+- [ ] Bump Glamour version and switch to fully-compliant Markdown (do not preserve new lines)
+- [ ] Add experimental build option for building with [BEAN](https://github.com/Trojan2021/BEAN) instead of Glamour
+### Release v0.4.0
+- [ ] Evaluate defaulting to building w/Bean over Glamour
+    - [ ] Verify having Glamour in go.mod does not impact binary size/speed (drop it if it does)
+### Release v0.5.0
+- [ ] libmutton v0.4.0
+    - [ ] Password aging support
+        - [ ] Append UNIX timestamp to entry names
+            - [ ] Trim timestamps to allow for vanity entry names in the following cases:
+                - [ ] Argument parsing
+                - [ ] Shell completions
+                - [ ] Entry list readout
+                - [ ] Add yellow/red dot indicators to entry list readout for when passwords should be changed
+### Release v0.6.0
+- [ ] libmutton v0.5.0
+    - [ ] Swap to native (cascading) encryption
+    - [ ] Implement "netpin" (quick-unlock) with new encryption
+### Release v1.0.0 - Distribution packages
+- [ ] Evaluate implementing custom types/interfaces (where applicable)
 - [ ] Create packaging scripts
     - [x] Stable source PKGBUILD
-    - [ ] Stable source APKBUILD
+    - [x] Stable source APKBUILD
     - [ ] Debian/Ubuntu
     - [ ] Fedora
     - [ ] FreeBSD
     - [ ] Windows installer
-- Hunt for polishing opportunities and bugs
+- Perform extensive testing
