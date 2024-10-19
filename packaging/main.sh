@@ -22,11 +22,11 @@ case "$1" in
         . ./resources/release-binaries.sh
         create_release_binaries
         ;;
-    pkgbuild-git-stable)
-        . ./resources/pkgbuild-git-stable.sh
-        create_pkgbuild_git_stable
+    pkgbuild-git-stable-optimized)
+        . ./resources/pkgbuild-git-stable-optimized.sh
+        create_pkgbuild_git_stable_optimized
         ;;
     *)
-    printf '\nusage: package.sh [target] <revision>\n\ntargets: release-binaries pkgbuild-git-stable\n\n'
+    printf '\nusage: package.sh [target] <revision>\n\ntargets: release-binaries pkgbuild-git-stable-optimized\n\n'
     ;;
 esac
