@@ -3,7 +3,6 @@ package cli
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/rwinkhart/libmutton/core"
 	"github.com/rwinkhart/libmutton/sync"
@@ -50,14 +49,13 @@ func EntryReader(decryptedEntry []string, hideSecrets, syncEnabled bool) {
 			fmt.Println(ansiDirectoryHeader + "Notes:" + core.AnsiReset)
 
 			// combine remaining fields into a single string (to support Markdown rendering)
-			var notesSlice []string
+			var noteLines []string
 			for ; field < len(decryptedEntry); field++ {
-				notesSlice = append(notesSlice, decryptedEntry[field])
+				noteLines = append(noteLines, decryptedEntry[field])
 			}
-			joinedString := strings.Join(notesSlice, "\n")
 
 			// print notes to stdout
-			renderNote(&joinedString)
+			renderNote(noteLines)
 
 			// break after notes have been printed
 			break

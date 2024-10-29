@@ -1,3 +1,5 @@
+github.com/Trojan2021/BEAN v0.0.0-20241029203751-320edbc990e8 h1:V4m0AESOYQ3rnklgxozXP7BSE2wqTaqVfWati1fGXAo=
+github.com/Trojan2021/BEAN v0.0.0-20241029203751-320edbc990e8/go.mod h1:mgyhaOTeO5Ba8xMhE4f/E+JrHEUbk7IHKDrt2AXqAWY=
 github.com/alecthomas/assert/v2 v2.7.0 h1:QtqSACNS3tF7oasA8CU6A6sXZSBDqnm7RfpLl9bZqbE=
 github.com/alecthomas/assert/v2 v2.7.0/go.mod h1:Bze95FyfUr7x34QZrjL+XP+0qgp/zg8yS+TtBj1WA3k=
 github.com/alecthomas/chroma/v2 v2.14.0 h1:R3+wzpnUArGcQz7fCETQBzO5n9IMNi13iIs46aU4V9E=
@@ -13,6 +15,8 @@ github.com/boombuler/barcode v1.0.2 h1:79yrbttoZrLGkL/oOI8hBrUKucwOL0oOjUgEguGMc
 github.com/boombuler/barcode v1.0.2/go.mod h1:paBWMcWSl3LHKBqUq+rly7CNSldXjb2rDl3JlRe0mD8=
 github.com/charmbracelet/glamour v0.7.0 h1:2BtKGZ4iVJCDfMF229EzbeR1QRKLWztO9dMtjmqZSng=
 github.com/charmbracelet/glamour v0.7.0/go.mod h1:jUMh5MeihljJPQbJ/wf4ldw2+yBP59+ctV36jASy7ps=
+github.com/charmbracelet/x/ansi v0.4.0 h1:NqwHA4B23VwsDn4H3VcNX1W1tOmgnvY1NDx5tOXdnOU=
+github.com/charmbracelet/x/ansi v0.4.0/go.mod h1:dk73KoMTT5AX5BsX0KrqhsTqAnhZZoCBjs7dGWp4Ktw=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -52,6 +56,8 @@ github.com/rivo/uniseg v0.1.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJ
 github.com/rivo/uniseg v0.2.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=
 github.com/rivo/uniseg v0.4.7 h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=
 github.com/rivo/uniseg v0.4.7/go.mod h1:FN3SvrM+Zdj16jyLfmOkMNblXMcoc8DfTHruCPUcx88=
+github.com/rwinkhart/convertroman v0.2.0 h1:otUm939eXT77q/Lr31mJtMwVWEw0RjEUB71gO65h9OM=
+github.com/rwinkhart/convertroman v0.2.0/go.mod h1:Af6HqvX0EIM4Y3HcnNXbbRey1dLasGB7WU0+3Cowgmw=
 github.com/rwinkhart/libmutton v0.2.3 h1:1oreB+3VQ4g3zy0ZzfCbYvU83Nkg7UCZMaimeBN5+eE=
 github.com/rwinkhart/libmutton v0.2.3/go.mod h1:z3BxZ8l6osV2HQ8RZ0PjUbPnUFNEbxX59/RMrSW0iLI=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

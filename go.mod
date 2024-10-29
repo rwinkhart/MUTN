@@ -3,6 +3,7 @@ module github.com/rwinkhart/MUTN
 go 1.23.2
 
 require (
+	github.com/Trojan2021/BEAN v0.0.0-20241029203751-320edbc990e8
 	github.com/charmbracelet/glamour v0.7.0
 	github.com/rwinkhart/libmutton v0.2.3
 	golang.org/x/term v0.25.0
@@ -13,6 +14,7 @@ require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/boombuler/barcode v1.0.2 // indirect
+	github.com/charmbracelet/x/ansi v0.4.0 // indirect
 	github.com/dlclark/regexp2 v1.11.4 // indirect
 	github.com/fortis/go-steam-totp v0.0.0-20171114202746-18e928674727 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
@@ -27,6 +29,7 @@ require (
 	github.com/pkg/sftp v1.13.6 // indirect
 	github.com/pquerna/otp v1.4.1-0.20231130234153-3357de7c0481 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
+	github.com/rwinkhart/convertroman v0.2.0 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/yuin/goldmark v1.7.8 // indirect
 	github.com/yuin/goldmark-emoji v1.0.4 // indirect
