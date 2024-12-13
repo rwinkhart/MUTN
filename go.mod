@@ -3,9 +3,9 @@ module github.com/rwinkhart/MUTN
 go 1.23.4
 
 require (
-	github.com/Trojan2021/BEAN v0.0.0-20241029203751-320edbc990e8
+	github.com/Trojan2021/BEAN v0.0.0-20241210230804-8f294833b514
 	github.com/charmbracelet/glamour v0.7.0
-	github.com/rwinkhart/libmutton v0.2.3
+	github.com/rwinkhart/libmutton v0.2.4
 	golang.org/x/term v0.27.0
 )
 
