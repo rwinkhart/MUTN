@@ -38,7 +38,7 @@ func main() {
 					case "show", "-s":
 						cli.EntryReaderDecrypt(targetLocation, false)
 					case "copy":
-						core.CopyArgument(args[0], targetLocation, 0)
+						core.CopyArgument(targetLocation, 0)
 					case "edit":
 						cli.EditEntryField(targetLocation, true, 0)
 					case "gen":
@@ -82,7 +82,7 @@ func main() {
 					default:
 						cli.HelpCopy()
 					}
-					core.CopyArgument(args[0], targetLocation, field)
+					core.CopyArgument(targetLocation, field)
 				case "edit":
 					var field int // indicates which (numbered) field to edit
 					switch args[3] {

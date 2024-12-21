@@ -5,7 +5,7 @@ go 1.23.4
 require (
 	github.com/Trojan2021/BEAN v0.0.0-20241210230804-8f294833b514
 	github.com/charmbracelet/glamour v0.7.0
-	github.com/rwinkhart/libmutton v0.2.4
+	github.com/rwinkhart/libmutton v0.2.5-0.20241221012916-619e4220a60f
 	golang.org/x/term v0.27.0
 )
 
