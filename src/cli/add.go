@@ -29,12 +29,12 @@ func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
 		// determine whether to generate the password
 		var password string
 		if entryType == 0 {
-			password = inputHidden("Password:")
+			password = string(inputHidden("Password:"))
 		} else {
 			password = core.StringGen(inputInt("Password length:", -1), inputBinary("Generate a complex (special characters) password?"), 0.2, false)
 		}
 
-		totp := inputHidden("TOTP secret:")
+		totp := string(inputHidden("TOTP secret:"))
 		url := input("URL:")
 		if inputBinary("Add a note to this entry?") {
 			note, _ := editNote([]string{})

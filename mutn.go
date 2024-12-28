@@ -160,7 +160,7 @@ func main() {
 			case "clipclear":
 				core.ClipClearArgument()
 			case "sync":
-				sync.RunJob(true)
+				cli.RunJobWrapper(true)
 			case "init":
 				cli.TempInitCli()
 			case "tweak":

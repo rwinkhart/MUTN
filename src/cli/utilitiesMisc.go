@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/rwinkhart/libmutton/core"
+	"github.com/rwinkhart/libmutton/sync"
 	"golang.org/x/term"
 )
 
@@ -18,13 +19,12 @@ func input(prompt string) string {
 	return strings.TrimRight(userInput, "\n\r ") // remove trailing newlines, carriage returns, and spaces
 }
 
-// inputHidden prompts the user for input and returns the input as a string, hiding the input from the terminal.
-func inputHidden(prompt string) string {
+// inputHidden prompts the user for input and returns the input as a byte array, hiding the input from the terminal.
+func inputHidden(prompt string) []byte {
 	fmt.Print("\n" + prompt + " ")
 	byteInput, _ := term.ReadPassword(int(os.Stdin.Fd()))
-	password := string(byteInput)
 	fmt.Println()
-	return password
+	return byteInput
 }
 
 // inputInt prompts the user for input and returns the input as an integer.
@@ -81,4 +81,10 @@ func writeEntryCLI(targetLocation string, unencryptedEntry []string, hideSecrets
 // expandPathWithHome, given a path (as a string) containing "~", returns the path with "~" expanded to the user's home directory.
 func expandPathWithHome(path string) string {
 	return strings.Replace(path, "~", core.Home, 1)
+}
+
+// RunJobWrapper is a wrapper for sync.RunJob that sets the passphrase input function to inputHidden.
+func RunJobWrapper(manualSync bool) {
+	core.PassphraseInputFunction = inputHidden
+	sync.RunJob(manualSync)
 }

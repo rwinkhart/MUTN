@@ -29,11 +29,11 @@ func EditEntryField(targetLocation string, hideSecrets bool, field int) {
 	// edit the field
 	switch field {
 	case 0:
-		unencryptedEntry[field] = inputHidden("Password:")
+		unencryptedEntry[field] = string(inputHidden("Password:"))
 	case 1:
 		unencryptedEntry[field] = input("Username:")
 	case 2:
-		unencryptedEntry[field] = inputHidden("TOTP secret:")
+		unencryptedEntry[field] = string(inputHidden("TOTP secret:"))
 	case 3:
 		unencryptedEntry[field] = input("URL:")
 	case 4: // edit notes fields

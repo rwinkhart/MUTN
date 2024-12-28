@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/rwinkhart/libmutton/core"
-	"github.com/rwinkhart/libmutton/sync"
 )
 
 const ansiShownPassword = "\033[38;5;10m"
@@ -63,7 +62,7 @@ func EntryReader(decryptedEntry []string, hideSecrets, syncEnabled bool) {
 	}
 
 	if syncEnabled {
-		sync.RunJob(false)
+		RunJobWrapper(false)
 	}
 
 	os.Exit(0)
