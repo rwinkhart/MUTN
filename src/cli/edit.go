@@ -16,7 +16,7 @@ import (
 func RenameCli(oldLocationIncomplete string) {
 	// prompt user for new location and rename
 	newLocationIncomplete := input("New location:")
-	sync.RenameRemoteFromClient(oldLocationIncomplete, newLocationIncomplete)
+	sync.RenameRemoteFromClient(oldLocationIncomplete, newLocationIncomplete, false)
 
 	// exit is done from sync.RenameRemoteFromClient
 }
@@ -75,7 +75,8 @@ func editNote(baseNote []string) ([]string, bool) {
 	}(tempFile.Name())
 
 	// fetch the user's text editor
-	editor := core.ParseConfig([][2]string{{"MUTN", "textEditor"}}, "")[0]
+	editorCfg, _ := core.ParseConfig([][2]string{{"MUTN", "textEditor"}}, "")
+	editor := editorCfg[0]
 
 	// write baseNote to tempFile (if it is not empty)
 	if len(baseNote) > 0 {
