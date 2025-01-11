@@ -86,5 +86,5 @@ func expandPathWithHome(path string) string {
 // RunJobWrapper is a wrapper for sync.RunJob that sets the passphrase input function to inputHidden.
 func RunJobWrapper(manualSync bool) {
 	core.PassphraseInputFunction = inputHidden
-	sync.RunJob(manualSync)
+	sync.RunJob(manualSync, false)
 }

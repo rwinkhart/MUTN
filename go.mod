@@ -5,8 +5,8 @@ go 1.23.4
 require (
 	github.com/Trojan2021/BEAN v0.0.0-20241210230804-8f294833b514
 	github.com/charmbracelet/glamour v0.7.0
-	github.com/rwinkhart/libmutton v0.2.5-0.20241229212818-fc2e77d8b80e
-	golang.org/x/term v0.27.0
+	github.com/rwinkhart/libmutton v0.2.5-0.20250111225846-b37dfdb912f3
+	golang.org/x/term v0.28.0
 )
 
 require (
@@ -33,8 +33,8 @@ require (
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/yuin/goldmark v1.7.8 // indirect
 	github.com/yuin/goldmark-emoji v1.0.4 // indirect
-	golang.org/x/crypto v0.31.0 // indirect
+	golang.org/x/crypto v0.32.0 // indirect
 	golang.org/x/net v0.33.0 // indirect
-	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/sys v0.29.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 )
