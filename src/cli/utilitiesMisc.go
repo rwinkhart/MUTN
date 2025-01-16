@@ -78,11 +78,6 @@ func writeEntryCLI(targetLocation string, unencryptedEntry []string, hideSecrets
 	}
 }
 
-// expandPathWithHome, given a path (as a string) containing "~", returns the path with "~" expanded to the user's home directory.
-func expandPathWithHome(path string) string {
-	return strings.Replace(path, "~", core.Home, 1)
-}
-
 // RunJobWrapper is a wrapper for sync.RunJob that sets the passphrase input function to inputHidden.
 func RunJobWrapper(manualSync bool) {
 	core.PassphraseInputFunction = inputHidden

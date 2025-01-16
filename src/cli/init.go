@@ -44,7 +44,7 @@ func TempInitCli() {
 		var sshKeyIsFile bool
 		for !sshKeyIsFile {
 			fallbackSSHKey := core.Home + core.PathSeparator + ".ssh" + core.PathSeparator + "id_ed25519"
-			sshKey = cmp.Or(expandPathWithHome(input("SSH private identity file path (falls back to \""+fallbackSSHKey+"\"):")), fallbackSSHKey)
+			sshKey = cmp.Or(core.ExpandPathWithHome(input("SSH private identity file path (falls back to \""+fallbackSSHKey+"\"):")), fallbackSSHKey)
 			sshKeyIsFile, _ = core.TargetIsFile(sshKey, false, 0)
 			if !sshKeyIsFile {
 				fmt.Println(core.AnsiError+"SSH identity file not found:", sshKey+core.AnsiReset)
