@@ -13,7 +13,7 @@ import (
 const (
 	ansiAlternateEntryColor   = "\033[38;5;8m"
 	ansiDirectoryHeader       = "\033[38;5;7;48;5;8m"
-	ansiEmptyDirectoryWarning = "\033[38;5;11m"
+	ansiEmptyDirectoryWarning = "\033[38;5;3m"
 )
 
 // determineIndentation calculates and returns the final visual indentation multiplier (needed to adjust indentation for skipped parent directories); also subtracts "old" text from directory header.
