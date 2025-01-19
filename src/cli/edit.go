@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/exec"
 	"reflect"
-	"strings"
 
 	"github.com/rwinkhart/libmutton/core"
 	"github.com/rwinkhart/libmutton/sync"
@@ -117,15 +116,13 @@ func editNote(baseNote []string) ([]string, bool) {
 	// remove trailing empty strings from the edited note
 	note = core.RemoveTrailingEmptyStrings(note)
 
-	// trim trailing whitespace from each note line
-	for i, line := range note {
-		note[i] = strings.TrimRight(line, " \t\r\n")
-	}
+	// clamp trailing whitespace in each note line
+	core.ClampTrailingWhitespace(note)
 
 	// return the edited note if it is different from baseNote
 	if !reflect.DeepEqual(note, baseNote) {
 		return note, true
 	} else {
-		return []string{}, false
+		return nil, false
 	}
 }
