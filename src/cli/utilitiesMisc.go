@@ -65,10 +65,10 @@ func inputMenuGen(prompt string, options []string) int {
 }
 
 // writeEntryCLI writes an entry to targetLocation and previews it (errors if no data is supplied).
-func writeEntryCLI(targetLocation string, unencryptedEntry []string, hideSecrets, verifyEntryDoesNotExist bool) {
+func writeEntryCLI(targetLocation string, unencryptedEntry []string, hideSecrets bool) {
 	if core.EntryIsNotEmpty(unencryptedEntry) {
 		// write the entry to the target location
-		core.WriteEntry(targetLocation, unencryptedEntry, verifyEntryDoesNotExist)
+		core.WriteEntry(targetLocation, unencryptedEntry)
 		// preview the entry
 		fmt.Println(AnsiBold + "\nEntry Preview:" + core.AnsiReset)
 		EntryReader(unencryptedEntry, hideSecrets, true)

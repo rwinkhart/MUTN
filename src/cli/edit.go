@@ -51,7 +51,7 @@ func EditEntryField(targetLocation string, hideSecrets bool, field int) {
 	}
 
 	// write and preview the modified entry
-	writeEntryCLI(targetLocation, unencryptedEntry, hideSecrets, false)
+	writeEntryCLI(targetLocation, unencryptedEntry, hideSecrets)
 }
 
 // GenUpdate generates a new password for an entry at targetLocation (user input).
@@ -63,7 +63,7 @@ func GenUpdate(targetLocation string, hideSecrets bool) {
 	unencryptedEntry[0] = core.StringGen(inputInt("Password length:", -1), inputBinary("Generate a complex (special characters) password?"), 0.2, false)
 
 	// write and preview the modified entry
-	writeEntryCLI(targetLocation, unencryptedEntry, hideSecrets, false)
+	writeEntryCLI(targetLocation, unencryptedEntry, hideSecrets)
 }
 
 // editNote uses the user-specified text editor to edit an existing note (or create a new one if baseNote is empty).

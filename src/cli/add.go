@@ -48,5 +48,5 @@ func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
 	}
 
 	// write and preview the new entry
-	writeEntryCLI(targetLocation, unencryptedEntry, hideSecrets, false)
+	writeEntryCLI(targetLocation, unencryptedEntry, hideSecrets)
 }
