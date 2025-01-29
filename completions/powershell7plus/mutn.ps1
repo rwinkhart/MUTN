@@ -3,6 +3,21 @@ $global:cliMUTN_entriesToSpaceIndicesMap = @{}
 if (!$IsWindows) {
     # since the executable has the same name as the completion function (on non-Windows platforms), its path must be stored before the function is registered
     $MUTNExecutablePath = (Get-Command mutn).Path
+    $spaceIndicesFilePath = '~/.config/libmutton/psCompletionsCache.json'
+} else {
+    $spaceIndicesFilePath = '~\AppData\Local\libmutton\psCompletionsCache.json'
+}
+
+function cliMUTN-loadSpaceIndices {
+    if (Test-Path $global:spaceIndicesFilePath) {
+        $jsonContent = Get-Content -Path $global:spaceIndicesFilePath -Raw
+        $global:cliMUTN_entriesToSpaceIndicesMap = ConvertFrom-Json -InputObject $jsonContent -AsHashtable
+    }
+}
+
+function cliMUTN-saveSpaceIndices {
+    $jsonContent = $global:cliMUTN_entriesToSpaceIndicesMap | ConvertTo-Json -Compress
+    $jsonContent | Set-Content -Path $global:spaceIndicesFilePath
 }
 
 function cliMUTN-getSpaceIndices {
@@ -59,8 +74,9 @@ function cliMUTN-entryCompleter {
             $spaceIndices = cliMUTN-getSpaceIndices -inputString $_
             $replacedEntry = $_ -replace ' ', '_'
             $replacedEntry
-            $cliMUTN_entriesToSpaceIndicesMap[$replacedEntry] = $spaceIndices
+            $global:cliMUTN_entriesToSpaceIndicesMap[$replacedEntry] = $spaceIndices
         }
+        cliMUTN-saveSpaceIndices
     }
     $trimmedPaths | Where-Object { $_ -like "$wordToComplete*" }
 }
@@ -106,6 +122,8 @@ function mutn {
     if ($IsWindows) {
         Invoke-Expression -Command ('mutn.exe ' + $escapedEntry, $argument, $option).Trim()
     } else {
-        Invoke-Expression -Command ($MUTNExecutablePath + ' ' + $escapedEntry, $argument, $option).Trim()
+        Invoke-Expression -Command ($global:MUTNExecutablePath + ' ' + $escapedEntry, $argument, $option).Trim()
     }
 }
+
+cliMUTN-loadSpaceIndices
