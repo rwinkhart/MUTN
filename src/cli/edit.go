@@ -119,8 +119,8 @@ func editNote(baseNote []string) ([]string, bool) {
 	// clamp trailing whitespace in each note line
 	core.ClampTrailingWhitespace(note)
 
-	// return the edited note if it is different from baseNote
-	if !reflect.DeepEqual(note, baseNote) {
+	// return the edited note if it is different from baseNote and is not empty
+	if !reflect.DeepEqual(note, baseNote) && len(note) > 0 {
 		return note, true
 	} else {
 		return nil, false
