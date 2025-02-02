@@ -73,8 +73,7 @@ func writeEntryCLI(targetLocation string, unencryptedEntry []string, hideSecrets
 		fmt.Println(AnsiBold + "\nEntry Preview:" + core.AnsiReset)
 		EntryReader(unencryptedEntry, hideSecrets, true)
 	} else {
-		fmt.Println(core.AnsiError + "No data supplied for entry" + core.AnsiReset)
-		os.Exit(core.ErrorTargetNotFound)
+		core.PrintError("No data supplied for entry", core.ErrorTargetNotFound, true)
 	}
 }
 

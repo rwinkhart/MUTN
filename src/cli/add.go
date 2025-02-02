@@ -1,8 +1,6 @@
 package cli
 
 import (
-	"fmt"
-	"os"
 	"strings"
 
 	"github.com/rwinkhart/libmutton/core"
@@ -14,8 +12,7 @@ func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
 	// ensure target location does not already exist
 	_, isAccessible := core.TargetIsFile(targetLocation, false, 0)
 	if isAccessible {
-		fmt.Println(core.AnsiError + "Target location already exists" + core.AnsiReset)
-		os.Exit(core.ErrorTargetExists)
+		core.PrintError("Target location already exists", core.ErrorTargetExists, true)
 	}
 
 	// ensure target containing directory exists and is a directory (not a file)

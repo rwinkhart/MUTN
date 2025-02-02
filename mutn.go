@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
@@ -164,8 +163,7 @@ func main() {
 			case "init":
 				cli.TempInitCli()
 			case "tweak":
-				fmt.Println(core.AnsiError + "\"tweak\" is not yet implemented" + core.AnsiReset)
-				os.Exit(0)
+				core.PrintError("\"tweak\" is not yet implemented", 0, true)
 			case "copy":
 				cli.HelpCopy()
 			case "edit":

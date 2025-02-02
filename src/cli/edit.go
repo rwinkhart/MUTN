@@ -2,7 +2,6 @@ package cli
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"os/exec"
 	"reflect"
@@ -43,8 +42,7 @@ func EditEntryField(targetLocation string, hideSecrets bool, field int) {
 		// edit the note
 		editedNote, noteEdited := editNote(noteData)
 		if !noteEdited { // exit early if the note was not edited
-			fmt.Println(core.AnsiError + "Entry is unchanged" + core.AnsiReset)
-			os.Exit(0)
+			core.PrintError("Entry is unchanged", 0, true)
 		}
 		unencryptedEntry = append(nonNoteData, editedNote...)
 	}
