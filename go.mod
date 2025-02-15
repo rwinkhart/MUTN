@@ -1,21 +1,21 @@
 module github.com/rwinkhart/MUTN
 
-go 1.23.4
+go 1.24.0
 
 require (
 	github.com/Trojan2021/BEAN v0.0.0-20241210230804-8f294833b514
 	github.com/charmbracelet/glamour v0.7.0
-	github.com/rwinkhart/libmutton v0.2.5-0.20250202014803-e9d0c3704362
-	golang.org/x/term v0.28.0
+	github.com/rwinkhart/libmutton v0.2.5-0.20250215180322-e1222f94d9fe
+	golang.org/x/term v0.29.0
 )
 
 require (
-	github.com/alecthomas/chroma/v2 v2.14.0 // indirect
+	github.com/alecthomas/chroma/v2 v2.15.0 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/boombuler/barcode v1.0.2 // indirect
 	github.com/charmbracelet/x/ansi v0.5.2 // indirect
-	github.com/dlclark/regexp2 v1.11.4 // indirect
+	github.com/dlclark/regexp2 v1.11.5 // indirect
 	github.com/fortis/go-steam-totp v0.0.0-20171114202746-18e928674727 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/kr/fs v0.1.0 // indirect
@@ -33,8 +33,8 @@ require (
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/yuin/goldmark v1.7.8 // indirect
 	github.com/yuin/goldmark-emoji v1.0.4 // indirect
-	golang.org/x/crypto v0.32.0 // indirect
-	golang.org/x/net v0.33.0 // indirect
-	golang.org/x/sys v0.29.0 // indirect
+	golang.org/x/crypto v0.33.0 // indirect
+	golang.org/x/net v0.35.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 )
