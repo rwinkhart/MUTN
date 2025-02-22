@@ -1,4 +1,4 @@
-.TH MUTN 1 "13 December 2024" "v0.2.4" "MUTN man page"
+.TH MUTN 1 "22 February 2025" "v0.2.5" "MUTN man page"
 
 .SH NAME
 \fBmutn\fR - Simple, self-hosted, SSH-synchronized password and note management based on libmutton. It is the successor to sshyp.
