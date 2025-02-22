@@ -5,7 +5,7 @@ go 1.24.0
 require (
 	github.com/Trojan2021/BEAN v0.0.0-20241210230804-8f294833b514
 	github.com/charmbracelet/glamour v0.7.0
-	github.com/rwinkhart/libmutton v0.2.5-0.20250215180322-e1222f94d9fe
+	github.com/rwinkhart/libmutton v0.3.0
 	golang.org/x/term v0.29.0
 )
 
@@ -24,7 +24,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.27 // indirect
 	github.com/muesli/reflow v0.3.0 // indirect
-	github.com/muesli/termenv v0.15.2 // indirect
+	github.com/muesli/termenv v0.16.0 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/pkg/sftp v1.13.7 // indirect
 	github.com/pquerna/otp v1.4.1-0.20231130234153-3357de7c0481 // indirect
@@ -33,7 +33,7 @@ require (
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/yuin/goldmark v1.7.8 // indirect
 	github.com/yuin/goldmark-emoji v1.0.4 // indirect
-	golang.org/x/crypto v0.33.0 // indirect
+	golang.org/x/crypto v0.34.0 // indirect
 	golang.org/x/net v0.35.0 // indirect
 	golang.org/x/sys v0.30.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
