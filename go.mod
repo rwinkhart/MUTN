@@ -1,12 +1,12 @@
 module github.com/rwinkhart/MUTN
 
-go 1.24.0
+go 1.24.1
 
 require (
 	github.com/Trojan2021/BEAN v0.0.0-20241210230804-8f294833b514
 	github.com/charmbracelet/glamour v0.7.0
-	github.com/rwinkhart/libmutton v0.3.0
-	golang.org/x/term v0.29.0
+	github.com/rwinkhart/libmutton v0.3.1-0.20250316222528-f40699076d8f
+	golang.org/x/term v0.30.0
 )
 
 require (
@@ -26,15 +26,15 @@ require (
 	github.com/muesli/reflow v0.3.0 // indirect
 	github.com/muesli/termenv v0.16.0 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
-	github.com/pkg/sftp v1.13.7 // indirect
+	github.com/pkg/sftp v1.13.8 // indirect
 	github.com/pquerna/otp v1.4.1-0.20231130234153-3357de7c0481 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/rwinkhart/convertroman v0.2.0 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/yuin/goldmark v1.7.8 // indirect
 	github.com/yuin/goldmark-emoji v1.0.4 // indirect
-	golang.org/x/crypto v0.34.0 // indirect
+	golang.org/x/crypto v0.36.0 // indirect
 	golang.org/x/net v0.35.0 // indirect
-	golang.org/x/sys v0.30.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 )

@@ -1,22 +1,14 @@
 package cli
 
 import (
-	"strings"
-
 	"github.com/rwinkhart/libmutton/core"
 )
 
 // AddEntry creates a new entry at targetLocation by taking user input via CLI prompts.
 // Requires: entryType (0 = standard password entry, 1 = auto-generated password entry, 2 = note-only entry).
 func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
-	// ensure target location does not already exist
-	_, isAccessible := core.TargetIsFile(targetLocation, false, 0)
-	if isAccessible {
-		core.PrintError("Target location already exists", core.ErrorTargetExists, true)
-	}
-
-	// ensure target containing directory exists and is a directory (not a file)
-	core.TargetIsFile(targetLocation[:strings.LastIndex(targetLocation, core.PathSeparator)], true, 1)
+	// ensure targetLocation is valid
+	core.EntryAddPrecheck(targetLocation)
 
 	var unencryptedEntry []string
 
