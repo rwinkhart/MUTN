@@ -76,7 +76,17 @@ func editNote(baseNote []string) ([]string, bool) {
 	editor := editorCfg[0]
 
 	// write baseNote to tempFile (if it is not empty)
-	if len(baseNote) > 0 {
+	baseNoteLen := len(baseNote)
+	switch baseNoteLen {
+	case 0: // do not write empty baseNote to file
+	case 1: // truncate baseNote if its only length is an empty string (do not write to file)
+		if baseNote[0] == "" {
+			baseNote = []string{}
+			baseNoteLen = 0
+			break
+		}
+		fallthrough // if baseNote contained real data, write it to tempFile
+	default: // write baseNote to tempFile for external editing
 		for _, line := range baseNote {
 			_, _ = tempFile.WriteString(line + "\n")
 		}
@@ -117,8 +127,12 @@ func editNote(baseNote []string) ([]string, bool) {
 	// clamp trailing whitespace in each note line
 	core.ClampTrailingWhitespace(note)
 
-	// return the edited note if it is different from baseNote and is not empty
-	if !reflect.DeepEqual(note, baseNote) && len(note) > 0 {
+	// return the edited note if:
+	// it is different from baseNote AND
+	// [it is not empty (prevent needless writes when adding blank notes) OR
+	// it has a different length from baseNote (allow removing notes from entries)]
+	noteLen := len(note)
+	if !reflect.DeepEqual(note, baseNote) && (noteLen > 0 || baseNoteLen != noteLen) {
 		return note, true
 	} else {
 		return nil, false
