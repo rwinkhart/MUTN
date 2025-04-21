@@ -67,6 +67,7 @@ func inputMenuGen(prompt string, options []string) int {
 // inputPasswordGen prompts the user for password generation parameters and returns a generated password as a string.
 func inputPasswordGen() string {
 	passLength := inputInt("Password length:", -1)
+	fmt.Println()
 	passCharset := uint8(inputMenuGen("Password complexity:", []string{"Simple", "Complex", "Ultra Complex (not compatible with many services)"}))
 	var complexity float64
 	switch passCharset {
