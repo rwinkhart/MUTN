@@ -20,7 +20,7 @@ func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
 		if entryType == 0 {
 			password = string(inputHidden("Password:"))
 		} else {
-			password = core.StringGen(inputInt("Password length:", -1), inputBinary("Generate a complex (special characters) password?"), 0.2, false)
+			password = inputPasswordGen()
 		}
 
 		totp := string(inputHidden("TOTP secret:"))

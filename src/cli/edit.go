@@ -57,7 +57,7 @@ func GenUpdate(targetLocation string, hideSecrets bool) {
 	unencryptedEntry := core.GetOldEntryData(targetLocation, 0)
 
 	// generate a new password
-	unencryptedEntry[0] = core.StringGen(inputInt("Password length:", -1), inputBinary("Generate a complex (special characters) password?"), 0.2, false)
+	unencryptedEntry[0] = inputPasswordGen()
 
 	// write and preview the modified entry
 	writeEntryCLI(targetLocation, unencryptedEntry, hideSecrets)
