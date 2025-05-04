@@ -158,6 +158,8 @@ func main() {
 			switch args[1] {
 			case "clipclear":
 				core.ClipClearArgument()
+			case "startrcwd":
+				core.RCWDArgument()
 			case "sync":
 				cli.RunJobWrapper(true)
 			case "init":

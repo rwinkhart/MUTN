@@ -8,22 +8,33 @@ import (
 
 	"github.com/rwinkhart/libmutton/core"
 	"github.com/rwinkhart/libmutton/sync"
+	"github.com/rwinkhart/rcw/daemon"
 	"github.com/rwinkhart/rcw/wrappers"
 	"golang.org/x/term"
 )
 
-// GetRCWPassphrase retrieves the RCW passphrase from the user.
-// TODO attempt to retrieve from RCW daemon
+// GetRCWPassphrase retrieves the RCW passphrase from the most accessible source.
+// It first attempts to retrieve from the RCW daemon, then from user input.
+// If it does not find an RCW daemon, it launches one to cache the passphrase.
 func GetRCWPassphrase() []byte {
-	for {
-		passphrase := inputHidden("RCW Passphrase:")
-		err := wrappers.RunSanityCheck(core.ConfigDir+"/sanity.rcw", passphrase)
-		if err != nil {
-			fmt.Println(core.AnsiError + "Failed to encrypt - " + err.Error() + core.AnsiReset)
-			continue
+	// request passphrase from RCW daemon
+	passphrase := daemon.CallDaemonIfOpen()
+
+	// if no passphrase was retrieved, request it from the user
+	if passphrase == nil {
+		for {
+			passphrase = inputHidden("RCW Passphrase:")
+			err := wrappers.RunSanityCheck(core.ConfigDir+"/sanity.rcw", passphrase)
+			if err != nil {
+				fmt.Println(core.AnsiError + "Failed to encrypt - " + err.Error() + core.AnsiReset)
+				continue
+			}
+			break
 		}
-		return passphrase
+		// since no daemon was found earlier, start a new one
+		core.LaunchRCWDProcess(string(passphrase))
 	}
+	return passphrase
 }
 
 // input prompts the user for input and returns the input as a string.

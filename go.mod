@@ -5,12 +5,13 @@ go 1.24.2
 require (
 	github.com/Trojan2021/BEAN v0.0.0-20241210230804-8f294833b514
 	github.com/charmbracelet/glamour v0.7.0
-	github.com/rwinkhart/libmutton v0.3.2-0.20250504220509-826d94bc4397
-	github.com/rwinkhart/rcw v0.0.0-20250504183741-f176d57b6ba5
+	github.com/rwinkhart/libmutton v0.3.2-0.20250504234931-3404fc74823c
+	github.com/rwinkhart/rcw v0.0.0-20250504233845-9314852f061b
 	golang.org/x/term v0.31.0
 )
 
 require (
+	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/alecthomas/chroma/v2 v2.16.0 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
@@ -31,6 +32,7 @@ require (
 	github.com/pquerna/otp v1.4.1-0.20231130234153-3357de7c0481 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/rwinkhart/convertroman v0.2.0 // indirect
+	github.com/rwinkhart/peercred-mini v0.0.0-20250407033241-c09add2eceea // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/yuin/goldmark v1.7.10 // indirect
 	github.com/yuin/goldmark-emoji v1.0.6 // indirect
