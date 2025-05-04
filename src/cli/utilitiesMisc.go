@@ -100,8 +100,7 @@ func inputPasswordGen() string {
 func writeEntryCLI(targetLocation string, unencryptedEntry []string, hideSecrets bool) {
 	if core.EntryIsNotEmpty(unencryptedEntry) {
 		// write the entry to the target location
-		joinedUnencryptedEntry := strings.Join(unencryptedEntry, "\n")
-		core.WriteEntry(targetLocation, []byte(joinedUnencryptedEntry), GetRCWPassphrase())
+		core.WriteEntry(targetLocation, []byte(strings.Join(unencryptedEntry, "\n")), GetRCWPassphrase())
 		// preview the entry
 		fmt.Println(AnsiBold + "\nEntry Preview:" + core.AnsiReset)
 		EntryReader(unencryptedEntry, hideSecrets, true)
