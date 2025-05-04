@@ -5,7 +5,8 @@ go 1.24.2
 require (
 	github.com/Trojan2021/BEAN v0.0.0-20241210230804-8f294833b514
 	github.com/charmbracelet/glamour v0.7.0
-	github.com/rwinkhart/libmutton v0.3.1
+	github.com/rwinkhart/libmutton v0.3.2-0.20250504220509-826d94bc4397
+	github.com/rwinkhart/rcw v0.0.0-20250504183741-f176d57b6ba5
 	golang.org/x/term v0.31.0
 )
 
@@ -42,3 +43,7 @@ require (
 	golang.org/x/sys v0.32.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 )
+
+replace golang.org/x/sys => github.com/rwinkhart/sys-freebsd-13-xucred v0.32.0
+
+replace github.com/Microsoft/go-winio => github.com/rwinkhart/go-winio-easy-pipe-handles v0.0.0-20250407031321-96994a0e8410

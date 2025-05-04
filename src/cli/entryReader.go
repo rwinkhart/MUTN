@@ -68,10 +68,10 @@ func EntryReader(decryptedEntry []string, hideSecrets, syncEnabled bool) {
 	os.Exit(0)
 }
 
-// EntryReaderDecrypt is a wrapper for EntryReader that first decrypts a GPG-encrypted file before sending it to EntryReader.
+// EntryReaderDecrypt is a wrapper for EntryReader that first decrypts an RCW-wrapped file before sending it to EntryReader.
 func EntryReaderDecrypt(targetLocation string, hideSecrets bool) {
 	if isFile, _ := core.TargetIsFile(targetLocation, true, 2); isFile {
-		EntryReader(core.DecryptGPG(targetLocation), hideSecrets, false) // never sync if decrypting straight to EntryReader, as this means the entry could not have been modified
+		EntryReader(core.DecryptFileToSlice(targetLocation, GetRCWPassphrase()), hideSecrets, false) // never sync if decrypting straight to EntryReader, as this means the entry could not have been modified
 	}
 	// do not exit, as this is the job of EntryReader
 }

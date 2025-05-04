@@ -8,8 +8,23 @@ import (
 
 	"github.com/rwinkhart/libmutton/core"
 	"github.com/rwinkhart/libmutton/sync"
+	"github.com/rwinkhart/rcw/wrappers"
 	"golang.org/x/term"
 )
+
+// GetRCWPassphrase retrieves the RCW passphrase from the user.
+// TODO attempt to retrieve from RCW daemon
+func GetRCWPassphrase() []byte {
+	for {
+		passphrase := inputHidden("RCW Passphrase:")
+		err := wrappers.RunSanityCheck(core.ConfigDir+"/sanity.rcw", passphrase)
+		if err != nil {
+			fmt.Println(core.AnsiError + "Failed to encrypt - " + err.Error() + core.AnsiReset)
+			continue
+		}
+		return passphrase
+	}
+}
 
 // input prompts the user for input and returns the input as a string.
 func input(prompt string) string {
@@ -85,7 +100,8 @@ func inputPasswordGen() string {
 func writeEntryCLI(targetLocation string, unencryptedEntry []string, hideSecrets bool) {
 	if core.EntryIsNotEmpty(unencryptedEntry) {
 		// write the entry to the target location
-		core.WriteEntry(targetLocation, unencryptedEntry)
+		joinedUnencryptedEntry := strings.Join(unencryptedEntry, "\n")
+		core.WriteEntry(targetLocation, []byte(joinedUnencryptedEntry), GetRCWPassphrase())
 		// preview the entry
 		fmt.Println(AnsiBold + "\nEntry Preview:" + core.AnsiReset)
 		EntryReader(unencryptedEntry, hideSecrets, true)

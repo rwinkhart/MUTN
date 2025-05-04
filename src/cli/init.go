@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"bytes"
 	"cmp"
 	"fmt"
 	"os"
@@ -12,21 +13,7 @@ import (
 
 // TempInitCli initializes the MUTN environment based on user input.
 func TempInitCli() {
-	// gpgID
-	var gpgID string
-	if inputBinary("Auto-generate GPG key?") {
-		gpgID = core.GpgKeyGen()
-	} else {
-		// select GPG key from menu
-		uidSlice := core.GpgUIDListGen()
-		gpgIDInt := inputMenuGen("Select GPG key:", uidSlice)
-		if gpgIDInt == 0 {
-			core.PrintError("No GPG keys found - please generate one", core.ErrorTargetNotFound, true)
-		}
-		gpgID = uidSlice[gpgIDInt-1]
-	}
-
-	// textEditor
+	// text editor
 	textEditor := cmp.Or(input("Text editor (leave blank for $EDITOR, falls back to \""+fallbackEditor+"\"):"), os.Getenv("EDITOR"), fallbackEditor)
 
 	// SSH info
@@ -56,7 +43,7 @@ func TempInitCli() {
 		oldDeviceID := core.DirInit(false)
 
 		// write config file (temporarily assigns sshEntryRoot and sshIsWindows to null to pass initial device ID registration)
-		core.WriteConfig([][3]string{{"MUTN", "textEditor", textEditor}, {"LIBMUTTON", "gpgID", gpgID}, {"LIBMUTTON", "sshUser", sshUser}, {"LIBMUTTON", "sshIP", sshIP}, {"LIBMUTTON", "sshPort", sshPort}, {"LIBMUTTON", "sshKey", sshKey}, {"LIBMUTTON", "sshKeyProtected", strconv.FormatBool(sshKeyProtected)}, {"LIBMUTTON", "sshEntryRoot", "null"}, {"LIBMUTTON", "sshIsWindows", "false"}}, nil, false)
+		core.WriteConfig([][3]string{{"MUTN", "textEditor", textEditor}, {"LIBMUTTON", "sshUser", sshUser}, {"LIBMUTTON", "sshIP", sshIP}, {"LIBMUTTON", "sshPort", sshPort}, {"LIBMUTTON", "sshKey", sshKey}, {"LIBMUTTON", "sshKeyProtected", strconv.FormatBool(sshKeyProtected)}, {"LIBMUTTON", "sshEntryRoot", "null"}, {"LIBMUTTON", "sshIsWindows", "false"}}, nil, false)
 
 		// generate and register device ID
 		sshEntryRoot, sshIsWindows := sync.DeviceIDGen(oldDeviceID)
@@ -68,6 +55,18 @@ func TempInitCli() {
 		core.DirInit(false)
 
 		// write config file
-		core.WriteConfig([][3]string{{"MUTN", "textEditor", textEditor}, {"LIBMUTTON", "gpgID", gpgID}}, nil, false)
+		core.WriteConfig([][3]string{{"MUTN", "textEditor", textEditor}}, nil, false)
+	}
+	// RCW sanity check file
+	var passphraseInput1 []byte
+	for {
+		passphraseInput1 = inputHidden("New master (RCW) passphrase:")
+		passphraseInput2 := inputHidden("Confirm RCW passphrase:")
+		if !bytes.Equal(passphraseInput1, passphraseInput2) {
+			fmt.Println(core.AnsiError + "Passphrases do not match" + core.AnsiReset)
+			continue
+		}
+		core.RCWSanityCheckGen(passphraseInput1)
+		break
 	}
 }

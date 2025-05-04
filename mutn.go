@@ -37,7 +37,7 @@ func main() {
 					case "show", "-s":
 						cli.EntryReaderDecrypt(targetLocation, false)
 					case "copy":
-						core.CopyArgument(targetLocation, 0)
+						core.CopyArgument(targetLocation, 0, cli.GetRCWPassphrase())
 					case "edit":
 						cli.EditEntryField(targetLocation, true, 0)
 					case "gen":
@@ -81,7 +81,7 @@ func main() {
 					default:
 						cli.HelpCopy()
 					}
-					core.CopyArgument(targetLocation, field)
+					core.CopyArgument(targetLocation, field, cli.GetRCWPassphrase())
 				case "edit":
 					var field int // indicates which (numbered) field to edit
 					switch args[3] {
