@@ -22,16 +22,16 @@ func RenameCli(oldLocationIncomplete string) {
 // EditEntryField edits a field of an entry at targetLocation (user input).
 func EditEntryField(targetLocation string, hideSecrets bool, field int) {
 	// fetch old entry data (with all required lines present)
-	unencryptedEntry := core.GetOldEntryData(targetLocation, field, GetRCWPassphrase())
+	unencryptedEntry := core.GetOldEntryData(targetLocation, field)
 
 	// edit the field
 	switch field {
 	case 0:
-		unencryptedEntry[field] = string(GetRCWPassphrase())
+		unencryptedEntry[field] = string(inputHidden("Password:"))
 	case 1:
 		unencryptedEntry[field] = input("Username:")
 	case 2:
-		unencryptedEntry[field] = string(GetRCWPassphrase())
+		unencryptedEntry[field] = string(inputHidden("TOTP secret:"))
 	case 3:
 		unencryptedEntry[field] = input("URL:")
 	case 4: // edit notes fields
@@ -54,7 +54,7 @@ func EditEntryField(targetLocation string, hideSecrets bool, field int) {
 // GenUpdate generates a new password for an entry at targetLocation (user input).
 func GenUpdate(targetLocation string, hideSecrets bool) {
 	// fetch old entry data
-	unencryptedEntry := core.GetOldEntryData(targetLocation, 0, GetRCWPassphrase())
+	unencryptedEntry := core.GetOldEntryData(targetLocation, 0)
 
 	// generate a new password
 	unencryptedEntry[0] = inputPasswordGen()

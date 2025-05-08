@@ -8,34 +8,8 @@ import (
 
 	"github.com/rwinkhart/libmutton/core"
 	"github.com/rwinkhart/libmutton/sync"
-	"github.com/rwinkhart/rcw/daemon"
-	"github.com/rwinkhart/rcw/wrappers"
 	"golang.org/x/term"
 )
-
-// GetRCWPassphrase retrieves the RCW passphrase from the most accessible source.
-// It first attempts to retrieve from the RCW daemon, then from user input.
-// If it does not find an RCW daemon, it launches one to cache the passphrase.
-func GetRCWPassphrase() []byte {
-	// request passphrase from RCW daemon
-	passphrase := daemon.CallDaemonIfOpen()
-
-	// if no passphrase was retrieved, request it from the user
-	if passphrase == nil {
-		for {
-			passphrase = inputHidden("RCW Passphrase:")
-			err := wrappers.RunSanityCheck(core.ConfigDir+"/sanity.rcw", passphrase)
-			if err != nil {
-				fmt.Println(core.AnsiError + "Failed to encrypt - " + err.Error() + core.AnsiReset)
-				continue
-			}
-			break
-		}
-		// since no daemon was found earlier, start a new one
-		core.LaunchRCWDProcess(string(passphrase))
-	}
-	return passphrase
-}
 
 // input prompts the user for input and returns the input as a string.
 func input(prompt string) string {
@@ -111,7 +85,7 @@ func inputPasswordGen() string {
 func writeEntryCLI(targetLocation string, unencryptedEntry []string, hideSecrets bool) {
 	if core.EntryIsNotEmpty(unencryptedEntry) {
 		// write the entry to the target location
-		core.WriteEntry(targetLocation, []byte(strings.Join(unencryptedEntry, "\n")), GetRCWPassphrase())
+		core.WriteEntry(targetLocation, []byte(strings.Join(unencryptedEntry, "\n")))
 		// preview the entry
 		fmt.Println(AnsiBold + "\nEntry Preview:" + core.AnsiReset)
 		EntryReader(unencryptedEntry, hideSecrets, true)

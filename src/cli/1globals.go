@@ -3,6 +3,7 @@ package cli
 import (
 	"os"
 
+	"github.com/rwinkhart/libmutton/core"
 	"golang.org/x/term"
 )
 
@@ -16,3 +17,9 @@ const (
 	AnsiBold         = "\033[1m"
 	ansiBlackOnWhite = "\033[38;5;0;48;5;15m"
 )
+
+func init() {
+	core.GetPassphrase = func() []byte {
+		return inputHidden("RCW Passphrase:")
+	}
+}
