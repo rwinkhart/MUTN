@@ -12,6 +12,5 @@ After placing the binaries in your $PATH, it is highly recommended to also downl
 Please see the [usage guide](https://github.com/rwinkhart/MUTN/blob/main/wiki/usage.md) for help getting started.
 
 ### Dependencies (required for all installations)
-- GnuPG command-line utility (`gpg` command; will not be required in the future) for encryption/decryption
 - A text editor (preferably CLI-based) for writing entry notes
 - A private key for SSH key-based authentication is required to use MUTN/libmutton in online/synced mode
