@@ -24,30 +24,29 @@ After installing, please review the [usage guide](https://github.com/rwinkhart/M
 
 # Roadmap
 ### Release v0.3.0
-- [ ] libmutton v0.3.0
+- [ ] libmutton v0.4.0
+    - [x] Swap to native (cascade) encryption
     - [ ] Add refresh/re-encrypt functionality
 - [ ] Re-implement init menu
 - [ ] Implement tweak menu
-- [ ] Bump Glamour version and switch to fully-compliant Markdown (do not preserve new lines)
-- [x] Add experimental build option for building with [BEAN](https://github.com/Trojan2021/BEAN) instead of Glamour
 ### Release v0.4.0
+- [ ] Switch to fully-compliant Markdown (do not preserve new lines)
 - [ ] Evaluate defaulting to building w/Bean over Glamour
     - [ ] Verify having Glamour in go.mod does not impact binary size/speed (drop it if it does)
 ### Release v0.5.0
-- [ ] libmutton v0.4.0
+- [ ] libmutton v0.5.0
     - [ ] Password aging support
         - [ ] Append UNIX timestamp to entry names
             - [ ] Trim timestamps to allow for vanity entry names in the following cases:
                 - [ ] Argument parsing
                 - [ ] Shell completions
                 - [ ] Entry list readout
+                - [ ] Sync output
                 - [ ] Add yellow/red dot indicators to entry list readout for when passwords should be changed
 ### Release v0.6.0
-- [ ] libmutton v0.5.0
-    - [ ] Swap to native (cascading) encryption
-    - [ ] Implement "netpin" (quick-unlock) with new encryption
+- [ ] libmutton v0.6.0
+    - [ ] Implement "netpin" (quick-unlock)
 ### Release v1.0.0 - Distribution packages
-- [ ] Evaluate implementing custom types/interfaces (where applicable)
 - [ ] Create packaging scripts
     - [x] Stable source PKGBUILD
     - [x] Stable source APKBUILD
