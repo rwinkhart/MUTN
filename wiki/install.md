@@ -14,3 +14,4 @@ Please see the [usage guide](https://github.com/rwinkhart/MUTN/blob/main/wiki/us
 ### Dependencies (required for all installations)
 - A text editor (preferably CLI-based) for writing entry notes
 - A private key for SSH key-based authentication is required to use MUTN/libmutton in online/synced mode
+- Linux: xclip (X11) or wl-clipboard (Wayland) for clipboard support
