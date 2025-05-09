@@ -11,7 +11,7 @@ pkgdesc='A simple, self-hosted, SSH-synchronized password/note manager for the C
 arch=('x86_64' 'i686' 'i486' 'pentium4' 'aarch64' 'armv7h' 'riscv64')
 url='https://github.com/rwinkhart/MUTN'
 license=('MIT')
-depends=(gnupg)
+depends=()
 makedepends=(go grep gzip)
 optdepends=(
     'wl-clipboard: Wayland clipboard support'
