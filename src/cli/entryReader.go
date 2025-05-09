@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/libmutton/core"
+	"github.com/rwinkhart/libmutton/sync"
 )
 
 const ansiShownPassword = "\033[38;5;10m"
@@ -19,33 +21,33 @@ func EntryReader(decryptedEntry []string, hideSecrets, syncEnabled bool) {
 			// if the first field (password) is not empty, print it
 			if decryptedEntry[0] != "" {
 				if !hideSecrets {
-					fmt.Print(ansiDirectoryHeader + "Password:" + core.AnsiReset + "\n" + ansiShownPassword + decryptedEntry[0] + core.AnsiReset + "\n\n")
+					fmt.Print(ansiDirectoryHeader + "Password:" + back.AnsiReset + "\n" + ansiShownPassword + decryptedEntry[0] + back.AnsiReset + "\n\n")
 				} else {
-					fmt.Print(ansiDirectoryHeader + "Password:" + core.AnsiReset + "\n" + ansiEmptyDirectoryWarning + "End command in \"show\" or \"-s\" to view" + core.AnsiReset + "\n\n")
+					fmt.Print(ansiDirectoryHeader + "Password:" + back.AnsiReset + "\n" + ansiEmptyDirectoryWarning + "End command in \"show\" or \"-s\" to view" + back.AnsiReset + "\n\n")
 				}
 			}
 		case 1:
 			// if the second field (username) is not empty, print it
 			if decryptedEntry[1] != "" {
-				fmt.Print(ansiDirectoryHeader + "Username:" + core.AnsiReset + "\n" + decryptedEntry[1] + "\n\n")
+				fmt.Print(ansiDirectoryHeader + "Username:" + back.AnsiReset + "\n" + decryptedEntry[1] + "\n\n")
 			}
 		case 2:
 			// if the third field (TOTP secret) is not empty, print it
 			if decryptedEntry[2] != "" {
 				if !hideSecrets {
-					fmt.Print(ansiDirectoryHeader + "TOTP Secret:" + core.AnsiReset + "\n" + ansiShownPassword + decryptedEntry[2] + core.AnsiReset + "\n\n")
+					fmt.Print(ansiDirectoryHeader + "TOTP Secret:" + back.AnsiReset + "\n" + ansiShownPassword + decryptedEntry[2] + back.AnsiReset + "\n\n")
 				} else {
-					fmt.Print(ansiDirectoryHeader + "TOTP Secret:" + core.AnsiReset + "\n" + ansiEmptyDirectoryWarning + "End command in \"show\" or \"-s\" to view" + core.AnsiReset + "\n\n")
+					fmt.Print(ansiDirectoryHeader + "TOTP Secret:" + back.AnsiReset + "\n" + ansiEmptyDirectoryWarning + "End command in \"show\" or \"-s\" to view" + back.AnsiReset + "\n\n")
 				}
 			}
 		case 3:
 			// if the fourth field (url) is not empty, print it
 			if decryptedEntry[3] != "" {
-				fmt.Print(ansiDirectoryHeader + "URL:" + core.AnsiReset + "\n" + decryptedEntry[3] + "\n\n")
+				fmt.Print(ansiDirectoryHeader + "URL:" + back.AnsiReset + "\n" + decryptedEntry[3] + "\n\n")
 			}
 		case 4:
 			// print the notes header
-			fmt.Println(ansiDirectoryHeader + "Notes:" + core.AnsiReset)
+			fmt.Println(ansiDirectoryHeader + "Notes:" + back.AnsiReset)
 
 			// combine remaining fields into a single string (to support Markdown rendering)
 			var noteLines []string
@@ -62,7 +64,7 @@ func EntryReader(decryptedEntry []string, hideSecrets, syncEnabled bool) {
 	}
 
 	if syncEnabled {
-		RunJobWrapper(false)
+		sync.RunJob(false, false)
 	}
 
 	os.Exit(0)
@@ -70,7 +72,7 @@ func EntryReader(decryptedEntry []string, hideSecrets, syncEnabled bool) {
 
 // EntryReaderDecrypt is a wrapper for EntryReader that first decrypts an RCW-wrapped file before sending it to EntryReader.
 func EntryReaderDecrypt(targetLocation string, hideSecrets bool) {
-	if isFile, _ := core.TargetIsFile(targetLocation, true, 2); isFile {
+	if isFile, _ := back.TargetIsFile(targetLocation, true, 2); isFile {
 		EntryReader(core.DecryptFileToSlice(targetLocation), hideSecrets, false) // never sync if decrypting straight to EntryReader, as this means the entry could not have been modified
 	}
 	// do not exit, as this is the job of EntryReader

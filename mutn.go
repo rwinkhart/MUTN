@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/rwinkhart/MUTN/src/cli"
+	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/libmutton/core"
 	"github.com/rwinkhart/libmutton/sync"
 )
@@ -96,7 +97,7 @@ func main() {
 					case "note", "-n":
 						field = 4
 					case "rename", "-r":
-						core.TargetIsFile(targetLocation, true, 0) // ensure location exists before prompting for new location
+						back.TargetIsFile(targetLocation, true, 0) // ensure location exists before prompting for new location
 						cli.RenameCli(args[1])                     // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
 					default:
 						cli.HelpEdit()
@@ -161,11 +162,11 @@ func main() {
 			case "startrcwd":
 				core.RCWDArgument()
 			case "sync":
-				cli.RunJobWrapper(true)
+				sync.RunJob(true, false)
 			case "init":
 				cli.TempInitCli()
 			case "tweak":
-				core.PrintError("\"tweak\" is not yet implemented", 0, true)
+				back.PrintError("\"tweak\" is not yet implemented", 0, true)
 			case "copy":
 				cli.HelpCopy()
 			case "edit":

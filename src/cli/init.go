@@ -7,6 +7,8 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/rwinkhart/go-boilerplate/back"
+	"github.com/rwinkhart/go-boilerplate/front"
 	"github.com/rwinkhart/libmutton/core"
 	"github.com/rwinkhart/libmutton/sync"
 )
@@ -14,30 +16,30 @@ import (
 // TempInitCli initializes the MUTN environment based on user input.
 func TempInitCli() {
 	// text editor
-	textEditor := cmp.Or(input("Text editor (leave blank for $EDITOR, falls back to \""+fallbackEditor+"\"):"), os.Getenv("EDITOR"), fallbackEditor)
+	textEditor := cmp.Or(front.Input("Text editor (leave blank for $EDITOR, falls back to \""+fallbackEditor+"\"):"), os.Getenv("EDITOR"), fallbackEditor)
 
 	// SSH info
-	configSSH := inputBinary("Configure SSH settings (for synchronization)?")
+	configSSH := front.InputBinary("Configure SSH settings (for synchronization)?")
 	if configSSH {
 		// necessary SSH info
-		fmt.Println(AnsiBold + "\nNote:" + core.AnsiReset + " Only key-based authentication is supported (keys may optionally be passphrase-protected).\nThe remote server must already be in your ~" + core.PathSeparator + ".ssh" + core.PathSeparator + "known_hosts file.")
-		sshUser := input("Remote SSH username:")
-		sshPort := input("Remote SSH port:")
-		sshIP := input("Remote SSH IP/domain:")
+		fmt.Println(AnsiBold + "\nNote:" + back.AnsiReset + " Only key-based authentication is supported (keys may optionally be passphrase-protected).\nThe remote server must already be in your ~" + core.PathSeparator + ".ssh" + core.PathSeparator + "known_hosts file.")
+		sshUser := front.Input("Remote SSH username:")
+		sshPort := front.Input("Remote SSH port:")
+		sshIP := front.Input("Remote SSH IP/domain:")
 
 		// prompt for and ensure existence of SSH identity file
 		var sshKey string
 		var sshKeyIsFile bool
 		for !sshKeyIsFile {
-			fallbackSSHKey := core.Home + core.PathSeparator + ".ssh" + core.PathSeparator + "id_ed25519"
-			sshKey = cmp.Or(core.ExpandPathWithHome(input("SSH private identity file path (falls back to \""+fallbackSSHKey+"\"):")), fallbackSSHKey)
-			sshKeyIsFile, _ = core.TargetIsFile(sshKey, false, 0)
+			fallbackSSHKey := back.Home + core.PathSeparator + ".ssh" + core.PathSeparator + "id_ed25519"
+			sshKey = cmp.Or(back.ExpandPathWithHome(front.Input("SSH private identity file path (falls back to \""+fallbackSSHKey+"\"):")), fallbackSSHKey)
+			sshKeyIsFile, _ = back.TargetIsFile(sshKey, false, 0)
 			if !sshKeyIsFile {
-				fmt.Println(core.AnsiError+"SSH identity file not found:", sshKey+core.AnsiReset) // do not exit after error (allow user to retry)
+				fmt.Println(back.AnsiError+"SSH identity file not found:", sshKey+back.AnsiReset) // do not exit after error (allow user to retry)
 			}
 		}
 
-		sshKeyProtected := inputBinary("Is the identity file password-protected?")
+		sshKeyProtected := front.InputBinary("Is the identity file password-protected?")
 
 		// initialize libmutton directories
 		oldDeviceID := core.DirInit(false)
@@ -60,10 +62,10 @@ func TempInitCli() {
 	// RCW sanity check file
 	var passphraseInput1 []byte
 	for {
-		passphraseInput1 = inputHidden("New master (RCW) passphrase:")
-		passphraseInput2 := inputHidden("Confirm RCW passphrase:")
+		passphraseInput1 = front.InputHidden("New master (RCW) passphrase:")
+		passphraseInput2 := front.InputHidden("Confirm RCW passphrase:")
 		if !bytes.Equal(passphraseInput1, passphraseInput2) {
-			fmt.Println(core.AnsiError + "Passphrases do not match" + core.AnsiReset)
+			fmt.Println(back.AnsiError + "Passphrases do not match" + back.AnsiReset)
 			continue
 		}
 		core.RCWSanityCheckGen(passphraseInput1)

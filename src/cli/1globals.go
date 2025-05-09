@@ -3,6 +3,7 @@ package cli
 import (
 	"os"
 
+	"github.com/rwinkhart/go-boilerplate/front"
 	"github.com/rwinkhart/libmutton/core"
 	"golang.org/x/term"
 )
@@ -19,7 +20,5 @@ const (
 )
 
 func init() {
-	core.GetPassphrase = func() []byte {
-		return inputHidden("RCW Passphrase:")
-	}
+	core.GetPassphrase = front.InputHidden
 }

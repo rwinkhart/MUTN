@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"github.com/rwinkhart/go-boilerplate/front"
 	"github.com/rwinkhart/libmutton/core"
 )
 
@@ -13,19 +14,19 @@ func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
 	var unencryptedEntry []string
 
 	if entryType < 2 {
-		username := input("Username:")
+		username := front.Input("Username:")
 
 		// determine whether to generate the password
 		var password string
 		if entryType == 0 {
-			password = string(inputHidden("Password:"))
+			password = string(front.InputHidden("Password:"))
 		} else {
 			password = inputPasswordGen()
 		}
 
-		totp := string(inputHidden("TOTP secret:"))
-		url := input("URL:")
-		if inputBinary("Add a note to this entry?") {
+		totp := string(front.InputHidden("TOTP secret:"))
+		url := front.Input("URL:")
+		if front.InputBinary("Add a note to this entry?") {
 			note, _ := editNote([]string{})
 			unencryptedEntry = append([]string{password, username, totp, url}, note...)
 		} else {

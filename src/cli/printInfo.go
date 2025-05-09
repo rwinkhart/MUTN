@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/libmutton/core"
 )
 
@@ -14,13 +15,13 @@ const (
 )
 
 func HelpMain() {
-	fmt.Print(AnsiBold + "\nMUTN | Copyright (c) 2024-2025 Randall Winkhart\n" + core.AnsiReset + `
+	fmt.Print(AnsiBold + "\nMUTN | Copyright (c) 2024-2025 Randall Winkhart\n" + back.AnsiReset + `
 This software exists under the MIT license; you may redistribute it under certain conditions.
 This program comes with absolutely no warranty; type "mutn version" for details.
 
-` + AnsiBold + "Usage:" + core.AnsiReset + ` mutn [/<entry name> [argument] [option]] | [argument]
+` + AnsiBold + "Usage:" + back.AnsiReset + ` mutn [/<entry name> [argument] [option]] | [argument]
 
-` + AnsiBold + "Arguments:" + core.AnsiReset + `
+` + AnsiBold + "Arguments:" + back.AnsiReset + `
  help                    Bring up this menu
  version                 Display version and license information
  init                    Set up MUTN (generates libmutton.ini)
@@ -31,7 +32,7 @@ This program comes with absolutely no warranty; type "mutn version" for details.
  shear                   Delete an existing entry
  sync                    Manually sync the entry directory
 
-` + AnsiBold + "Options:" + core.AnsiReset + `
+` + AnsiBold + "Options:" + back.AnsiReset + `
  copy:
   password|-pw|<blank>   Copy the password in an entry to your clipboard
   username|-u            Copy the username in an entry to your clipboard
@@ -52,17 +53,17 @@ This program comes with absolutely no warranty; type "mutn version" for details.
   note|-n                Add a note entry
   folder|-f              Add a new folder for entries
 
-` + AnsiBold + "Tip 1:" + core.AnsiReset + ` You can quickly read an entry with "mutn /<entry name>"
-` + AnsiBold + "Tip 2:" + core.AnsiReset + ` Type "mutn" (no arguments/options) to view a list of saved entries
-` + AnsiBold + "Tip 3:" + core.AnsiReset + ` Provide "add", "edit", "copy", or "gen" as the only argument to receive more specific help
-` + AnsiBold + "Tip 4:" + core.AnsiReset + " Using \"add\", \"edit\", or \"copy\" without specifying an option (field) will default to \"password\"\n\n")
+` + AnsiBold + "Tip 1:" + back.AnsiReset + ` You can quickly read an entry with "mutn /<entry name>"
+` + AnsiBold + "Tip 2:" + back.AnsiReset + ` Type "mutn" (no arguments/options) to view a list of saved entries
+` + AnsiBold + "Tip 3:" + back.AnsiReset + ` Provide "add", "edit", "copy", or "gen" as the only argument to receive more specific help
+` + AnsiBold + "Tip 4:" + back.AnsiReset + " Using \"add\", \"edit\", or \"copy\" without specifying an option (field) will default to \"password\"\n\n")
 	os.Exit(0)
 }
 
 func HelpAdd() {
-	fmt.Print(AnsiBold + "\nUsage:" + core.AnsiReset + ` mutn /<entry name> add <option>
+	fmt.Print(AnsiBold + "\nUsage:" + back.AnsiReset + ` mutn /<entry name> add <option>
 
-` + AnsiBold + "Options:" + core.AnsiReset + `
+` + AnsiBold + "Options:" + back.AnsiReset + `
  add:
   password|-pw|<blank>   Add a password entry
   note|-n                Add a note entry
@@ -71,9 +72,9 @@ func HelpAdd() {
 }
 
 func HelpEdit() {
-	fmt.Print(AnsiBold + "\nUsage:" + core.AnsiReset + ` mutn /<entry name> edit <option>
+	fmt.Print(AnsiBold + "\nUsage:" + back.AnsiReset + ` mutn /<entry name> edit <option>
 
-` + AnsiBold + "Options:" + core.AnsiReset + `
+` + AnsiBold + "Options:" + back.AnsiReset + `
  edit:
   password|-pw|<blank>   Change the password in an entry
   username|-u            Change the username in an entry
@@ -85,9 +86,9 @@ func HelpEdit() {
 }
 
 func HelpCopy() {
-	fmt.Print(AnsiBold + "\nUsage:" + core.AnsiReset + ` mutn /<entry name> copy <option>
+	fmt.Print(AnsiBold + "\nUsage:" + back.AnsiReset + ` mutn /<entry name> copy <option>
 
-` + AnsiBold + "Options:" + core.AnsiReset + `
+` + AnsiBold + "Options:" + back.AnsiReset + `
  copy:
   password|-pw|<blank>   Copy the password in an entry to your clipboard
   username|-u            Copy the username in an entry to your clipboard
@@ -98,18 +99,18 @@ func HelpCopy() {
 }
 
 func HelpGen() {
-	fmt.Print(AnsiBold + "\nUsage:" + core.AnsiReset + ` mutn /<entry name> gen [option]
+	fmt.Print(AnsiBold + "\nUsage:" + back.AnsiReset + ` mutn /<entry name> gen [option]
 
-` + AnsiBold + "Options:" + core.AnsiReset + `
+` + AnsiBold + "Options:" + back.AnsiReset + `
  gen:
   update|-u              Generate a password for an existing entry
 
-` + AnsiBold + "Tip:" + core.AnsiReset + " If no options are provided, a new password entry is generated\n\n")
+` + AnsiBold + "Tip:" + back.AnsiReset + " If no options are provided, a new password entry is generated\n\n")
 	os.Exit(0)
 }
 
 func MITLicense() {
-	fmt.Print(AnsiBold + "\n                    MIT License" + core.AnsiReset + `
+	fmt.Print(AnsiBold + "\n                    MIT License" + back.AnsiReset + `
 
   Permission is hereby granted, free of charge, to any
 person obtaining a copy of this software and associated
@@ -141,20 +142,20 @@ func Version() {
 	MITLicense()
 	fmt.Print("\n\n             MUTN is a simple, self-hosted,\n  SSH-synchronized password manager based on libmutton\n\n" +
 		"         ..                                     ..\n" +
-		"        /()\\''.''.    " + ansiVersionMeat + "♥♥♥♥" + core.AnsiReset + "               .''.''/()\\   _)\n" +
-		"     _.   :       *  " + ansiVersionMeat + "♥♥♥♥♥♥   ♥♥♥♥♥♥♥♥" + core.AnsiReset + "  *       :   <[◎]|_|=\n" +
-		" }-}-*]    `..'..'    " + ansiVersionMeat + "♥♥♥♥♥♥♥♥♥♥♥♥♥" + core.AnsiReset + "      `..'..'      |\n" +
-		"    ◎-◎    //   \\\\     " + ansiVersionMeat + "♥♥♥♥♥♥♥♥♥" + core.AnsiReset + "         //   \\\\     /|\\\n" +
+		"        /()\\''.''.    " + ansiVersionMeat + "♥♥♥♥" + back.AnsiReset + "               .''.''/()\\   _)\n" +
+		"     _.   :       *  " + ansiVersionMeat + "♥♥♥♥♥♥   ♥♥♥♥♥♥♥♥" + back.AnsiReset + "  *       :   <[◎]|_|=\n" +
+		" }-}-*]    `..'..'    " + ansiVersionMeat + "♥♥♥♥♥♥♥♥♥♥♥♥♥" + back.AnsiReset + "      `..'..'      |\n" +
+		"    ◎-◎    //   \\\\     " + ansiVersionMeat + "♥♥♥♥♥♥♥♥♥" + back.AnsiReset + "         //   \\\\     /|\\\n" +
 		ansiVersionOutline + "<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" +
-		"\\" + ansiBlackOnWhite + "                                                       " + core.AnsiReset + ansiVersionOutline + "/\n" +
-		"\\" + ansiBlackOnWhite + "                      MUTN v" + MUTNVersion + "                      " + core.AnsiReset + ansiVersionOutline + "/\n" +
-		"\\" + ansiBlackOnWhite + "             The Tripe Transmission Update             " + core.AnsiReset + ansiVersionOutline + "/\n" +
-		"\\" + ansiBlackOnWhite + "                                                       " + core.AnsiReset + ansiVersionOutline + "/\n" +
-		"\\" + ansiBlackOnWhite + "              Built with libmutton v" + core.LibmuttonVersion + "              " + core.AnsiReset + ansiVersionOutline + "/\n" +
-		"\\" + ansiBlackOnWhite + "                                                       " + core.AnsiReset + ansiVersionOutline + "/\n" +
-		"\\" + ansiBlackOnWhite + "       Copyright (c) 2024-2025: Randall Winkhart       " + core.AnsiReset + ansiVersionOutline + "/\n" +
-		"\\" + ansiBlackOnWhite + "                                                       " + core.AnsiReset + ansiVersionOutline + "/\n" +
-		"<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" + core.AnsiReset +
+		"\\" + ansiBlackOnWhite + "                                                       " + back.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "                      MUTN v" + MUTNVersion + "                      " + back.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "             The Tripe Transmission Update             " + back.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "                                                       " + back.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "              Built with libmutton v" + core.LibmuttonVersion + "              " + back.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "                                                       " + back.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "       Copyright (c) 2024-2025: Randall Winkhart       " + back.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "                                                       " + back.AnsiReset + ansiVersionOutline + "/\n" +
+		"<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" + back.AnsiReset +
 		"\n               For more information, see:\n\n" +
 		"           https://github.com/rwinkhart/MUTN\n" +
 		"         https://github.com/rwinkhart/libmutton\n\n")
