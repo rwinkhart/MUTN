@@ -6,7 +6,7 @@ require (
 	github.com/Trojan2021/BEAN v0.0.0-20241210230804-8f294833b514
 	github.com/charmbracelet/glamour v0.7.0
 	github.com/rwinkhart/go-boilerplate v0.0.0-20250509173525-20670ec7bb9c
-	github.com/rwinkhart/libmutton v0.3.2-0.20250511191843-8860ce4969ec
+	github.com/rwinkhart/libmutton v0.3.2-0.20250511210751-84d227b80379
 	golang.org/x/term v0.32.0
 )
 
@@ -33,7 +33,7 @@ require (
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/rwinkhart/convertroman v0.2.0 // indirect
 	github.com/rwinkhart/peercred-mini v0.1.0 // indirect
-	github.com/rwinkhart/rcw v0.1.0 // indirect
+	github.com/rwinkhart/rcw v0.1.1 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/yuin/goldmark v1.7.10 // indirect
 	github.com/yuin/goldmark-emoji v1.0.6 // indirect
