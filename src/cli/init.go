@@ -60,15 +60,14 @@ func TempInitCli() {
 		core.WriteConfig([][3]string{{"MUTN", "textEditor", textEditor}}, nil, false)
 	}
 	// RCW sanity check file
-	var passphraseInput1 []byte
+	var passphrase []byte
 	for {
-		passphraseInput1 = front.InputHidden("New master (RCW) passphrase:")
-		passphraseInput2 := front.InputHidden("Confirm RCW passphrase:")
-		if !bytes.Equal(passphraseInput1, passphraseInput2) {
+		passphrase = front.InputHidden("Master passphrase:")
+		if !bytes.Equal(passphrase, front.InputHidden("Confirm master passphrase:")) {
 			fmt.Println(back.AnsiError + "Passphrases do not match" + back.AnsiReset)
 			continue
 		}
-		core.RCWSanityCheckGen(passphraseInput1)
+		core.RCWSanityCheckGen(passphrase)
 		break
 	}
 }
