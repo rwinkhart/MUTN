@@ -5,8 +5,8 @@ go 1.24.3
 require (
 	github.com/Trojan2021/BEAN v0.0.0-20241210230804-8f294833b514
 	github.com/charmbracelet/glamour v0.7.0
-	github.com/rwinkhart/go-boilerplate v0.0.0-20250509154735-0846290a7620
-	github.com/rwinkhart/libmutton v0.3.2-0.20250511044144-dfb5c10dcb09
+	github.com/rwinkhart/go-boilerplate v0.0.0-20250509173525-20670ec7bb9c
+	github.com/rwinkhart/libmutton v0.3.2-0.20250511191843-8860ce4969ec
 	golang.org/x/term v0.32.0
 )
 
@@ -32,8 +32,8 @@ require (
 	github.com/pquerna/otp v1.4.1-0.20231130234153-3357de7c0481 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/rwinkhart/convertroman v0.2.0 // indirect
-	github.com/rwinkhart/peercred-mini v0.0.0-20250407033241-c09add2eceea // indirect
-	github.com/rwinkhart/rcw v0.0.0-20250508234041-b49d9f1eea42 // indirect
+	github.com/rwinkhart/peercred-mini v0.1.0 // indirect
+	github.com/rwinkhart/rcw v0.1.0 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/yuin/goldmark v1.7.10 // indirect
 	github.com/yuin/goldmark-emoji v1.0.6 // indirect
@@ -47,6 +47,6 @@ require (
 	gopkg.in/ini.v1 v1.67.0 // indirect
 )
 
-replace golang.org/x/sys => github.com/rwinkhart/sys-freebsd-13-xucred v0.32.0
+replace golang.org/x/sys => github.com/rwinkhart/sys-freebsd-13-xucred v0.33.0
 
 replace github.com/Microsoft/go-winio => github.com/rwinkhart/go-winio-easy-pipe-handles v0.0.0-20250407031321-96994a0e8410

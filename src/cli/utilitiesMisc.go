@@ -11,7 +11,7 @@ import (
 
 // inputPasswordGen prompts the user for password generation parameters and returns a generated password as a string.
 func inputPasswordGen() string {
-	passLength := front.InputPositiveInt("Password length:", 1, -1)
+	passLength := front.InputInt("Password length:", 1, -1)
 	fmt.Println()
 	passCharset := uint8(front.InputMenuGen("Password complexity:", []string{"Simple", "Complex", "Ultra Complex (not compatible with many services)"}))
 	var complexity float64
