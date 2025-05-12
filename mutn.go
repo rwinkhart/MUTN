@@ -7,7 +7,9 @@ import (
 	"github.com/rwinkhart/MUTN/src/cli"
 	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/libmutton/core"
-	"github.com/rwinkhart/libmutton/sync"
+	"github.com/rwinkhart/libmutton/crypt"
+	"github.com/rwinkhart/libmutton/global"
+	"github.com/rwinkhart/libmutton/syncclient"
 )
 
 func main() {
@@ -25,7 +27,7 @@ func main() {
 		if strings.HasPrefix(args[1], "/") {
 
 			// store location of target entry
-			targetLocation := core.TargetLocationFormat(args[1])
+			targetLocation := global.TargetLocationFormat(args[1])
 
 			// entry reader shortcut (if no other arguments are supplied)
 			if argsCount == 2 {
@@ -46,7 +48,7 @@ func main() {
 					case "add":
 						cli.AddEntry(targetLocation, true, 0)
 					case "shear":
-						sync.ShearRemoteFromClient(args[1], false) // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
+						syncclient.ShearRemoteFromClient(args[1], false) // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
 					default:
 						cli.HelpMain()
 					}
@@ -145,7 +147,7 @@ func main() {
 					case "note", "-n":
 						cli.AddEntry(targetLocation, true, 2)
 					case "folder", "-f":
-						sync.AddFolderRemoteFromClient(args[1], false) // pass the incomplete path as the server will have a different home directory
+						syncclient.AddFolderRemoteFromClient(args[1], false) // pass the incomplete path as the server will have a different home directory
 					default:
 						cli.HelpAdd()
 					}
@@ -160,9 +162,9 @@ func main() {
 			case "clipclear":
 				core.ClipClearArgument()
 			case "startrcwd":
-				core.RCWDArgument()
+				crypt.RCWDArgument()
 			case "sync":
-				sync.RunJob(true, false)
+				syncclient.RunJob(true, false)
 			case "init":
 				cli.TempInitCli()
 			case "tweak":

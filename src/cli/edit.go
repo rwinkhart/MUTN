@@ -9,14 +9,14 @@ import (
 	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/go-boilerplate/front"
 	"github.com/rwinkhart/libmutton/core"
-	"github.com/rwinkhart/libmutton/sync"
+	"github.com/rwinkhart/libmutton/syncclient"
 )
 
 // RenameCli renames an entry at oldLocationIncomplete to a new location (user input) on both the client and the server.
 func RenameCli(oldLocationIncomplete string) {
 	// prompt user for new location and rename
 	newLocationIncomplete := front.Input("New location:")
-	sync.RenameRemoteFromClient(oldLocationIncomplete, newLocationIncomplete, false)
+	syncclient.RenameRemoteFromClient(oldLocationIncomplete, newLocationIncomplete, false)
 
 	// exit is done from sync.RenameRemoteFromClient
 }

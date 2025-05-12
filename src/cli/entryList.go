@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/rwinkhart/go-boilerplate/back"
-	"github.com/rwinkhart/libmutton/sync"
+	"github.com/rwinkhart/libmutton/synccommon"
 )
 
 // ANSI color constants used only in this file
@@ -79,7 +79,7 @@ func printFileEntry(entry string, lastSlash, charCounter, indent int, colorAlter
 
 // EntryListGen generates and displays the full libmutton entry list.
 func EntryListGen() {
-	fileList, dirList := sync.WalkEntryDir()
+	fileList, dirList := synccommon.WalkEntryDir()
 
 	// print header bar w/total entry count
 	fmt.Print("\n"+ansiBlackOnWhite, len(fileList), " libmutton entries:"+back.AnsiReset)

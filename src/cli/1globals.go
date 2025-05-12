@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/rwinkhart/go-boilerplate/front"
-	"github.com/rwinkhart/libmutton/core"
+	"github.com/rwinkhart/libmutton/global"
 	"golang.org/x/term"
 )
 
@@ -20,5 +20,5 @@ const (
 )
 
 func init() {
-	core.GetPassphrase = front.InputHidden
+	global.GetPassphrase = front.InputHidden
 }

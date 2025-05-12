@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/rwinkhart/go-boilerplate/back"
-	"github.com/rwinkhart/libmutton/core"
+	"github.com/rwinkhart/libmutton/global"
 )
 
 // ANSI color constants used only in this file
@@ -151,7 +151,7 @@ func Version() {
 		"\\" + ansiBlackOnWhite + "                      MUTN v" + MUTNVersion + "                      " + back.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "             The Tripe Transmission Update             " + back.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + back.AnsiReset + ansiVersionOutline + "/\n" +
-		"\\" + ansiBlackOnWhite + "              Built with libmutton v" + core.LibmuttonVersion + "              " + back.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "              Built with libmutton v" + global.LibmuttonVersion + "              " + back.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + back.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "       Copyright (c) 2024-2025: Randall Winkhart       " + back.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + back.AnsiReset + ansiVersionOutline + "/\n" +

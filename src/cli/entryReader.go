@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"github.com/rwinkhart/go-boilerplate/back"
-	"github.com/rwinkhart/libmutton/core"
-	"github.com/rwinkhart/libmutton/sync"
+	"github.com/rwinkhart/libmutton/crypt"
+	"github.com/rwinkhart/libmutton/syncclient"
 )
 
 const ansiShownPassword = "\033[38;5;10m"
@@ -64,7 +64,7 @@ func EntryReader(decryptedEntry []string, hideSecrets, syncEnabled bool) {
 	}
 
 	if syncEnabled {
-		sync.RunJob(false, false)
+		syncclient.RunJob(false, false)
 	}
 
 	os.Exit(0)
@@ -73,7 +73,7 @@ func EntryReader(decryptedEntry []string, hideSecrets, syncEnabled bool) {
 // EntryReaderDecrypt is a wrapper for EntryReader that first decrypts an RCW-wrapped file before sending it to EntryReader.
 func EntryReaderDecrypt(targetLocation string, hideSecrets bool) {
 	if isFile, _ := back.TargetIsFile(targetLocation, true, 2); isFile {
-		EntryReader(core.DecryptFileToSlice(targetLocation), hideSecrets, false) // never sync if decrypting straight to EntryReader, as this means the entry could not have been modified
+		EntryReader(crypt.DecryptFileToSlice(targetLocation), hideSecrets, false) // never sync if decrypting straight to EntryReader, as this means the entry could not have been modified
 	}
 	// do not exit, as this is the job of EntryReader
 }
