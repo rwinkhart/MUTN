@@ -2,4 +2,4 @@
 
 package cli
 
-const fallbackEditor = "nvim" // since there is no pre-installed CLI editor on Windows, default to the most popular one
+const fallbackEditor = "edit" // "edit" is the Microsoft-developed CLI text editor

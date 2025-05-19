@@ -6,7 +6,7 @@ require (
 	github.com/Trojan2021/BEAN v0.0.0-20241210230804-8f294833b514
 	github.com/charmbracelet/glamour v0.7.0
 	github.com/rwinkhart/go-boilerplate v0.0.0-20250509173525-20670ec7bb9c
-	github.com/rwinkhart/libmutton v0.3.2-0.20250512162603-36bbf88690c5
+	github.com/rwinkhart/libmutton v0.3.2-0.20250517001120-35d053b46f70
 	golang.org/x/term v0.32.0
 )
 
@@ -18,7 +18,6 @@ require (
 	github.com/boombuler/barcode v1.0.2 // indirect
 	github.com/charmbracelet/x/ansi v0.5.2 // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
-	github.com/fortis/go-steam-totp v0.0.0-20171114202746-18e928674727 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/kr/fs v0.1.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
@@ -29,11 +28,11 @@ require (
 	github.com/muesli/termenv v0.16.0 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/pkg/sftp v1.13.9 // indirect
-	github.com/pquerna/otp v1.4.1-0.20231130234153-3357de7c0481 // indirect
+	github.com/pquerna/otp v1.5.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/rwinkhart/convertroman v0.2.0 // indirect
 	github.com/rwinkhart/peercred-mini v0.1.0 // indirect
-	github.com/rwinkhart/rcw v0.1.1 // indirect
+	github.com/rwinkhart/rcw v0.1.2 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/yuin/goldmark v1.7.10 // indirect
 	github.com/yuin/goldmark-emoji v1.0.6 // indirect
