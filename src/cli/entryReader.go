@@ -15,6 +15,7 @@ const ansiShownPassword = "\033[38;5;10m"
 func EntryReader(decryptedEntry []string, hideSecrets, syncEnabled bool) {
 	fmt.Println()
 
+fieldLoop:
 	for field := range decryptedEntry {
 		switch field {
 		case 0:
@@ -59,7 +60,7 @@ func EntryReader(decryptedEntry []string, hideSecrets, syncEnabled bool) {
 			renderNote(noteLines)
 
 			// break after notes have been printed
-			break
+			break fieldLoop
 		}
 	}
 
