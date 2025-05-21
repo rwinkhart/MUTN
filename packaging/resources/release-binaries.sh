@@ -1,4 +1,10 @@
 #!/bin/sh
+# This script generates portable MUTN release binaries for the following platforms:
+# - Linux (x86_64_v2)
+# - Linux (arm64v8.0)
+# - Linux (arm64v8.7+crypto)
+# - Windows (x86_64_v2)
+# - Windows (arm64v8.7+crypto)
 
 create_release_binaries() {
     printf '\nGenerating release binaries...\n'
