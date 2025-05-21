@@ -20,5 +20,8 @@ Once this has been done, you may proceed with the client setup:
 #### Operating on Passwords
 Any action that operates on the password attached to an entry (copying, editing, adding a new password-focused entry) does not require the user to specify the `password` or `-pw` options. In all cases, `password` is the assumed target when no other option is specified.
 
+#### TOTP Support
+See [here](https://github.com/rwinkhart/libmutton/blob/main/wiki/tips.md#totp-support).
+
 #### Granular Help
 Argument-specific help can be obtained by running `mutn <argument>` without an entry name or any options. For example, `mutn edit` will display help for the `edit` argument.
