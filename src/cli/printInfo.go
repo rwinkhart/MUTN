@@ -15,13 +15,13 @@ const (
 )
 
 func HelpMain() {
-	fmt.Print(AnsiBold + "\nMUTN | Copyright (c) 2024-2025 Randall Winkhart\n" + back.AnsiReset + `
+	fmt.Print(back.AnsiBold + "\nMUTN | Copyright (c) 2024-2025 Randall Winkhart\n" + back.AnsiReset + `
 This software exists under the MIT license; you may redistribute it under certain conditions.
 This program comes with absolutely no warranty; type "mutn version" for details.
 
-` + AnsiBold + "Usage:" + back.AnsiReset + ` mutn [/<entry name> [argument] [option]] | [argument]
+` + back.AnsiBold + "Usage:" + back.AnsiReset + ` mutn [/<entry name> [argument] [option]] | [argument]
 
-` + AnsiBold + "Arguments:" + back.AnsiReset + `
+` + back.AnsiBold + "Arguments:" + back.AnsiReset + `
  help                    Bring up this menu
  version                 Display version and license information
  init                    Set up MUTN (generates libmutton.ini)
@@ -32,7 +32,7 @@ This program comes with absolutely no warranty; type "mutn version" for details.
  shear                   Delete an existing entry
  sync                    Manually sync the entry directory
 
-` + AnsiBold + "Options:" + back.AnsiReset + `
+` + back.AnsiBold + "Options:" + back.AnsiReset + `
  copy:
   password|-pw|<blank>   Copy the password in an entry to your clipboard
   username|-u            Copy the username in an entry to your clipboard
@@ -53,17 +53,17 @@ This program comes with absolutely no warranty; type "mutn version" for details.
   note|-n                Add a note entry
   folder|-f              Add a new folder for entries
 
-` + AnsiBold + "Tip 1:" + back.AnsiReset + ` You can quickly read an entry with "mutn /<entry name>"
-` + AnsiBold + "Tip 2:" + back.AnsiReset + ` Type "mutn" (no arguments/options) to view a list of saved entries
-` + AnsiBold + "Tip 3:" + back.AnsiReset + ` Provide "add", "edit", "copy", or "gen" as the only argument to receive more specific help
-` + AnsiBold + "Tip 4:" + back.AnsiReset + " Using \"add\", \"edit\", or \"copy\" without specifying an option (field) will default to \"password\"\n\n")
+` + back.AnsiBold + "Tip 1:" + back.AnsiReset + ` You can quickly read an entry with "mutn /<entry name>"
+` + back.AnsiBold + "Tip 2:" + back.AnsiReset + ` Type "mutn" (no arguments/options) to view a list of saved entries
+` + back.AnsiBold + "Tip 3:" + back.AnsiReset + ` Provide "add", "edit", "copy", or "gen" as the only argument to receive more specific help
+` + back.AnsiBold + "Tip 4:" + back.AnsiReset + " Using \"add\", \"edit\", or \"copy\" without specifying an option (field) will default to \"password\"\n\n")
 	os.Exit(0)
 }
 
 func HelpAdd() {
-	fmt.Print(AnsiBold + "\nUsage:" + back.AnsiReset + ` mutn /<entry name> add <option>
+	fmt.Print(back.AnsiBold + "\nUsage:" + back.AnsiReset + ` mutn /<entry name> add <option>
 
-` + AnsiBold + "Options:" + back.AnsiReset + `
+` + back.AnsiBold + "Options:" + back.AnsiReset + `
  add:
   password|-pw|<blank>   Add a password entry
   note|-n                Add a note entry
@@ -72,9 +72,9 @@ func HelpAdd() {
 }
 
 func HelpEdit() {
-	fmt.Print(AnsiBold + "\nUsage:" + back.AnsiReset + ` mutn /<entry name> edit <option>
+	fmt.Print(back.AnsiBold + "\nUsage:" + back.AnsiReset + ` mutn /<entry name> edit <option>
 
-` + AnsiBold + "Options:" + back.AnsiReset + `
+` + back.AnsiBold + "Options:" + back.AnsiReset + `
  edit:
   password|-pw|<blank>   Change the password in an entry
   username|-u            Change the username in an entry
@@ -86,9 +86,9 @@ func HelpEdit() {
 }
 
 func HelpCopy() {
-	fmt.Print(AnsiBold + "\nUsage:" + back.AnsiReset + ` mutn /<entry name> copy <option>
+	fmt.Print(back.AnsiBold + "\nUsage:" + back.AnsiReset + ` mutn /<entry name> copy <option>
 
-` + AnsiBold + "Options:" + back.AnsiReset + `
+` + back.AnsiBold + "Options:" + back.AnsiReset + `
  copy:
   password|-pw|<blank>   Copy the password in an entry to your clipboard
   username|-u            Copy the username in an entry to your clipboard
@@ -99,18 +99,18 @@ func HelpCopy() {
 }
 
 func HelpGen() {
-	fmt.Print(AnsiBold + "\nUsage:" + back.AnsiReset + ` mutn /<entry name> gen [option]
+	fmt.Print(back.AnsiBold + "\nUsage:" + back.AnsiReset + ` mutn /<entry name> gen [option]
 
-` + AnsiBold + "Options:" + back.AnsiReset + `
+` + back.AnsiBold + "Options:" + back.AnsiReset + `
  gen:
   update|-u              Generate a password for an existing entry
 
-` + AnsiBold + "Tip:" + back.AnsiReset + " If no options are provided, a new password entry is generated\n\n")
+` + back.AnsiBold + "Tip:" + back.AnsiReset + " If no options are provided, a new password entry is generated\n\n")
 	os.Exit(0)
 }
 
 func MITLicense() {
-	fmt.Print(AnsiBold + "\n                    MIT License" + back.AnsiReset + `
+	fmt.Print(back.AnsiBold + "\n                    MIT License" + back.AnsiReset + `
 
   Permission is hereby granted, free of charge, to any
 person obtaining a copy of this software and associated

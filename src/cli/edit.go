@@ -8,6 +8,7 @@ import (
 
 	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/go-boilerplate/front"
+	"github.com/rwinkhart/libmutton/cfg"
 	"github.com/rwinkhart/libmutton/core"
 	"github.com/rwinkhart/libmutton/syncclient"
 )
@@ -74,7 +75,7 @@ func editNote(baseNote []string) ([]string, bool) {
 	}(tempFile.Name())
 
 	// fetch the user's text editor
-	editorCfg, _ := core.ParseConfig([][2]string{{"MUTN", "textEditor"}}, "")
+	editorCfg, _ := cfg.ParseConfig([][2]string{{"MUTN", "textEditor"}}, "")
 	editor := editorCfg[0]
 
 	// write baseNote to tempFile (if it is not empty)

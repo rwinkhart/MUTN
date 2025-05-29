@@ -1,11 +1,15 @@
 package main
 
 import (
+	"bytes"
+	"cmp"
+	"fmt"
 	"os"
 	"strings"
 
 	"github.com/rwinkhart/MUTN/src/cli"
 	"github.com/rwinkhart/go-boilerplate/back"
+	"github.com/rwinkhart/go-boilerplate/front"
 	"github.com/rwinkhart/libmutton/core"
 	"github.com/rwinkhart/libmutton/crypt"
 	"github.com/rwinkhart/libmutton/global"
@@ -166,7 +170,22 @@ func main() {
 			case "sync":
 				syncclient.RunJob(true, false)
 			case "init":
-				cli.TempInitCli()
+				const fallbackEditor = "vi" // TODO "edit" for Windows
+				var rcwPass []byte
+				for { // get master passphrase
+					rcwPass = front.InputHidden("Master passphrase:")
+					if !bytes.Equal(rcwPass, front.InputHidden("Confirm master passphrase:")) || len(rcwPass) == 0 {
+						fmt.Println(back.AnsiError + "Passphrases do not match" + back.AnsiReset)
+						continue
+					}
+					break
+				}
+				err := core.LibmuttonInit(front.Input,
+					[][3]string{{"MUTN", "textEditor", cmp.Or(front.Input("Text editor (leave blank for $EDITOR, falls back to \""+fallbackEditor+"\"):"), os.Getenv("EDITOR"), fallbackEditor)}},
+					rcwPass, false)
+				if err != nil {
+					back.PrintError("Initialization failed: "+err.Error(), 0, true)
+				}
 			case "tweak":
 				back.PrintError("\"tweak\" is not yet implemented", 0, true)
 			case "copy":

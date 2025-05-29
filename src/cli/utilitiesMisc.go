@@ -7,6 +7,7 @@ import (
 	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/go-boilerplate/front"
 	"github.com/rwinkhart/libmutton/core"
+	"github.com/rwinkhart/libmutton/synccycles"
 )
 
 // inputPasswordGen prompts the user for password generation parameters and returns a generated password as a string.
@@ -23,7 +24,7 @@ func inputPasswordGen() string {
 		complexity = 0.2 // (ultra) complex
 		// 2 and 3 indicate complex and ultra complex charsets, respectively
 	}
-	return core.StringGen(passLength, complexity, passCharset)
+	return synccycles.StringGen(passLength, complexity, passCharset)
 }
 
 // writeEntryCLI writes an entry to targetLocation and previews it (errors if no data is supplied).
@@ -32,7 +33,7 @@ func writeEntryCLI(targetLocation string, unencryptedEntry []string, hideSecrets
 		// write the entry to the target location
 		core.WriteEntry(targetLocation, []byte(strings.Join(unencryptedEntry, "\n")))
 		// preview the entry
-		fmt.Println(AnsiBold + "\nEntry Preview:" + back.AnsiReset)
+		fmt.Println(back.AnsiBold + "\nEntry Preview:" + back.AnsiReset)
 		EntryReader(unencryptedEntry, hideSecrets, true)
 	} else {
 		back.PrintError("No data supplied for entry", back.ErrorTargetNotFound, true)
