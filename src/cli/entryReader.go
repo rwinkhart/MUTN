@@ -66,7 +66,7 @@ fieldLoop:
 	}
 
 	if syncEnabled {
-		_, err := syncclient.RunJob(false, false)
+		_, err := syncclient.RunJob(false)
 		if err != nil {
 			back.PrintError("Failed to sync entries: "+err.Error(), global.ErrorSyncProcess, true)
 		}

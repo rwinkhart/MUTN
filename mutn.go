@@ -55,7 +55,7 @@ func main() {
 					case "add":
 						cli.AddEntry(targetLocation, true, 0)
 					case "shear":
-						err := syncclient.ShearRemoteFromClient(args[1], false) // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
+						err := syncclient.ShearRemoteFromClient(args[1]) // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
 						if err != nil {
 							back.PrintError("Failed to shear target: "+err.Error(), back.ErrorWrite, true)
 						}
@@ -160,7 +160,7 @@ func main() {
 					case "note", "-n":
 						cli.AddEntry(targetLocation, true, 2)
 					case "folder", "-f":
-						err := syncclient.AddFolderRemoteFromClient(args[1], false) // pass the incomplete path as the server will have a different home directory
+						err := syncclient.AddFolderRemoteFromClient(args[1]) // pass the incomplete path as the server will have a different home directory
 						if err != nil {
 							back.PrintError("Failed to add folder: "+err.Error(), back.ErrorWrite, true)
 						}
@@ -183,7 +183,7 @@ func main() {
 			case "startrcwd":
 				crypt.RCWDArgument()
 			case "sync":
-				_, err := syncclient.RunJob(true, false)
+				_, err := syncclient.RunJob(true)
 				if err != nil {
 					back.PrintError("Failed to sync entries: "+err.Error(), global.ErrorSyncProcess, true)
 				}
