@@ -17,7 +17,10 @@ import (
 func RenameCli(oldLocationIncomplete string) {
 	// prompt user for new location and rename
 	newLocationIncomplete := front.Input("New location:")
-	syncclient.RenameRemoteFromClient(oldLocationIncomplete, newLocationIncomplete, false)
+	err := syncclient.RenameRemoteFromClient(oldLocationIncomplete, newLocationIncomplete, false)
+	if err != nil {
+		back.PrintError("Failed to rename entry: "+err.Error(), back.ErrorWrite, true)
+	}
 
 	// exit is done from sync.RenameRemoteFromClient
 }
@@ -25,7 +28,10 @@ func RenameCli(oldLocationIncomplete string) {
 // EditEntryField edits a field of an entry at targetLocation (user input).
 func EditEntryField(targetLocation string, hideSecrets bool, field int) {
 	// fetch old entry data (with all required lines present)
-	unencryptedEntry := core.GetOldEntryData(targetLocation, field)
+	unencryptedEntry, err := core.GetOldEntryData(targetLocation, field)
+	if err != nil {
+		back.PrintError("Failed to fetch entry data: "+err.Error(), back.ErrorRead, true)
+	}
 
 	// edit the field
 	switch field {
@@ -57,7 +63,10 @@ func EditEntryField(targetLocation string, hideSecrets bool, field int) {
 // GenUpdate generates a new password for an entry at targetLocation (user input).
 func GenUpdate(targetLocation string, hideSecrets bool) {
 	// fetch old entry data
-	unencryptedEntry := core.GetOldEntryData(targetLocation, 0)
+	unencryptedEntry, err := core.GetOldEntryData(targetLocation, 0)
+	if err != nil {
+		back.PrintError("Failed to fetch entry data: "+err.Error(), back.ErrorRead, true)
+	}
 
 	// generate a new password
 	unencryptedEntry[0] = inputPasswordGen()

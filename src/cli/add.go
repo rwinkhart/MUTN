@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/go-boilerplate/front"
 	"github.com/rwinkhart/libmutton/core"
 )
@@ -9,7 +10,10 @@ import (
 // Requires: entryType (0 = standard password entry, 1 = auto-generated password entry, 2 = note-only entry).
 func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
 	// ensure targetLocation is valid
-	core.EntryAddPrecheck(targetLocation)
+	_, err := core.EntryAddPrecheck(targetLocation)
+	if err != nil {
+		back.PrintError("Failed to add entry: "+err.Error(), back.ErrorWrite, true)
+	}
 
 	var unencryptedEntry []string
 

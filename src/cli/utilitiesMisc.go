@@ -31,7 +31,10 @@ func inputPasswordGen() string {
 func writeEntryCLI(targetLocation string, unencryptedEntry []string, hideSecrets bool) {
 	if core.EntryIsNotEmpty(unencryptedEntry) {
 		// write the entry to the target location
-		core.WriteEntry(targetLocation, []byte(strings.Join(unencryptedEntry, "\n")))
+		err := core.WriteEntry(targetLocation, []byte(strings.Join(unencryptedEntry, "\n")))
+		if err != nil {
+			back.PrintError("Failed to write entry: "+err.Error(), back.ErrorWrite, true)
+		}
 		// preview the entry
 		fmt.Println(back.AnsiBold + "\nEntry Preview:" + back.AnsiReset)
 		EntryReader(unencryptedEntry, hideSecrets, true)

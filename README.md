@@ -30,7 +30,7 @@ After installing, please review the [usage guide](https://github.com/rwinkhart/M
 - [ ] Re-implement init menu
 - [ ] Implement tweak menu
 ### Release v0.4.0
-- [ ] Switch to fully-compliant Markdown (do not preserve new lines)
+- [ ] Switch to fully compliant Markdown (do not preserve new lines)
 - [ ] Evaluate defaulting to building w/Bean over Glamour
     - [ ] Verify having Glamour in go.mod does not impact binary size/speed (drop it if it does)
 ### Release v0.5.0

@@ -79,7 +79,10 @@ func printFileEntry(entry string, lastSlash, charCounter, indent int, colorAlter
 
 // EntryListGen generates and displays the full libmutton entry list.
 func EntryListGen() {
-	fileList, dirList := synccommon.WalkEntryDir()
+	fileList, dirList, err := synccommon.WalkEntryDir()
+	if err != nil {
+		back.PrintError("Failed to generate entry list: "+err.Error(), back.ErrorRead, true)
+	}
 
 	// print header bar w/total entry count
 	fmt.Print("\n"+ansiBlackOnWhite, len(fileList), " libmutton entries:"+back.AnsiReset)

@@ -44,7 +44,10 @@ func main() {
 					case "show", "-s":
 						cli.EntryReaderDecrypt(targetLocation, false)
 					case "copy":
-						core.CopyArgument(targetLocation, 0)
+						err := core.CopyArgument(targetLocation, 0)
+						if err != nil {
+							back.PrintError("Failed to copy passphrase to clipboard: "+err.Error(), global.ErrorClipboard, true)
+						}
 					case "edit":
 						cli.EditEntryField(targetLocation, true, 0)
 					case "gen":
@@ -52,7 +55,10 @@ func main() {
 					case "add":
 						cli.AddEntry(targetLocation, true, 0)
 					case "shear":
-						syncclient.ShearRemoteFromClient(args[1], false) // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
+						err := syncclient.ShearRemoteFromClient(args[1], false) // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
+						if err != nil {
+							back.PrintError("Failed to shear target: "+err.Error(), back.ErrorWrite, true)
+						}
 					default:
 						cli.HelpMain()
 					}
@@ -88,7 +94,10 @@ func main() {
 					default:
 						cli.HelpCopy()
 					}
-					core.CopyArgument(targetLocation, field)
+					err := core.CopyArgument(targetLocation, field)
+					if err != nil {
+						back.PrintError("Failed to copy field to clipboard: "+err.Error(), global.ErrorClipboard, true)
+					}
 				case "edit":
 					var field int // indicates which (numbered) field to edit
 					switch args[3] {
@@ -151,7 +160,10 @@ func main() {
 					case "note", "-n":
 						cli.AddEntry(targetLocation, true, 2)
 					case "folder", "-f":
-						syncclient.AddFolderRemoteFromClient(args[1], false) // pass the incomplete path as the server will have a different home directory
+						err := syncclient.AddFolderRemoteFromClient(args[1], false) // pass the incomplete path as the server will have a different home directory
+						if err != nil {
+							back.PrintError("Failed to add folder: "+err.Error(), back.ErrorWrite, true)
+						}
 					default:
 						cli.HelpAdd()
 					}
@@ -164,13 +176,18 @@ func main() {
 		} else {
 			switch args[1] {
 			case "clipclear":
-				core.ClipClearArgument()
+				err := core.ClipClearArgument()
+				if err != nil {
+					back.PrintError("Failure occurred in clipboard clearing process: "+err.Error(), global.ErrorClipboard, true)
+				}
 			case "startrcwd":
 				crypt.RCWDArgument()
 			case "sync":
-				syncclient.RunJob(true, false)
+				_, err := syncclient.RunJob(true, false)
+				if err != nil {
+					back.PrintError("Failed to sync entries: "+err.Error(), global.ErrorSyncProcess, true)
+				}
 			case "init":
-				const fallbackEditor = "vi" // TODO "edit" for Windows
 				var rcwPass []byte
 				for { // get master passphrase
 					rcwPass = front.InputHidden("Master passphrase:")
@@ -181,7 +198,7 @@ func main() {
 					break
 				}
 				err := core.LibmuttonInit(front.Input,
-					[][3]string{{"MUTN", "textEditor", cmp.Or(front.Input("Text editor (leave blank for $EDITOR, falls back to \""+fallbackEditor+"\"):"), os.Getenv("EDITOR"), fallbackEditor)}},
+					[][3]string{{"MUTN", "textEditor", cmp.Or(front.Input("Text editor (leave blank for $EDITOR, falls back to \""+cli.FallbackEditor+"\"):"), os.Getenv("EDITOR"), cli.FallbackEditor)}},
 					rcwPass, false)
 				if err != nil {
 					back.PrintError("Initialization failed: "+err.Error(), 0, true)

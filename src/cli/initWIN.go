@@ -2,4 +2,4 @@
 
 package cli
 
-const fallbackEditor = "edit" // "edit" is the Microsoft-developed CLI text editor
+const FallbackEditor = "edit" // "edit" is the Microsoft-developed CLI text editor
