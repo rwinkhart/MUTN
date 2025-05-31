@@ -15,7 +15,7 @@ func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
 		back.PrintError("Failed to add entry: "+err.Error(), back.ErrorWrite, true)
 	}
 
-	var unencryptedEntry []string
+	var decryptedEntry []string
 
 	if entryType < 2 {
 		username := front.Input("Username:")
@@ -32,15 +32,15 @@ func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
 		url := front.Input("URL:")
 		if front.InputBinary("Add a note to this entry?") {
 			note, _ := editNote([]string{})
-			unencryptedEntry = append([]string{password, username, totp, url}, note...)
+			decryptedEntry = append([]string{password, username, totp, url}, note...)
 		} else {
-			unencryptedEntry = []string{password, username, totp, url}
+			decryptedEntry = []string{password, username, totp, url}
 		}
 	} else {
 		note, _ := editNote([]string{})
-		unencryptedEntry = append([]string{"", "", "", ""}, note...)
+		decryptedEntry = append([]string{"", "", "", ""}, note...)
 	}
 
 	// write and preview the new entry
-	writeEntryCLI(targetLocation, unencryptedEntry, hideSecrets)
+	writeEntryCLI(targetLocation, decryptedEntry, hideSecrets)
 }

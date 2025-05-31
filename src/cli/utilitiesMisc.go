@@ -28,16 +28,16 @@ func inputPasswordGen() string {
 }
 
 // writeEntryCLI writes an entry to targetLocation and previews it (errors if no data is supplied).
-func writeEntryCLI(targetLocation string, unencryptedEntry []string, hideSecrets bool) {
-	if core.EntryIsNotEmpty(unencryptedEntry) {
+func writeEntryCLI(targetLocation string, decryptedEntry []string, hideSecrets bool) {
+	if core.EntryIsNotEmpty(decryptedEntry) {
 		// write the entry to the target location
-		err := core.WriteEntry(targetLocation, []byte(strings.Join(unencryptedEntry, "\n")))
+		err := core.WriteEntry(targetLocation, []byte(strings.Join(decryptedEntry, "\n")))
 		if err != nil {
 			back.PrintError("Failed to write entry: "+err.Error(), back.ErrorWrite, true)
 		}
 		// preview the entry
 		fmt.Println(back.AnsiBold + "\nEntry Preview:" + back.AnsiReset)
-		EntryReader(unencryptedEntry, hideSecrets, true)
+		EntryReader(decryptedEntry, hideSecrets, true)
 	} else {
 		back.PrintError("No data supplied for entry", back.ErrorTargetNotFound, true)
 	}

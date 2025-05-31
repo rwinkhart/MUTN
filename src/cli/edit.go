@@ -28,7 +28,7 @@ func RenameCli(oldLocationIncomplete string) {
 // EditEntryField edits a field of an entry at targetLocation (user input).
 func EditEntryField(targetLocation string, hideSecrets bool, field int) {
 	// fetch old entry data (with all required lines present)
-	unencryptedEntry, err := core.GetOldEntryData(targetLocation, field)
+	decryptedEntry, err := core.GetOldEntryData(targetLocation, field)
 	if err != nil {
 		back.PrintError("Failed to fetch entry data: "+err.Error(), back.ErrorRead, true)
 	}
@@ -36,43 +36,43 @@ func EditEntryField(targetLocation string, hideSecrets bool, field int) {
 	// edit the field
 	switch field {
 	case 0:
-		unencryptedEntry[field] = string(front.InputHidden("Password:"))
+		decryptedEntry[field] = string(front.InputHidden("Password:"))
 	case 1:
-		unencryptedEntry[field] = front.Input("Username:")
+		decryptedEntry[field] = front.Input("Username:")
 	case 2:
-		unencryptedEntry[field] = string(front.InputHidden("TOTP secret:"))
+		decryptedEntry[field] = string(front.InputHidden("TOTP secret:"))
 	case 3:
-		unencryptedEntry[field] = front.Input("URL:")
+		decryptedEntry[field] = front.Input("URL:")
 	case 4: // edit notes fields
 		// store note and non-note data separately
-		nonNoteData := unencryptedEntry[:4]
-		noteData := unencryptedEntry[4:]
+		fieldsMain := decryptedEntry[:4]
+		fieldsNote := decryptedEntry[4:]
 
 		// edit the note
-		editedNote, noteEdited := editNote(noteData)
+		editedNote, noteEdited := editNote(fieldsNote)
 		if !noteEdited { // exit early if the note was not edited
 			back.PrintError("Entry is unchanged", 0, true)
 		}
-		unencryptedEntry = append(nonNoteData, editedNote...)
+		decryptedEntry = append(fieldsMain, editedNote...)
 	}
 
 	// write and preview the modified entry
-	writeEntryCLI(targetLocation, unencryptedEntry, hideSecrets)
+	writeEntryCLI(targetLocation, decryptedEntry, hideSecrets)
 }
 
 // GenUpdate generates a new password for an entry at targetLocation (user input).
 func GenUpdate(targetLocation string, hideSecrets bool) {
 	// fetch old entry data
-	unencryptedEntry, err := core.GetOldEntryData(targetLocation, 0)
+	decryptedEntry, err := core.GetOldEntryData(targetLocation, 0)
 	if err != nil {
 		back.PrintError("Failed to fetch entry data: "+err.Error(), back.ErrorRead, true)
 	}
 
 	// generate a new password
-	unencryptedEntry[0] = inputPasswordGen()
+	decryptedEntry[0] = inputPasswordGen()
 
 	// write and preview the modified entry
-	writeEntryCLI(targetLocation, unencryptedEntry, hideSecrets)
+	writeEntryCLI(targetLocation, decryptedEntry, hideSecrets)
 }
 
 // editNote uses the user-specified text editor to edit an existing note (or create a new one if baseNote is empty).
