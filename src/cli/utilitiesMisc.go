@@ -34,12 +34,12 @@ func writeEntryCLI(targetLocation string, decryptedEntry []string, hideSecrets b
 		// write the entry to the target location
 		err := core.WriteEntry(targetLocation, []byte(strings.Join(decryptedEntry, "\n")))
 		if err != nil {
-			other.PrintError("Failed to write entry: "+err.Error(), back.ErrorWrite, true)
+			other.PrintError("Failed to write entry: "+err.Error(), back.ErrorWrite)
 		}
 		// preview the entry
 		fmt.Println(back.AnsiBold + "\nEntry Preview:" + back.AnsiReset)
 		EntryReader(decryptedEntry, hideSecrets, true)
 	} else {
-		other.PrintError("No data supplied for entry", back.ErrorTargetNotFound, true)
+		other.PrintError("No data supplied for entry", back.ErrorTargetNotFound)
 	}
 }

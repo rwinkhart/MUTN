@@ -5,8 +5,8 @@ go 1.24.3
 require (
 	github.com/Trojan2021/BEAN v0.0.0-20241210230804-8f294833b514
 	github.com/charmbracelet/glamour v0.7.0
-	github.com/rwinkhart/go-boilerplate v0.0.0-20250601184813-71b5056ca6b3
-	github.com/rwinkhart/libmutton v0.3.2-0.20250601204024-ca4913f0546a
+	github.com/rwinkhart/go-boilerplate v0.0.0-20250601205829-83b0be1379fd
+	github.com/rwinkhart/libmutton v0.3.2-0.20250601210140-c0f55156d8a9
 	golang.org/x/term v0.32.0
 )
 

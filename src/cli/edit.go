@@ -20,7 +20,7 @@ func RenameCli(oldLocationIncomplete string) {
 	newLocationIncomplete := front.Input("New location:")
 	err := syncclient.RenameRemoteFromClient(oldLocationIncomplete, newLocationIncomplete)
 	if err != nil {
-		other.PrintError("Failed to rename entry: "+err.Error(), back.ErrorWrite, true)
+		other.PrintError("Failed to rename entry: "+err.Error(), back.ErrorWrite)
 	}
 
 	// exit is done from sync.RenameRemoteFromClient
@@ -31,7 +31,7 @@ func EditEntryField(targetLocation string, hideSecrets bool, field int) {
 	// fetch old entry data (with all required lines present)
 	decryptedEntry, err := core.GetOldEntryData(targetLocation, field)
 	if err != nil {
-		other.PrintError("Failed to fetch entry data: "+err.Error(), back.ErrorRead, true)
+		other.PrintError("Failed to fetch entry data: "+err.Error(), back.ErrorRead)
 	}
 
 	// edit the field
@@ -52,7 +52,7 @@ func EditEntryField(targetLocation string, hideSecrets bool, field int) {
 		// edit the note
 		editedNote, noteEdited := editNote(fieldsNote)
 		if !noteEdited { // exit early if the note was not edited
-			other.PrintError("Entry is unchanged", 0, true)
+			other.PrintError("Entry is unchanged", 0)
 		}
 		decryptedEntry = append(fieldsMain, editedNote...)
 	}
@@ -66,7 +66,7 @@ func GenUpdate(targetLocation string, hideSecrets bool) {
 	// fetch old entry data
 	decryptedEntry, err := core.GetOldEntryData(targetLocation, 0)
 	if err != nil {
-		other.PrintError("Failed to fetch entry data: "+err.Error(), back.ErrorRead, true)
+		other.PrintError("Failed to fetch entry data: "+err.Error(), back.ErrorRead)
 	}
 
 	// generate a new password
@@ -81,7 +81,7 @@ func GenUpdate(targetLocation string, hideSecrets bool) {
 func editNote(baseNote []string) ([]string, bool) {
 	tempFile, err := back.CreateTempFile()
 	if err != nil {
-		other.PrintError("Failed to create temporary note file: "+err.Error(), back.ErrorWrite, true)
+		other.PrintError("Failed to create temporary note file: "+err.Error(), back.ErrorWrite)
 	}
 	defer func(name string) {
 		_ = os.Remove(name) // error ignored; if the file could be created, it can probably be removed

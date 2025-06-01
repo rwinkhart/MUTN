@@ -13,7 +13,7 @@ func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
 	// ensure targetLocation is valid
 	_, err := core.EntryAddPrecheck(targetLocation)
 	if err != nil {
-		other.PrintError("Failed to add entry: "+err.Error(), back.ErrorWrite, true)
+		other.PrintError("Failed to add entry: "+err.Error(), back.ErrorWrite)
 	}
 
 	var decryptedEntry []string

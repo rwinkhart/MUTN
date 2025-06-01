@@ -82,7 +82,7 @@ func printFileEntry(entry string, lastSlash, charCounter, indent int, colorAlter
 func EntryListGen() {
 	fileList, dirList, err := synccommon.WalkEntryDir()
 	if err != nil {
-		other.PrintError("Failed to generate entry list: "+err.Error(), back.ErrorRead, true)
+		other.PrintError("Failed to generate entry list: "+err.Error(), back.ErrorRead)
 	}
 
 	// print header bar w/total entry count
