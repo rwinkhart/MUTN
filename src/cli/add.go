@@ -3,6 +3,7 @@ package cli
 import (
 	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/go-boilerplate/front"
+	"github.com/rwinkhart/go-boilerplate/other"
 	"github.com/rwinkhart/libmutton/core"
 )
 
@@ -12,7 +13,7 @@ func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
 	// ensure targetLocation is valid
 	_, err := core.EntryAddPrecheck(targetLocation)
 	if err != nil {
-		back.PrintError("Failed to add entry: "+err.Error(), back.ErrorWrite, true)
+		other.PrintError("Failed to add entry: "+err.Error(), back.ErrorWrite, true)
 	}
 
 	var decryptedEntry []string

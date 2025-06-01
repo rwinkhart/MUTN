@@ -1,4 +1,4 @@
-.TH MUTN 1 "21 April 2025" "v0.2.6" "MUTN man page"
+.TH MUTN 1 "01 June 2025" "v0.D.0" "MUTN man page"
 
 .SH NAME
 \fBmutn\fR - Simple, self-hosted, SSH-synchronized password and note management based on libmutton. It is the successor to sshyp.
@@ -152,23 +152,15 @@ Once this has been done, you may proceed with the client setup:
 
 102: write error
 
-103: sync process error
+103: target not found
 
-104: server connection error
+104: sync process error
 
-105: target not found
+105: decryption error
 
-106: target already exists
+106: encryption error
 
-107: target wrong type (file/directory)
-
-108: decryption error
-
-109: encryption error
-
-110: clipboard error
-
-111: other error
+107: clipboard error
 
 .SH AUTHOR
 Randall Winkhart (https://github.com/rwinkhart)

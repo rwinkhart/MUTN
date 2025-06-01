@@ -10,6 +10,7 @@ import (
 	"github.com/rwinkhart/MUTN/src/cli"
 	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/go-boilerplate/front"
+	"github.com/rwinkhart/go-boilerplate/other"
 	"github.com/rwinkhart/libmutton/core"
 	"github.com/rwinkhart/libmutton/crypt"
 	"github.com/rwinkhart/libmutton/global"
@@ -47,7 +48,7 @@ func main() {
 					case "copy":
 						err := core.CopyArgument(targetLocation, 0)
 						if err != nil {
-							back.PrintError("Failed to copy passphrase to clipboard: "+err.Error(), global.ErrorClipboard, true)
+							other.PrintError("Failed to copy passphrase to clipboard: "+err.Error(), global.ErrorClipboard, true)
 						}
 					case "edit":
 						cli.EditEntryField(targetLocation, true, 0)
@@ -58,7 +59,7 @@ func main() {
 					case "shear":
 						err := syncclient.ShearRemoteFromClient(args[1]) // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
 						if err != nil {
-							back.PrintError("Failed to shear target: "+err.Error(), back.ErrorWrite, true)
+							other.PrintError("Failed to shear target: "+err.Error(), back.ErrorWrite, true)
 						}
 					default:
 						cli.HelpMain()
@@ -97,7 +98,7 @@ func main() {
 					}
 					err := core.CopyArgument(targetLocation, field)
 					if err != nil {
-						back.PrintError("Failed to copy field to clipboard: "+err.Error(), global.ErrorClipboard, true)
+						other.PrintError("Failed to copy field to clipboard: "+err.Error(), global.ErrorClipboard, true)
 					}
 				case "edit":
 					var field int // indicates which (numbered) field to edit
@@ -163,7 +164,7 @@ func main() {
 					case "folder", "-f":
 						err := syncclient.AddFolderRemoteFromClient(args[1]) // pass the incomplete path as the server will have a different home directory
 						if err != nil {
-							back.PrintError("Failed to add folder: "+err.Error(), back.ErrorWrite, true)
+							other.PrintError("Failed to add folder: "+err.Error(), back.ErrorWrite, true)
 						}
 					default:
 						cli.HelpAdd()
@@ -179,21 +180,21 @@ func main() {
 			case "clipclear":
 				err := core.ClipClearArgument()
 				if err != nil {
-					back.PrintError("Failure occurred in clipboard clearing process: "+err.Error(), global.ErrorClipboard, true)
+					other.PrintError("Failure occurred in clipboard clearing process: "+err.Error(), global.ErrorClipboard, true)
 				}
 			case "startrcwd":
 				crypt.RCWDArgument()
 			case "sync":
 				_, err := syncclient.RunJob(true)
 				if err != nil {
-					back.PrintError("Failed to sync entries: "+err.Error(), global.ErrorSyncProcess, true)
+					other.PrintError("Failed to sync entries: "+err.Error(), global.ErrorSyncProcess, true)
 				}
 			case "init":
 				err := core.LibmuttonInit(front.Input,
 					[][3]string{{"MUTN", "textEditor", cmp.Or(front.Input("Text editor (leave blank for $EDITOR, falls back to \""+cli.FallbackEditor+"\"):"), os.Getenv("EDITOR"), cli.FallbackEditor)}},
 					confirmRCWPassphrase("new"), false)
 				if err != nil {
-					back.PrintError("Initialization failed: "+err.Error(), 0, true)
+					other.PrintError("Initialization failed: "+err.Error(), 0, true)
 				}
 			case "tweak":
 				choice := front.InputMenuGen("Action:", []string{"Change device ID", "Change master passphrase/Optimize entries"})
@@ -201,11 +202,11 @@ func main() {
 				case 1:
 					oldDeviceID, err := global.GetCurrentDeviceID()
 					if err != nil {
-						back.PrintError("Failed to get current device ID: "+err.Error(), back.ErrorRead, true)
+						other.PrintError("Failed to get current device ID: "+err.Error(), back.ErrorRead, true)
 					}
 					_, _, err = synccycles.DeviceIDGen(oldDeviceID)
 					if err != nil {
-						back.PrintError("Failed to change device ID: "+err.Error(), global.ErrorSyncProcess, true)
+						other.PrintError("Failed to change device ID: "+err.Error(), global.ErrorSyncProcess, true)
 					}
 					fmt.Println("\nDevice ID changed successfully.")
 				case 2:
@@ -214,7 +215,7 @@ func main() {
 					fmt.Print("\nRe-encrypting entries. Please wait; do not force close this process.\n")
 					err := core.EntryRefresh(oldPassphrase, newPassphrase, false)
 					if err != nil {
-						back.PrintError("Re-encryption failed: "+err.Error(), global.ErrorEncryption, true)
+						other.PrintError("Re-encryption failed: "+err.Error(), global.ErrorEncryption, true)
 					}
 					fmt.Println("\nRe-encryption complete.")
 				}

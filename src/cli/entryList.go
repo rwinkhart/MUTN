@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/rwinkhart/go-boilerplate/back"
+	"github.com/rwinkhart/go-boilerplate/other"
 	"github.com/rwinkhart/libmutton/synccommon"
 )
 
@@ -81,7 +82,7 @@ func printFileEntry(entry string, lastSlash, charCounter, indent int, colorAlter
 func EntryListGen() {
 	fileList, dirList, err := synccommon.WalkEntryDir()
 	if err != nil {
-		back.PrintError("Failed to generate entry list: "+err.Error(), back.ErrorRead, true)
+		other.PrintError("Failed to generate entry list: "+err.Error(), back.ErrorRead, true)
 	}
 
 	// print header bar w/total entry count

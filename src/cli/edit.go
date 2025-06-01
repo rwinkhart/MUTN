@@ -8,6 +8,7 @@ import (
 
 	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/go-boilerplate/front"
+	"github.com/rwinkhart/go-boilerplate/other"
 	"github.com/rwinkhart/libmutton/cfg"
 	"github.com/rwinkhart/libmutton/core"
 	"github.com/rwinkhart/libmutton/syncclient"
@@ -19,7 +20,7 @@ func RenameCli(oldLocationIncomplete string) {
 	newLocationIncomplete := front.Input("New location:")
 	err := syncclient.RenameRemoteFromClient(oldLocationIncomplete, newLocationIncomplete)
 	if err != nil {
-		back.PrintError("Failed to rename entry: "+err.Error(), back.ErrorWrite, true)
+		other.PrintError("Failed to rename entry: "+err.Error(), back.ErrorWrite, true)
 	}
 
 	// exit is done from sync.RenameRemoteFromClient
@@ -30,7 +31,7 @@ func EditEntryField(targetLocation string, hideSecrets bool, field int) {
 	// fetch old entry data (with all required lines present)
 	decryptedEntry, err := core.GetOldEntryData(targetLocation, field)
 	if err != nil {
-		back.PrintError("Failed to fetch entry data: "+err.Error(), back.ErrorRead, true)
+		other.PrintError("Failed to fetch entry data: "+err.Error(), back.ErrorRead, true)
 	}
 
 	// edit the field
@@ -51,7 +52,7 @@ func EditEntryField(targetLocation string, hideSecrets bool, field int) {
 		// edit the note
 		editedNote, noteEdited := editNote(fieldsNote)
 		if !noteEdited { // exit early if the note was not edited
-			back.PrintError("Entry is unchanged", 0, true)
+			other.PrintError("Entry is unchanged", 0, true)
 		}
 		decryptedEntry = append(fieldsMain, editedNote...)
 	}
@@ -65,7 +66,7 @@ func GenUpdate(targetLocation string, hideSecrets bool) {
 	// fetch old entry data
 	decryptedEntry, err := core.GetOldEntryData(targetLocation, 0)
 	if err != nil {
-		back.PrintError("Failed to fetch entry data: "+err.Error(), back.ErrorRead, true)
+		other.PrintError("Failed to fetch entry data: "+err.Error(), back.ErrorRead, true)
 	}
 
 	// generate a new password
@@ -78,7 +79,10 @@ func GenUpdate(targetLocation string, hideSecrets bool) {
 // editNote uses the user-specified text editor to edit an existing note (or create a new one if baseNote is empty).
 // Returns the edited note and a boolean indicating whether the note was edited.
 func editNote(baseNote []string) ([]string, bool) {
-	tempFile := back.CreateTempFile()
+	tempFile, err := back.CreateTempFile()
+	if err != nil {
+		other.PrintError("Failed to create temporary note file: "+err.Error(), back.ErrorWrite, true)
+	}
 	defer func(name string) {
 		_ = os.Remove(name) // error ignored; if the file could be created, it can probably be removed
 	}(tempFile.Name())
@@ -112,7 +116,7 @@ func editNote(baseNote []string) ([]string, bool) {
 	cmd.Stdout = os.Stdout
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
-	err := cmd.Run()
+	err = cmd.Run()
 	if err != nil {
 		panic(back.AnsiError + "Failed to write note with " + editor + back.AnsiReset) // panic is used to ensure the tempFile is removed, as per the defer statement
 	}

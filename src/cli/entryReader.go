@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/rwinkhart/go-boilerplate/back"
+	"github.com/rwinkhart/go-boilerplate/other"
 	"github.com/rwinkhart/libmutton/crypt"
 	"github.com/rwinkhart/libmutton/global"
 	"github.com/rwinkhart/libmutton/syncclient"
@@ -68,7 +69,7 @@ fieldLoop:
 	if syncEnabled {
 		_, err := syncclient.RunJob(false)
 		if err != nil {
-			back.PrintError("Failed to sync entries: "+err.Error(), global.ErrorSyncProcess, true)
+			other.PrintError("Failed to sync entries: "+err.Error(), global.ErrorSyncProcess, true)
 		}
 	}
 
@@ -77,10 +78,14 @@ fieldLoop:
 
 // EntryReaderDecrypt is a wrapper for EntryReader that first decrypts an RCW-wrapped file before sending it to EntryReader.
 func EntryReaderDecrypt(targetLocation string, hideSecrets bool) {
-	if isFile, _ := back.TargetIsFile(targetLocation, true, 2); isFile {
+	isFile, _, err := back.TargetIsFile(targetLocation, true, 2)
+	if err != nil {
+		other.PrintError("Failed to verify target location: "+err.Error(), back.ErrorTargetNotFound, true)
+	}
+	if isFile {
 		decBytes, err := crypt.DecryptFileToSlice(targetLocation)
 		if err != nil {
-			back.PrintError("Failed to decrypt entry: "+err.Error(), global.ErrorDecryption, true)
+			other.PrintError("Failed to decrypt entry: "+err.Error(), global.ErrorDecryption, true)
 		}
 		EntryReader(decBytes, hideSecrets, false) // never sync if decrypting straight to EntryReader, as this means the entry could not have been modified
 	}
