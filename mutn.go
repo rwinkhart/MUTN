@@ -114,8 +114,11 @@ func main() {
 					case "note", "-n":
 						field = 4
 					case "rename", "-r":
-						back.TargetIsFile(targetLocation, true, 0) // ensure location exists before prompting for new location
-						cli.RenameCli(args[1])                     // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
+						isAccessible, _ := back.TargetIsFile(targetLocation, true) // error is ignored because dir/file status is irrelevant
+						if !isAccessible {
+							other.PrintError("Failed to access location ("+targetLocation+")", back.ErrorTargetNotFound, true)
+						}
+						cli.RenameCli(args[1]) // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
 					default:
 						cli.HelpEdit()
 					}
