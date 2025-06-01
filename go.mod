@@ -6,7 +6,7 @@ require (
 	github.com/Trojan2021/BEAN v0.0.0-20241210230804-8f294833b514
 	github.com/charmbracelet/glamour v0.7.0
 	github.com/rwinkhart/go-boilerplate v0.0.0-20250601184813-71b5056ca6b3
-	github.com/rwinkhart/libmutton v0.3.2-0.20250601192431-d0f7b663d50f
+	github.com/rwinkhart/libmutton v0.3.2-0.20250601194316-87041a7bb3e0
 	golang.org/x/term v0.32.0
 )
 
