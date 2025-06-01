@@ -14,6 +14,7 @@ import (
 	"github.com/rwinkhart/libmutton/crypt"
 	"github.com/rwinkhart/libmutton/global"
 	"github.com/rwinkhart/libmutton/syncclient"
+	"github.com/rwinkhart/libmutton/synccycles"
 )
 
 func main() {
@@ -195,9 +196,19 @@ func main() {
 					back.PrintError("Initialization failed: "+err.Error(), 0, true)
 				}
 			case "tweak":
-				choice := front.InputMenuGen("Action:", []string{"Change master passphrase/Optimize entries"})
+				choice := front.InputMenuGen("Action:", []string{"Change device ID", "Change master passphrase/Optimize entries"})
 				switch choice {
 				case 1:
+					oldDeviceID, err := global.GetCurrentDeviceID()
+					if err != nil {
+						back.PrintError("Failed to get current device ID: "+err.Error(), back.ErrorRead, true)
+					}
+					_, _, err = synccycles.DeviceIDGen(oldDeviceID)
+					if err != nil {
+						back.PrintError("Failed to change device ID: "+err.Error(), global.ErrorSyncProcess, true)
+					}
+					fmt.Println("\nDevice ID changed successfully.")
+				case 2:
 					oldPassphrase := confirmRCWPassphrase("old")
 					newPassphrase := confirmRCWPassphrase("new")
 					fmt.Print("\nRe-encrypting entries. Please wait; do not force close this process.\n")
