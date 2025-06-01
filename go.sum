@@ -61,8 +61,8 @@ github.com/rwinkhart/go-boilerplate v0.0.0-20250529185306-e2e64d7fa43b h1:ENgsUl
 github.com/rwinkhart/go-boilerplate v0.0.0-20250529185306-e2e64d7fa43b/go.mod h1:cnzIF45I0FCOvE4YIB+26pLCUx2kWyY2llKYZruNaRY=
 github.com/rwinkhart/go-winio-easy-pipe-handles v0.0.0-20250407031321-96994a0e8410 h1:NhHwFM3Pgm6zRUfFKvi0p5ndjfFbVWsRwmmhyFlG4PE=
 github.com/rwinkhart/go-winio-easy-pipe-handles v0.0.0-20250407031321-96994a0e8410/go.mod h1:yd8OoFMLzJbo9gZq8j5qaps8bJ9aShtEA8Ipt1oGCvU=
-github.com/rwinkhart/libmutton v0.3.2-0.20250531214811-ca277ba7735d h1:3CdwTMhr7wNn8qmHyyMsT/jPEAB1ebCd4OX58oHrmtA=
-github.com/rwinkhart/libmutton v0.3.2-0.20250531214811-ca277ba7735d/go.mod h1:uIz4AJcXW7ZHvvoPlLNWQofTBIbFa1UJ2JI6O+FSQ60=
+github.com/rwinkhart/libmutton v0.3.2-0.20250601004130-4dab9f2c93e5 h1:ofZcQ4Pns5PsJY4ksejkt92ldDyDZ+FPhXMoRHehw4I=
+github.com/rwinkhart/libmutton v0.3.2-0.20250601004130-4dab9f2c93e5/go.mod h1:uIz4AJcXW7ZHvvoPlLNWQofTBIbFa1UJ2JI6O+FSQ60=
 github.com/rwinkhart/peercred-mini v0.1.0 h1:TiS6u8cEWzW55S9X4iVpU72Iuy/NG6rMUJMtUEVEFLw=
 github.com/rwinkhart/peercred-mini v0.1.0/go.mod h1:+x4Mxc2veE+YePSOpcUasjimh7n799c1KraLuQwHR20=
 github.com/rwinkhart/rcw v0.2.0 h1:/rFgJ+20OSThipKAX5KPwW2xbPpgh1zl49THmEkkPis=

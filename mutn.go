@@ -188,23 +188,25 @@ func main() {
 					back.PrintError("Failed to sync entries: "+err.Error(), global.ErrorSyncProcess, true)
 				}
 			case "init":
-				var rcwPass []byte
-				for { // get master passphrase
-					rcwPass = front.InputHidden("Master passphrase:")
-					if !bytes.Equal(rcwPass, front.InputHidden("Confirm master passphrase:")) || len(rcwPass) == 0 {
-						fmt.Println(back.AnsiError + "Passphrases do not match" + back.AnsiReset)
-						continue
-					}
-					break
-				}
 				err := core.LibmuttonInit(front.Input,
 					[][3]string{{"MUTN", "textEditor", cmp.Or(front.Input("Text editor (leave blank for $EDITOR, falls back to \""+cli.FallbackEditor+"\"):"), os.Getenv("EDITOR"), cli.FallbackEditor)}},
-					rcwPass, false)
+					confirmRCWPassphrase("new"), false)
 				if err != nil {
 					back.PrintError("Initialization failed: "+err.Error(), 0, true)
 				}
 			case "tweak":
-				back.PrintError("\"tweak\" is not yet implemented", 0, true)
+				choice := front.InputMenuGen("Action:", []string{"Change master passphrase/Optimize entries"})
+				switch choice {
+				case 1:
+					oldPassphrase := confirmRCWPassphrase("old")
+					newPassphrase := confirmRCWPassphrase("new")
+					fmt.Print("\nRe-encrypting entries. Please wait; do not force close this process.\n")
+					err := core.EntryRefresh(oldPassphrase, newPassphrase, false)
+					if err != nil {
+						back.PrintError("Re-encryption failed: "+err.Error(), global.ErrorEncryption, true)
+					}
+					fmt.Println("\nRe-encryption complete.")
+				}
 			case "copy":
 				cli.HelpCopy()
 			case "edit":
@@ -219,5 +221,19 @@ func main() {
 				cli.HelpMain()
 			}
 		}
+	}
+}
+
+// confirmRCWPassphrase prompts the user for a master passphrase and confirms it
+// is typed correctly. Returns the passphrase as a byte slice.
+func confirmRCWPassphrase(lowercasePrefix string) []byte {
+	for {
+		// get master passphrase
+		rcwPass := front.InputHidden(strings.ToUpper(string(lowercasePrefix[0])) + lowercasePrefix[1:] + " master passphrase:")
+		if !bytes.Equal(rcwPass, front.InputHidden("Confirm "+lowercasePrefix+" master passphrase:")) || len(rcwPass) == 0 {
+			fmt.Println(back.AnsiError + "Passphrases do not match or passphrase is invalid" + back.AnsiReset)
+			continue
+		}
+		return rcwPass
 	}
 }
