@@ -26,9 +26,9 @@ After installing, please review the [usage guide](https://github.com/rwinkhart/M
 ### Release v0.3.0
 - [ ] libmutton v0.4.0
     - [x] Swap to native (cascade) encryption
-    - [ ] Add refresh/re-encrypt functionality
-- [ ] Re-implement init menu
-- [ ] Implement tweak menu
+    - [x] Add refresh/re-encrypt functionality
+- [x] Re-implement init menu
+- [x] Implement tweak menu
 ### Release v0.4.0
 - [ ] Switch to fully compliant Markdown (do not preserve new lines)
 - [ ] Evaluate defaulting to building w/Bean over Glamour
