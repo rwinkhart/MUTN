@@ -150,7 +150,7 @@ func Version() {
 		ansiVersionOutline + "<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + back.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "                      MUTN v" + MUTNVersion + "                      " + back.AnsiReset + ansiVersionOutline + "/\n" +
-		"\\" + ansiBlackOnWhite + "             The Tripe Transmission Update             " + back.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "                The Cryptic Cuts Update                " + back.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + back.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "              Built with libmutton v" + global.LibmuttonVersion + "              " + back.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + back.AnsiReset + ansiVersionOutline + "/\n" +
