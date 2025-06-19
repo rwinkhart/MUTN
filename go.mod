@@ -3,7 +3,6 @@ module github.com/rwinkhart/MUTN
 go 1.24.4
 
 require (
-	github.com/Trojan2021/BEAN v0.0.0-20241210230804-8f294833b514
 	github.com/charmbracelet/glamour v0.7.0
 	github.com/rwinkhart/go-boilerplate v0.0.0-20250601205829-83b0be1379fd
 	github.com/rwinkhart/libmutton v0.3.2-0.20250619183947-37a1a6049fec
@@ -15,7 +14,6 @@ require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/boombuler/barcode v1.0.2 // indirect
-	github.com/charmbracelet/x/ansi v0.9.2 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/kr/fs v0.1.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
@@ -28,7 +26,6 @@ require (
 	github.com/pkg/sftp v1.13.9 // indirect
 	github.com/pquerna/otp v1.5.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
-	github.com/rwinkhart/convertroman v0.2.0 // indirect
 	github.com/rwinkhart/go-highlite v0.1.1 // indirect
 	github.com/rwinkhart/peercred-mini v0.1.0 // indirect
 	github.com/rwinkhart/rcw v0.2.0 // indirect

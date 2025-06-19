@@ -3,7 +3,9 @@ package cli
 import (
 	"fmt"
 	"os"
+	"strings"
 
+	"github.com/charmbracelet/glamour"
 	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/go-boilerplate/other"
 	"github.com/rwinkhart/libmutton/crypt"
@@ -58,8 +60,12 @@ fieldLoop:
 				noteLines = append(noteLines, decryptedEntry[field])
 			}
 
-			// print notes to stdout
-			renderNote(noteLines)
+			// render notes as Markdown
+			r, _ := glamour.NewTermRenderer(glamour.WithStylesFromJSONBytes(glamourStyle()), glamour.WithPreservedNewLines(), glamour.WithWordWrap(width))
+			markdownNotesString, _ := r.Render(strings.Join(noteLines, "\n"))
+
+			// print the rendered Markdown notes
+			fmt.Print(markdownNotesString)
 
 			// break after notes have been printed
 			break fieldLoop
