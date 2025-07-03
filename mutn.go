@@ -195,7 +195,7 @@ func main() {
 				}
 			case "init":
 				err := core.LibmuttonInit(front.Input,
-					[][3]string{{"MUTN", "textEditor", cmp.Or(front.Input("Text editor (leave blank for $EDITOR, falls back to \""+cli.FallbackEditor+"\"):"), os.Getenv("EDITOR"), cli.FallbackEditor)}},
+					[][3]string{{"MUTN", "textEditor", getTextEditorInput()}},
 					confirmRCWPassphrase("new"), false)
 				if err != nil {
 					other.PrintError("Initialization failed: "+err.Error(), 0)
@@ -223,7 +223,7 @@ func main() {
 					}
 					fmt.Println("\nRe-encryption complete.")
 				case 3:
-					err := cfg.WriteConfig([][3]string{{"MUTN", "textEditor", cmp.Or(front.Input("Text editor (leave blank for $EDITOR, falls back to \""+cli.FallbackEditor+"\"):"), os.Getenv("EDITOR"), cli.FallbackEditor)}}, nil, true)
+					err := cfg.WriteConfig([][3]string{{"MUTN", "textEditor", getTextEditorInput()}}, nil, true)
 					if err != nil {
 						other.PrintError("Failed to set text editor: "+err.Error(), back.ErrorWrite)
 					}
@@ -257,4 +257,9 @@ func confirmRCWPassphrase(lowercasePrefix string) []byte {
 		}
 		return rcwPass
 	}
+}
+
+// getTextEditorInput prompts the user for a text editor input, first falling back to "$EDITOR", then to a default value
+func getTextEditorInput() string {
+	return cmp.Or(front.Input("Text editor (leave blank for $EDITOR, falls back to \""+cli.FallbackEditor+"\"):"), os.Getenv("EDITOR"), cli.FallbackEditor)
 }
