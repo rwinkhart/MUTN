@@ -11,6 +11,7 @@ import (
 	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/go-boilerplate/front"
 	"github.com/rwinkhart/go-boilerplate/other"
+	"github.com/rwinkhart/libmutton/cfg"
 	"github.com/rwinkhart/libmutton/core"
 	"github.com/rwinkhart/libmutton/crypt"
 	"github.com/rwinkhart/libmutton/global"
@@ -200,7 +201,7 @@ func main() {
 					other.PrintError("Initialization failed: "+err.Error(), 0)
 				}
 			case "tweak":
-				choice := front.InputMenuGen("Action:", []string{"Change device ID", "Change master passphrase/Optimize entries"})
+				choice := front.InputMenuGen("Action:", []string{"Change device ID", "Change master passphrase/Optimize entries", "Set text editor"})
 				switch choice {
 				case 1:
 					oldDeviceID, err := global.GetCurrentDeviceID()
@@ -221,6 +222,11 @@ func main() {
 						other.PrintError("Re-encryption failed: "+err.Error(), global.ErrorEncryption)
 					}
 					fmt.Println("\nRe-encryption complete.")
+				case 3:
+					err := cfg.WriteConfig([][3]string{{"MUTN", "textEditor", cmp.Or(front.Input("Text editor (leave blank for $EDITOR, falls back to \""+cli.FallbackEditor+"\"):"), os.Getenv("EDITOR"), cli.FallbackEditor)}}, nil, true)
+					if err != nil {
+						other.PrintError("Failed to set text editor: "+err.Error(), back.ErrorWrite)
+					}
 				}
 			case "copy":
 				cli.HelpCopy()
