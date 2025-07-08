@@ -208,7 +208,7 @@ func main() {
 					if err != nil {
 						other.PrintError("Failed to get current device ID: "+err.Error(), back.ErrorRead)
 					}
-					_, _, err = synccycles.DeviceIDGen(oldDeviceID)
+					_, _, err = synccycles.DeviceIDGen(oldDeviceID, "")
 					if err != nil {
 						other.PrintError("Failed to change device ID: "+err.Error(), global.ErrorSyncProcess)
 					}
