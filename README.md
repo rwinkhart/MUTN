@@ -23,28 +23,14 @@ Additionally, MUTN is available as a source package ("[mutn](https://aur.archlin
 After installing, please review the [usage guide](https://github.com/rwinkhart/MUTN/blob/main/wiki/usage.md).
 
 # Roadmap
-### Release v0.3.0
-- [ ] libmutton v0.4.0
-    - [x] Swap to native (cascade) encryption
-    - [x] Add refresh/re-encrypt functionality
-- [x] Re-implement init menu
-- [x] Implement tweak menu
 ### Release v0.4.0
 - [ ] Switch to fully compliant Markdown (do not preserve new lines)
 - [ ] Switch to alternative Markdown renderer (minimark or BEAN)
 ### Release v0.5.0
 - [ ] libmutton v0.5.0
-    - [ ] Password aging support
-        - [ ] Append UNIX timestamp to entry names
-            - [ ] Trim timestamps to allow for vanity entry names in the following cases:
-                - [ ] Argument parsing
-                - [ ] Shell completions
-                - [ ] Entry list readout
-                - [ ] Sync output
-                - [ ] Add yellow/red dot indicators to entry list readout for when passwords should be changed
-### Release v0.6.0
-- [ ] libmutton v0.6.0
     - [ ] Implement "netpin" (quick-unlock)
+    - [ ] Password aging support
+        - [ ] Add yellow/red dot indicators to entry list readout for when passwords should be changed
 ### Release v1.0.0 - Distribution packages
 - [ ] Create packaging scripts
     - [x] Stable source PKGBUILD
@@ -53,4 +39,5 @@ After installing, please review the [usage guide](https://github.com/rwinkhart/M
     - [ ] Fedora
     - [ ] FreeBSD
     - [ ] Windows installer
+    - [ ] Brew formula
 - Perform extensive testing
