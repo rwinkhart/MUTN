@@ -88,10 +88,10 @@ func EntryReaderDecrypt(targetLocation string, hideSecrets bool) {
 	if err != nil { // if the location does not exist or is a directory...
 		other.PrintError("Failed to verify target location: "+err.Error(), back.ErrorTargetNotFound)
 	}
-	decBytes, err := crypt.DecryptFileToSlice(targetLocation)
+	decSlice, err := crypt.DecryptFileToSlice(targetLocation)
 	if err != nil {
 		other.PrintError("Failed to decrypt entry: "+err.Error(), global.ErrorDecryption)
 	}
-	EntryReader(decBytes, hideSecrets, false) // never sync if decrypting straight to EntryReader, as this means the entry could not have been modified
+	EntryReader(decSlice, hideSecrets, false) // never sync if decrypting straight to EntryReader, as this means the entry could not have been modified
 	// do not exit, as this is the job of EntryReader
 }
