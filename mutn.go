@@ -49,7 +49,7 @@ func main() {
 					case "copy":
 						err := core.CopyArgument(targetLocation, 0)
 						if err != nil {
-							other.PrintError("Failed to copy passphrase to clipboard: "+err.Error(), global.ErrorClipboard)
+							other.PrintError("Failed to copy password to clipboard: "+err.Error(), global.ErrorClipboard)
 						}
 					case "edit":
 						cli.EditEntryField(targetLocation, true, 0)
@@ -196,12 +196,12 @@ func main() {
 			case "init":
 				err := core.LibmuttonInit(front.Input,
 					[][3]string{{"MUTN", "textEditor", getTextEditorInput()}},
-					confirmRCWPassphrase("new"), false)
+					confirmRCWPassword("new"), false, false)
 				if err != nil {
 					other.PrintError("Initialization failed: "+err.Error(), 0)
 				}
 			case "tweak":
-				choice := front.InputMenuGen("Action:", []string{"Change device ID", "Change master passphrase/Optimize entries", "Set text editor"})
+				choice := front.InputMenuGen("Action:", []string{"Change device ID", "Change master password/Optimize entries", "Set text editor"})
 				switch choice {
 				case 1:
 					oldDeviceID, err := global.GetCurrentDeviceID()
@@ -214,10 +214,10 @@ func main() {
 					}
 					fmt.Println("\nDevice ID changed successfully.")
 				case 2:
-					oldPassphrase := confirmRCWPassphrase("old")
-					newPassphrase := confirmRCWPassphrase("new")
+					oldPassword := confirmRCWPassword("old")
+					newPassword := confirmRCWPassword("new")
 					fmt.Print("\nRe-encrypting entries. Please wait; do not force close this process.\n")
-					err := core.EntryRefresh(oldPassphrase, newPassphrase, false)
+					err := core.EntryRefresh(oldPassword, newPassword, false)
 					if err != nil {
 						other.PrintError("Re-encryption failed: "+err.Error(), global.ErrorEncryption)
 					}
@@ -245,14 +245,14 @@ func main() {
 	}
 }
 
-// confirmRCWPassphrase prompts the user for a master passphrase and confirms it
-// is typed correctly. Returns the passphrase as a byte slice.
-func confirmRCWPassphrase(lowercasePrefix string) []byte {
+// confirmRCWPassword prompts the user for a master password and confirms it
+// is typed correctly. Returns the password as a byte slice.
+func confirmRCWPassword(lowercasePrefix string) []byte {
 	for {
-		// get master passphrase
-		rcwPass := front.InputHidden(strings.ToUpper(string(lowercasePrefix[0])) + lowercasePrefix[1:] + " master passphrase:")
-		if !bytes.Equal(rcwPass, front.InputHidden("Confirm "+lowercasePrefix+" master passphrase:")) || len(rcwPass) == 0 {
-			fmt.Println(back.AnsiError + "Passphrases do not match or passphrase is invalid" + back.AnsiReset)
+		// get master password
+		rcwPass := front.InputHidden(strings.ToUpper(string(lowercasePrefix[0])) + lowercasePrefix[1:] + " master password:")
+		if !bytes.Equal(rcwPass, front.InputHidden("Confirm "+lowercasePrefix+" master password:")) || len(rcwPass) == 0 {
+			fmt.Println(back.AnsiError + "Passwords do not match or password is invalid" + back.AnsiReset)
 			continue
 		}
 		return rcwPass
