@@ -12,6 +12,7 @@ import (
 	"github.com/rwinkhart/go-boilerplate/front"
 	"github.com/rwinkhart/go-boilerplate/other"
 	"github.com/rwinkhart/libmutton/cfg"
+	"github.com/rwinkhart/libmutton/clip"
 	"github.com/rwinkhart/libmutton/core"
 	"github.com/rwinkhart/libmutton/crypt"
 	"github.com/rwinkhart/libmutton/global"
@@ -47,7 +48,7 @@ func main() {
 					case "show", "-s":
 						cli.EntryReaderDecrypt(targetLocation, false)
 					case "copy":
-						err := core.CopyArgument(targetLocation, 0)
+						err := clip.CopyArgument(targetLocation, 0)
 						if err != nil {
 							other.PrintError("Failed to copy password to clipboard: "+err.Error(), global.ErrorClipboard)
 						}
@@ -94,10 +95,12 @@ func main() {
 						field = 3
 					case "note", "-n":
 						field = 4
+					case "menu", "-m":
+						cli.CopyMenu(targetLocation)
 					default:
 						cli.HelpCopy()
 					}
-					err := core.CopyArgument(targetLocation, field)
+					err := clip.CopyArgument(targetLocation, field)
 					if err != nil {
 						other.PrintError("Failed to copy field to clipboard: "+err.Error(), global.ErrorClipboard)
 					}
@@ -182,7 +185,7 @@ func main() {
 		} else {
 			switch args[1] {
 			case "clipclear":
-				err := core.ClipClearArgument()
+				err := clip.ClipClearArgument()
 				if err != nil {
 					other.PrintError("Failure occurred in clipboard clearing process: "+err.Error(), global.ErrorClipboard)
 				}

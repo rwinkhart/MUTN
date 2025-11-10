@@ -1,4 +1,4 @@
-.TH MUTN 1 "17 August 2025" "v0.3.0" "MUTN man page"
+.TH MUTN 1 "09 November 2025" "v0.3.B" "MUTN man page"
 
 .SH NAME
 \fBmutn\fR - Simple, self-hosted, SSH-synchronized password and note management based on libmutton. It is the successor to sshyp.
@@ -63,6 +63,7 @@ copy:
  totp|-t                Generate and copy the TOTP token for an entry to your clipboard
  url|-l                 Copy the URL in an entry to your clipboard
  note|-n                Copy the first note line in an entry to your clipboard
+ menu|-m                Open interactive menu to copy any combination of fields
 
 edit:
  password|-pw           Change the password in an entry

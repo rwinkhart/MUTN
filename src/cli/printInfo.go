@@ -40,6 +40,7 @@ This program comes with absolutely no warranty; type "mutn version" for details.
   totp|-t                Generate and copy the TOTP token for an entry to your clipboard
   url|-l                 Copy the URL in an entry to your clipboard
   note|-n                Copy the first note line in an entry to your clipboard
+  menu|-m                Open interactive menu to copy any combination of fields
  edit:
   password|-pw|<blank>   Change the password in an entry
   username|-u            Change the username in an entry
