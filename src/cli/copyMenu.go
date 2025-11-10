@@ -2,6 +2,9 @@ package cli
 
 import (
 	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/go-boilerplate/front"
@@ -35,6 +38,15 @@ func CopyMenu(targetLocation string) {
 			fields = append(fields, fieldIndexToString[i])
 		}
 	}
+
+	// set up signal handling for ctrl+c to clear clipboard
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-sigChan
+		clip.ClipClearProcess("")
+		os.Exit(0)
+	}()
 
 	// copy selected field to clipboard
 	for {
@@ -78,5 +90,4 @@ func CopyMenu(targetLocation string) {
 			}
 		}
 	}
-	// TODO clear clipboard on exit!
 }
