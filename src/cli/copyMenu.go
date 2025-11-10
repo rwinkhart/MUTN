@@ -12,7 +12,6 @@ import (
 	"github.com/rwinkhart/libmutton/clip"
 	"github.com/rwinkhart/libmutton/crypt"
 	"github.com/rwinkhart/libmutton/global"
-	"github.com/rwinkhart/libmutton/synccommon"
 )
 
 // CopyMenu decrypts an entry and allows the user to
@@ -64,7 +63,7 @@ func CopyMenu(targetLocation string) {
 			choice = 4
 		}
 		if choice == 2 {
-			fmt.Println(ansiEmptyDirectoryWarning + "[Starting]" + back.AnsiReset + " TOTP clipboard refresher")
+			fmt.Println(back.AnsiWarning + "[Starting]" + back.AnsiReset + " TOTP clipboard refresher")
 			errorChan := make(chan error)
 			done := make(chan bool)
 			go clip.TOTPCopier(decSlice[2], 0, errorChan, done)
@@ -73,7 +72,7 @@ func CopyMenu(targetLocation string) {
 			if err != nil {
 				other.PrintError("Failed to copy TOTP token: "+err.Error(), global.ErrorClipboard)
 			}
-			fmt.Println(synccommon.AnsiDownload + "[Started]" + back.AnsiReset + " TOTP clipboard refresher")
+			fmt.Println(back.AnsiGreen + "[Started]" + back.AnsiReset + " TOTP clipboard refresher")
 			// block until the user sends "q"
 			for {
 				input := front.Input("Service will run until 'q' is entered:")
@@ -82,7 +81,7 @@ func CopyMenu(targetLocation string) {
 				}
 			}
 			close(done)
-			fmt.Print(synccommon.AnsiUpload + "\n[Stopped]" + back.AnsiReset + " TOTP clipboard refresher\n\n")
+			fmt.Print(back.AnsiBlue + "\n[Stopped]" + back.AnsiReset + " TOTP clipboard refresher\n\n")
 		} else {
 			err := clip.CopyString(true, decSlice[choice])
 			if err != nil {

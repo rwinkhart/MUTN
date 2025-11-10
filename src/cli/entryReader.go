@@ -28,7 +28,7 @@ fieldLoop:
 				if !hideSecrets {
 					fmt.Print(ansiDirectoryHeader + "Password:" + back.AnsiReset + "\n" + ansiShownPassword + decryptedEntry[0] + back.AnsiReset + "\n\n")
 				} else {
-					fmt.Print(ansiDirectoryHeader + "Password:" + back.AnsiReset + "\n" + ansiEmptyDirectoryWarning + "End command in \"show\" or \"-s\" to view" + back.AnsiReset + "\n\n")
+					fmt.Print(ansiDirectoryHeader + "Password:" + back.AnsiReset + "\n" + back.AnsiWarning + "End command in \"show\" or \"-s\" to view" + back.AnsiReset + "\n\n")
 				}
 			}
 		case 1:
@@ -42,7 +42,7 @@ fieldLoop:
 				if !hideSecrets {
 					fmt.Print(ansiDirectoryHeader + "TOTP Secret:" + back.AnsiReset + "\n" + ansiShownPassword + decryptedEntry[2] + back.AnsiReset + "\n\n")
 				} else {
-					fmt.Print(ansiDirectoryHeader + "TOTP Secret:" + back.AnsiReset + "\n" + ansiEmptyDirectoryWarning + "End command in \"show\" or \"-s\" to view" + back.AnsiReset + "\n\n")
+					fmt.Print(ansiDirectoryHeader + "TOTP Secret:" + back.AnsiReset + "\n" + back.AnsiWarning + "End command in \"show\" or \"-s\" to view" + back.AnsiReset + "\n\n")
 				}
 			}
 		case 3:

@@ -12,9 +12,8 @@ import (
 
 // ANSI color constants used only in this file
 const (
-	ansiAlternateEntryColor   = "\033[38;5;8m"
-	ansiDirectoryHeader       = "\033[38;5;7;48;5;8m"
-	ansiEmptyDirectoryWarning = "\033[38;5;3m"
+	ansiAlternateEntryColor = "\033[38;5;8m"
+	ansiDirectoryHeader     = "\033[38;5;7;48;5;8m"
 )
 
 // determineIndentation calculates and returns the final visual indentation multiplier (needed to adjust indentation for skipped parent directories); also subtracts "old" text from directory header.
@@ -145,7 +144,7 @@ func EntryListGen() {
 					skippedDirList[i] = false                                                  // the directory header is being printed, indicate that it is not being skipped
 					indent, vanityDirectory = determineIndentation(skippedDirList, dirList, i) // calculate the final indentation multiplier
 					fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+back.AnsiReset+"\n", vanityDirectory)
-					fmt.Print(strings.Repeat(" ", indent*2) + ansiEmptyDirectoryWarning + "-empty directory-" + back.AnsiReset)
+					fmt.Print(strings.Repeat(" ", indent*2) + back.AnsiWarning + "-empty directory-" + back.AnsiReset)
 				} else { // warn if the only thing that exists is the root-level directory
 					fmt.Print("\n\nNothing's here! For help creating your first entry, run \"mutn help\".")
 				}
