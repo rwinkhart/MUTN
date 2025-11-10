@@ -49,6 +49,7 @@ func CopyMenu(targetLocation string) {
 
 	// copy selected field to clipboard
 	for {
+		fmt.Println()
 		choice := front.InputMenuGen("Field to copy:", fields)
 		switch fields[choice-1] {
 		case "Password":
