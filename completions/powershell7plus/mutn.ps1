@@ -86,7 +86,7 @@ function cliMUTN-optionCompleter {
 
     $possibleValues = @{
         add = @('password', 'note', 'folder')
-        copy = @('password', 'username', 'totp', 'url', 'note')
+        copy = @('password', 'username', 'totp', 'url', 'note', 'menu')
         edit = @('password', 'username', 'totp', 'url', 'note', 'rename')
         gen = @('update')
     }
