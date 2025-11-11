@@ -32,7 +32,7 @@ func CopyMenu(targetLocation string) {
 		4: "Note (first line)",
 	}
 	var fields []string
-	for i, _ := range decSlice[:5] {
+	for i, _ := range decSlice[:min(5, len(decSlice))] {
 		if decSlice[i] != "" {
 			fields = append(fields, fieldIndexToString[i])
 		}
