@@ -82,7 +82,7 @@ func CopyMenu(targetLocation string) {
 				}
 			}
 			close(done)
-			fmt.Print(back.AnsiBlue + "\n[Stopped]" + back.AnsiReset + " TOTP clipboard refresher\n\n")
+			fmt.Println(back.AnsiBlue + "\n[Stopped]" + back.AnsiReset + " TOTP clipboard refresher")
 		} else {
 			err := clip.CopyString(true, decSlice[choice])
 			if err != nil {
