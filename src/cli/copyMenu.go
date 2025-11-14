@@ -67,7 +67,7 @@ func CopyMenu(targetLocation string) {
 			fmt.Println(back.AnsiWarning + "[Starting]" + back.AnsiReset + " TOTP clipboard refresher")
 			errorChan := make(chan error)
 			done := make(chan bool)
-			go clip.TOTPCopier(decSlice[2], 0, errorChan, done)
+			go clip.TOTPCopier(decSlice[2], errorChan, done)
 			// block until first successful copy
 			err = <-errorChan
 			if err != nil {
@@ -84,7 +84,7 @@ func CopyMenu(targetLocation string) {
 			close(done)
 			fmt.Println(back.AnsiBlue + "\n[Stopped]" + back.AnsiReset + " TOTP clipboard refresher")
 		} else {
-			err := clip.CopyString(true, decSlice[choice])
+			err := clip.CopyString(false, decSlice[choice])
 			if err != nil {
 				other.PrintError("Failed to copy field to clipboard: "+err.Error(), global.ErrorClipboard)
 			}

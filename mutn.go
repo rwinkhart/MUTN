@@ -48,7 +48,7 @@ func main() {
 					case "show", "-s":
 						cli.EntryReaderDecrypt(targetLocation, false)
 					case "copy":
-						err := clip.CopyArgument(targetLocation, 0)
+						err := clip.CopyShortcut(targetLocation, 0)
 						if err != nil {
 							other.PrintError("Failed to copy password to clipboard: "+err.Error(), global.ErrorClipboard)
 						}
@@ -100,7 +100,7 @@ func main() {
 					default:
 						cli.HelpCopy()
 					}
-					err := clip.CopyArgument(targetLocation, field)
+					err := clip.CopyShortcut(targetLocation, field)
 					if err != nil {
 						other.PrintError("Failed to copy field to clipboard: "+err.Error(), global.ErrorClipboard)
 					}
