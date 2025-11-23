@@ -5,8 +5,8 @@ go 1.25.4
 require (
 	github.com/charmbracelet/glamour v0.7.0
 	github.com/rwinkhart/go-boilerplate v0.1.1-0.20251110055016-10ee4f91fcb6
-	github.com/rwinkhart/libmutton v0.4.3-0.20251123082520-3ddce4bdf5a7
-	golang.org/x/term v0.36.0
+	github.com/rwinkhart/libmutton v0.4.3-0.20251123083838-5dc3a5576d67
+	golang.org/x/term v0.37.0
 )
 
 require (
@@ -31,8 +31,8 @@ require (
 	github.com/rwinkhart/rcw v0.2.3 // indirect
 	github.com/yuin/goldmark v1.7.13 // indirect
 	github.com/yuin/goldmark-emoji v1.0.6 // indirect
-	golang.org/x/crypto v0.43.0 // indirect
-	golang.org/x/net v0.45.0 // indirect
+	golang.org/x/crypto v0.45.0 // indirect
+	golang.org/x/net v0.47.0 // indirect
 	golang.org/x/sys v0.38.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
