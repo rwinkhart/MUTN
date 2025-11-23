@@ -15,10 +15,10 @@ import (
 )
 
 // RenameCli renames an entry at oldLocationIncomplete to a new location (user input) on both the client and the server.
-func RenameCli(oldLocationIncomplete string) {
+func RenameCli(oldVanityPath string) {
 	// prompt user for new location and rename
-	newLocationIncomplete := front.Input("New location:")
-	err := syncclient.RenameRemoteFromClient(oldLocationIncomplete, newLocationIncomplete)
+	newVanityPath := front.Input("New location:")
+	err := syncclient.RenameRemoteFromClient(oldVanityPath, newVanityPath)
 	if err != nil {
 		other.PrintError("Failed to rename entry: "+err.Error(), back.ErrorWrite)
 	}
@@ -26,10 +26,10 @@ func RenameCli(oldLocationIncomplete string) {
 	// exit is done from sync.RenameRemoteFromClient
 }
 
-// EditEntryField edits a field of an entry at targetLocation (user input).
-func EditEntryField(targetLocation string, hideSecrets bool, field int) {
+// EditEntryField edits a field of an entry at realPath (user input).
+func EditEntryField(realPath string, hideSecrets bool, field int) {
 	// fetch old entry data (with all required lines present)
-	decryptedEntry, err := core.GetOldEntryData(targetLocation, field)
+	decryptedEntry, err := core.GetOldEntryData(realPath, field)
 	if err != nil {
 		other.PrintError("Failed to fetch entry data: "+err.Error(), back.ErrorRead)
 	}
@@ -58,13 +58,17 @@ func EditEntryField(targetLocation string, hideSecrets bool, field int) {
 	}
 
 	// write and preview the modified entry
-	writeEntryCLI(targetLocation, decryptedEntry, hideSecrets)
+	if field == 0 {
+		writeEntryCLI(realPath, decryptedEntry, hideSecrets, true)
+	} else {
+		writeEntryCLI(realPath, decryptedEntry, hideSecrets, false)
+	}
 }
 
-// GenUpdate generates a new password for an entry at targetLocation (user input).
-func GenUpdate(targetLocation string, hideSecrets bool) {
+// GenUpdate generates a new password for an entry at realPath (user input).
+func GenUpdate(realPath string, hideSecrets bool) {
 	// fetch old entry data
-	decryptedEntry, err := core.GetOldEntryData(targetLocation, 0)
+	decryptedEntry, err := core.GetOldEntryData(realPath, 0)
 	if err != nil {
 		other.PrintError("Failed to fetch entry data: "+err.Error(), back.ErrorRead)
 	}
@@ -73,7 +77,7 @@ func GenUpdate(targetLocation string, hideSecrets bool) {
 	decryptedEntry[0] = inputPasswordGen()
 
 	// write and preview the modified entry
-	writeEntryCLI(targetLocation, decryptedEntry, hideSecrets)
+	writeEntryCLI(realPath, decryptedEntry, hideSecrets, true)
 }
 
 // editNote uses the user-specified text editor to edit an existing note (or create a new one if baseNote is empty).

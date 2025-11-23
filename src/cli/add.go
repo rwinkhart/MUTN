@@ -7,22 +7,22 @@ import (
 	"github.com/rwinkhart/libmutton/core"
 )
 
-// AddEntry creates a new entry at targetLocation by taking user input via CLI prompts.
+// AddEntry creates a new entry at realPath by taking user input via CLI prompts.
 // Requires: entryType (0 = standard password entry, 1 = auto-generated password entry, 2 = note-only entry).
-func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
-	// ensure targetLocation is valid
-	_, err := core.EntryAddPrecheck(targetLocation)
+func AddEntry(realPath string, hideSecrets bool, entryType uint8) {
+	// ensure realPath is valid
+	_, err := core.EntryAddPrecheck(realPath)
 	if err != nil {
 		other.PrintError("Failed to add entry: "+err.Error(), back.ErrorWrite)
 	}
 
 	var decryptedEntry []string
 
+	var password string
 	if entryType < 2 {
 		username := front.Input("Username:")
 
 		// determine whether to generate the password
-		var password string
 		if entryType == 0 {
 			password = string(front.InputHidden("Password:"))
 		} else {
@@ -43,5 +43,10 @@ func AddEntry(targetLocation string, hideSecrets bool, entryType uint8) {
 	}
 
 	// write and preview the new entry
-	writeEntryCLI(targetLocation, decryptedEntry, hideSecrets)
+	if password != "" {
+		writeEntryCLI(realPath, decryptedEntry, hideSecrets, true)
+	} else {
+		writeEntryCLI(realPath, decryptedEntry, hideSecrets, false)
+	}
+
 }

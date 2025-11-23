@@ -2,7 +2,6 @@ package cli
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/go-boilerplate/front"
@@ -28,17 +27,16 @@ func inputPasswordGen() string {
 	return synccycles.StringGen(passLength, complexity, passCharset)
 }
 
-// writeEntryCLI writes an entry to targetLocation and previews it (errors if no data is supplied).
-func writeEntryCLI(targetLocation string, decryptedEntry []string, hideSecrets bool) {
-	if core.EntryIsNotEmpty(decryptedEntry) {
-		// write the entry to the target location
-		err := core.WriteEntry(targetLocation, []byte(strings.Join(decryptedEntry, "\n")))
+// writeEntryCLI writes an entry to realPath and previews it (errors if no data is supplied).
+func writeEntryCLI(realPath string, decSlice []string, hideSecrets bool, passwordIsNew bool) {
+	if core.EntryIsNotEmpty(decSlice) {
+		err := core.WriteEntry(realPath, decSlice, passwordIsNew)
 		if err != nil {
 			other.PrintError("Failed to write entry: "+err.Error(), back.ErrorWrite)
 		}
 		// preview the entry
 		fmt.Println(back.AnsiBold + "\nEntry Preview:" + back.AnsiReset)
-		EntryReader(decryptedEntry, hideSecrets, true)
+		EntryReader(decSlice, hideSecrets, true)
 	} else {
 		other.PrintError("No data supplied for entry", back.ErrorTargetNotFound)
 	}

@@ -23,20 +23,18 @@ Additionally, MUTN is available as a source package ("[mutn](https://aur.archlin
 After installing, please review the [usage guide](https://github.com/rwinkhart/MUTN/blob/main/wiki/usage.md).
 
 # Roadmap
-### Release v0.3.1
-- [x] Add interactive copy menu
-    - [ ] Send user to this menu after add/gen
-- [ ] libmutton v0.5.0
 ### Release v0.4.0
-- [ ] libmutton v0.6.0
-    - [ ] Password aging support
-        - [ ] Add yellow/red dot indicators to entry list readout for when passwords should be changed
+- Add interactive copy menu
+    - Send user to this menu after add/gen
+- libmutton v0.5.0
+    - Password aging support
+        - Add green/yellow/red dot indicators to entry list readout for when passwords should be changed
 ### Release v0.5.0
-- [ ] libmutton v0.7.0
-    - [ ] Implement "netpin" (quick-unlock)
+- libmutton v0.6.0
+    - Implement "netpin" (quick-unlock)
 ### Release v0.6.0
-- [ ] Switch to fully compliant Markdown (do not preserve new lines)
-- [ ] Switch to alternative Markdown renderer (minimark or BEAN)
+- Switch to fully compliant Markdown (do not preserve new lines)
+- Switch to alternative Markdown renderer (minimark or BEAN)
 ### Release v1.0.0 - Distribution packages
 - [ ] Create packaging scripts
     - [x] Stable source PKGBUILD

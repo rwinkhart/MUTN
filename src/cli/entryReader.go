@@ -83,12 +83,12 @@ fieldLoop:
 }
 
 // EntryReaderDecrypt is a wrapper for EntryReader that first decrypts an RCW-wrapped file before sending it to EntryReader.
-func EntryReaderDecrypt(targetLocation string, hideSecrets bool) {
-	_, err := back.TargetIsFile(targetLocation, true)
+func EntryReaderDecrypt(realPath string, hideSecrets bool) {
+	_, err := back.TargetIsFile(realPath, true)
 	if err != nil { // if the location does not exist or is a directory...
 		other.PrintError("Failed to verify target location: "+err.Error(), back.ErrorTargetNotFound)
 	}
-	decSlice, err := crypt.DecryptFileToSlice(targetLocation)
+	decSlice, err := crypt.DecryptFileToSlice(realPath)
 	if err != nil {
 		other.PrintError("Failed to decrypt entry: "+err.Error(), global.ErrorDecryption)
 	}

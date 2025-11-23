@@ -11,6 +11,7 @@ import (
 	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/go-boilerplate/front"
 	"github.com/rwinkhart/go-boilerplate/other"
+	"github.com/rwinkhart/libmutton/age"
 	"github.com/rwinkhart/libmutton/cfg"
 	"github.com/rwinkhart/libmutton/clip"
 	"github.com/rwinkhart/libmutton/core"
@@ -34,32 +35,32 @@ func main() {
 		// if the first argument is an entry...
 		if strings.HasPrefix(args[1], "/") {
 
-			// store location of target entry
-			targetLocation := global.TargetLocationFormat(args[1])
+			// store realPath of target entry
+			realPath := global.GetRealPath(args[1])
 
 			// entry reader shortcut (if no other arguments are supplied)
 			if argsCount == 2 {
-				cli.EntryReaderDecrypt(targetLocation, true)
+				cli.EntryReaderDecrypt(realPath, true)
 
 				// perform other operations on the entry (if other arguments are supplied)
 			} else if argsCount == 3 || (argsCount == 4 && (args[3] == "show" || args[3] == "-s")) {
 				if argsCount == 3 { // default to "password" if no field is specified (for copy, edit, and add)
 					switch args[2] {
 					case "show", "-s":
-						cli.EntryReaderDecrypt(targetLocation, false)
+						cli.EntryReaderDecrypt(realPath, false)
 					case "copy":
-						err := clip.CopyShortcut(targetLocation, 0)
+						err := clip.CopyShortcut(realPath, 0)
 						if err != nil {
 							other.PrintError("Failed to copy password to clipboard: "+err.Error(), global.ErrorClipboard)
 						}
 					case "edit":
-						cli.EditEntryField(targetLocation, true, 0)
+						cli.EditEntryField(realPath, true, 0)
 					case "gen":
-						cli.AddEntry(targetLocation, true, 1)
+						cli.AddEntry(realPath, true, 1)
 					case "add":
-						cli.AddEntry(targetLocation, true, 0)
+						cli.AddEntry(realPath, true, 0)
 					case "shear":
-						err := syncclient.ShearRemoteFromClient(args[1]) // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
+						err := syncclient.ShearRemoteFromClient(args[1], false) // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
 						if err != nil {
 							other.PrintError("Failed to shear target: "+err.Error(), back.ErrorWrite)
 						}
@@ -69,11 +70,11 @@ func main() {
 				} else { // handle "show" or "-s" argument for gen, edit, and add
 					switch args[2] {
 					case "edit":
-						cli.EditEntryField(targetLocation, false, 0)
+						cli.EditEntryField(realPath, false, 0)
 					case "gen":
-						cli.AddEntry(targetLocation, false, 1)
+						cli.AddEntry(realPath, false, 1)
 					case "add":
-						cli.AddEntry(targetLocation, false, 0)
+						cli.AddEntry(realPath, false, 0)
 					default:
 						cli.HelpMain()
 					}
@@ -96,11 +97,11 @@ func main() {
 					case "note", "-n":
 						field = 4
 					case "menu", "-m":
-						cli.CopyMenu(targetLocation)
+						cli.CopyMenu(realPath)
 					default:
 						cli.HelpCopy()
 					}
-					err := clip.CopyShortcut(targetLocation, field)
+					err := clip.CopyShortcut(realPath, field)
 					if err != nil {
 						other.PrintError("Failed to copy field to clipboard: "+err.Error(), global.ErrorClipboard)
 					}
@@ -118,38 +119,38 @@ func main() {
 					case "note", "-n":
 						field = 4
 					case "rename", "-r":
-						isAccessible, _ := back.TargetIsFile(targetLocation, true) // error is ignored because dir/file status is irrelevant
+						isAccessible, _ := back.TargetIsFile(realPath, true) // error is ignored because dir/file status is irrelevant
 						if !isAccessible {
-							other.PrintError("Failed to access location ("+targetLocation+")", back.ErrorTargetNotFound)
+							other.PrintError("Failed to access location ("+realPath+")", back.ErrorTargetNotFound)
 						}
 						cli.RenameCli(args[1]) // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
 					default:
 						cli.HelpEdit()
 					}
 					if argsCount == 4 {
-						cli.EditEntryField(targetLocation, true, field)
+						cli.EditEntryField(realPath, true, field)
 					} else {
 						switch args[4] {
 						case "show", "-s":
-							cli.EditEntryField(targetLocation, false, field)
+							cli.EditEntryField(realPath, false, field)
 						default:
-							cli.EditEntryField(targetLocation, true, field)
+							cli.EditEntryField(realPath, true, field)
 						}
 					}
 				case "gen":
 					if argsCount == 4 {
 						switch args[3] {
 						case "update", "-u":
-							cli.GenUpdate(targetLocation, true)
+							cli.GenUpdate(realPath, true)
 						default:
 							cli.HelpGen()
 						}
 					} else if args[3] == "update" || args[3] == "-u" {
 						switch args[4] {
 						case "show", "-s":
-							cli.GenUpdate(targetLocation, false)
+							cli.GenUpdate(realPath, false)
 						default:
-							cli.GenUpdate(targetLocation, true)
+							cli.GenUpdate(realPath, true)
 						}
 					}
 					cli.HelpGen()
@@ -157,17 +158,17 @@ func main() {
 					switch args[3] {
 					case "password", "-pw":
 						if argsCount == 4 {
-							cli.AddEntry(targetLocation, true, 0)
+							cli.AddEntry(realPath, true, 0)
 						} else {
 							switch args[4] {
 							case "show", "-s":
-								cli.AddEntry(targetLocation, false, 0)
+								cli.AddEntry(realPath, false, 0)
 							default:
-								cli.AddEntry(targetLocation, true, 0)
+								cli.AddEntry(realPath, true, 0)
 							}
 						}
 					case "note", "-n":
-						cli.AddEntry(targetLocation, true, 2)
+						cli.AddEntry(realPath, true, 2)
 					case "folder", "-f":
 						err := syncclient.AddFolderRemoteFromClient(args[1]) // pass the incomplete path as the server will have a different home directory
 						if err != nil {
@@ -204,14 +205,14 @@ func main() {
 					other.PrintError("Initialization failed: "+err.Error(), 0)
 				}
 			case "tweak":
-				choice := front.InputMenuGen("Action:", []string{"Change device ID", "Change master password/Optimize entries", "Set text editor"})
+				choice := front.InputMenuGen("Action:", []string{"Change device ID", "Change master password/Optimize entries", "Set text editor", "Age all entries"})
 				switch choice {
 				case 1:
 					oldDeviceID, err := global.GetCurrentDeviceID()
 					if err != nil {
 						other.PrintError("Failed to get current device ID: "+err.Error(), back.ErrorRead)
 					}
-					_, _, err = synccycles.DeviceIDGen(oldDeviceID, "")
+					_, _, _, err = synccycles.DeviceIDGen(oldDeviceID, "")
 					if err != nil {
 						other.PrintError("Failed to change device ID: "+err.Error(), global.ErrorSyncProcess)
 					}
@@ -229,6 +230,13 @@ func main() {
 					err := cfg.WriteConfig([][3]string{{"MUTN", "textEditor", getTextEditorInput()}}, nil, true)
 					if err != nil {
 						other.PrintError("Failed to set text editor: "+err.Error(), back.ErrorWrite)
+					}
+				case 4:
+					forceReage := front.InputBinary("Re-age aged entries?")
+					fmt.Println("Aging entries; this may take awhile - do not terminate this process")
+					err := age.AgeAllPasswordEntries(forceReage)
+					if err != nil {
+						other.PrintError("Failed to age entries: "+err.Error(), 1)
 					}
 				}
 			case "copy":

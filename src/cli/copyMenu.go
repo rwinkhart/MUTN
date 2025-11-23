@@ -16,9 +16,9 @@ import (
 
 // CopyMenu decrypts an entry and allows the user to
 // interactively copy fields without having to re-decrypt each time.
-func CopyMenu(targetLocation string) {
+func CopyMenu(realPath string) {
 	// decrypt entry
-	decSlice, err := crypt.DecryptFileToSlice(targetLocation)
+	decSlice, err := crypt.DecryptFileToSlice(realPath)
 	if err != nil {
 		other.PrintError("Failed to decrypt entry: "+err.Error(), global.ErrorDecryption)
 	}
