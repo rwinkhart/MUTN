@@ -12,12 +12,14 @@ import (
 	"github.com/rwinkhart/libmutton/clip"
 	"github.com/rwinkhart/libmutton/crypt"
 	"github.com/rwinkhart/libmutton/global"
+	"github.com/rwinkhart/libmutton/syncclient"
 )
 
 // CopyMenu decrypts an entry and allows the user to
 // interactively copy fields without having to re-decrypt each time.
-// Only one of realPath or decSlice should be provided.
-func CopyMenu(realPath string, decSlice []string, oldPassword string) {
+// decSlice can be left nil to decrypt the entry specified by vanityPath.
+func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
+	realPath := global.GetRealPath(vanityPath)
 	var err error
 	if decSlice == nil {
 		// decrypt entry
@@ -25,19 +27,34 @@ func CopyMenu(realPath string, decSlice []string, oldPassword string) {
 		if err != nil {
 			other.PrintError("Failed to decrypt entry: "+err.Error(), global.ErrorDecryption)
 		}
+	} else {
+		fmt.Print("\n\n")
+		_, err := syncclient.RunJob(false)
+		if err != nil {
+			other.PrintError("Failed to sync on copy menu entry: "+err.Error(), global.ErrorSyncProcess)
+		}
 	}
 
 	// determine populated fields in entry
 	var fieldStrings = []string{"Username", "Password", "TOTP Code", "URL", "Note (first line)"}
 	var indices = []int{1, 0, 2, 3, 4}
 	var fields []string
+	var mainFieldPopulated bool
 	for i := range indices {
 		if len(decSlice) > indices[i] && decSlice[indices[i]] != "" {
 			fields = append(fields, fieldStrings[i])
+			mainFieldPopulated = true
 			if indices[i] == 0 && oldPassword != "" {
 				fields = append(fields, "Old Password")
 			}
 		}
+	}
+
+	// if no non-first-line notes are populated, render notes and exit
+	if !mainFieldPopulated {
+		EntryReader(vanityPath, decSlice, true)
+		fmt.Println("Entry has no copyable fields, exiting...")
+		os.Exit(0)
 	}
 
 	// set up signal handling for ctrl+c to clear clipboard

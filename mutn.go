@@ -54,11 +54,11 @@ func main() {
 							other.PrintError("Failed to copy password to clipboard: "+err.Error(), global.ErrorClipboard)
 						}
 					case "edit":
-						cli.EditEntryField(realPath, true, 0)
+						cli.EditEntryField(realPath, 0)
 					case "gen":
-						cli.AddEntry(realPath, true, 1)
+						cli.AddEntry(realPath, 1)
 					case "add":
-						cli.AddEntry(realPath, true, 0)
+						cli.AddEntry(realPath, 0)
 					case "shear":
 						err := syncclient.ShearRemoteFromClient(args[1], false) // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
 						if err != nil {
@@ -70,11 +70,11 @@ func main() {
 				} else { // handle "show" or "-s" argument for gen, edit, and add
 					switch args[2] {
 					case "edit":
-						cli.EditEntryField(realPath, false, 0)
+						cli.EditEntryField(realPath, 0)
 					case "gen":
-						cli.AddEntry(realPath, false, 1)
+						cli.AddEntry(realPath, 1)
 					case "add":
-						cli.AddEntry(realPath, false, 0)
+						cli.AddEntry(realPath, 0)
 					default:
 						cli.HelpMain()
 					}
@@ -97,7 +97,7 @@ func main() {
 					case "note", "-n":
 						field = 4
 					case "menu", "-m":
-						cli.CopyMenu(realPath, nil, "")
+						cli.CopyMenu(args[1], nil, "")
 					default:
 						cli.HelpCopy()
 					}
@@ -128,29 +128,29 @@ func main() {
 						cli.HelpEdit()
 					}
 					if argsCount == 4 {
-						cli.EditEntryField(realPath, true, field)
+						cli.EditEntryField(realPath, field)
 					} else {
 						switch args[4] {
 						case "show", "-s":
-							cli.EditEntryField(realPath, false, field)
+							cli.EditEntryField(realPath, field)
 						default:
-							cli.EditEntryField(realPath, true, field)
+							cli.EditEntryField(realPath, field)
 						}
 					}
 				case "gen":
 					if argsCount == 4 {
 						switch args[3] {
 						case "update", "-u":
-							cli.GenUpdate(realPath, true)
+							cli.GenUpdate(realPath)
 						default:
 							cli.HelpGen()
 						}
 					} else if args[3] == "update" || args[3] == "-u" {
 						switch args[4] {
 						case "show", "-s":
-							cli.GenUpdate(realPath, false)
+							cli.GenUpdate(realPath)
 						default:
-							cli.GenUpdate(realPath, true)
+							cli.GenUpdate(realPath)
 						}
 					}
 					cli.HelpGen()
@@ -158,17 +158,17 @@ func main() {
 					switch args[3] {
 					case "password", "-pw":
 						if argsCount == 4 {
-							cli.AddEntry(realPath, true, 0)
+							cli.AddEntry(realPath, 0)
 						} else {
 							switch args[4] {
 							case "show", "-s":
-								cli.AddEntry(realPath, false, 0)
+								cli.AddEntry(realPath, 0)
 							default:
-								cli.AddEntry(realPath, true, 0)
+								cli.AddEntry(realPath, 0)
 							}
 						}
 					case "note", "-n":
-						cli.AddEntry(realPath, true, 2)
+						cli.AddEntry(realPath, 2)
 					case "folder", "-f":
 						err := syncclient.AddFolderRemoteFromClient(args[1]) // pass the incomplete path as the server will have a different home directory
 						if err != nil {

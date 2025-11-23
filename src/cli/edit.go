@@ -27,9 +27,9 @@ func RenameCli(oldVanityPath string) {
 }
 
 // EditEntryField edits a field of an entry at realPath (user input).
-func EditEntryField(realPath string, hideSecrets bool, field int) {
+func EditEntryField(realPath string, field int) {
 	// fetch old entry data (with all required lines present)
-	decryptedEntry, err := core.GetOldEntryData(realPath, field)
+	decSlice, err := core.GetOldEntryData(realPath, field)
 	if err != nil {
 		other.PrintError("Failed to fetch entry data: "+err.Error(), back.ErrorRead)
 	}
@@ -38,49 +38,49 @@ func EditEntryField(realPath string, hideSecrets bool, field int) {
 	var oldPassword string
 	switch field {
 	case 0:
-		oldPassword = decryptedEntry[field]
-		decryptedEntry[field] = string(front.InputHidden("Password:"))
+		oldPassword = decSlice[field]
+		decSlice[field] = string(front.InputHidden("Password:"))
 	case 1:
-		decryptedEntry[field] = front.Input("Username:")
+		decSlice[field] = front.Input("Username:")
 	case 2:
-		decryptedEntry[field] = string(front.InputHidden("TOTP secret:"))
+		decSlice[field] = string(front.InputHidden("TOTP secret:"))
 	case 3:
-		decryptedEntry[field] = front.Input("URL:")
+		decSlice[field] = front.Input("URL:")
 	case 4: // edit notes fields
 		// store note and non-note data separately
-		fieldsMain := decryptedEntry[:4]
-		fieldsNote := decryptedEntry[4:]
+		fieldsMain := decSlice[:4]
+		fieldsNote := decSlice[4:]
 
 		// edit the note
 		editedNote, noteEdited := editNote(fieldsNote)
 		if !noteEdited { // exit early if the note was not edited
 			other.PrintError("Entry is unchanged", 0)
 		}
-		decryptedEntry = append(fieldsMain, editedNote...)
+		decSlice = append(fieldsMain, editedNote...)
 	}
 
 	// write and preview the modified entry
 	if field == 0 {
-		writeEntryCLI(realPath, decryptedEntry, hideSecrets, true, oldPassword)
+		writeEntryCLI(realPath, decSlice, true, oldPassword)
 	} else {
-		writeEntryCLI(realPath, decryptedEntry, hideSecrets, false, oldPassword)
+		writeEntryCLI(realPath, decSlice, false, oldPassword)
 	}
 }
 
 // GenUpdate generates a new password for an entry at realPath (user input).
-func GenUpdate(realPath string, hideSecrets bool) {
+func GenUpdate(realPath string) {
 	// fetch old entry data
-	decryptedEntry, err := core.GetOldEntryData(realPath, 0)
+	decSlice, err := core.GetOldEntryData(realPath, 0)
 	if err != nil {
 		other.PrintError("Failed to fetch entry data: "+err.Error(), back.ErrorRead)
 	}
 
 	// generate a new password
-	oldPassword := decryptedEntry[0]
-	decryptedEntry[0] = inputPasswordGen()
+	oldPassword := decSlice[0]
+	decSlice[0] = inputPasswordGen()
 
 	// write and preview the modified entry
-	writeEntryCLI(realPath, decryptedEntry, hideSecrets, true, oldPassword)
+	writeEntryCLI(realPath, decSlice, true, oldPassword)
 }
 
 // editNote uses the user-specified text editor to edit an existing note (or create a new one if baseNote is empty).

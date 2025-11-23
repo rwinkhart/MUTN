@@ -9,14 +9,14 @@ import (
 
 // AddEntry creates a new entry at realPath by taking user input via CLI prompts.
 // Requires: entryType (0 = standard password entry, 1 = auto-generated password entry, 2 = note-only entry).
-func AddEntry(realPath string, hideSecrets bool, entryType uint8) {
+func AddEntry(realPath string, entryType uint8) {
 	// ensure realPath is valid
 	_, err := core.EntryAddPrecheck(realPath)
 	if err != nil {
 		other.PrintError("Failed to add entry: "+err.Error(), back.ErrorWrite)
 	}
 
-	var decryptedEntry []string
+	var decSlice []string
 
 	var password string
 	if entryType < 2 {
@@ -33,20 +33,20 @@ func AddEntry(realPath string, hideSecrets bool, entryType uint8) {
 		url := front.Input("URL:")
 		if front.InputBinary("Add a note to this entry?") {
 			note, _ := editNote([]string{})
-			decryptedEntry = append([]string{password, username, totp, url}, note...)
+			decSlice = append([]string{password, username, totp, url}, note...)
 		} else {
-			decryptedEntry = []string{password, username, totp, url}
+			decSlice = []string{password, username, totp, url}
 		}
 	} else {
 		note, _ := editNote([]string{})
-		decryptedEntry = append([]string{"", "", "", ""}, note...)
+		decSlice = append([]string{"", "", "", ""}, note...)
 	}
 
 	// write and preview the new entry
 	if password != "" {
-		writeEntryCLI(realPath, decryptedEntry, hideSecrets, true, "")
+		writeEntryCLI(realPath, decSlice, true, "")
 	} else {
-		writeEntryCLI(realPath, decryptedEntry, hideSecrets, false, "")
+		writeEntryCLI(realPath, decSlice, false, "")
 	}
 
 }
