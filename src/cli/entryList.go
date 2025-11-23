@@ -48,7 +48,7 @@ func determineIndentation(skippedDirList []bool, dirList []string, currentDirInd
 }
 
 // printFileEntry handles processing for printing file entries (determines color, wraps lines, and prints).
-func printFileEntry(entry string, lastSlash, charCounter, indent int, colorAlternator int8, agingTimestamp int64) (int, int8) {
+func printFileEntry(entry string, lastSlash int, charCounter *int, indent int, colorAlternator int8, agingTimestamp int64) int8 {
 	// determine color to print fileEntryName (alternate each time function is run)
 	var colorCode string
 	if colorAlternator > 0 {
@@ -72,21 +72,24 @@ func printFileEntry(entry string, lastSlash, charCounter, indent int, colorAlter
 	// trim the containing directory from the entry to determine fileEntryName
 	fileEntryName := entry[lastSlash:]
 
-	if charCounter == 0 { // indent first line of entries for each directory header
+	if *charCounter == 0 { // indent first line of entries for each directory header
 		fmt.Print(strings.Repeat(" ", indent*2))
 	}
 
 	// determine whether to wrap to a new line (+1 is to account for trailing spaces)
-	charCounter += len(fileEntryName) + 1
-	if indentation := indent * 2; charCounter+(indentation) >= width {
-		charCounter = len(fileEntryName) + 1
+	*charCounter += len(fileEntryName) + 1
+	if agingDot != "" {
+		*charCounter++
+	}
+	if indentation := indent * 2; *charCounter+(indentation) >= width {
+		*charCounter = len(fileEntryName) + 1
 		fmt.Print("\n" + strings.Repeat(" ", indentation)) // indent each line
 	}
 
 	// print fileEntryName to screen
 	fmt.Printf("%s%s%s%s ", agingDot, colorCode, fileEntryName, back.AnsiReset)
 
-	return charCounter, colorAlternator
+	return colorAlternator
 }
 
 // EntryListGen generates and displays the full libmutton entry list.
@@ -151,7 +154,7 @@ func EntryListGen() {
 					fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+back.AnsiReset+"\n", vanityDirectory)
 				}
 
-				charCounter, colorAlternator = printFileEntry(file, lastSlash, charCounter, indent, colorAlternator, vanityPathsToTimestamps[file])
+				colorAlternator = printFileEntry(file, lastSlash, &charCounter, indent, colorAlternator, vanityPathsToTimestamps[file])
 			}
 		}
 
