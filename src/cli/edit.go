@@ -35,8 +35,10 @@ func EditEntryField(realPath string, hideSecrets bool, field int) {
 	}
 
 	// edit the field
+	var oldPassword string
 	switch field {
 	case 0:
+		oldPassword = decryptedEntry[field]
 		decryptedEntry[field] = string(front.InputHidden("Password:"))
 	case 1:
 		decryptedEntry[field] = front.Input("Username:")
@@ -59,9 +61,9 @@ func EditEntryField(realPath string, hideSecrets bool, field int) {
 
 	// write and preview the modified entry
 	if field == 0 {
-		writeEntryCLI(realPath, decryptedEntry, hideSecrets, true)
+		writeEntryCLI(realPath, decryptedEntry, hideSecrets, true, oldPassword)
 	} else {
-		writeEntryCLI(realPath, decryptedEntry, hideSecrets, false)
+		writeEntryCLI(realPath, decryptedEntry, hideSecrets, false, oldPassword)
 	}
 }
 
@@ -74,10 +76,11 @@ func GenUpdate(realPath string, hideSecrets bool) {
 	}
 
 	// generate a new password
+	oldPassword := decryptedEntry[0]
 	decryptedEntry[0] = inputPasswordGen()
 
 	// write and preview the modified entry
-	writeEntryCLI(realPath, decryptedEntry, hideSecrets, true)
+	writeEntryCLI(realPath, decryptedEntry, hideSecrets, true, oldPassword)
 }
 
 // editNote uses the user-specified text editor to edit an existing note (or create a new one if baseNote is empty).

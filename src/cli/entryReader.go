@@ -2,7 +2,6 @@ package cli
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/charmbracelet/glamour"
@@ -78,8 +77,6 @@ fieldLoop:
 			other.PrintError("Failed to sync entries: "+err.Error(), global.ErrorSyncProcess)
 		}
 	}
-
-	os.Exit(0)
 }
 
 // EntryReaderDecrypt is a wrapper for EntryReader that first decrypts an RCW-wrapped file before sending it to EntryReader.

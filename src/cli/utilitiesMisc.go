@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/go-boilerplate/front"
@@ -28,7 +29,7 @@ func inputPasswordGen() string {
 }
 
 // writeEntryCLI writes an entry to realPath and previews it (errors if no data is supplied).
-func writeEntryCLI(realPath string, decSlice []string, hideSecrets bool, passwordIsNew bool) {
+func writeEntryCLI(realPath string, decSlice []string, hideSecrets bool, passwordIsNew bool, oldPassword string) {
 	if core.EntryIsNotEmpty(decSlice) {
 		err := core.WriteEntry(realPath, decSlice, passwordIsNew)
 		if err != nil {
@@ -37,6 +38,8 @@ func writeEntryCLI(realPath string, decSlice []string, hideSecrets bool, passwor
 		// preview the entry
 		fmt.Println(back.AnsiBold + "\nEntry Preview:" + back.AnsiReset)
 		EntryReader(decSlice, hideSecrets, true)
+		CopyMenu("", decSlice, oldPassword)
+		os.Exit(0)
 	} else {
 		other.PrintError("No data supplied for entry", back.ErrorTargetNotFound)
 	}

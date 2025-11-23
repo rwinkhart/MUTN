@@ -97,7 +97,7 @@ func main() {
 					case "note", "-n":
 						field = 4
 					case "menu", "-m":
-						cli.CopyMenu(realPath)
+						cli.CopyMenu(realPath, nil, "")
 					default:
 						cli.HelpCopy()
 					}

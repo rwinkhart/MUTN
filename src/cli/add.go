@@ -44,9 +44,9 @@ func AddEntry(realPath string, hideSecrets bool, entryType uint8) {
 
 	// write and preview the new entry
 	if password != "" {
-		writeEntryCLI(realPath, decryptedEntry, hideSecrets, true)
+		writeEntryCLI(realPath, decryptedEntry, hideSecrets, true, "")
 	} else {
-		writeEntryCLI(realPath, decryptedEntry, hideSecrets, false)
+		writeEntryCLI(realPath, decryptedEntry, hideSecrets, false, "")
 	}
 
 }

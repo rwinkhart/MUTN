@@ -16,25 +16,27 @@ import (
 
 // CopyMenu decrypts an entry and allows the user to
 // interactively copy fields without having to re-decrypt each time.
-func CopyMenu(realPath string) {
-	// decrypt entry
-	decSlice, err := crypt.DecryptFileToSlice(realPath)
-	if err != nil {
-		other.PrintError("Failed to decrypt entry: "+err.Error(), global.ErrorDecryption)
+// Only one of realPath or decSlice should be provided.
+func CopyMenu(realPath string, decSlice []string, oldPassword string) {
+	var err error
+	if decSlice == nil {
+		// decrypt entry
+		decSlice, err = crypt.DecryptFileToSlice(realPath)
+		if err != nil {
+			other.PrintError("Failed to decrypt entry: "+err.Error(), global.ErrorDecryption)
+		}
 	}
 
 	// determine populated fields in entry
-	fieldIndexToString := map[int]string{
-		0: "Password",
-		1: "Username",
-		2: "TOTP Code",
-		3: "URL",
-		4: "Note (first line)",
-	}
+	var fieldStrings = []string{"Username", "Password", "TOTP Code", "URL", "Note (first line)"}
+	var indices = []int{1, 0, 2, 3, 4}
 	var fields []string
-	for i, _ := range decSlice[:min(5, len(decSlice))] {
-		if decSlice[i] != "" {
-			fields = append(fields, fieldIndexToString[i])
+	for i := range indices {
+		if len(decSlice) > indices[i] && decSlice[indices[i]] != "" {
+			fields = append(fields, fieldStrings[i])
+			if indices[i] == 0 && oldPassword != "" {
+				fields = append(fields, "Old Password")
+			}
 		}
 	}
 
@@ -52,10 +54,16 @@ func CopyMenu(realPath string) {
 		fmt.Println()
 		choice := front.InputMenuGen("Field to copy:", fields)
 		switch fields[choice-1] {
-		case "Password":
-			choice = 0
 		case "Username":
 			choice = 1
+		case "Password":
+			choice = 0
+		case "Old Password":
+			err := clip.CopyString(false, oldPassword)
+			if err != nil {
+				other.PrintError("Failed to copy old password to clipboard: "+err.Error(), global.ErrorClipboard)
+			}
+			continue
 		case "TOTP Code":
 			choice = 2
 		case "URL":
