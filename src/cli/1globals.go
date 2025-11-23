@@ -13,7 +13,7 @@ var (
 )
 
 const (
-	MUTNVersion = "0.3.0" // untagged releases feature a letter suffix corresponding to the eventual release version, e.g "0.2.A" -> "0.2.0", "0.2.B" -> "0.2.1"
+	MUTNVersion = "0.3.1" // untagged releases feature a letter suffix corresponding to the eventual release version, e.g "0.2.A" -> "0.2.0", "0.2.B" -> "0.2.1"
 
 	ansiBlackOnWhite = "\033[38;5;0;48;5;15m"
 )
