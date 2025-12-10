@@ -1,11 +1,11 @@
 module github.com/rwinkhart/MUTN
 
-go 1.25.4
+go 1.25.5
 
 require (
 	github.com/charmbracelet/glamour v0.7.0
 	github.com/rwinkhart/go-boilerplate v0.1.1-0.20251110055016-10ee4f91fcb6
-	github.com/rwinkhart/libmutton v0.4.3-0.20251123183956-95a877d0b300
+	github.com/rwinkhart/libmutton v0.4.3-0.20251210051340-01be63c587ca
 	golang.org/x/term v0.37.0
 )
 
