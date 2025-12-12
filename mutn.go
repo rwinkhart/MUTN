@@ -18,7 +18,6 @@ import (
 	"github.com/rwinkhart/libmutton/crypt"
 	"github.com/rwinkhart/libmutton/global"
 	"github.com/rwinkhart/libmutton/syncclient"
-	"github.com/rwinkhart/libmutton/synccycles"
 )
 
 func main() {
@@ -60,7 +59,7 @@ func main() {
 					case "add":
 						cli.AddEntry(realPath, 0)
 					case "shear":
-						err := syncclient.ShearRemoteFromClient(args[1], false) // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
+						err := syncclient.ShearRemote(args[1], false) // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
 						if err != nil {
 							other.PrintError("Failed to shear target: "+err.Error(), back.ErrorWrite)
 						}
@@ -170,7 +169,7 @@ func main() {
 					case "note", "-n":
 						cli.AddEntry(realPath, 2)
 					case "folder", "-f":
-						err := syncclient.AddFolderRemoteFromClient(args[1]) // pass the incomplete path as the server will have a different home directory
+						err := syncclient.AddFolderRemote(args[1]) // pass the incomplete path as the server will have a different home directory
 						if err != nil {
 							other.PrintError("Failed to add folder: "+err.Error(), back.ErrorWrite)
 						}
@@ -212,7 +211,7 @@ func main() {
 					if err != nil {
 						other.PrintError("Failed to get current device ID: "+err.Error(), back.ErrorRead)
 					}
-					_, _, _, err = synccycles.DeviceIDGen(oldDeviceID, "")
+					_, _, _, err = syncclient.GenDeviceID(oldDeviceID, "")
 					if err != nil {
 						other.PrintError("Failed to change device ID: "+err.Error(), global.ErrorSyncProcess)
 					}

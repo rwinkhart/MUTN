@@ -6,8 +6,8 @@ import (
 	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/go-boilerplate/front"
 	"github.com/rwinkhart/go-boilerplate/other"
+	"github.com/rwinkhart/go-boilerplate/stringy"
 	"github.com/rwinkhart/libmutton/core"
-	"github.com/rwinkhart/libmutton/synccycles"
 )
 
 // inputPasswordGen prompts the user for password generation parameters and returns a generated password as a string.
@@ -24,7 +24,7 @@ func inputPasswordGen() string {
 		complexity = 0.2 // (ultra) complex
 		// 2 and 3 indicate complex and ultra complex charsets, respectively
 	}
-	return synccycles.StringGen(passLength, complexity, passCharset)
+	return stringy.StringGen(passLength, complexity, passCharset)
 }
 
 // writeEntryCLI writes an entry to realPath and previews it (errors if no data is supplied).

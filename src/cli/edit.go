@@ -18,12 +18,12 @@ import (
 func RenameCli(oldVanityPath string) {
 	// prompt user for new location and rename
 	newVanityPath := front.Input("New location:")
-	err := syncclient.RenameRemoteFromClient(oldVanityPath, newVanityPath)
+	err := syncclient.RenameRemote(oldVanityPath, newVanityPath)
 	if err != nil {
 		other.PrintError("Failed to rename entry: "+err.Error(), back.ErrorWrite)
 	}
 
-	// exit is done from sync.RenameRemoteFromClient
+	// exit is done from sync.RenameRemote
 }
 
 // EditEntryField edits a field of an entry at realPath (user input).
