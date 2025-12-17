@@ -198,7 +198,7 @@ func main() {
 				}
 			case "init":
 				err := core.LibmuttonInit(front.Input,
-					[][3]string{{"MUTN", "textEditor", getTextEditorInput()}},
+					map[string]any{"mutnTextEditor": getTextEditorInput()},
 					confirmRCWPassword("new"), false, false)
 				if err != nil {
 					other.PrintError("Initialization failed: "+err.Error(), 0)
@@ -226,7 +226,10 @@ func main() {
 					}
 					fmt.Println("\nRe-encryption complete.")
 				case 3:
-					err := cfg.WriteConfig([][3]string{{"MUTN", "textEditor", getTextEditorInput()}}, nil, true)
+					newCfg := &cfg.CfgT{}
+					newThirdPartyCfg := map[string]any{"mutnTextEditor": getTextEditorInput()}
+					newCfg.ThirdParty = &newThirdPartyCfg
+					err := cfg.WriteConfig(newCfg, true)
 					if err != nil {
 						other.PrintError("Failed to set text editor: "+err.Error(), back.ErrorWrite)
 					}

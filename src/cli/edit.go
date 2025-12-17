@@ -95,11 +95,16 @@ func editNote(baseNote []string) ([]string, bool) {
 	}(tempFile.Name())
 
 	// fetch the user's text editor
-	editorCfg, err := cfg.ParseConfig([][2]string{{"MUTN", "textEditor"}})
+	cfg, err := cfg.LoadConfig()
 	if err != nil {
-		other.PrintError("Failed to retrieve text editor from libmutton.ini\n\nPlease specify one with \"mutn tweak\"", back.ErrorRead)
+		other.PrintError("Failed to load libmuttoncfg.json: "+err.Error(), back.ErrorRead)
 	}
-	editor := editorCfg[0]
+	var editor string
+	if value, exists := (*cfg.ThirdParty)["mutnTextEditor"]; !exists {
+		other.PrintError("Failed to retrieve text editor from libmuttoncfg.json\n\nPlease specify one with \"mutn tweak\"", back.ErrorRead)
+	} else {
+		editor = value.(string)
+	}
 
 	// write baseNote to tempFile (if it is not empty)
 	baseNoteLen := len(baseNote)

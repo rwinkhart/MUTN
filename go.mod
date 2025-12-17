@@ -5,7 +5,7 @@ go 1.25.5
 require (
 	github.com/charmbracelet/glamour v0.7.0
 	github.com/rwinkhart/go-boilerplate v0.1.1-0.20251211171453-df1fb21b2366
-	github.com/rwinkhart/libmutton v0.4.3-0.20251212003405-35db3bf20b8a
+	github.com/rwinkhart/libmutton v0.4.3-0.20251217053620-b591e2ef5a6d
 	golang.org/x/term v0.37.0
 )
 
@@ -34,7 +34,6 @@ require (
 	golang.org/x/crypto v0.45.0 // indirect
 	golang.org/x/net v0.47.0 // indirect
 	golang.org/x/sys v0.38.0 // indirect
-	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
