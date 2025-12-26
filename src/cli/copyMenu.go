@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"slices"
 	"syscall"
 	"time"
 
@@ -39,22 +40,20 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 	// determine populated fields in entry
 	var fieldStrings = []string{"Username", "Password", "TOTP Code", "URL", "Note (first line)"}
 	var indices = []int{1, 0, 2, 3, 4}
-	var fields []string
-	var mainFieldPopulated bool
+	var fieldOptions []string
 	for i := range indices {
 		if len(decSlice) > indices[i] && decSlice[indices[i]] != "" {
-			fields = append(fields, fieldStrings[i])
-			mainFieldPopulated = true
+			fieldOptions = append(fieldOptions, fieldStrings[i])
 			if indices[i] == 0 && oldPassword != "" {
-				fields = append(fields, "Old Password")
+				fieldOptions = append(fieldOptions, "Old Password")
 			}
 		}
 	}
 
-	// if no non-first-line notes are populated, render notes and exit
-	if !mainFieldPopulated {
+	// if no copyable lines are populated, render notes and exit
+	if len(fieldOptions) < 1 {
 		EntryReader(vanityPath, decSlice, true)
-		fmt.Println("Entry has no copyable fields, exiting...")
+		fmt.Printf("\r%sNo copyable fields present, exiting copy menu...%s\n", back.AnsiWarning, back.AnsiReset)
 		os.Exit(0)
 	}
 
@@ -73,16 +72,12 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 	// and is not desired)
 	const timeoutSeconds uint8 = 5
 	selectedChan := make(chan bool, 1)
-	var selected bool
 	go func() {
-		var i uint8
-		for i < timeoutSeconds {
-			time.Sleep(1 * time.Second)
+		for i := uint8(1); i <= timeoutSeconds; i++ {
 			select {
 			case <-selectedChan:
 				return
-			default:
-				i++
+			case <-time.After(1 * time.Second):
 				if i == timeoutSeconds {
 					fmt.Printf("\r%sNo field selected, exiting copy menu...%s\n", back.AnsiWarning, back.AnsiReset)
 					os.Exit(0)
@@ -94,33 +89,24 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 
 	// copy selected field to clipboard
 	var choice int
+	var selectedField string
 	for {
 		fmt.Println()
-		if selected {
-			choice = front.InputMenuGen("Field to copy:", fields)
+		if selectedField != "" {
+			choice = front.InputMenuGen("Field to copy:", fieldOptions)
 		} else {
-			choice = front.InputMenuGen("Field to copy (exiting in 5 seconds):", fields)
+			choice = front.InputMenuGen("Field to copy (exiting in 5 seconds):", fieldOptions)
+			selectedChan <- true
 		}
-		selected = true
-		selectedChan <- selected
-		switch fields[choice-1] {
-		case "Username":
-			choice = 1
-		case "Password":
-			choice = 0
-		case "Old Password":
-			err := clip.CopyString(false, oldPassword)
+		selectedField = fieldOptions[choice-1]
+		if selectedField == "Old Password" {
+			err = clip.CopyString(false, oldPassword)
 			if err != nil {
 				other.PrintError("Failed to copy old password to clipboard: "+err.Error(), global.ErrorClipboard)
 			}
 			continue
-		case "TOTP Code":
-			choice = 2
-		case "URL":
-			choice = 3
-		case "Note (first line)":
-			choice = 4
 		}
+		choice = indices[slices.Index(fieldStrings, selectedField)]
 		if choice == 2 {
 			fmt.Println(back.AnsiWarning + "[Starting]" + back.AnsiReset + " TOTP clipboard refresher")
 			errorChan := make(chan error)
@@ -142,8 +128,7 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 			close(done)
 			fmt.Println(back.AnsiBlue + "\n[Stopped]" + back.AnsiReset + " TOTP clipboard refresher")
 		} else {
-			err := clip.CopyString(false, decSlice[choice])
-			if err != nil {
+			if err = clip.CopyString(false, decSlice[choice]); err != nil {
 				other.PrintError("Failed to copy field to clipboard: "+err.Error(), global.ErrorClipboard)
 			}
 		}
