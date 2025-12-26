@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/go-boilerplate/front"
@@ -66,10 +67,42 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 		os.Exit(0)
 	}()
 
+	// set up timer to close copy menu if an item is
+	// not selected (useful to avoid extra user input
+	// when the copy menu is displayed automatically
+	// and is not desired)
+	const timeoutSeconds uint8 = 5
+	selectedChan := make(chan bool, 1)
+	var selected bool
+	go func() {
+		var i uint8
+		for i < timeoutSeconds {
+			time.Sleep(1 * time.Second)
+			select {
+			case <-selectedChan:
+				return
+			default:
+				i++
+				if i == timeoutSeconds {
+					fmt.Printf("\r%sNo field selected, exiting copy menu...%s\n", back.AnsiWarning, back.AnsiReset)
+					os.Exit(0)
+				}
+				fmt.Printf("\rField to copy (exiting in %d seconds): ", timeoutSeconds-i)
+			}
+		}
+	}()
+
 	// copy selected field to clipboard
+	var choice int
 	for {
 		fmt.Println()
-		choice := front.InputMenuGen("Field to copy:", fields)
+		if selected {
+			choice = front.InputMenuGen("Field to copy:", fields)
+		} else {
+			choice = front.InputMenuGen("Field to copy (exiting in 5 seconds):", fields)
+		}
+		selected = true
+		selectedChan <- selected
 		switch fields[choice-1] {
 		case "Username":
 			choice = 1
