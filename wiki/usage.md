@@ -15,6 +15,7 @@ Once this has been done, you may proceed with the client setup:
 2. Run `mutn init` and follow the prompts
 3. If you already have entries on the server, sync them using `mutn sync`
 4. Optionally, shell completions (Bash, ZSH, and PowerShell 7+) can be [enabled with your shell's respective method](https://github.com/rwinkhart/MUTN/blob/main/wiki/completions.md)
+5. Optionally, [import passwords](https://github.com/rwinkhart/libmutton/blob/main/wiki/migration.md) from another password manager. After doing this, you may desire to use the "Age all entries" option from the `mutn tweak` menu to add initial age tracking data to the imported passwords
 
 ### Tips
 #### Operating on Passwords

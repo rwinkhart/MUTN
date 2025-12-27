@@ -1,7 +1,7 @@
-.TH MUTN 1 "23 November 2025" "v0.D.0" "MUTN man page"
+.TH MUTN 1 "26 December 2025" "v0.D.0" "MUTN man page"
 
 .SH NAME
-\fBmutn\fR - Simple, self-hosted, SSH-synchronized password and note management based on libmutton. It is the successor to sshyp.
+\fBmutn\fR - Simple, self-hosted, SSH-synchronized password and note management based on libmutton.
 
 .SH SYNOPSIS
 Usage: mutn [/<entry name> [argument] [option]] | [argument]
@@ -84,11 +84,11 @@ add:
 .SH TIPS
 1. You can quickly read an entry with "mutn /<entry name>"
 
-2. Type "mutn" (no arguments/options) to view a list of saved entries
+2. Using "add", "edit", or "copy" without specifying an option (field) will default to "password"
 
-3. Provide "add", "edit", "copy", or "gen" as the only argument to receive more specific help
+3. Various changes can be made to the configuration and stored entries from the "mutn tweak" menu
 
-4. Using "add", "edit", or "copy" without specifying an option (field) will default to "password"
+4. Type "mutn" (no arguments) to view a list of saved entries w/colored markers indicating the ages of stored passwords
 
 .SH SETUP
 libmutton operates on a client-server model, and thus sync support requires you to have access to your own server (whether it be a physical home server or a cloud rental) with remote access via SSH.
@@ -102,6 +102,7 @@ Once this has been done, you may proceed with the client setup:
     2. Run "mutn init" and follow the prompts
     3. If you already have entries on the server, sync them using "mutn sync"
     4. Optionally, shell completions (Bash, ZSH, and PowerShell 7+) can be enabled with your shell's respective method
+    5. If importing passwords from another password manager, you may desire to use the "Age all entries" option from the "mutn tweak" menu to add initial age tracking data to the imported passwords
 
 .SH TROUBLESHOOTING
 .B Clipboard not clearing:

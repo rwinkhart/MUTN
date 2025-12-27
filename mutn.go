@@ -204,9 +204,17 @@ func main() {
 					other.PrintError("Initialization failed: "+err.Error(), 0)
 				}
 			case "tweak":
-				choice := front.InputMenuGen("Action:", []string{"Change device ID", "Change master password/Optimize entries", "Set text editor", "Age all entries"})
+				choice := front.InputMenuGen("Action:", []string{"Set text editor", "Change device ID", "Age all entries", "Change master password/Optimize entries"})
 				switch choice {
 				case 1:
+					newCfg := &cfg.ConfigT{}
+					newThirdPartyCfg := map[string]any{"mutnTextEditor": getTextEditorInput()}
+					newCfg.ThirdParty = &newThirdPartyCfg
+					err := cfg.WriteConfig(newCfg, true)
+					if err != nil {
+						other.PrintError("Failed to set text editor: "+err.Error(), back.ErrorWrite)
+					}
+				case 2:
 					oldDeviceID, err := global.GetCurrentDeviceID()
 					if err != nil {
 						other.PrintError("Failed to get current device ID: "+err.Error(), back.ErrorRead)
@@ -216,7 +224,14 @@ func main() {
 						other.PrintError("Failed to change device ID: "+err.Error(), global.ErrorSyncProcess)
 					}
 					fmt.Println("\nDevice ID changed successfully.")
-				case 2:
+				case 3:
+					forceReage := front.InputBinary("Re-age aged entries?")
+					fmt.Println("Aging entries; this may take awhile - do not terminate this process")
+					err := age.AllPasswordEntries(forceReage)
+					if err != nil {
+						other.PrintError("Failed to age entries: "+err.Error(), 1)
+					}
+				case 4:
 					oldPassword := confirmRCWPassword("old")
 					newPassword := confirmRCWPassword("new")
 					fmt.Print("\nRe-encrypting entries. Please wait; do not force close this process.\n")
@@ -225,21 +240,6 @@ func main() {
 						other.PrintError("Re-encryption failed: "+err.Error(), global.ErrorEncryption)
 					}
 					fmt.Println("\nRe-encryption complete.")
-				case 3:
-					newCfg := &cfg.ConfigT{}
-					newThirdPartyCfg := map[string]any{"mutnTextEditor": getTextEditorInput()}
-					newCfg.ThirdParty = &newThirdPartyCfg
-					err := cfg.WriteConfig(newCfg, true)
-					if err != nil {
-						other.PrintError("Failed to set text editor: "+err.Error(), back.ErrorWrite)
-					}
-				case 4:
-					forceReage := front.InputBinary("Re-age aged entries?")
-					fmt.Println("Aging entries; this may take awhile - do not terminate this process")
-					err := age.AllPasswordEntries(forceReage)
-					if err != nil {
-						other.PrintError("Failed to age entries: "+err.Error(), 1)
-					}
 				}
 			case "copy":
 				cli.HelpCopy()

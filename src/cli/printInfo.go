@@ -56,9 +56,9 @@ This program comes with absolutely no warranty; type "mutn version" for details.
   folder|-f              Add a new folder for entries
 
 ` + back.AnsiBold + "Tip 1:" + back.AnsiReset + ` You can quickly read an entry with "mutn /<entry name>"
-` + back.AnsiBold + "Tip 2:" + back.AnsiReset + ` Type "mutn" (no arguments/options) to view a list of saved entries
-` + back.AnsiBold + "Tip 3:" + back.AnsiReset + ` Provide "add", "edit", "copy", or "gen" as the only argument to receive more specific help
-` + back.AnsiBold + "Tip 4:" + back.AnsiReset + " Using \"add\", \"edit\", or \"copy\" without specifying an option (field) will default to \"password\"\n\n")
+` + back.AnsiBold + "Tip 2:" + back.AnsiReset + ` Using "add", "edit", or "copy" without specifying an option (field) will default to "password"
+` + back.AnsiBold + "Tip 3:" + back.AnsiReset + ` Various changes can be made to the configuration and stored entries from the "mutn tweak" menu
+` + back.AnsiBold + "Tip 4:" + back.AnsiReset + " Type \"mutn\" (no arguments) to view a list of saved entries w/colored markers indicating the ages of stored passwords\n\n")
 	os.Exit(0)
 }
 
@@ -96,7 +96,8 @@ func HelpCopy() {
   username|-u            Copy the username in an entry to your clipboard
   totp|-t                Generate and copy the TOTP token for an entry to your clipboard
   url|-l                 Copy the URL in an entry to your clipboard
-  note|-n                Copy the first note line in an entry to your clipboard` + "\n\n")
+  note|-n                Copy the first note line in an entry to your clipboard
+  menu|-m                Open interactive menu to copy any combination of fields` + "\n\n")
 	os.Exit(0)
 }
 
