@@ -55,6 +55,7 @@ fieldLoop:
 			// render notes as Markdown
 			r, _ := glamour.NewTermRenderer(glamour.WithStylesFromJSONBytes(glamourStyle()), glamour.WithPreservedNewLines(), glamour.WithWordWrap(width))
 			markdownNotesString, _ := r.Render(strings.Join(decSlice[4:], "\n"))
+			_ = r.Close()
 
 			// print the rendered Markdown notes
 			fmt.Print(markdownNotesString)

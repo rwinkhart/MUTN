@@ -185,7 +185,7 @@ func main() {
 		} else {
 			switch args[1] {
 			case "clipclear":
-				err := clip.ClipClearArgument()
+				err := clip.ClearArgument()
 				if err != nil {
 					other.PrintError("Failure occurred in clipboard clearing process: "+err.Error(), global.ErrorClipboard)
 				}
@@ -226,7 +226,7 @@ func main() {
 					}
 					fmt.Println("\nRe-encryption complete.")
 				case 3:
-					newCfg := &cfg.CfgT{}
+					newCfg := &cfg.ConfigT{}
 					newThirdPartyCfg := map[string]any{"mutnTextEditor": getTextEditorInput()}
 					newCfg.ThirdParty = &newThirdPartyCfg
 					err := cfg.WriteConfig(newCfg, true)
@@ -236,7 +236,7 @@ func main() {
 				case 4:
 					forceReage := front.InputBinary("Re-age aged entries?")
 					fmt.Println("Aging entries; this may take awhile - do not terminate this process")
-					err := age.AgeAllPasswordEntries(forceReage)
+					err := age.AllPasswordEntries(forceReage)
 					if err != nil {
 						other.PrintError("Failed to age entries: "+err.Error(), 1)
 					}
