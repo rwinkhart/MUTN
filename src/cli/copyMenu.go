@@ -63,7 +63,7 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 	go func() {
 		<-sigChan
 		if err = clip.ClearProcess(""); err != nil {
-			other.PrintError("Failed to clear clipboard on exit", global.ErrorClipboard)
+			other.PrintError("Failed to clear clipboard on exit: "+err.Error(), global.ErrorClipboard)
 		}
 		os.Exit(0)
 	}()
