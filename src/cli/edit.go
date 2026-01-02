@@ -9,7 +9,7 @@ import (
 	"github.com/rwinkhart/go-boilerplate/back"
 	"github.com/rwinkhart/go-boilerplate/front"
 	"github.com/rwinkhart/go-boilerplate/other"
-	"github.com/rwinkhart/libmutton/cfg"
+	"github.com/rwinkhart/libmutton/config"
 	"github.com/rwinkhart/libmutton/core"
 	"github.com/rwinkhart/libmutton/syncclient"
 )
@@ -95,12 +95,12 @@ func editNote(baseNote []string) ([]string, bool) {
 	}(tempFile.Name())
 
 	// fetch the user's text editor
-	config, err := cfg.LoadConfig()
+	cfg, err := config.Load()
 	if err != nil {
 		other.PrintError("Failed to load libmuttoncfg.json: "+err.Error(), back.ErrorRead)
 	}
 	var editor string
-	if value, exists := (*config.ThirdParty)["mutnTextEditor"]; !exists {
+	if value, exists := (*cfg.ClientSpecific)["mutnTextEditor"]; !exists {
 		other.PrintError("Failed to retrieve text editor from libmuttoncfg.json\n\nPlease specify one with \"mutn tweak\"", back.ErrorRead)
 	} else {
 		editor = value.(string)

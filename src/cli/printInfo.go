@@ -15,7 +15,7 @@ const (
 )
 
 func HelpMain() {
-	fmt.Print(back.AnsiBold + "\nMUTN | Copyright (c) 2024-2025 Randall Winkhart\n" + back.AnsiReset + `
+	fmt.Print(back.AnsiBold + "\nMUTN | Copyright (c) 2024-2026 Randall Winkhart\n" + back.AnsiReset + `
 This software exists under the MIT license; you may redistribute it under certain conditions.
 This program comes with absolutely no warranty; type "mutn version" for details.
 
@@ -156,7 +156,7 @@ func Version() {
 		"\\" + ansiBlackOnWhite + "                                                       " + back.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "              Built with libmutton v" + global.LibmuttonVersion + "              " + back.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + back.AnsiReset + ansiVersionOutline + "/\n" +
-		"\\" + ansiBlackOnWhite + "       Copyright (c) 2024-2025: Randall Winkhart       " + back.AnsiReset + ansiVersionOutline + "/\n" +
+		"\\" + ansiBlackOnWhite + "       Copyright (c) 2024-2026: Randall Winkhart       " + back.AnsiReset + ansiVersionOutline + "/\n" +
 		"\\" + ansiBlackOnWhite + "                                                       " + back.AnsiReset + ansiVersionOutline + "/\n" +
 		"<><><><><><><><><><><><><><>-<><><><><><><><><><><><><><>\n" + back.AnsiReset +
 		"\n               For more information, see:\n\n" +

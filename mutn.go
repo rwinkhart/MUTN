@@ -12,8 +12,8 @@ import (
 	"github.com/rwinkhart/go-boilerplate/front"
 	"github.com/rwinkhart/go-boilerplate/other"
 	"github.com/rwinkhart/libmutton/age"
-	"github.com/rwinkhart/libmutton/cfg"
 	"github.com/rwinkhart/libmutton/clip"
+	"github.com/rwinkhart/libmutton/config"
 	"github.com/rwinkhart/libmutton/core"
 	"github.com/rwinkhart/libmutton/crypt"
 	"github.com/rwinkhart/libmutton/global"
@@ -199,7 +199,7 @@ func main() {
 			case "init":
 				err := core.LibmuttonInit(front.Input,
 					map[string]any{"mutnTextEditor": getTextEditorInput()},
-					confirmRCWPassword("new"), false, false)
+					confirmRCWPassword("new"), front.InputBinary("Preserve existing config directory?"), false)
 				if err != nil {
 					other.PrintError("Initialization failed: "+err.Error(), 0)
 				}
@@ -207,10 +207,10 @@ func main() {
 				choice := front.InputMenuGen("Action:", []string{"Set text editor", "Change device ID", "Age all entries", "Change master password/Optimize entries"})
 				switch choice {
 				case 1:
-					newCfg := &cfg.ConfigT{}
-					newThirdPartyCfg := map[string]any{"mutnTextEditor": getTextEditorInput()}
-					newCfg.ThirdParty = &newThirdPartyCfg
-					err := cfg.WriteConfig(newCfg, true)
+					newCfg := &config.CfgT{}
+					newClientSpecificCfg := map[string]any{"mutnTextEditor": getTextEditorInput()}
+					newCfg.ClientSpecific = &newClientSpecificCfg
+					err := config.Write(newCfg, true)
 					if err != nil {
 						other.PrintError("Failed to set text editor: "+err.Error(), back.ErrorWrite)
 					}
