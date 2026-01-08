@@ -48,7 +48,7 @@ func determineIndentation(skippedDirList []bool, dirList []string, currentDirInd
 }
 
 // printFileEntry handles processing for printing file entries (determines color, wraps lines, and prints).
-func printFileEntry(entry string, lastSlash int, charCounter *int, indent int, colorAlternator int8, agingTimestamp int64) int8 {
+func printFileEntry(entry string, lastSlash int, charCounter *int, indent int, colorAlternator int8, agingTimestamp *int64) int8 {
 	// determine color to print fileEntryName (alternate each time function is run)
 	var colorCode string
 	if colorAlternator > 0 {
@@ -98,8 +98,7 @@ func EntryListGen() {
 	if err != nil {
 		other.PrintError("Failed to generate entry list: "+err.Error(), back.ErrorRead)
 	}
-	var vanityPathsToTimestamps map[string]int64
-	vanityPathsToTimestamps, err = synccommon.GetEntryAges()
+	entryMap, err := synccommon.GetAllEntryData()
 	if err != nil {
 		other.PrintError("Failed to retrieve entry aging data: "+err.Error(), back.ErrorRead)
 	}
@@ -141,10 +140,10 @@ func EntryListGen() {
 
 		// fileList iteration
 		containsFiles := false // indicates whether the current directory contains files (entries)
-		for _, file := range fileList {
+		for _, vanityPath := range fileList {
 
 			// print the current file if it belongs in the current directory - otherwise, break the loop and move on to the next directory
-			if lastSlash := strings.LastIndex(file, "/") + 1; file[:lastSlash-1] == directory {
+			if lastSlash := strings.LastIndex(vanityPath, "/") + 1; vanityPath[:lastSlash-1] == directory {
 
 				// print directory header if this is the first run of the loop
 				if !containsFiles {
@@ -154,7 +153,7 @@ func EntryListGen() {
 					fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+back.AnsiReset+"\n", vanityDirectory)
 				}
 
-				colorAlternator = printFileEntry(file, lastSlash, &charCounter, indent, colorAlternator, vanityPathsToTimestamps[file])
+				colorAlternator = printFileEntry(vanityPath, lastSlash, &charCounter, indent, colorAlternator, entryMap[vanityPath].AgeTimestamp)
 			}
 		}
 

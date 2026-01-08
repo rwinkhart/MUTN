@@ -192,14 +192,19 @@ func main() {
 			case "startrcwd":
 				crypt.RCWDArgument()
 			case "sync":
-				_, err := syncclient.RunJob(true)
+				_, err := syncclient.RunJob()
 				if err != nil {
 					other.PrintError("Failed to sync entries: "+err.Error(), global.ErrorSyncProcess)
 				}
 			case "init":
-				err := core.LibmuttonInit(front.Input,
+				err := core.LibmuttonInit(
+					front.Input,
+					confirmRCWPassword("new"),
+					front.InputBinary("Preserve existing config directory?"),
+					false,
+					"",
 					map[string]any{"mutnTextEditor": getTextEditorInput()},
-					confirmRCWPassword("new"), front.InputBinary("Preserve existing config directory?"), false)
+				)
 				if err != nil {
 					other.PrintError("Initialization failed: "+err.Error(), 0)
 				}
@@ -219,7 +224,7 @@ func main() {
 					if err != nil {
 						other.PrintError("Failed to get current device ID: "+err.Error(), back.ErrorRead)
 					}
-					_, _, _, err = syncclient.GenDeviceID(oldDeviceID, "")
+					_, _, err = syncclient.GenDeviceID(oldDeviceID, "")
 					if err != nil {
 						other.PrintError("Failed to change device ID: "+err.Error(), global.ErrorSyncProcess)
 					}

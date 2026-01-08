@@ -4,8 +4,8 @@ go 1.25.5
 
 require (
 	github.com/charmbracelet/glamour v0.7.0
-	github.com/rwinkhart/go-boilerplate v0.1.1-0.20251211171453-df1fb21b2366
-	github.com/rwinkhart/libmutton v0.4.3-0.20260102005208-28286788a045
+	github.com/rwinkhart/go-boilerplate v0.1.1
+	github.com/rwinkhart/libmutton v0.4.3-0.20260108232004-d54b59030e72
 	golang.org/x/term v0.38.0
 )
 
@@ -34,7 +34,7 @@ require (
 	github.com/yuin/goldmark-emoji v1.0.6 // indirect
 	golang.org/x/crypto v0.46.0 // indirect
 	golang.org/x/net v0.48.0 // indirect
-	golang.org/x/sys v0.39.0 // indirect
+	golang.org/x/sys v0.40.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 

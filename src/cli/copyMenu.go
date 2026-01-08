@@ -31,7 +31,7 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 		}
 	} else {
 		fmt.Print("\n\n")
-		_, err := syncclient.RunJob(false)
+		_, err := syncclient.RunJob()
 		if err != nil {
 			other.PrintError("Failed to sync on copy menu entry: "+err.Error(), global.ErrorSyncProcess)
 		}
