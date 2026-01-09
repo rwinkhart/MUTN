@@ -48,8 +48,7 @@ func main() {
 					case "show", "-s":
 						cli.EntryReaderDecrypt(realPath, false)
 					case "copy":
-						err := clip.CopyShortcut(realPath, 0)
-						if err != nil {
+						if err := clip.CopyShortcut(realPath, 0); err != nil {
 							other.PrintError("Failed to copy password to clipboard: "+err.Error(), global.ErrorClipboard)
 						}
 					case "edit":
@@ -59,8 +58,7 @@ func main() {
 					case "add":
 						cli.AddEntry(realPath, 0)
 					case "shear":
-						err := syncclient.ShearRemote(args[1], false) // pass the incomplete path as the server and all clients (reading from the deletions directory) will have a different home directory
-						if err != nil {
+						if err := syncclient.ShearRemote(args[1], false); err != nil {
 							other.PrintError("Failed to shear target: "+err.Error(), back.ErrorWrite)
 						}
 					default:
@@ -100,8 +98,7 @@ func main() {
 					default:
 						cli.HelpCopy()
 					}
-					err := clip.CopyShortcut(realPath, field)
-					if err != nil {
+					if err := clip.CopyShortcut(realPath, field); err != nil {
 						other.PrintError("Failed to copy field to clipboard: "+err.Error(), global.ErrorClipboard)
 					}
 				case "edit":
@@ -169,8 +166,7 @@ func main() {
 					case "note", "-n":
 						cli.AddEntry(realPath, 2)
 					case "folder", "-f":
-						err := syncclient.AddFolderRemote(args[1]) // pass the incomplete path as the server will have a different home directory
-						if err != nil {
+						if err := syncclient.AddFolderRemote(args[1]); err != nil {
 							other.PrintError("Failed to add folder: "+err.Error(), back.ErrorWrite)
 						}
 					default:
@@ -185,8 +181,7 @@ func main() {
 		} else {
 			switch args[1] {
 			case "clipclear":
-				err := clip.ClearArgument()
-				if err != nil {
+				if err := clip.ClearArgument(); err != nil {
 					other.PrintError("Failure occurred in clipboard clearing process: "+err.Error(), global.ErrorClipboard)
 				}
 			case "startrcwd":
@@ -215,8 +210,7 @@ func main() {
 					newCfg := &config.CfgT{}
 					newClientSpecificCfg := map[string]any{"mutnTextEditor": getTextEditorInput()}
 					newCfg.ClientSpecific = &newClientSpecificCfg
-					err := config.Write(newCfg, true)
-					if err != nil {
+					if err := config.Write(newCfg, true); err != nil {
 						other.PrintError("Failed to set text editor: "+err.Error(), back.ErrorWrite)
 					}
 				case 2:
@@ -224,7 +218,7 @@ func main() {
 					if err != nil {
 						other.PrintError("Failed to get current device ID: "+err.Error(), back.ErrorRead)
 					}
-					_, _, err = syncclient.GenDeviceID(oldDeviceID, "")
+					_, _, _, err = syncclient.GenDeviceID(oldDeviceID, "")
 					if err != nil {
 						other.PrintError("Failed to change device ID: "+err.Error(), global.ErrorSyncProcess)
 					}
@@ -232,16 +226,14 @@ func main() {
 				case 3:
 					forceReage := front.InputBinary("Re-age aged entries?")
 					fmt.Println("Aging entries; this may take awhile - do not terminate this process")
-					err := age.AllPasswordEntries(forceReage)
-					if err != nil {
+					if err := age.AllPasswordEntries(forceReage); err != nil {
 						other.PrintError("Failed to age entries: "+err.Error(), 1)
 					}
 				case 4:
 					oldPassword := confirmRCWPassword("old")
 					newPassword := confirmRCWPassword("new")
 					fmt.Print("\nRe-encrypting entries. Please wait; do not force close this process.\n")
-					err := core.EntryRefresh(oldPassword, newPassword, false)
-					if err != nil {
+					if err := core.EntryRefresh(oldPassword, newPassword, false); err != nil {
 						other.PrintError("Re-encryption failed: "+err.Error(), global.ErrorEncryption)
 					}
 					fmt.Println("\nRe-encryption complete.")

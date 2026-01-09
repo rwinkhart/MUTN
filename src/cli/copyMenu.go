@@ -102,8 +102,7 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 		}
 		selectedField = fieldOptions[choice-1]
 		if selectedField == "Old Password" {
-			err = clip.CopyString(false, oldPassword)
-			if err != nil {
+			if err = clip.CopyString(false, oldPassword); err != nil {
 				other.PrintError("Failed to copy old password to clipboard: "+err.Error(), global.ErrorClipboard)
 			}
 			continue
@@ -115,8 +114,7 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 			done := make(chan bool)
 			go clip.TOTPCopier(decSlice[2], errorChan, done)
 			// block until first successful copy
-			err = <-errorChan
-			if err != nil {
+			if err = <-errorChan; err != nil {
 				other.PrintError("Failed to copy TOTP token: "+err.Error(), global.ErrorClipboard)
 			}
 			fmt.Println(back.AnsiGreen + "[Started]" + back.AnsiReset + " TOTP clipboard refresher")

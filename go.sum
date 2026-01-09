@@ -48,8 +48,8 @@ github.com/rwinkhart/go-highlite v0.1.1 h1:9TxbRhYVfD/3YaEgNk1BtEiZ0t8/5mxDUZqNM
 github.com/rwinkhart/go-highlite v0.1.1/go.mod h1:mWLMtCWcyV0BG4NeyPyAUGMjPvI0ds6vXmUq89QwBFA=
 github.com/rwinkhart/go-winio v0.1.0 h1:b72agLW+dETGmhR3VbcbwnStfgKfc5AfgJOXBJDkaHg=
 github.com/rwinkhart/go-winio v0.1.0/go.mod h1:ZWa7ssZJT30CCDGJ7fk/2SBTq9BIQrrVjrcss0UW2s0=
-github.com/rwinkhart/libmutton v0.4.3-0.20260108232004-d54b59030e72 h1:sFtwqO//25lLwsD77wtxyojRKSrK+ABVZSWIZg5mf1w=
-github.com/rwinkhart/libmutton v0.4.3-0.20260108232004-d54b59030e72/go.mod h1:qInUv19lzX1adFNI6Ih/IEVy+pktSTh/yA7cRTdVPH8=
+github.com/rwinkhart/libmutton v0.4.3-0.20260109022300-a54d15e33111 h1:nxQHhtdRVIUhRAc/5oYTli30tive65c8N7u75dENVWE=
+github.com/rwinkhart/libmutton v0.4.3-0.20260109022300-a54d15e33111/go.mod h1:qInUv19lzX1adFNI6Ih/IEVy+pktSTh/yA7cRTdVPH8=
 github.com/rwinkhart/peercred-mini v0.1.2 h1:4cGWDbv0whvLeVvbUdx84V/9p+2fS+DEXgrA1KxlRFo=
 github.com/rwinkhart/peercred-mini v0.1.2/go.mod h1:LLHG7YshHEpbpJJP+Il9nx2dnGj5O3VGE32rWmflj0c=
 github.com/rwinkhart/rcw v0.2.4 h1:FrRSsl+ui1WLmDwqjLSROtFPKqSeGLEfF2SPENt4qP0=

@@ -18,8 +18,7 @@ import (
 func RenameCli(oldVanityPath string) {
 	// prompt user for new location and rename
 	newVanityPath := front.Input("New location:")
-	err := syncclient.RenameRemote(oldVanityPath, newVanityPath)
-	if err != nil {
+	if err := syncclient.RenameRemote(oldVanityPath, newVanityPath); err != nil {
 		other.PrintError("Failed to rename entry: "+err.Error(), back.ErrorWrite)
 	}
 
@@ -131,8 +130,7 @@ func editNote(baseNote []string) ([]string, bool) {
 	cmd.Stdout = os.Stdout
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
-	err = cmd.Run()
-	if err != nil {
+	if err = cmd.Run(); err != nil {
 		panic(back.AnsiError + "Failed to write note with " + editor + back.AnsiReset) // panic is used to ensure the tempFile is removed, as per the defer statement
 	}
 
