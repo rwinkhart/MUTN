@@ -48,5 +48,4 @@ func AddEntry(realPath string, entryType uint8) {
 	} else {
 		writeEntryCLI(realPath, decSlice, false, "")
 	}
-
 }

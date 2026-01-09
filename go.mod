@@ -4,8 +4,8 @@ go 1.25.5
 
 require (
 	github.com/charmbracelet/glamour v0.7.0
-	github.com/rwinkhart/go-boilerplate v0.1.1
-	github.com/rwinkhart/libmutton v0.4.3-0.20260109022300-a54d15e33111
+	github.com/rwinkhart/go-boilerplate v0.2.2
+	github.com/rwinkhart/libmutton v0.4.3-0.20260109040506-4467a8c7421b
 	golang.org/x/term v0.38.0
 )
 

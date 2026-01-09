@@ -17,9 +17,10 @@ import (
 	"github.com/rwinkhart/libmutton/syncclient"
 )
 
-// CopyMenu decrypts an entry and allows the user to
-// interactively copy fields without having to re-decrypt each time.
-// decSlice can be left nil to decrypt the entry specified by vanityPath.
+// CopyMenu decrypts an entry and allows the user to interactively copy
+// fields without having to re-decrypt each time. decSlice can be left nil
+// to decrypt the entry specified by vanityPath. If the entry was provided
+// decrypted, CopyMenu assumes it was edited and triggers a sync.
 func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 	realPath := global.GetRealPath(vanityPath)
 	var err error
@@ -30,7 +31,7 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 			other.PrintError("Failed to decrypt entry: "+err.Error(), global.ErrorDecryption)
 		}
 	} else {
-		fmt.Print("\n\n")
+		fmt.Print("\n")
 		_, err := syncclient.RunJob()
 		if err != nil {
 			other.PrintError("Failed to sync on copy menu entry: "+err.Error(), global.ErrorSyncProcess)
@@ -50,11 +51,13 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 		}
 	}
 
-	// if no copyable lines are populated, render notes and exit
-	if len(fieldOptions) < 1 {
-		EntryReader(vanityPath, decSlice, true)
-		fmt.Printf("\r%sNo copyable fields present, exiting copy menu...%s\n", back.AnsiWarning, back.AnsiReset)
-		os.Exit(0)
+	// if notes are included, preview them
+	if len(decSlice) > 4 {
+		EntryReader(vanityPath, append([]string{"", "", "", ""}, decSlice[4:]...), true)
+		if len(fieldOptions) < 1 { // if notes are the only thing included, exit
+			fmt.Printf("\r%sNo copyable fields present, exiting copy menu...%s\n", back.AnsiWarning, back.AnsiReset)
+			os.Exit(0)
+		}
 	}
 
 	// set up signal handling for ctrl+c to clear clipboard
