@@ -38,7 +38,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-replace golang.org/x/sys => github.com/rwinkhart/sys v0.39.0
+replace golang.org/x/sys => github.com/rwinkhart/sys v0.40.0
 
 replace github.com/Microsoft/go-winio => github.com/rwinkhart/go-winio v0.1.0
 
