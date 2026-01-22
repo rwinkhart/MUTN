@@ -62,7 +62,7 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 
 	// set up signal handling for ctrl+c to clear clipboard
 	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
+	signal.Notify(sigChan, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 	go func() {
 		<-sigChan
 		if err = clip.ClearProcess(""); err != nil {
