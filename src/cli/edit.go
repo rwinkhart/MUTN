@@ -28,7 +28,7 @@ func RenameCli(oldVanityPath string) {
 // EditEntryField edits a field of an entry at realPath (user input).
 func EditEntryField(realPath string, field int) {
 	// fetch old entry data (with all required lines present)
-	decSlice, err := core.GetOldEntryData(realPath, field)
+	decSlice, err := core.GetOldEntryData(realPath, field, nil)
 	if err != nil {
 		other.PrintError("Failed to fetch entry data: "+err.Error(), back.ErrorRead)
 	}
@@ -69,7 +69,7 @@ func EditEntryField(realPath string, field int) {
 // GenUpdate generates a new password for an entry at realPath (user input).
 func GenUpdate(realPath string) {
 	// fetch old entry data
-	decSlice, err := core.GetOldEntryData(realPath, 0)
+	decSlice, err := core.GetOldEntryData(realPath, 0, nil)
 	if err != nil {
 		other.PrintError("Failed to fetch entry data: "+err.Error(), back.ErrorRead)
 	}

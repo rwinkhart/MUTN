@@ -72,7 +72,7 @@ func EntryReaderDecrypt(realPath string, hideSecrets bool) {
 	if err != nil { // if the location does not exist or is a directory...
 		other.PrintError("Failed to verify target location: "+err.Error(), back.ErrorTargetNotFound)
 	}
-	decSlice, err := crypt.DecryptFileToSlice(realPath)
+	decSlice, err := crypt.DecryptFileToSlice(realPath, nil)
 	if err != nil {
 		other.PrintError("Failed to decrypt entry: "+err.Error(), global.ErrorDecryption)
 	}

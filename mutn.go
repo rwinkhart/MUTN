@@ -48,7 +48,7 @@ func main() {
 					case "show", "-s":
 						cli.EntryReaderDecrypt(realPath, false)
 					case "copy":
-						if err := clip.CopyShortcut(realPath, 0); err != nil {
+						if err := clip.CopyShortcut(realPath, 0, nil); err != nil {
 							other.PrintError("Failed to copy password to clipboard: "+err.Error(), global.ErrorClipboard)
 						}
 					case "edit":
@@ -98,7 +98,7 @@ func main() {
 					default:
 						cli.HelpCopy()
 					}
-					if err := clip.CopyShortcut(realPath, field); err != nil {
+					if err := clip.CopyShortcut(realPath, field, nil); err != nil {
 						other.PrintError("Failed to copy field to clipboard: "+err.Error(), global.ErrorClipboard)
 					}
 				case "edit":
@@ -226,7 +226,7 @@ func main() {
 				case 3:
 					forceReage := front.InputBinary("Re-age aged entries?")
 					fmt.Println("Aging entries; this may take awhile - do not terminate this process")
-					if err := age.AllPasswordEntries(forceReage); err != nil {
+					if err := age.AllPasswordEntries(forceReage, nil); err != nil {
 						other.PrintError("Failed to age entries: "+err.Error(), 1)
 					}
 				case 4:

@@ -26,7 +26,7 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 	var err error
 	if decSlice == nil {
 		// decrypt entry
-		decSlice, err = crypt.DecryptFileToSlice(realPath)
+		decSlice, err = crypt.DecryptFileToSlice(realPath, nil)
 		if err != nil {
 			other.PrintError("Failed to decrypt entry: "+err.Error(), global.ErrorDecryption)
 		}
