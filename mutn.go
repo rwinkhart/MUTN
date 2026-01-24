@@ -234,7 +234,7 @@ func main() {
 				case 5:
 					oldPassword := confirmRCWPassword("old")
 					newPassword := confirmRCWPassword("new")
-					fmt.Print("\nRe-encrypting entries...\nPlease wait; do not force close this process.\n\n")
+					fmt.Print("Re-encrypting entries...\nPlease wait; do not force close this process.\n\n")
 					if err := core.EntryRefresh(oldPassword, newPassword, false); err != nil {
 						other.PrintError("Re-encryption failed: "+err.Error(), global.ErrorEncryption)
 					}

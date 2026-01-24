@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 	"os"
+	"sort"
 	"strings"
 
 	"github.com/rwinkhart/go-boilerplate/back"
@@ -17,49 +18,42 @@ const (
 	ansiDirectoryHeader     = "\033[38;5;7;48;5;8m"
 )
 
-// determineIndentation calculates and returns the final visual indentation multiplier (needed to adjust indentation for skipped parent directories); also subtracts "old" text from directory header.
+func writeIndent(sb *strings.Builder, indent int) { sb.WriteString(strings.Repeat(" ", indent*2)) }
+
+// determineIndentation calculates the final visual indentation multiplier (adjusts for skipped parents)
+// and trims the parent directory name from the directory header (if applicable).
 func determineIndentation(skippedDirList []bool, dirList []string, currentDirIndex int) (int, string) {
-	var subtractor int      // tracks how much to subtract from expected indentation multiplier
-	var lastPrefixIndex int // tracks the index (in both skippedDirList and dirList) of the last displayed parent directory
-	var trimmedDirectory = dirList[currentDirIndex]
+	trimmed := dirList[currentDirIndex]
+	indent := strings.Count(trimmed, "/") - 1 // avoid indenting root-level dirs
 
-	// determine initial indentation multiplier based on "/" occurrences
-	indent := strings.Count(trimmedDirectory, "/") - 1 // subtract 1 to avoid indenting root-level directories
-
-	for i, skipped := range skippedDirList[:currentDirIndex] { // checks each skipped directory to determine if it is a parent to the current directory
-		if strings.HasPrefix(trimmedDirectory, dirList[i]+"/") { // if the current directory is the child of this iteration's directory...
-			if skipped { // ...and this iteration's directory was skipped...
-				subtractor++ // increment the subtractor to indicate that the visual indentation should be reduced
+	subtractor, lastPrefixIndex := 0, 0
+	for i, skipped := range skippedDirList[:currentDirIndex] {
+		if strings.HasPrefix(trimmed, dirList[i]+"/") {
+			if skipped {
+				subtractor++
 			} else {
 				lastPrefixIndex = i
 			}
 		}
 	}
-
-	indent = indent - subtractor // calculates final visual indentation multiplier
-
-	if indent < 0 { // disallow negative indentation multipliers
-		indent = 0
-	} else if indent > 0 { // trim the most recently displayed parent directory from the directory header to avoid displaying redundant information
-		trimmedDirectory = strings.Replace(trimmedDirectory, dirList[lastPrefixIndex], "", 1)
+	if indent -= subtractor; indent < 0 {
+		return 0, trimmed
 	}
-
-	return indent, trimmedDirectory
+	if indent > 0 {
+		trimmed = strings.TrimPrefix(trimmed, dirList[lastPrefixIndex])
+	}
+	return indent, trimmed
 }
 
-// printFileEntry handles processing for printing file entries (determines color, wraps lines, and prints).
-func printFileEntry(entry string, lastSlash int, charCounter *int, indent int, colorAlternator int8, agingTimestamp *int64) int8 {
-	// determine color to print fileEntryName (alternate each time function is run)
-	var colorCode string
-	if colorAlternator > 0 {
-		colorCode = ""
-	} else {
+// printFileEntry handles processing for printing file entries (determines color, adds aging indicator, wraps lines, and prints).
+func printFileEntry(sb *strings.Builder, entry string, lastSlash int, charCounter *int, indent int, colorAlternator int8, agingTimestamp *int64) int8 {
+	colorCode := ""
+	if colorAlternator <= 0 {
 		colorCode = ansiAlternateEntryColor
 	}
 	colorAlternator = -colorAlternator
 
-	// determine password aging dot
-	var agingDot string
+	agingDot := ""
 	switch age.TranslateAgeTimestamp(agingTimestamp) {
 	case 1:
 		agingDot = back.AnsiGreen + "⁍" + back.AnsiReset
@@ -69,32 +63,36 @@ func printFileEntry(entry string, lastSlash int, charCounter *int, indent int, c
 		agingDot = back.AnsiError + "⁍" + back.AnsiReset
 	}
 
-	// trim the containing directory from the entry to determine fileEntryName
-	fileEntryName := entry[lastSlash:]
-
-	if *charCounter == 0 { // indent first line of entries for each directory header
-		fmt.Print(strings.Repeat(" ", indent*2))
+	name := entry[lastSlash:]
+	if *charCounter == 0 {
+		writeIndent(sb, indent)
 	}
 
-	// determine whether to wrap to a new line (+1 is to account for trailing spaces)
-	*charCounter += len(fileEntryName) + 1
+	// wrap if needed; +1 accounts for trailing space, +1 more if aging dot is present
+	inc := len(name) + 1
 	if agingDot != "" {
-		*charCounter++
+		inc++
 	}
-	if indentation := indent * 2; *charCounter+(indentation) >= width {
-		*charCounter = len(fileEntryName) + 1
-		fmt.Print("\n" + strings.Repeat(" ", indentation)) // indent each line
+	if *charCounter += inc; *charCounter+indent*2 >= width {
+		*charCounter = len(name) + 1
+		if agingDot != "" {
+			*charCounter++
+		}
+		sb.WriteString("\n")
+		writeIndent(sb, indent)
 	}
 
-	// print fileEntryName to screen
-	fmt.Printf("%s%s%s%s ", agingDot, colorCode, fileEntryName, back.AnsiReset)
-
+	sb.WriteString(agingDot)
+	sb.WriteString(colorCode)
+	sb.WriteString(name)
+	sb.WriteString(back.AnsiReset)
+	sb.WriteString(" ")
 	return colorAlternator
 }
 
 // EntryListGen generates and displays the full libmutton entry list.
 func EntryListGen() {
-	fileList, dirList, err := synccommon.WalkEntryDir()
+	_, dirList, err := synccommon.WalkEntryDir()
 	if err != nil {
 		other.PrintError("Failed to generate entry list: "+err.Error(), back.ErrorRead)
 	}
@@ -103,76 +101,81 @@ func EntryListGen() {
 		other.PrintError("Failed to retrieve entry aging data: "+err.Error(), back.ErrorRead)
 	}
 
+	var sb strings.Builder
+
 	// print header bar w/total entry count
-	fmt.Print("\n"+ansiBlackOnWhite, len(fileList), " libmutton entries:"+back.AnsiReset)
+	sb.WriteString("\n")
+	sb.WriteString(ansiBlackOnWhite)
+	fmt.Fprint(&sb, len(entryMap))
+	sb.WriteString(" libmutton entries:")
+	sb.WriteString(back.AnsiReset)
 
-	// dirList iteration
-	dirListLength := len(dirList)                    // save length for multiple references below
-	var skippedDirList = make([]bool, dirListLength) // stores whether each directory was skipped during printout (later used to determine appropriate visual indentation)
-	charCounter := 0                                 // track whether to line-wrap based on character count in line
-	var colorAlternator int8 = 1                     // track alternating colors for each printed entry name
-	var containsSubdirectory bool                    // indicates whether the current directory contains a subdirectory
-	var indent int                                   // visual indentation multiplier
-	var vanityDirectory string                       // directory header printed to end-user - visual only, not used in any processing
-	for i, directory := range dirList {
-
-		// reset formatting variables for new directory
-		charCounter = 0
-		colorAlternator = 1
-
-		// default to assuming this directory will be skipped (unless it is the root)
-		if i == 0 {
-			skippedDirList[i] = false
-		} else {
-			skippedDirList[i] = true
+	entriesByDir := make(map[string][]string, len(dirList))
+	for vanityPath := range entryMap {
+		if lastSlash := strings.LastIndex(vanityPath, "/"); lastSlash >= 0 {
+			entriesByDir[vanityPath[:lastSlash]] = append(entriesByDir[vanityPath[:lastSlash]], vanityPath)
 		}
+	}
+	for _, entries := range entriesByDir {
+		sort.Strings(entries)
+	}
 
-		// check if next directory is within the current one
-		if dirListLength > i+1 {
-			if nextDir := dirList[i+1]; directory == nextDir[:strings.LastIndex(nextDir, "/")] {
-				containsSubdirectory = true
-			} else {
-				containsSubdirectory = false
-			}
-		} else {
-			containsSubdirectory = false
-		}
-
-		// fileList iteration
-		containsFiles := false // indicates whether the current directory contains files (entries)
-		for _, vanityPath := range fileList {
-
-			// print the current file if it belongs in the current directory - otherwise, break the loop and move on to the next directory
-			if lastSlash := strings.LastIndex(vanityPath, "/") + 1; vanityPath[:lastSlash-1] == directory {
-
-				// print directory header if this is the first run of the loop
-				if !containsFiles {
-					containsFiles = true
-					skippedDirList[i] = false                                                  // the directory header is being printed, indicate that it is not being skipped
-					indent, vanityDirectory = determineIndentation(skippedDirList, dirList, i) // calculate the final indentation multiplier
-					fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+back.AnsiReset+"\n", vanityDirectory)
-				}
-
-				colorAlternator = printFileEntry(vanityPath, lastSlash, &charCounter, indent, colorAlternator, entryMap[vanityPath].AgeTimestamp)
-			}
-		}
-
-		if !containsFiles { // if the current directory contains no files...
-			if !containsSubdirectory { // nor does it contain any subdirectories...
-				if dirListLength > 1 { // and directories besides the root-level exist... display directory header and empty directory warning
-					skippedDirList[i] = false                                                  // the directory header is being printed, indicate that it is not being skipped
-					indent, vanityDirectory = determineIndentation(skippedDirList, dirList, i) // calculate the final indentation multiplier
-					fmt.Printf("\n\n"+strings.Repeat(" ", indent*2)+ansiDirectoryHeader+"%s/"+back.AnsiReset+"\n", vanityDirectory)
-					fmt.Print(strings.Repeat(" ", indent*2) + back.AnsiWarning + "-empty directory-" + back.AnsiReset)
-				} else { // warn if the only thing that exists is the root-level directory
-					fmt.Print("\n\nNothing's here! For help creating your first entry, run \"mutn help\".")
-				}
-			}
+	// precompute whether each directory contains subdirectories;
+	// handle root-level child dirs by treating "" as their parent.
+	hasChildDir := make(map[string]bool, len(dirList))
+	for _, d := range dirList {
+		switch parentEnd := strings.LastIndex(d, "/"); {
+		case parentEnd > 0:
+			hasChildDir[d[:parentEnd]] = true
+		case parentEnd == -1:
+			hasChildDir[""] = true
 		}
 	}
 
-	// print trailing new lines for proper spacing after entry list is complete
-	fmt.Print("\n\n")
+	dirListLength := len(dirList)
+	skippedDirList := make([]bool, dirListLength)
+	charCounter := 0
+	var colorAlternator int8 = 1
 
+	printDirHeader := func(i int) int {
+		skippedDirList[i] = false
+		indent, vanityDirectory := determineIndentation(skippedDirList, dirList, i)
+		sb.WriteString("\n\n")
+		writeIndent(&sb, indent)
+		sb.WriteString(ansiDirectoryHeader)
+		sb.WriteString(vanityDirectory)
+		sb.WriteString("/" + back.AnsiReset + "\n")
+		return indent
+	}
+
+	for i, directory := range dirList {
+		charCounter, colorAlternator = 0, 1
+		skippedDirList[i] = i != 0
+
+		if entries := entriesByDir[directory]; len(entries) > 0 {
+			indent := printDirHeader(i)
+			for _, vanityPath := range entries {
+				lastSlash := strings.LastIndex(vanityPath, "/") + 1
+				colorAlternator = printFileEntry(&sb, vanityPath, lastSlash, &charCounter, indent, colorAlternator, entryMap[vanityPath].AgeTimestamp)
+			}
+			continue
+		}
+
+		if hasChildDir[directory] {
+			continue
+		}
+
+		if dirListLength > 1 {
+			indent := printDirHeader(i)
+			writeIndent(&sb, indent)
+			sb.WriteString(back.AnsiWarning + "-empty directory-" + back.AnsiReset)
+			continue
+		}
+
+		sb.WriteString("\n\nNothing's here! For help creating your first entry, run \"mutn help\".")
+	}
+
+	sb.WriteString("\n\n")
+	fmt.Print(sb.String())
 	os.Exit(0)
 }
