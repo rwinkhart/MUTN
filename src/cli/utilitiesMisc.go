@@ -27,7 +27,7 @@ func inputPasswordGen() string {
 	return stringy.StringGen(passLength, complexity, passCharset)
 }
 
-// writeEntryCLI writes an entry to realPath and previews it (errors if no data is supplied).
+// writeEntryCLI writes decSlice to realPath and previews it (errors if no data is supplied).
 func writeEntryCLI(realPath string, decSlice []string, passwordIsNew bool, oldPassword string) {
 	if core.EntryIsNotEmpty(decSlice) {
 		if err := core.WriteEntry(realPath, decSlice, passwordIsNew, nil); err != nil {

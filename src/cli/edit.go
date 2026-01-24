@@ -150,12 +150,6 @@ func editNote(baseNote []string) ([]string, bool) {
 	// close tempFile
 	_ = tempFile.Close() // error ignored; if the file could be opened, it can probably be closed
 
-	// remove trailing empty strings from the edited note
-	note = back.RemoveTrailingEmptyStrings(note)
-
-	// clamp trailing whitespace in each note line
-	core.ClampTrailingWhitespace(note)
-
 	// return the edited note if:
 	// it is different from baseNote AND
 	// [it is not empty (prevent needless writes when adding blank notes) OR
