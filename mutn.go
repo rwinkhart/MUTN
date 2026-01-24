@@ -204,7 +204,7 @@ func main() {
 					other.PrintError("Initialization failed: "+err.Error(), 0)
 				}
 			case "tweak":
-				choice := front.InputMenuGen("Action:", []string{"Set text editor", "Change device ID", "Age all entries", "Change master password/Optimize entries"})
+				choice := front.InputMenuGen("Action:", []string{"Set text editor", "Change device ID", "Age all entries", "Verify all entries", "Change master password/Optimize entries"})
 				switch choice {
 				case 1:
 					newCfg := &config.CfgT{}
@@ -230,13 +230,17 @@ func main() {
 						other.PrintError("Failed to age entries: "+err.Error(), 1)
 					}
 				case 4:
+					verifyEntries(front.InputHidden("RCW Password:"))
+				case 5:
 					oldPassword := confirmRCWPassword("old")
 					newPassword := confirmRCWPassword("new")
 					fmt.Print("\nRe-encrypting entries...\nPlease wait; do not force close this process.\n\n")
 					if err := core.EntryRefresh(oldPassword, newPassword, false); err != nil {
 						other.PrintError("Re-encryption failed: "+err.Error(), global.ErrorEncryption)
 					}
-					fmt.Println("\nRe-encryption complete.")
+					if front.InputBinary("\nRe-encryption complete. Verify new entries (recommended)?") {
+						verifyEntries(newPassword)
+					}
 				}
 			case "copy":
 				cli.HelpCopy()
@@ -272,4 +276,14 @@ func confirmRCWPassword(lowercasePrefix string) []byte {
 // getTextEditorInput prompts the user for a text editor input, first falling back to "$EDITOR", then to a default value
 func getTextEditorInput() string {
 	return cmp.Or(front.Input("Text editor (leave blank for $EDITOR, falls back to \""+cli.FallbackEditor+"\"):"), os.Getenv("EDITOR"), cli.FallbackEditor)
+}
+
+// verifyEntries attempts to verify all entries using the provided RCW password.
+func verifyEntries(rcwPassword []byte) {
+	fmt.Println("Verification in progress; please wait...")
+	err := core.VerifyEntries(rcwPassword)
+	if err != nil {
+		other.PrintError("Verification failed: "+err.Error(), global.ErrorDecryption)
+	}
+	fmt.Println("Verification successful")
 }

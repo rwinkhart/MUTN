@@ -45,7 +45,7 @@ build() {
     esac
 
     # compile binary
-    CGO_ENABLED=1 go build -ldflags=\"-s -w\" -trimpath -tags=stxAll ./mutn.go
+    CGO_ENABLED=0 go build -ldflags=\"-s -w\" -trimpath -tags=stxAll ./mutn.go
 }
 
 package() {

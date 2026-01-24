@@ -3,7 +3,7 @@
 # get version number from cli package
 cd ..
 printf 'package main\nimport (\n"fmt"\n"github.com/rwinkhart/MUTN/src/cli"\n)\nfunc main() {\nfmt.Println(cli.MUTNVersion)\n}' > ./version.go
-version=$(go run -ldflags="-s -w" -tags noMarkdown ./version.go)
+version=$(go run -ldflags="-s -w" ./version.go)
 rm ./version.go
 cd ./packaging
 
