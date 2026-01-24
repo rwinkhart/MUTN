@@ -53,7 +53,7 @@ fieldLoop:
 			fmt.Println(ansiDirectoryHeader + "Notes:" + back.AnsiReset)
 
 			// render notes as Markdown
-			r, _ := glamour.NewTermRenderer(glamour.WithStylesFromJSONBytes(glamourStyle()), glamour.WithPreservedNewLines(), glamour.WithWordWrap(width))
+			r, _ := glamour.NewTermRenderer(glamour.WithStylesFromJSONBytes(glamourStyle()), glamour.WithWordWrap(width))
 			markdownNotesString, _ := r.Render(strings.Join(decSlice[4:], "\n"))
 			_ = r.Close()
 
