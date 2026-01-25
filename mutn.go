@@ -225,7 +225,7 @@ func main() {
 					fmt.Println("\nDevice ID changed successfully.")
 				case 3:
 					forceReage := front.InputBinary("Re-age aged entries?")
-					fmt.Println("Aging entries; this may take awhile - do not terminate this process")
+					fmt.Println("Aging entries; please wait - do not terminate this process")
 					if err := age.AllPasswordEntries(forceReage, nil); err != nil {
 						other.PrintError("Failed to age entries: "+err.Error(), 1)
 					}
@@ -234,7 +234,7 @@ func main() {
 				case 5:
 					oldPassword := confirmRCWPassword("old")
 					newPassword := confirmRCWPassword("new")
-					fmt.Print("Re-encrypting entries...\nPlease wait; do not force close this process.\n\n")
+					fmt.Print("Re-encrypting entries; please wait - do not terminate this process.\n\n")
 					if err := core.EntryRefresh(oldPassword, newPassword, false); err != nil {
 						other.PrintError("Re-encryption failed: "+err.Error(), global.ErrorEncryption)
 					}
@@ -280,7 +280,7 @@ func getTextEditorInput() string {
 
 // verifyEntries attempts to verify all entries using the provided RCW password.
 func verifyEntries(rcwPassword []byte) {
-	fmt.Println("Verification in progress; please wait...")
+	fmt.Println("Verification in progress; please wait - do not terminate this process...")
 	err := core.VerifyEntries(rcwPassword)
 	if err != nil {
 		other.PrintError("Verification failed: "+err.Error(), global.ErrorDecryption)
