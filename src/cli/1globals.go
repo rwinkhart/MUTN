@@ -19,5 +19,5 @@ const (
 )
 
 func init() {
-	global.GetPassword = front.InputHidden
+	global.GetPassword = front.InputSecret
 }

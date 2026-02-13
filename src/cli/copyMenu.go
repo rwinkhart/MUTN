@@ -21,7 +21,7 @@ import (
 // fields without having to re-decrypt each time. decSlice can be left nil
 // to decrypt the entry specified by vanityPath. If the entry was provided
 // decrypted, CopyMenu assumes it was edited and triggers a sync.
-func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
+func CopyMenu(vanityPath string, decSlice []string, oldPassword []byte) {
 	realPath := global.GetRealPath(vanityPath)
 	var err error
 	if decSlice == nil {
@@ -45,7 +45,7 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 	for i := range indices {
 		if len(decSlice) > indices[i] && decSlice[indices[i]] != "" {
 			fieldOptions = append(fieldOptions, fieldStrings[i])
-			if indices[i] == 0 && oldPassword != "" {
+			if indices[i] == 0 && oldPassword != nil {
 				fieldOptions = append(fieldOptions, "Old Password")
 			}
 		}
@@ -65,7 +65,7 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 	signal.Notify(sigChan, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 	go func() {
 		<-sigChan
-		if err = clip.ClearProcess(""); err != nil {
+		if err = clip.ClearProcess(nil); err != nil {
 			other.PrintError("Failed to clear clipboard on exit: "+err.Error(), global.ErrorClipboard)
 		}
 		os.Exit(0)
@@ -105,7 +105,7 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 		}
 		selectedField = fieldOptions[choice-1]
 		if selectedField == "Old Password" {
-			if err = clip.CopyString(false, oldPassword); err != nil {
+			if err = clip.CopyBytes(false, oldPassword); err != nil {
 				other.PrintError("Failed to copy old password to clipboard: "+err.Error(), global.ErrorClipboard)
 			}
 			continue
@@ -113,14 +113,13 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 		choice = indices[slices.Index(fieldStrings, selectedField)]
 		if choice == 2 {
 			fmt.Println(back.AnsiWarning + "[Starting]" + back.AnsiReset + " TOTP clipboard refresher")
-			errorChan := make(chan error)
+			errorChan := make(chan error, 1)
 			done := make(chan bool)
 			go clip.TOTPCopier(decSlice[2], errorChan, done)
 			// block until first successful copy
 			if err = <-errorChan; err != nil {
 				other.PrintError("Failed to copy TOTP token: "+err.Error(), global.ErrorClipboard)
 			}
-			fmt.Println(back.AnsiGreen + "[Started]" + back.AnsiReset + " TOTP clipboard refresher")
 			// block until the user sends "q"
 			for {
 				input := front.Input("Service will run until 'q' is entered:")
@@ -129,9 +128,9 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword string) {
 				}
 			}
 			close(done)
-			fmt.Println(back.AnsiBlue + "\n[Stopped]" + back.AnsiReset + " TOTP clipboard refresher")
+			fmt.Println(back.AnsiBlue + "[Stopped]" + back.AnsiReset + " TOTP clipboard refresher")
 		} else {
-			if err = clip.CopyString(false, decSlice[choice]); err != nil {
+			if err = clip.CopyBytes(false, []byte(decSlice[choice])); err != nil {
 				other.PrintError("Failed to copy field to clipboard: "+err.Error(), global.ErrorClipboard)
 			}
 		}

@@ -94,7 +94,7 @@ func main() {
 					case "note", "-n":
 						field = 4
 					case "menu", "-m":
-						cli.CopyMenu(args[1], nil, "")
+						cli.CopyMenu(args[1], nil, nil)
 					default:
 						cli.HelpCopy()
 					}
@@ -230,7 +230,7 @@ func main() {
 						other.PrintError("Failed to age entries: "+err.Error(), 1)
 					}
 				case 4:
-					verifyEntries(front.InputHidden("RCW Password:"))
+					verifyEntries(front.InputSecret("RCW Password:"))
 				case 5:
 					oldPassword := confirmRCWPassword("old")
 					newPassword := confirmRCWPassword("new")
@@ -264,8 +264,8 @@ func main() {
 func confirmRCWPassword(lowercasePrefix string) []byte {
 	for {
 		// get master password
-		rcwPass := front.InputHidden(strings.ToUpper(string(lowercasePrefix[0])) + lowercasePrefix[1:] + " master password:")
-		if !bytes.Equal(rcwPass, front.InputHidden("Confirm "+lowercasePrefix+" master password:")) || len(rcwPass) == 0 {
+		rcwPass := front.InputSecret(strings.ToUpper(string(lowercasePrefix[0])) + lowercasePrefix[1:] + " master password:")
+		if !bytes.Equal(rcwPass, front.InputSecret("Confirm "+lowercasePrefix+" master password:")) || len(rcwPass) == 0 {
 			fmt.Println(back.AnsiError + "Passwords do not match or password is invalid" + back.AnsiReset)
 			continue
 		}

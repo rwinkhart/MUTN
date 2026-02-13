@@ -1,12 +1,12 @@
 module github.com/rwinkhart/MUTN
 
-go 1.25.6
+go 1.26.0
 
 require (
 	github.com/charmbracelet/glamour v0.7.0
-	github.com/rwinkhart/go-boilerplate v0.2.2
-	github.com/rwinkhart/libmutton v0.4.3-0.20260125215941-ec9c6b506232
-	golang.org/x/term v0.39.0
+	github.com/rwinkhart/go-boilerplate v0.3.0
+	github.com/rwinkhart/libmutton v0.4.3-0.20260213233823-3fd2b13712ef
+	golang.org/x/term v0.40.0
 )
 
 require (
@@ -29,18 +29,18 @@ require (
 	github.com/pquerna/otp v1.5.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/rwinkhart/go-highlite v0.1.1 // indirect
-	github.com/rwinkhart/peercred-mini v0.1.2 // indirect
-	github.com/rwinkhart/rcw v0.2.5 // indirect
+	github.com/rwinkhart/peercred-mini v0.1.4 // indirect
+	github.com/rwinkhart/rcw v0.3.0 // indirect
 	github.com/yuin/goldmark v1.7.16 // indirect
 	github.com/yuin/goldmark-emoji v1.0.6 // indirect
-	golang.org/x/crypto v0.47.0 // indirect
+	golang.org/x/crypto v0.48.0 // indirect
 	golang.org/x/net v0.49.0 // indirect
-	golang.org/x/sys v0.40.0 // indirect
+	golang.org/x/sys v0.41.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-replace golang.org/x/sys => github.com/rwinkhart/sys v0.40.0
+replace golang.org/x/sys => github.com/rwinkhart/sys v0.41.0
 
-replace github.com/Microsoft/go-winio => github.com/rwinkhart/go-winio v0.1.0
+replace github.com/Microsoft/go-winio => github.com/rwinkhart/go-winio v0.1.1
 
 replace github.com/charmbracelet/glamour => github.com/rwinkhart/glamour-temp-MUTN v0.7.2

@@ -18,24 +18,24 @@ func AddEntry(realPath string, entryType uint8) {
 
 	var decSlice []string
 
-	var password string
+	var password []byte
 	if entryType < 2 {
 		username := front.Input("Username:")
 
 		// determine whether to generate the password
 		if entryType == 0 {
-			password = string(front.InputHidden("Password:"))
+			password = front.InputSecret("Password:")
 		} else {
 			password = inputPasswordGen()
 		}
 
-		totp := string(front.InputHidden("TOTP secret:"))
+		totp := string(front.InputSecret("TOTP secret:"))
 		url := front.Input("URL:")
 		if front.InputBinary("Add a note to this entry?") {
 			note, _ := editNote([]string{})
-			decSlice = append([]string{password, username, totp, url}, note...)
+			decSlice = append([]string{string(password), username, totp, url}, note...)
 		} else {
-			decSlice = []string{password, username, totp, url}
+			decSlice = []string{string(password), username, totp, url}
 		}
 	} else {
 		note, _ := editNote([]string{})
@@ -43,9 +43,9 @@ func AddEntry(realPath string, entryType uint8) {
 	}
 
 	// write and preview the new entry
-	if password != "" {
-		writeEntryCLI(realPath, decSlice, true, "")
+	if password != nil {
+		writeEntryCLI(realPath, decSlice, true, nil)
 	} else {
-		writeEntryCLI(realPath, decSlice, false, "")
+		writeEntryCLI(realPath, decSlice, false, nil)
 	}
 }

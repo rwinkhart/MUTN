@@ -34,15 +34,15 @@ func EditEntryField(realPath string, field int) {
 	}
 
 	// edit the field
-	var oldPassword string
+	var oldPassword []byte
 	switch field {
 	case 0:
-		oldPassword = decSlice[field]
-		decSlice[field] = string(front.InputHidden("Password:"))
+		oldPassword = []byte(decSlice[field])
+		decSlice[field] = string(front.InputSecret("Password:"))
 	case 1:
 		decSlice[field] = front.Input("Username:")
 	case 2:
-		decSlice[field] = string(front.InputHidden("TOTP secret:"))
+		decSlice[field] = string(front.InputSecret("TOTP secret:"))
 	case 3:
 		decSlice[field] = front.Input("URL:")
 	case 4: // edit notes fields
@@ -75,8 +75,8 @@ func GenUpdate(realPath string) {
 	}
 
 	// generate a new password
-	oldPassword := decSlice[0]
-	decSlice[0] = inputPasswordGen()
+	oldPassword := []byte(decSlice[0])
+	decSlice[0] = string(inputPasswordGen())
 
 	// write and preview the modified entry
 	writeEntryCLI(realPath, decSlice, true, oldPassword)
