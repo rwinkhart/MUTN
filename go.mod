@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	github.com/charmbracelet/glamour v0.7.0
 	github.com/rwinkhart/go-boilerplate v0.3.0
-	github.com/rwinkhart/libmutton v0.4.3-0.20260213233823-3fd2b13712ef
+	github.com/rwinkhart/libmutton v0.4.3-0.20260214001306-20d8e141ebbb
 	golang.org/x/term v0.40.0
 )
 
@@ -14,8 +14,7 @@ require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/boombuler/barcode v1.1.0 // indirect
-	github.com/clipperhouse/stringish v0.1.1 // indirect
-	github.com/clipperhouse/uax29/v2 v2.3.1 // indirect
+	github.com/clipperhouse/uax29/v2 v2.6.0 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/kr/fs v0.1.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.3.0 // indirect
@@ -34,7 +33,7 @@ require (
 	github.com/yuin/goldmark v1.7.16 // indirect
 	github.com/yuin/goldmark-emoji v1.0.6 // indirect
 	golang.org/x/crypto v0.48.0 // indirect
-	golang.org/x/net v0.49.0 // indirect
+	golang.org/x/net v0.50.0 // indirect
 	golang.org/x/sys v0.41.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
