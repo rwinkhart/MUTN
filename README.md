@@ -2,7 +2,7 @@
 ---
 Pronounced as: "mutton", "muh·tn"
 
-MUTN is a simple, self-hosted, SSH-synchronized password and note manager based on [libmutton](https://github.com/rwinkhart/libmutton). It is the successor to [sshyp](https://github.com/rwinkhart/sshyp).
+MUTN is a simple, self-hosted, vertically integrated, SSH-synchronized password manager. It is based on and is the reference implementation of [libmutton](https://github.com/rwinkhart/libmutton).
 
 > [!WARNING]
 >It is your responsibility to assess the security and stability of MUTN and to ensure it meets your needs before using it.
@@ -24,7 +24,6 @@ After installing, please review the [usage guide](https://github.com/rwinkhart/M
 
 # Roadmap
 ### Release v0.5.0
-- Switch to fully compliant Markdown (do not preserve new lines)
 - Switch to alternative Markdown renderer (minimark or BEAN)
 ### Release v1.0.0 - Distribution packages
 - [ ] Create packaging scripts

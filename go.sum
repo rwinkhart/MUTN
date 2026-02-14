@@ -48,8 +48,10 @@ github.com/rwinkhart/go-highlite v0.1.1 h1:9TxbRhYVfD/3YaEgNk1BtEiZ0t8/5mxDUZqNM
 github.com/rwinkhart/go-highlite v0.1.1/go.mod h1:mWLMtCWcyV0BG4NeyPyAUGMjPvI0ds6vXmUq89QwBFA=
 github.com/rwinkhart/go-winio v0.1.1 h1:kAJKiqneR7cUR01Wn5/doAAV4kOGTEGPug4oinXc5N4=
 github.com/rwinkhart/go-winio v0.1.1/go.mod h1:ZWa7ssZJT30CCDGJ7fk/2SBTq9BIQrrVjrcss0UW2s0=
-github.com/rwinkhart/libmutton v0.4.3-0.20260214001306-20d8e141ebbb h1:1f05OYv4LRg+zhwITUyFHZxddMN8cw9XwhxUKj/Zq5Y=
-github.com/rwinkhart/libmutton v0.4.3-0.20260214001306-20d8e141ebbb/go.mod h1:XkT0W9PW8ouGUwrGKhNCSDgaEY25n64+/HxJUQcQ0FU=
+github.com/rwinkhart/libmutton v0.4.3-0.20260214210418-a091cd4952e0 h1:1C2cDXaWrtK5+nD5+TPUHB69ONe5eU2iP3ZHWU8aoOs=
+github.com/rwinkhart/libmutton v0.4.3-0.20260214210418-a091cd4952e0/go.mod h1:XkT0W9PW8ouGUwrGKhNCSDgaEY25n64+/HxJUQcQ0FU=
+github.com/rwinkhart/libmutton v0.4.3-0.20260214212002-f4fdf65528c4 h1:Mws/RzEEoEdJM/uGpOvc9NBKPbatH/0ux1Ep1o0LnFY=
+github.com/rwinkhart/libmutton v0.4.3-0.20260214212002-f4fdf65528c4/go.mod h1:XkT0W9PW8ouGUwrGKhNCSDgaEY25n64+/HxJUQcQ0FU=
 github.com/rwinkhart/peercred-mini v0.1.4 h1:93+phjLknvJadEd2cu/ZPPWdfRSPOwFJzDBEn4ZtWVc=
 github.com/rwinkhart/peercred-mini v0.1.4/go.mod h1:E8eApo/izzmq4nGGR+kpJ0ZLAXjofnVRMGCeVMPQ/Ik=
 github.com/rwinkhart/rcw v0.3.0 h1:OdgA++IGcDrZqN6FzyYnzbz04fL8Q1MHvlgPjhtgJM4=

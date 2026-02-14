@@ -106,7 +106,7 @@ func EntryListGen() {
 	// print header bar w/total entry count
 	sb.WriteString("\n")
 	sb.WriteString(ansiBlackOnWhite)
-	fmt.Fprint(&sb, len(entryMap))
+	_, _ = fmt.Fprint(&sb, len(entryMap))
 	sb.WriteString(" libmutton entries:")
 	sb.WriteString(back.AnsiReset)
 
