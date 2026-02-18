@@ -5,8 +5,8 @@ github.com/aymerick/douceur v0.2.0/go.mod h1:wlT5vV2O3h55X9m7iVYN0TBM0NH/MmbLnd3
 github.com/boombuler/barcode v1.0.1-0.20190219062509-6c824513bacc/go.mod h1:paBWMcWSl3LHKBqUq+rly7CNSldXjb2rDl3JlRe0mD8=
 github.com/boombuler/barcode v1.1.0 h1:ChaYjBR63fr4LFyGn8E8nt7dBSt3MiU3zMOZqFvVkHo=
 github.com/boombuler/barcode v1.1.0/go.mod h1:paBWMcWSl3LHKBqUq+rly7CNSldXjb2rDl3JlRe0mD8=
-github.com/clipperhouse/uax29/v2 v2.6.0 h1:z0cDbUV+aPASdFb2/ndFnS9ts/WNXgTNNGFoKXuhpos=
-github.com/clipperhouse/uax29/v2 v2.6.0/go.mod h1:Wn1g7MK6OoeDT0vL+Q0SQLDz/KpfsVRgg6W7ihQeh4g=
+github.com/clipperhouse/uax29/v2 v2.7.0 h1:+gs4oBZ2gPfVrKPthwbMzWZDaAFPGYK72F0NJv2v7Vk=
+github.com/clipperhouse/uax29/v2 v2.7.0/go.mod h1:EFJ2TJMRUaplDxHKj1qAEhCtQPW2tJSwu5BF98AuoVM=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -20,8 +20,8 @@ github.com/mattn/go-isatty v0.0.20 h1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWE
 github.com/mattn/go-isatty v0.0.20/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
 github.com/mattn/go-runewidth v0.0.9/go.mod h1:H031xJmbD/WCDINGzjvQ9THkh0rPKHF+m2gUSrubnMI=
 github.com/mattn/go-runewidth v0.0.12/go.mod h1:RAqKPSqVFrSLVXbA8x7dzmKdmGzieGRCM46jaSJTDAk=
-github.com/mattn/go-runewidth v0.0.19 h1:v++JhqYnZuu5jSKrk9RbgF5v4CGUjqRfBm05byFGLdw=
-github.com/mattn/go-runewidth v0.0.19/go.mod h1:XBkDxAl56ILZc9knddidhrOlY5R/pDhgLpndooCuJAs=
+github.com/mattn/go-runewidth v0.0.20 h1:WcT52H91ZUAwy8+HUkdM3THM6gXqXuLJi9O3rjcQQaQ=
+github.com/mattn/go-runewidth v0.0.20/go.mod h1:XBkDxAl56ILZc9knddidhrOlY5R/pDhgLpndooCuJAs=
 github.com/microcosm-cc/bluemonday v1.0.27 h1:MpEUotklkwCSLeH+Qdx1VJgNqLlpY2KXwXFM08ygZfk=
 github.com/microcosm-cc/bluemonday v1.0.27/go.mod h1:jFi9vgW+H7c3V0lb6nR74Ib/DIB5OBs92Dimizgw2cA=
 github.com/muesli/reflow v0.3.0 h1:IFsN6K9NfGtjeggFP+68I4chLZV2yIKsXJFNZ+eWh6s=
@@ -48,8 +48,8 @@ github.com/rwinkhart/go-highlite v0.1.1 h1:9TxbRhYVfD/3YaEgNk1BtEiZ0t8/5mxDUZqNM
 github.com/rwinkhart/go-highlite v0.1.1/go.mod h1:mWLMtCWcyV0BG4NeyPyAUGMjPvI0ds6vXmUq89QwBFA=
 github.com/rwinkhart/go-winio v0.1.1 h1:kAJKiqneR7cUR01Wn5/doAAV4kOGTEGPug4oinXc5N4=
 github.com/rwinkhart/go-winio v0.1.1/go.mod h1:ZWa7ssZJT30CCDGJ7fk/2SBTq9BIQrrVjrcss0UW2s0=
-github.com/rwinkhart/libmutton v0.4.3-0.20260214221254-8da264866416 h1:XoJM+RhHABenlAbRXCEkZpko0bgvlQrvr27rN8CEogY=
-github.com/rwinkhart/libmutton v0.4.3-0.20260214221254-8da264866416/go.mod h1:peh8A1f3gnaF97m8J06U28JloKv04Kw8WtFCH+Pcq6s=
+github.com/rwinkhart/libmutton v0.5.0 h1:Du/o5Hyb26uE6lubqBISN/ZF9JZ5oObHVveQjAqrP0E=
+github.com/rwinkhart/libmutton v0.5.0/go.mod h1:peh8A1f3gnaF97m8J06U28JloKv04Kw8WtFCH+Pcq6s=
 github.com/rwinkhart/peercred-mini v0.1.4 h1:93+phjLknvJadEd2cu/ZPPWdfRSPOwFJzDBEn4ZtWVc=
 github.com/rwinkhart/peercred-mini v0.1.4/go.mod h1:E8eApo/izzmq4nGGR+kpJ0ZLAXjofnVRMGCeVMPQ/Ik=
 github.com/rwinkhart/rcw v0.3.0 h1:OdgA++IGcDrZqN6FzyYnzbz04fL8Q1MHvlgPjhtgJM4=
