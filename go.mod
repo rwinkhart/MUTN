@@ -17,9 +17,9 @@ require (
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/kr/fs v0.1.0 // indirect
-	github.com/lucasb-eyer/go-colorful v1.3.0 // indirect
-	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/mattn/go-runewidth v0.0.20 // indirect
+	github.com/lucasb-eyer/go-colorful v1.4.0 // indirect
+	github.com/mattn/go-isatty v0.0.22 // indirect
+	github.com/mattn/go-runewidth v0.0.24 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.27 // indirect
 	github.com/muesli/reflow v0.3.0 // indirect
 	github.com/muesli/termenv v0.16.0 // indirect
@@ -30,10 +30,10 @@ require (
 	github.com/rwinkhart/go-highlite v0.1.1 // indirect
 	github.com/rwinkhart/peercred-mini v0.1.5 // indirect
 	github.com/rwinkhart/rcw v0.3.1-0.20260529214935-ba4a2c839620 // indirect
-	github.com/yuin/goldmark v1.7.16 // indirect
+	github.com/yuin/goldmark v1.8.2 // indirect
 	github.com/yuin/goldmark-emoji v1.0.6 // indirect
 	golang.org/x/crypto v0.52.0 // indirect
-	golang.org/x/net v0.54.0 // indirect
+	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/sys v0.45.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
