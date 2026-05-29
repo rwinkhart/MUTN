@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/signal"
 	"slices"
+	"strings"
 	"syscall"
 	"time"
 
@@ -111,7 +112,8 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword []byte) {
 			continue
 		}
 		choice = indices[slices.Index(fieldStrings, selectedField)]
-		if choice == 2 {
+		switch choice {
+		case 2: // TOTP
 			fmt.Println(back.AnsiWarning + "[Starting]" + back.AnsiReset + " TOTP clipboard refresher")
 			errorChan := make(chan error, 1)
 			done := make(chan bool)
@@ -129,7 +131,10 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword []byte) {
 			}
 			close(done)
 			fmt.Println(back.AnsiBlue + "[Stopped]" + back.AnsiReset + " TOTP clipboard refresher")
-		} else {
+		case 4: // notes
+			decSlice[choice] = strings.TrimRight(decSlice[choice], " ")
+			fallthrough
+		default:
 			if err = clip.CopyBytes(false, []byte(decSlice[choice])); err != nil {
 				other.PrintError("Failed to copy field to clipboard: "+err.Error(), global.ErrorClipboard)
 			}

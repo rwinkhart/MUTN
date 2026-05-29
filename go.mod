@@ -5,7 +5,7 @@ go 1.26.3
 require (
 	github.com/charmbracelet/glamour v0.7.0
 	github.com/rwinkhart/go-boilerplate v0.3.1
-	github.com/rwinkhart/libmutton v0.5.0
+	github.com/rwinkhart/libmutton v0.5.1-0.20260529233337-726153b9be84
 	golang.org/x/term v0.43.0
 )
 
@@ -29,7 +29,7 @@ require (
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/rwinkhart/go-highlite v0.1.1 // indirect
 	github.com/rwinkhart/peercred-mini v0.1.5 // indirect
-	github.com/rwinkhart/rcw v0.3.1-0.20260529214935-ba4a2c839620 // indirect
+	github.com/rwinkhart/rcw v0.3.1 // indirect
 	github.com/yuin/goldmark v1.8.2 // indirect
 	github.com/yuin/goldmark-emoji v1.0.6 // indirect
 	golang.org/x/crypto v0.52.0 // indirect
