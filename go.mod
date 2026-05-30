@@ -43,3 +43,5 @@ replace golang.org/x/sys => github.com/rwinkhart/sys v0.45.0
 replace github.com/Microsoft/go-winio => github.com/rwinkhart/go-winio v0.1.1
 
 replace github.com/charmbracelet/glamour => github.com/rwinkhart/glamour-temp-MUTN v0.7.2
+
+replace github.com/rwinkhart/go-boilerplate => ../go-boilerplate

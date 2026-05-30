@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"slices"
 	"strings"
 	"syscall"
 	"time"
@@ -40,14 +39,18 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword []byte) {
 	}
 
 	// determine populated fields in entry
-	var fieldStrings = []string{"Username", "Password", "TOTP Code", "URL", "Note (first line)"}
-	var indices = []int{1, 0, 2, 3, 4}
-	var fieldOptions []string
-	for i := range indices {
-		if len(decSlice) > indices[i] && decSlice[indices[i]] != "" {
-			fieldOptions = append(fieldOptions, fieldStrings[i])
-			if indices[i] == 0 && oldPassword != nil {
-				fieldOptions = append(fieldOptions, "Old Password")
+	var allStrings = [5]string{"Username", "Password", "TOTP Code", "URL", "Note (first line)"}
+	var allIndices = [5]int{1, 0, 2, 3, 4}
+	var allRunes = [5]rune{'u', 'p', 't', 'l', 'n'}
+	var fieldStrings []string
+	var fieldRunes []rune
+	for i := range allIndices {
+		if len(decSlice) > allIndices[i] && decSlice[allIndices[i]] != "" {
+			fieldStrings = append(fieldStrings, allStrings[i])
+			fieldRunes = append(fieldRunes, allRunes[i])
+			if allIndices[i] == 0 && oldPassword != nil {
+				fieldStrings = append(fieldStrings, "Old Password")
+				fieldRunes = append(fieldRunes, 'b')
 			}
 		}
 	}
@@ -55,7 +58,7 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword []byte) {
 	// if notes are included, preview them
 	if len(decSlice) > 4 {
 		EntryReader(vanityPath, append([]string{"", "", "", ""}, decSlice[4:]...), true)
-		if len(fieldOptions) < 1 { // if notes are the only thing included, exit
+		if len(fieldStrings) < 1 { // if notes are the only thing included, exit
 			fmt.Printf("\r%sNo copyable fields present, exiting copy menu...%s\n", back.AnsiWarning, back.AnsiReset)
 			os.Exit(0)
 		}
@@ -94,26 +97,23 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword []byte) {
 	}()
 
 	// copy selected field to clipboard
-	var choice int
-	var selectedField string
+	var runesToIndices = map[rune]int{'u': 1, 'p': 0, 't': 2, 'l': 3, 'n': 4}
+	var selectedField rune
 	for {
 		fmt.Println()
-		if selectedField != "" {
-			choice = front.InputMenuGen("Field to copy:", fieldOptions)
+		if selectedField != 0 {
+			selectedField = front.InputMenuGenWithRuneInputs("Field to copy:", fieldStrings, fieldRunes)
 		} else {
-			choice = front.InputMenuGen("Field to copy (exiting in 5 seconds):", fieldOptions)
+			selectedField = front.InputMenuGenWithRuneInputs("Field to copy (exiting in 5 seconds):", fieldStrings, fieldRunes)
 			selectedChan <- true
 		}
-		selectedField = fieldOptions[choice-1]
-		if selectedField == "Old Password" {
+
+		switch selectedField {
+		case 'b': // old password
 			if err = clip.CopyBytes(false, oldPassword); err != nil {
 				other.PrintError("Failed to copy old password to clipboard: "+err.Error(), global.ErrorClipboard)
 			}
-			continue
-		}
-		choice = indices[slices.Index(fieldStrings, selectedField)]
-		switch choice {
-		case 2: // TOTP
+		case 't': // TOTP
 			fmt.Println(back.AnsiWarning + "[Starting]" + back.AnsiReset + " TOTP clipboard refresher")
 			errorChan := make(chan error, 1)
 			done := make(chan bool)
@@ -131,11 +131,11 @@ func CopyMenu(vanityPath string, decSlice []string, oldPassword []byte) {
 			}
 			close(done)
 			fmt.Println(back.AnsiBlue + "[Stopped]" + back.AnsiReset + " TOTP clipboard refresher")
-		case 4: // notes
-			decSlice[choice] = strings.TrimRight(decSlice[choice], " ")
+		case 'n': // notes
+			decSlice[4] = strings.TrimRight(decSlice[4], " ")
 			fallthrough
 		default:
-			if err = clip.CopyBytes(false, []byte(decSlice[choice])); err != nil {
+			if err = clip.CopyBytes(false, []byte(decSlice[runesToIndices[selectedField]])); err != nil {
 				other.PrintError("Failed to copy field to clipboard: "+err.Error(), global.ErrorClipboard)
 			}
 		}

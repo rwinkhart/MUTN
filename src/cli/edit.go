@@ -37,7 +37,9 @@ func EditEntryField(realPath string, field int) {
 	var oldPassword []byte
 	switch field {
 	case 0:
-		oldPassword = []byte(decSlice[field])
+		if decSlice[0] != "" {
+			oldPassword = []byte(decSlice[0])
+		}
 		decSlice[field] = string(front.InputSecret("Password:"))
 	case 1:
 		decSlice[field] = front.Input("Username:")
@@ -75,7 +77,10 @@ func GenUpdate(realPath string) {
 	}
 
 	// generate a new password
-	oldPassword := []byte(decSlice[0])
+	var oldPassword []byte
+	if decSlice[0] != "" {
+		oldPassword = []byte(decSlice[0])
+	}
 	decSlice[0] = string(inputPasswordGen())
 
 	// write and preview the modified entry
