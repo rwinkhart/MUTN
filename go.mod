@@ -1,10 +1,10 @@
 module github.com/rwinkhart/MUTN
 
-go 1.26.3
+go 1.26.4
 
 require (
 	github.com/charmbracelet/glamour v0.7.0
-	github.com/rwinkhart/go-boilerplate v0.3.1
+	github.com/rwinkhart/go-boilerplate v0.3.2-0.20260530010204-f70ff83e1ea1
 	github.com/rwinkhart/libmutton v0.5.1-0.20260529233337-726153b9be84
 	golang.org/x/term v0.43.0
 )
@@ -43,5 +43,3 @@ replace golang.org/x/sys => github.com/rwinkhart/sys v0.45.0
 replace github.com/Microsoft/go-winio => github.com/rwinkhart/go-winio v0.1.1
 
 replace github.com/charmbracelet/glamour => github.com/rwinkhart/glamour-temp-MUTN v0.7.2
-
-replace github.com/rwinkhart/go-boilerplate => ../go-boilerplate
